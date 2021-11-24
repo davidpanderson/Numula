@@ -1,1 +1,1 @@
-# music
+Experiments with music in Python
