@@ -2,26 +2,26 @@
 
 At this point I have these tools:
 
-Music21: Python library;
-Defines has a powerful data structure for representing scores.
-These scores can be generated algorithmically,
-possibly using a compact textual notation,
-or parsed from files (musicXML or MIDI).
-They can be manipulated (volume/timing/articulation).
-They can be aggregated (e.g. chordify).
-They can be output in various forms (graphic score, test, MIDI)
+1) Music21: Python library;
+    defines a rich data structure for representing scores.
+    These scores can be generated algorithmically,
+    possibly using a compact textual notation,
+    or parsed from files (musicXML or MIDI).
+    They can be manipulated (volume/timing/articulation).
+    They can be aggregated (e.g. chordify).
+    They can be output in various forms (graphic score, test, MIDI)
 
-MIDIUtils: Python library for generating MIDI files
+2) MIDIUtils: Python library for generating MIDI files
 
-PianoTeq: play MIDI files with piano sounds, to speakers or .WAV files
+3) PianoTeq: play MIDI files with piano sounds, to speakers or .WAV files
 
+--------------
 Some general goals:
 
 1) "Prepared performance" with nuance,
 of an existing piece (e.g. Berio or Bach).
 I think it's best to use Music21 for this.
-Many pieces are available on the web in various formats
-that Music21 can parse.
+Many pieces are available on the web in various formats that Music21 can parse.
 The textual notation makes it easy to enter new pieces.
 
 What I need to write are functions that apply nuance to Stream objects.
@@ -38,5 +38,6 @@ but going forward I think it's better to use Music21.
 3) Nuance analysis
 If we have a score for a piece (say, MusicXML)
 and the MIDI file for a human performance of the piece,
-we could write code to correlate the two and extract the nuance
+we could write a program to correlate the two and extract the nuance
 (e.g. timing variation, horizontal/vertical dynamics, etc.)
+This would be useful for defining nuance primitives, and it would make a good paper.
