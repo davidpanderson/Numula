@@ -6,15 +6,21 @@ class Note:
         self.dur = dur
         self.pitch = pitch
         self.vol = vol
+        self.highest = False
+        self.lowest = False
     def print(self):
-        print('time: %f dur: %f pitch: %d vol: %d'%(
-            self.time, self.dur, self.pitch, self.vol
+        h = " highest" if self.highest else ''
+        l = ' lowest' if self.lowest else ''
+        print('time: %f dur: %f pitch: %d vol: %d%s%s'%(
+            self.time, self.dur, self.pitch, self.vol, l, h
         ))
+
+epsilon = 1e-4    # slop factor for time in case of round-off
 
 class NoteSet:
     def __init__(self):
         self.notes = []
-        cur_time = 0
+        self.cur_time = 0
     def add(self, note):
         self. notes.append(note)
     def print(self):
@@ -22,18 +28,76 @@ class NoteSet:
             note.print()
     def sort_time(self):
         self.notes.sort(key=lambda x: x.time)
-    def write_midi(self, filename):
+    def write_midi(self, tempo, filename):
         f = MIDIFile(1)
-        f.addTempo(0, 0, 60)
+        f.addTempo(0, 0, tempo/4)
         for note in self.notes:
             f.addNote(0, 0, note.pitch, note.time, note.dur, note.vol)
         with open(filename, "wb") as file:
             f.writeFile(file)
-    def append(s):
-        new_notes = parse_notes(s)
+    def append(self, new_notes):
         for note in new_notes:
-            note.time += cur_time
+            note.time += self.cur_time
             self.add(note)
+    def insert(self, time, new_notes):
+        self.cur_time = time
+        self.append(new_notes)
+    def start(self):
+        self.cur_time = 0
+        self.ind = 0
+    def vol(self, vol0, vol1, dt, is_closed=True):
+        start_time = self.cur_time
+        end_time = start_time + dt
+        dvol = vol1 - vol0
+        if is_closed:
+            end_time += epsilon
+        else:
+            end_time -= epsilon
+        nnotes = len(self.notes)
+        while self.ind < nnotes:
+            note = self.notes[self.ind]
+            if note.time > end_time:
+                break;
+            note.vol = int(vol0 + dvol*((note.time-start_time)/dt))
+            self.ind += 1
+        self.cur_time += dt
+
+    # mark notes that are the highest or lowest sounding notes at their start
+    #
+    def flag_aux(active, started):
+        min = 128
+        max = -1
+        for n in active:
+            if n.pitch < min: min = n.pitch
+            if n.pitch > max: max = n.pitch
+        for n in started:
+            n.highest = n.pitch == max
+            n.lowest = n.pitch == min
+            
+    def flag_outer(self):
+        cur_time = 0
+        active = []     # notes active at current time
+        started = []    # notes that started at current time
+        for note in self.notes:
+            if note.time > cur_time + epsilon:
+                if len(started):
+                    NoteSet.flag_aux(active, started)
+                cur_time = note.time
+                new_active = [note]
+                for n in active:
+                    if n.time + n.dur > cur_time + epsilon:
+                        new_active.append(n)
+                active = new_active
+                started = [note]
+            else:
+                active.append(note)
+                started.append(note)
+        NoteSet.flag_aux(active, started)
+            
+    def outer(self, bottom, mid, top, dt):
+        end_time = self.cur_time + dt
+        while self.ind < len(self.notes):
+            pass
 
     # remove notes that start while a note of the same pitch is active
     #
@@ -48,126 +112,15 @@ class NoteSet:
             end_time[note.pitch] = note.time+note.dur
         self.notes = out
 
-note_names = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
-pitch_offset = [0, 2, 4, 5, 7, 9, 11]
+ppp = 3
+pp = 20
+p = 35
+mp = 50
+mf = 65
+f = 80
+ff = 100
+fff = 120
 
-# parse a string of the form ++b-
-# octave offset, pitch class, accidental
-#
-def parse_note(s):
-    got_pitch = False
-    off = [0,0]
-    for c in s:
-        if c in note_names:
-            if got_pitch:
-                raise Exception('already have pitch')
-            pitch_class = pitch_offset[note_names.index(c)]
-            got_pitch = True
-        elif c == '+':
-            i = 1 if got_pitch else 0
-            if off[i] < 0:
-                raise Exception('bad offset')
-            off[i] += 1
-        elif c == '-':
-            i = 1 if got_pitch else 0
-            if off[i] > 1:
-                raise Exception('bad offset')
-            off[i] -= 1
-    return [pitch_class, off[0], off[1]]
-
-print(parse_note('-f++'))
-
-# if octave_offset is 0,
-# return instance of the pitch class closest to the current pitch (tie: upward)
-# if it's -1, return the first instance below the current pitch;
-# -2, the octave below that etc.
-#
-def next_pitch(cur_pitch, pitch_class, octave_offset):
-    cur_pitch_class = cur_pitch % 12
-    cur_octave = cur_pitch // 12
-    if octave_offset == 0:
-        if pitch_class == cur_pitch_class:
-            return cur_pitch
-        elif pitch_class < cur_pitch_class:
-            diff = cur_pitch_class - pitch_class
-            if diff  > 6:
-                return pitch_class + 12*(cur_octave+1)
-            else:
-                return pitch_class + 12*cur_octave
-        else:
-            diff = pitch_class - cur_pitch_class
-            if diff > 6:
-                return pitch_class + 12*(cur_octave-1)
-            else:
-                return pitch_class + 12*cur_octave
-    elif octave_offset < 0:
-        if pitch_class < cur_pitch_class:
-            next_down = pitch_class + 12*cur_octave
-        else:
-            next_down = pitch_class + 12*(cur_octave-1)
-        if octave_offset < -1:
-            return next_down  + 12*(octave_offset+1)
-        else:
-            return next_down
-    else:
-        if pitch_class > cur_pitch_class:
-            next_up = pitch_class + 12*(cur_octave)
-        else:
-            next_up = pitch_class + 12*(cur_octave+1)
-        if octave_offset > 1:
-            return next_up + 12*(octave_offset-1)
-        else:
-            return next_up
-    
-# textual note specification
-def n(s):
-    s = s.replace('{', ' { ')
-    s = s.replace('}', ' } ')
-    notes = []
-    cur_pitch = 60
-    cur_time = 0
-    in_chord = False
-    vol = 64
-    dur = 1
-    for t in s.split(' '):
-        if not t: continue
-        if t == '{':
-            if in_chord:
-                raise Exception("Can't nest {")
-            in_chord = True
-            chord_dur = dur
-        elif t == '}':
-            if not in_chord:
-                raise Exception("} not in chord")
-            in_chord = False
-            cur_time += dur
-        elif '/' in t:
-            # rhythm notation
-            a = t.split('/')
-            num = 1 if a[0] == '' else int(a[0])
-            denom = int(a[1])
-            d = num/denom
-            if in_chord:
-                chord_dur = d
-            else:
-                dur = d
-        else:
-            # note
-            x = parse_note(t)
-            pitch_class = x[0]
-            octave_offset = x[1]
-            accidental = x[2]
-            pitch_class += accidental
-            pitch_class = (pitch_class + 12) % 12
-            pitch = next_pitch(cur_pitch, pitch_class, octave_offset)
-            d = chord_dur if in_chord else dur
-            n = Note(cur_time, d, pitch, vol)
-            notes.append(n)
-            n.print()
-            if not in_chord:
-                cur_time += dur
-            cur_pitch = pitch
-            
 def test():
     y = NoteSet()
     y.add(Note(1,2,3,4))

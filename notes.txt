@@ -41,3 +41,107 @@ and the MIDI file for a human performance of the piece,
 we could write a program to correlate the two and extract the nuance
 (e.g. timing variation, horizontal/vertical dynamics, etc.)
 This would be useful for defining nuance primitives, and it would make a good paper.
+
+=====================
+
+text notation
+
+1/4 c4 d e f+ . a- +f+ 1/8 g {c e g}
+
+1/4 or /4: duration of following notes
+
+.: rest
+
+c4: middle C
+
+d: the D closest to previous pitch
+
+f+: F sharp
+
++f: first F above previous pitch
+++f: 2nd F above previous pitch
+
+{c e g}: chord
+
+{c e 1/2 g}: chord, g is half note
+
+1/8 _: back up an eighth
+
+NoteSet
+    maintains current time, last vol, last dur
+    NoteSet ns
+    ns.append(n('a b c'))
+    ns.insert(time, n('a b c'))
+    ns.set_vol(), set_time(), set_dur()
+    ns.get_time()
+
+Nuance:
+    have notion of "current time"
+    time(x): set time
+    dt(x): advane time
+
+timing primitives:
+Notes have
+    "score time" - static
+        use a slop factor for "simultaneous" because of roundoff
+        score duration
+    "performed time": seconds
+        performed duration
+    stages:
+        1) tempo + accelerandi
+            defines a continuous function from score to performed time
+        2) pauses
+            whether silence is added
+        3) shifts
+            roll
+                neg offset per note
+                specify whether it adds time
+            agogic
+            rubato
+                specify a time map
+                apply this to a group of tagged notes
+                but don't change its overall duration
+            random(dt, x)
+                apply random shift
+            these may also add pauses
+        in 2 and 3 everything is in seconds
+
+dynamics primitives
+    volume is represented as 1..127
+    adjustments to volume are represented as fractions (0..1), possibly > 1
+    adjusted volumes are pegged at 1 and 127
+        (print when this happens)
+
+    stages:
+        1) set base volume (e.g. crescendos)
+            dyn(dt, v0, v1)
+        2) adjust volume
+            outer(dt, bottom, mid, top)
+                "voice" notes that are highest/lowest
+                e.g. outer(4, .8, .4, 1)
+            metric(dt, pattern)
+                apply metric emphases
+            random(dt, x)
+                apply random change
+
+notes on outer:
+    need to sort of simulate the piece to figure out it a note is highest and/or lowest
+    cur_time = 0
+    S = notes active at current time
+    C = notes started at current time
+    C is always a subset of S
+    for each note N
+        if n.time > cur_time+1e-4:
+            is len(C):
+                find min, max of pitches in S
+                for each note in C
+                    if pitch = min, tag as lowest
+                    if pitch = max, tag as highest
+            cur_time = N.time
+            remove notes from S that end <= cur_time
+            C = {N}
+        else:
+            add N to S
+            add N to C
+
+

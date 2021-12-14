@@ -18,4 +18,19 @@ def chromatic():
     with open("chromatic.midi", "wb") as file:
         f.writeFile(file)
 
-chromatic()
+def test():
+    track = 0
+    channel = 0
+    time = 0
+    dur = 0.5
+    tempo = 120
+    vol = 120
+
+    f = MIDIFile(1)
+    f.addTempo(0, 0, 120)
+    f.addNote(0, 0, 60, 0, .5, 64);
+    f.addNote(0, 0, 60, 0, .4, 64);
+    with open("test.midi", "wb") as file:
+        f.writeFile(file)
+        
+test()

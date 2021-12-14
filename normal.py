@@ -1,17 +1,30 @@
-from midiutil import MIDIFile
-import random, numpy
+import random, numpy, math
+import note
 
 def normal_time():
-    f = MIDIFile(1)
-    f.addTempo(0, 0, 120)
-    for i in range(300):
-        pitch = random.randrange(40, 80)
-        time = 30 + numpy.random.normal()*10
-        dur = 1
-        vol = random.randrange(20,40)
-        f.addNote(0, 0, pitch, time, dur, vol)
+    notes = note.NoteSet()
+    z = []
+    min = 0
+    for i in range(400):
+        x = numpy.random.normal()
+        if x > 2: continue
+        if x < -2: continue
+        z.append(x)
+        if x < min: min = x
+    for x in z:
+        y = math.exp(-(x*x))
+        r = int(y*36)
+        if r > 0:
+            pitch = 60 + random.randrange(-r, r+1)
+        else:
+            pitch = 60
+        time = 30*(x-min)   # 4 min long
+        dur = random.randrange(1,6)
+        vol = 10 + random.randrange(1+int(y*110))
+        notes.add(note.Note(time, dur, pitch, vol))
+        #print(x, pitch, time, dur, vol)
 
-    with open("normal.midi", "wb") as file:
-        f.writeFile(file)
+    notes.remove_overlap()
+    notes.write_midi("normal.midi")
 
 normal_time()
