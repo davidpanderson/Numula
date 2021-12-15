@@ -1,12 +1,13 @@
 from note import *
 from notate import *
+from nuance import *
 
-def vol(ns):
-    ns.start()
-    ns.vol(ppp, mp, 18/8)
-    ns.vol(mp, pp, 12/8)
-    ns.vol(pp, ppp, 18/8)
-    ns.vol(pp, mp, 18/8)
+def set_vol(ns):
+    score_start(ns)
+    vol(ns, ppp, mp, 18/8)
+    vol(ns, mp, pp, 12/8)
+    vol(ns, pp, ppp, 18/8)
+    vol(ns, pp, mp, 18/8)
     
 def main():
     ns = NoteSet()
@@ -27,13 +28,13 @@ def main():
         --g- f e- \
         d- c b- \
         1/4 e- 1/8 f 1/4 [g- ++b-] 1/8 --a- 3/8 [a ++c] ')
-    #ns.append(n(' 3/16 [e- +b-] +b- [--f b- +a-] [d- --b-] 1/4 [c 3/8 +g-] 1/8 -c'))
-    ns.append(rh)
-    ns.insert(0, lh)
+
+    ns.add_list(0, rh)
+    ns.add_list(0, lh)
     ns.sort_time()
-    ns.flag_outer()
-    vol(ns)
+    flag_outer(ns)
+    set_vol(ns)
     ns.print()
-    ns.write_midi(60, 'wasserklavier.midi')
+    ns.write_midi('wasserklavier.midi')
 
 main()

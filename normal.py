@@ -20,9 +20,8 @@ def normal_time():
             pitch = 60
         time = 30*(x-min)   # 4 min long
         dur = random.randrange(1,6)
-        vol = 10 + random.randrange(1+int(y*110))
+        vol = .02 + y*0.9*random.random()
         notes.add(note.Note(time, dur, pitch, vol))
-        #print(x, pitch, time, dur, vol)
 
     notes.remove_overlap()
     notes.write_midi("normal.midi")

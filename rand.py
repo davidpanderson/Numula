@@ -14,7 +14,7 @@ def rand_notes():
         pitch = random.randrange(40, 80)
         time = random.uniform(0,200)
         dur = random.uniform(.1, 5)
-        vol = random.randrange(20,128)
+        vol = random.uniform(.1, 1)
         f.addNote(track, channel, pitch, time, dur, vol)
 
     with open("random.midi", "wb") as file:

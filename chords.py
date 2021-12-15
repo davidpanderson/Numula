@@ -17,8 +17,7 @@ def main():
         j = (j+1) % 4
         octave = random.randrange(4,8)
         pitch = octave*12 + c[j]
-        vol = (math.sin(time/30)+1)*20 + 10 + random.randrange(20)
-        vol = int(vol)
+        vol = (math.sin(time/30)+1)*.3 + .1 + 0.15*random.random()
         
         f.addNote(0, 0, pitch, time, dur, vol)
         #time += random.uniform(.5, 2.)

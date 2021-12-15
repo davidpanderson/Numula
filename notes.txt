@@ -88,11 +88,32 @@ Notes have
     "performed time": seconds
         performed duration
     stages:
-        1) tempo + accelerandi
+        1) tempo
             defines a continuous function from score to performed time
-        2) pauses
-            whether silence is added
-        3) shifts
+            seg(dt, func, params)
+            func is a function that computes the integral of a tempo function
+            e.g. linear(dt, tempo0, tempo1)(a,b)
+                returns the integral of a line between a and b,
+                where 0 <= a < b <= dt
+            could also have exponential, etc.
+            e.g.:
+                ns.start()
+                tseg(ns, 8/4, linear, [40, 60])
+                tseg(ns, 8/4, linear, [60, 50])
+            segment boundaries may not line up with note times,
+            so some tricky computation is needed
+            one approach:
+                given the NoteSet, make another data structure which
+                    has start and end records, each with a pointer to a Note.
+                    Traverse this, computing performed times.
+                    For start records, fill in Note.perf_time
+                    For end records, fill in Note.perf_duration
+            
+        2) adjustments
+            these change the time of some notes;
+                thay may also add a delay to everything later
+            pause
+                whether silence is added
             roll
                 neg offset per note
                 specify whether it adds time
@@ -104,7 +125,7 @@ Notes have
             random(dt, x)
                 apply random shift
             these may also add pauses
-        in 2 and 3 everything is in seconds
+        in 2 everything is in seconds
 
 dynamics primitives
     volume is represented as 1..127
@@ -144,4 +165,13 @@ notes on outer:
             add N to S
             add N to C
 
-
+Note selection (for timing/vol adjustment, articulation)
+    Notes have the following attributes:
+        tags explicitly assigned
+        highest/lowest
+        number of simultaneous notes
+    note selector:
+        time range
+        duration range
+        required tags
+        excluded tags

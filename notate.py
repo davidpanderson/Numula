@@ -1,3 +1,7 @@
+# textual music notation
+# E.g. n('1/8 a b c') returns a list of Note objects for 8th note A, B, C
+# see https://github.com/davidpanderson/music/wiki
+
 import note
 
 note_names = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
@@ -75,6 +79,7 @@ def n(s):
     s = s.replace(']', ' ] ')
     notes = []
     cur_pitch = 60
+    tags = []
     cur_time = 0
     in_chord = False
     vol = 64
@@ -107,6 +112,16 @@ def n(s):
             if in_chord:
                 raise Exception('no rests in chords')
             cur_time += dur
+        elif t[0] == '(':
+            tag = t[1:]
+            if tag in tags:
+                raise Exception('tag %s already in effect'%tag)
+            tags.append(tag)
+        elif t[-1] == ')':
+            tag = t[0:-1]
+            if tag in tags:
+                raise Exception('missing tag %s'%tag)
+            tags.remove(tag)
         else:
             # note
             x = parse_note(t)
@@ -122,4 +137,6 @@ def n(s):
             if not in_chord:
                 cur_time += dur
             cur_pitch = pitch
+    if in_chord:
+        raise Exception('missing ]')
     return notes
