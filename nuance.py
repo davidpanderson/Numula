@@ -97,11 +97,13 @@ def make_start_end(ns):
     ns.cur_perf_time = 0
     
 def linear(dur, time, params):
-    tempo0 = 1/params[0]
-    tempo1 = 1/params[1]
+    tempo0 = params[0]
+    tempo1 = params[1]
     dtempo = tempo1 - tempo0
-    avg_tempo = tempo0 + .5*t/dur
-    return avg_tempo * time
+    avg_tempo = tempo0 + .5*dtempo*time/dur
+    seconds_per_beat = 60/avg_tempo
+    print('avg_tempo%f seconds_per_beat %f'%(avg_tempo, seconds_per_beat))
+    return 4* seconds_per_beat * time
 
 def tseg(ns, dur, func, params):
     start_time = ns.cur_time
@@ -111,7 +113,7 @@ def tseg(ns, dur, func, params):
         if event[0] > end_time + epsilon:
             break
         dt = event[0] - start_time
-        t = cur_perf_time + func(dur, dt, params)
+        t = ns.cur_perf_time + func(dur, dt, params)
         note = event[1]
         if event[2]:
             note.perf_time = t

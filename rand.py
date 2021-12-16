@@ -1,23 +1,11 @@
-from midiutil import MIDIFile
+from note import *
 import random
 
-def rand_notes():
-    track = 0
-    channel = 0
-    tempo = 120
-    time = 0
-    
-    f = MIDIFile(1)
-    f.addTempo(track, time, tempo)
-    
-    for i in range(300):
-        pitch = random.randrange(40, 80)
-        time = random.uniform(0,200)
-        dur = random.uniform(.1, 5)
-        vol = random.uniform(.1, 1)
-        f.addNote(track, channel, pitch, time, dur, vol)
-
-    with open("random.midi", "wb") as file:
-        f.writeFile(file)
-
-rand_notes()
+ns = NoteSet()
+for i in range(200):
+    pitch = random.randrange(40, 80)
+    time = random.uniform(0, 10)
+    dur = random.uniform(.1, 1)
+    vol = random.uniform(.1, .8)
+    ns.add(Note(time, dur, pitch, vol))
+ns.write_midi("random.midi")

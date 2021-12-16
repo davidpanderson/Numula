@@ -8,6 +8,12 @@ def set_vol(ns):
     vol(ns, mp, pp, 12/8)
     vol(ns, pp, ppp, 18/8)
     vol(ns, pp, mp, 18/8)
+
+def set_tempo(ns):
+    make_start_end(ns)
+    tseg(ns, 18/8, linear, [60,80])
+    tseg(ns, 12/8, linear, [80,50])
+    tseg(ns, 36/8, linear, [50,70])
     
 def main():
     ns = NoteSet()
@@ -34,6 +40,7 @@ def main():
     ns.sort_time()
     flag_outer(ns)
     set_vol(ns)
+    set_tempo(ns)
     ns.print()
     ns.write_midi('wasserklavier.midi')
 
