@@ -18,14 +18,9 @@ def chromatic():
     with open("chromatic.midi", "wb") as file:
         f.writeFile(file)
 
-def test():
-    track = 0
-    channel = 0
-    time = 0
-    dur = 0.5
-    tempo = 120
-    vol = 120
-
+# show a bug in MIDIFile: crashes if 2 notes w/ same time and pitch
+#
+def mf_bug():
     f = MIDIFile(1)
     f.addTempo(0, 0, 120)
     f.addNote(0, 0, 60, 0, .5, 64);
@@ -33,4 +28,4 @@ def test():
     with open("test.midi", "wb") as file:
         f.writeFile(file)
         
-test()
+

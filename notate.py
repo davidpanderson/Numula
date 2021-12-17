@@ -16,7 +16,7 @@ def parse_note(s):
     for c in s:
         if c in note_names:
             if got_pitch:
-                raise Exception('already have pitch')
+                raise Exception('already have pitch in %s'%s)
             pitch_class = pitch_offset[note_names.index(c)]
             got_pitch = True
         elif c == '+':
@@ -29,6 +29,8 @@ def parse_note(s):
             if off[i] > 1:
                 raise Exception('bad offset')
             off[i] -= 1
+    if not got_pitch:
+        raise Exception('no pitch specified in %s'%s)
     return [pitch_class, off[0], off[1]]
 
 # if octave_offset is 0,
@@ -83,7 +85,7 @@ def n(s):
     cur_time = 0
     in_chord = False
     vol = 64
-    dur = 1
+    dur = 1/4
     for t in s.split(' '):
         if not t: continue
         if t == '[':
@@ -119,8 +121,8 @@ def n(s):
             tags.append(tag)
         elif t[-1] == ')':
             tag = t[0:-1]
-            if tag in tags:
-                raise Exception('missing tag %s'%tag)
+            if tag not in tags:
+                raise Exception('unopened tag %s'%tag)
             tags.remove(tag)
         else:
             # note
@@ -132,7 +134,7 @@ def n(s):
             pitch_class = (pitch_class + 12) % 12
             pitch = next_pitch(cur_pitch, pitch_class, octave_offset)
             d = chord_dur if in_chord else dur
-            n = note.Note(cur_time, d, pitch, vol)
+            n = note.Note(cur_time, d, pitch, vol, tags)
             notes.append(n)
             if not in_chord:
                 cur_time += dur

@@ -6,10 +6,10 @@ class Note:
         self.dur = dur
         self.pitch = pitch
         self.vol = vol
-        self.tags = tags
+        self.tags = tags.copy()
     def print(self):
         t = ' '.join(self.tags)
-        print('time: %f dur: %f pitch: %d vol: %f%s'%(
+        print('time: %f dur: %f pitch: %d vol: %f %s'%(
             self.perf_time, self.perf_dur, self.pitch, self.vol, t
         ))
 
@@ -21,6 +21,9 @@ class NoteSet:
         self.cur_time = 0
         self.tempo = 60    # beats per minute
     def add(self, note):
+        # set time and dur in such a way that playback will be at quarter = 60.
+        # These will be modified if you adjust tempo.
+        #
         note.perf_time = note.time*4*60/ self.tempo
         note.perf_dur = note.dur*4*60/self.tempo
         self. notes.append(note)

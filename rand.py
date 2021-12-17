@@ -8,4 +8,6 @@ for i in range(200):
     dur = random.uniform(.1, 1)
     vol = random.uniform(.1, .8)
     ns.add(Note(time, dur, pitch, vol))
+ns.remove_overlap()
+ns.print()
 ns.write_midi("random.midi")

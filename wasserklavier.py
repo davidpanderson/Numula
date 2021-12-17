@@ -3,17 +3,20 @@ from notate import *
 from nuance import *
 
 def set_vol(ns):
-    score_start(ns)
-    vol(ns, ppp, mp, 18/8)
-    vol(ns, mp, pp, 12/8)
-    vol(ns, pp, ppp, 18/8)
-    vol(ns, pp, mp, 18/8)
+    vol_init(ns)
+    vol_seg(ns, ppp, mp, 18/8)
+    vol_seg(ns, mp, pp, 12/8)
+    vol_seg(ns, pp, ppp, 18/8)
+    vol_seg(ns, pp, mp, 18/8)
+    
+    vol_adjust(ns, .7, lambda n: 'highest' not in n.tags and 'lowest' not in n.tags)
+    vol_adjust(ns, .9, lambda n: 'highest' not in n.tags and 'lowest' in n.tags)
 
 def set_tempo(ns):
-    make_start_end(ns)
-    tseg(ns, 18/8, linear, [60,80])
-    tseg(ns, 12/8, linear, [80,50])
-    tseg(ns, 36/8, linear, [50,70])
+    timing_init(ns)
+    tempo_seg(ns, 18/8, linear, [60,80])
+    tempo_seg(ns, 12/8, linear, [80,50])
+    tempo_seg(ns, 36/8, linear, [50,70])
     
 def main():
     ns = NoteSet()
