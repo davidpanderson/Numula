@@ -8,7 +8,7 @@ note_names = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
 pitch_offset = [0, 2, 4, 5, 7, 9, 11]
 
 # parse a string of the form ++b-
-# octave offset, pitch class, accidental
+# return list of pitch class, octave offset, accidental offset
 #
 def parse_note(s):
     got_pitch = False
@@ -29,6 +29,8 @@ def parse_note(s):
             if off[i] > 1:
                 raise Exception('bad offset')
             off[i] -= 1
+        else:
+            raise Exception("can't parse %s"%s)
     if not got_pitch:
         raise Exception('no pitch specified in %s'%s)
     return [pitch_class, off[0], off[1]]
@@ -79,10 +81,9 @@ def next_pitch(cur_pitch, pitch_class, octave_offset):
 def n(s):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
-    notes = []
+    ns = note.NoteSet()
     cur_pitch = 60
     tags = []
-    cur_time = 0
     in_chord = False
     vol = .5
     dur = 1/4
@@ -97,9 +98,9 @@ def n(s):
             if not in_chord:
                 raise Exception("] not in chord")
             in_chord = False
-            cur_time += dur
+            ns.advance_time(dur)
         elif t == '_':
-            cur_time -= dur
+            ns.advance_time(-dur)
         elif '/' in t:
             # rhythm notation
             a = t.split('/')
@@ -113,7 +114,7 @@ def n(s):
         elif t == '.':
             if in_chord:
                 raise Exception('no rests in chords')
-            cur_time += dur
+            ns.advance_time(dur)
         elif t[0] == '(':
             tag = t[1:]
             if tag in tags:
@@ -134,11 +135,11 @@ def n(s):
             pitch_class = (pitch_class + 12) % 12
             pitch = next_pitch(cur_pitch, pitch_class, octave_offset)
             d = chord_dur if in_chord else dur
-            n = note.Note(cur_time, d, pitch, vol, tags)
-            notes.append(n)
+            n = note.Note(0, d, pitch, vol, tags)
+            ns.append_note(n)
             if not in_chord:
-                cur_time += dur
+                ns.advance_time(dur)
             cur_pitch = pitch
     if in_chord:
         raise Exception('missing ]')
-    return notes
+    return ns

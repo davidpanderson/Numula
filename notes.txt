@@ -248,3 +248,27 @@ Note: in Pianoteq, 0..63 is off.  64..127 is on a little to all the way
 Note 2: CC 64 is sustain pedal;
 CC is middle (sostenuto) pedal
     send this command after all notes of that start time
+
+------------------
+entering large scores
+
+Goal: make it easy to enter and test scores in small pieces
+
+2 approaches:
+
+1) notation: "reset" means return to middle C, 1/4 dur
+    this lets you have separate strings and concatenate them
+
+2) Appending notes:
+    c() adds a zero-volume note at end
+        to mark end time if end w/ a rest
+
+    NoteSet.done() removes these
+
+    NoteSet.add_list() returns the time after add
+    So if you have, say rh0, rh1, ..., lh0, lh1, ... you could do
+    t0 = ns.add_list(0, rh)
+    ns.add_list(0, lh)
+    t1 = ns.add_list(t0, rh1)
+    ns.add_list(t0, lh1)
+    ...

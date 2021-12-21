@@ -36,18 +36,30 @@ class NoteSet:
         self.pedals = []
         self.done_called = False
         
-    def add(self, note):
+    def insert_note(self, note):
         self. notes.append(note)
-        
-    def add_list(self, time, new_notes):
-        for note in new_notes:
-            note.time += time
-            self.add(note)
+    def append_note(self, note):
+        note.time = self.cur_time
+        self.notes.append(note)
+    def advance_time(self, dur):
+        self.cur_time += dur
+
+    def insert_ns(self, t, ns):
+        for note in ns.notes:
+            note.time += t
+            self.insert_note(note)
+
+    def append_ns(self, nss):
+        longest = 0
+        for ns in nss:
+            if ns.cur_time > longest: longest = ns.cur_time
+            self.insert_ns(self.cur_time, ns)
+        self.cur_time += longest
             
-    def add_measure(self, t):
+    def insert_measure(self, t):
         self.measures.append(t)
 
-    def add_pedal(self, pedal):
+    def insert_pedal(self, pedal):
         self.pedals.append(pedal)
         
     def print(self):

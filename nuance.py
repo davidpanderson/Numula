@@ -78,13 +78,13 @@ def tempo_seg(ns, dur, func, params):
             break
         dt = event.time - start_time
         t = ns.cur_perf_time + func(dur, dt, params)
-        if event.kind == NoteSet.event_kind_note:
+        if event.kind == event_kind_note:
             note = event.obj
             if event.is_start:
                 note.perf_time = t
             else:
                 note.perf_dur = t - note.perf_time
-        elif event.kind == NoteSet.event_kind_pedal:
+        elif event.kind == event_kind_pedal:
             pedal = event.obj
             if event.is_start:
                 pedal.perf_time = t
