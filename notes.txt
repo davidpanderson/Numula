@@ -221,3 +221,30 @@ metric rubato (e.g. waltz rhythm)
             
     as adjustment:
         delay notes beyond 2nd beat
+-------------
+Sustain pedal
+
+ns.sustain_pedal(t, dt, level)
+ns.sostenuto_pedal(t, dt, level)
+    apply pedal from t to d+dt at given level (0..1)
+    This is stored in a separate NoteSet.pedal list
+    write_midi adds the appropriate CC commands.
+
+    In the timing logic, add pedal events to the start/end structure.
+    Run the set-tempo logic.
+    This gives the end perf times.
+    start perf time is determined as follows:
+    sustain pedal:
+        start time is the min of the start times
+        of notes with score times in the pedal interal;
+        we need to "catch" all these notes, even if they got moved earlier
+    sostenuto pedal:
+        if a note is active (in score time) at the pedal start,
+        but its perf time is greater than pedal perf start,
+        set pedal perf to that time
+
+Note: in Pianoteq, 0..63 is off.  64..127 is on a little to all the way
+
+Note 2: CC 64 is sustain pedal;
+CC is middle (sostenuto) pedal
+    send this command after all notes of that start time

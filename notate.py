@@ -84,7 +84,7 @@ def n(s):
     tags = []
     cur_time = 0
     in_chord = False
-    vol = 64
+    vol = .5
     dur = 1/4
     for t in s.split(' '):
         if not t: continue

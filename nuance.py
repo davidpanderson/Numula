@@ -1,6 +1,5 @@
 from note import *
-import numpy
-
+import numpy, random
 
 # --------------- Volume ----------------------
 
@@ -15,15 +14,11 @@ f = .70
 ff = .84
 fff = .99
 
-def vol_init(ns):
-    ns.cur_time = 0
-    ns.ind = 0
-
 # linear volume change over a time interval
 # is_closed: include notes at end of interval
 #
 def vol_seg(ns, vol0, vol1, dt, is_closed=True):
-    start_time = ns.cur_time
+    start_time = ns.vol_cur_time
     end_time = start_time + dt
     dvol = vol1 - vol0
     if is_closed:
@@ -31,13 +26,13 @@ def vol_seg(ns, vol0, vol1, dt, is_closed=True):
     else:
         end_time -= epsilon
     nnotes = len(ns.notes)
-    while ns.ind < nnotes:
-        note = ns.notes[ns.ind]
+    while ns.vol_ind < nnotes:
+        note = ns.notes[ns.vol_ind]
         if note.time > end_time:
             break;
         note.vol = vol0 + dvol*((note.time-start_time)/dt)
-        ns.ind += 1
-    ns.cur_time += dt
+        ns.vol_ind += 1
+    ns.vol_cur_time += dt
 
 # ------- volume adjustments.  Changes are multiplicative factors
 
@@ -53,20 +48,18 @@ def vol_adjust_func(ns, func, pred):
             
 # --------------- Timing ----------------------
 
-# make an auxiliary structure with start/end events
+# A tempo segment function.
+# Such functions map score time to performance time over an interval starting at zero.
+# args:
+# dur: the length of the interval (in score time)
+# time: a time in this interval (i.e. 0..dur)
+# params: arguments to the function,
+# e.g. in the case of linear tempo change, the start and end tempi
 #
-def timing_init(ns):
-    ns.start_end = []
-    for note in ns.notes:
-        start = [note.time, note, True]
-        end = [note.time+note.dur, note, False]
-        ns.start_end.append(start)
-        ns.start_end.append(end)
-    ns.start_end.sort(key=lambda x: x[0])
-    ns.cur_ind = 0    # index into ns.start_end
-    ns.cur_time = 0
-    ns.cur_perf_time = 0
-    
+# This can be any monotonically increasing function.
+# Linear is easy but something else (logarithmic, quadratic)
+# might model performance practice better.
+#
 def linear(dur, time, params):
     tempo0 = params[0]
     tempo1 = params[1]
@@ -74,22 +67,31 @@ def linear(dur, time, params):
     avg_tempo = tempo0 + .5*dtempo*time/dur
     seconds_per_beat = 60/avg_tempo
     #print('avg_tempo %f seconds_per_beat %f'%(avg_tempo, seconds_per_beat))
-    return 4* seconds_per_beat * time
+    return 4*seconds_per_beat*time
 
 def tempo_seg(ns, dur, func, params):
     start_time = ns.cur_time
     end_time = ns.cur_time + dur
     while ns.cur_ind < len(ns.start_end):
         event = ns.start_end[ns.cur_ind]
-        if event[0] > end_time + epsilon:
+        if event.time > end_time + epsilon:
             break
-        dt = event[0] - start_time
+        dt = event.time - start_time
         t = ns.cur_perf_time + func(dur, dt, params)
-        note = event[1]
-        if event[2]:
-            note.perf_time = t
+        if event.kind == NoteSet.event_kind_note:
+            note = event.obj
+            if event.is_start:
+                note.perf_time = t
+            else:
+                note.perf_dur = t - note.perf_time
+        elif event.kind == NoteSet.event_kind_pedal:
+            pedal = event.obj
+            if event.is_start:
+                pedal.perf_time = t
+            else:
+                pedal.perf_dur = t - pedal.perf_time
         else:
-            note.perf_dur = t - note.perf_time
+            raise Exception('bad event kind')
         ns.cur_ind += 1
     ns.cur_time += dur
     ns.cur_perf_time += func(dur, dur, params)
@@ -171,69 +173,59 @@ def t_adjust_notes(ns, offset, pred):
         if pred(note):
             note.perf_time += offset
 
-def t_adjust_notes_func(ns, func, pred):
+def t_adjust_func(ns, func, pred):
     for note in ns.notes:
         if pred(note):
             note.perf_time += func(note)
 
-def t_random_uniform(ns, min, max, pred):
+# perturb start time, and adjust duration to keep end time the same
+# Possible TODO: adjust durations of earlier notes that end at this time
+#
+def t_random_uniform(ns, min, max, pred=None):
     for note in ns.notes:
-        if pred(note):
-            note.perf_time += random.uniform(min, max)
+        if pred and not pred(note): continue
+        x = random.uniform(min, max)
+        note.perf_time += x
+        note.per_dur -= x
 
-def t_random_normal(ns, stddev, max_sigma, pred):
+def t_random_normal(ns, stddev, max_sigma, pred=None):
     for note in ns.notes:
+        if pred and not pred(note): continue
         while True:
             x = numpy.random.normal()
             if abs(x) < max_sigma: break
-        note.perf_time += stddev*x
+        y = stddev*x
+        note.perf_time += y
+        note.perf_dur -= y
                 
 # --------------- Articulation ----------------------
 
-def dur_abs(ns, dur, pred):
+def score_dur_abs(ns, dur, pred):
     for note in ns.notes:
         if pred(note):
             note.dur = dur
 
-def dur_rel(ns, factor, pred):
+def score_dur_rel(ns, factor, pred):
     for note in ns.notes:
         if pred(note):
             note.dur *= factor
 
-# --------------- Utility --------------------
-
-# tag notes that are the highest or lowest sounding notes at their start
-#
-def flag_outer_aux(active, started):
-    print('flag_aux: %d active, %d started'%(len(active), len(started)))
-    min = 128
-    max = -1
-    for n in active:
-        if n.pitch < min: min = n.pitch
-        if n.pitch > max: max = n.pitch
-    for n in started:
-        if n.pitch == max:
-            n.tags.append('highest')
-        if n.pitch == min:
-            n.tags.append('lowest')
-        
-def flag_outer(ns):
-    cur_time = 0
-    active = []     # notes active at current time
-    started = []    # notes that started at current time
+def score_dur_func(ns, func, pred):
     for note in ns.notes:
-        if note.time > cur_time + epsilon:
-            if len(started):
-                flag_outer_aux(active, started)
-            cur_time = note.time
-            new_active = [note]
-            for n in active:
-                if n.time + n.dur > cur_time + epsilon:
-                    new_active.append(n)
-            active = new_active
-            started = [note]
-        else:
-            active.append(note)
-            started.append(note)
-    flag_outer_aux(active, started)
+        if pred(note):
+            note.dur = func(note)
+            
+def perf_dur_abs(ns, dur, pred):
+    for note in ns.notes:
+        if pred(note):
+            note.perf_dur = dur
 
+def perf_dur_rel(ns, factor, pred):
+    for note in ns.notes:
+        if pred(note):
+            note.perf_dur *= factor
+
+def perf_dur_func(ns, func, pred):
+    for note in ns.notes:
+        if pred(note):
+            note.perf_dur = func(note)

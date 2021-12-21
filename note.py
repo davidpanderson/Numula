@@ -7,12 +7,24 @@ class Note:
         self.pitch = pitch
         self.vol = vol
         self.tags = tags.copy()
+        self.measure_offset = -1
     def print(self):
-        t = ' '.join(self.tags)
-        print('time: %f dur: %f pitch: %d vol: %f %s'%(
-            self.perf_time, self.perf_dur, self.pitch, self.vol, t
+        t = ''
+        if self.measure_offset >= 0:
+            t += 'm_off: %.4f '%self.measure_offset
+        t += ' '.join(self.tags)
+        print('t: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %d vol: %.4f chord: (%d/%d) %s'%(
+            self.time, self.dur, self.perf_time, self.perf_dur, self.pitch, self.vol,
+            self.chord_pos, self.nchord, t
         ))
 
+class Pedal:
+    def __init__(self, time, dur, level=1, sostenuto=False):
+        self.time = time
+        self.dur = dur
+        self.level = level
+        self.sostenuto = False
+        
 epsilon = 1e-4    # slop factor for time in case of round-off
 
 class NoteSet:
@@ -20,46 +32,253 @@ class NoteSet:
         self.notes = []
         self.cur_time = 0
         self.tempo = 60    # beats per minute
+        self.measures = []
+        self.pedals = []
+        self.done_called = False
+        
     def add(self, note):
-        # set time and dur in such a way that playback will be at quarter = 60.
-        # These will be modified if you adjust tempo.
-        #
-        note.perf_time = note.time*4*60/ self.tempo
-        note.perf_dur = note.dur*4*60/self.tempo
         self. notes.append(note)
+        
+    def add_list(self, time, new_notes):
+        for note in new_notes:
+            note.time += time
+            self.add(note)
+            
+    def add_measure(self, t):
+        self.measures.append(t)
+
+    def add_pedal(self, pedal):
+        self.pedals.append(pedal)
+        
     def print(self):
+        if not self.done_called:
+            raise Exception('Call done() before print()')
+        m_ind = 0
         for note in self.notes:
+            if m_ind < len(self.measures):
+                if note.time > self.measures[m_ind] - epsilon:
+                    print('measure %d'%m_ind);
+                    m_ind += 1
             note.print()
-    def sort_time(self):
+            
+    def done(self):
+        self.done_called = True
         self.notes.sort(key=lambda x: x.time)
+        # set perf time and dur in such a way that playback will be at the
+        # tempo given by self.tempo.
+        # These will be modified if you use nuance functions.
+        #
+        # Also set note.nchord and not.chord_pos
+        #
+        chord = []
+        def do_chord(chord):
+            n = len(chord)
+            if n > 1:
+                chord.sort(key=lambda x: x.pitch)
+                for i in range(n):
+                    cnote = chord[i]
+                    cnote.nchord = n
+                    cnote.chord_pos = i
+            else:
+                cnote = chord[0]
+                cnote.nchord = 1
+                cnote.chord_pos = 0
+                
+        for note in self.notes:
+            note.perf_time = note.time*4*60/ self.tempo
+            note.perf_dur = note.dur*4*60/self.tempo
+            if chord:
+                if note.time > chord_time + epsilon:
+                    do_chord(chord)
+                    chord = [note]
+                    chord_time = note.time
+                else:
+                    chord.append(note)
+            else:
+                chord = [note]
+                chord_time = note.time
+        do_chord(chord)
+
+        for pedal in self.pedals:
+            pedal.perf_time = pedal.time*4*60/self.tempo
+            pedal.perf_dur = pedal.dur*4*60/self.tempo
+                
+        # initialize for nuance stuff
+        #
+        self.measure_offsets()
+        self.flag_outer()
+        self.vol_cur_time = 0
+        self.vol_ind = 0
+        self.timing_init()
+        
     def write_midi(self, filename):
+        if not self.done_called:
+            raise Exception('Call done() before write_midi()')
+        
         f = MIDIFile(1)
         f.addTempo(0, 0, 60)
+
+        # shift to avoid negative times; MIDI files don't like them
+        #
+        self.notes.sort(key=lambda x: x.perf_time)
+        t0 = self.notes[0].perf_time
+        if t0 < 0:
+            for note in self.notes:
+                note.perf_time -= t0
+            for pedal in self.pedal:
+                pedal.perf_time -= t0
         for note in self.notes:
             v = int(note.vol * 128)
             if v < 2: v = 2
             if v > 127: v = 127
             f.addNote(0, 0, note.pitch, note.perf_time, note.perf_dur, v)
+        if self.pedals:
+            self.adjust_pedal_times()
+            for pedal in self.pedals:
+                c = 66 if pedal.sostenuto else 64
+                level = int(64+pedal.level*63)
+                f.addControllerEvent(0, 0, pedal.perf_time, c, level)
+                f.addControllerEvent(0, 0, pedal.perf_time + pedal.perf_dur, c, 0)
         with open(filename, "wb") as file:
             f.writeFile(file)
-    def add_list(self, time, new_notes):
-        for note in new_notes:
-            note.time += time
-            self.add(note)
+
+    def set_tempo(self, tempo):
+        if  self.done_called:
+            raise Exception('Call set_tempo() before done()')
+        self.tempo = tempo
 
     # remove notes that start while a note of the same pitch is active
     # Useful for cleaning up randomly-generated stuff
     #
     def remove_overlap(self):
-        self.sort_time()
+        if not self.done_called:
+            raise Exception('Call done() before remove_overlap()')
         end_time = [0]*128
         out = []
         for note in self.notes:
-            if note.time < end_time[note.pitch]:
+            if note.perf_time < end_time[note.pitch]:
                 continue
             out.append(note)
-            end_time[note.pitch] = note.time+note.dur
+            end_time[note.pitch] = note.perf_time+note.perf_dur
         self.notes = out
+
+    # ----- implementation ----
+
+
+        
+    # make an auxiliary structure with start/end events
+    #
+    def timing_init(self):
+        self.start_end = []
+        for note in self.notes:
+            self.start_end.append(Event(note.time, note, event_kind_note, True))
+            self.start_end.append(Event(note.time+note.dur, note, event_kind_note, False))
+        for pedal in self.pedals:
+            self.start_end.append(Event(pedal.time, pedal, event_kind_pedal, True))
+            self.start_end.append(Event(pedal.time+pedal.dur, pedal, event_kind_pedal, False))
+        self.start_end.sort(key=lambda x: x.time)
+        self.cur_ind = 0    # index into ns.start_end
+        self.cur_time = 0
+        self.cur_perf_time = 0
+        
+    # compute offsets from measure boundaries
+    #
+    def measure_offsets(self):
+        if not self.measures: return
+        m_ind = 0
+        m_time = -9999
+        for note in self.notes:
+            if m_ind < len(self.measures):
+                if note.time > self.measures[m_ind] - epsilon:
+                    m_time = self.measures[m_ind]
+                    m_ind += 1
+            note.measure_offset = note.time - m_time
+
+    # tag notes that are the highest or lowest sounding notes at their start
+    #
+    def flag_outer_aux(active, started):
+        #print('flag_aux: %d active, %d started'%(len(active), len(started)))
+        min = 128
+        max = -1
+        for n in active:
+            if n.pitch < min: min = n.pitch
+            if n.pitch > max: max = n.pitch
+        for n in started:
+            if n.pitch == max:
+                n.tags.append('top')
+            if n.pitch == min:
+                n.tags.append('bottom')
+            
+    def flag_outer(self):
+        cur_time = 0
+        active = []     # notes active at current time
+        started = []    # notes that started at current time
+        for note in self.notes:
+            if note.time > cur_time + epsilon:
+                if len(started):
+                    NoteSet.flag_outer_aux(active, started)
+                cur_time = note.time
+                new_active = [note]
+                for n in active:
+                    if n.time + n.dur > cur_time + epsilon:
+                        new_active.append(n)
+                active = new_active
+                started = [note]
+            else:
+                active.append(note)
+                started.append(note)
+        NoteSet.flag_outer_aux(active, started)
+
+    # Adjust performance time of pedal events so that they do the right thing
+    # even if note start times have been adjusted.
+    # Sustain pedal:
+    # start time is the min of the start times
+    # of notes with score times in the pedal interal;
+    # we need to "catch" all these notes, even if they got moved earlier
+    # Sostenuto pedal:
+    # if a note is active (in score time) at the pedal start,
+    # but its perf time is greater than pedal perf start,
+    # set pedal perf to that time
+    # plus an epsilon so that the pedal "catches" all those notes
+    #
+    def adjust_pedal_times(self):
+        # need to scan notes by score time
+        notes2 = list(self.notes)
+        notes2.sort(key=lambda x: x.time)
+        self.pedals.sort(key=lambda x: x.time)
+        ped_ind = 0
+        cur_ped = self.pedals[0]
+        for note in notes2:
+            if ped_ind == len(self.pedals):
+                break
+            if cur_ped.sostenuto:
+                if note.time + note.dur < cur_ped.time - epsilon:
+                    continue
+                if note.time > cur_ped.time + epsilon:
+                    ped_ind += 1
+                else:
+                    if note.perf_time > cur_ped.perf_time:
+                        cur_ped.perf_time = note.perf_time + epsilon
+            else:
+                # sustain
+                if note.time < cur_ped.time:
+                    continue
+                if note.time > cur_ped.time + cur_ped.dur:
+                    ped_ind += 1
+                else:
+                    if note.perf_time < cur_ped.perf_time:
+                        cur_ped.perf_time = note.perf_time
+            
+ # represents the start or end of a note or pedal application
+#
+event_kind_note = 0
+event_kind_pedal = 1
+class Event:
+    def __init__(self, time, obj, kind, is_start):
+        self.time = time
+        self.obj = obj
+        self.kind = kind
+        self.is_start = is_start
         
 def test():
     y = NoteSet()

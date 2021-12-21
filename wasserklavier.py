@@ -40,8 +40,7 @@ def main():
 
     ns.add_list(0, rh)
     ns.add_list(0, lh)
-    ns.sort_time()
-    flag_outer(ns)
+    ns.done()
     set_vol(ns)
     set_tempo(ns)
     ns.print()
