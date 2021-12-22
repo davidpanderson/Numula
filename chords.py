@@ -19,7 +19,7 @@ def main():
         pitch = octave*12 + c[j]
         vol = (math.sin(time/30)+1)*.3 + .1 + 0.15*random.random()
         
-        f.addNote(0, 0, pitch, time, dur, vol)
+        f.addNote(0, 0, pitch, time, dur, int(vol*128))
         #time += random.uniform(.5, 2.)
         time += .5*random.randrange(0,6)
         if i % 30 == 29:

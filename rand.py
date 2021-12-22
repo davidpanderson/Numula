@@ -7,7 +7,7 @@ for i in range(200):
     time = random.uniform(0, 10)
     dur = random.uniform(.1, 1)
     vol = random.uniform(.1, .8)
-    ns.add(Note(time, dur, pitch, vol))
+    ns.insert_note(Note(time, dur, pitch, vol))
 ns.done()
 ns.remove_overlap()
 ns.print()

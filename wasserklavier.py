@@ -29,8 +29,8 @@ def main():
         3/16 [c 3/8 d- g-] -b- d- +c [d- -d- 3/8 g-] [e- +e-] \
         ')
     rh3 = n(' 3/16 [++e- 3/8 f -b- f] [+d- +d-] [e- -f c a- f] +++f 1/4 [--f b-] 1/8 [e- -e-] \
-        3/16 [--f b- +g-] [+f +f] 1/8 . 1/32 _ 1/64 ----c +c 1/8 [c +c] [-c -c] \
-        3/16 [f +e-] c [+c +c] \
+        3/16 [-f b- +g-] [+f +f] 1/8 . 1/32 _ 1/64 ----c +c 1/8 [c +c] [-c -c] \
+        3/16 . [f +e-] c [+c +c] \
         1/32 _ 1/64 ---f +f 3/16 [f +f] +f ---c [+g- +g-] \
         ')
     lh1 = n('6/8 . 2/8 [--f +c +a-] 1/8 [-d- +b-] 2/8 [--f +e-] 1/8 [f +d-] \
@@ -52,7 +52,7 @@ def main():
     ns = NoteSet()
     #ns.append_ns([rh1, lh1])
     #ns.append_ns([rh2, lh2])
-    ns.append_ns([rh3])
+    ns.append_ns([rh3, lh3])
     ns.done()
     #set_vol(ns)
     #set_tempo(ns)
