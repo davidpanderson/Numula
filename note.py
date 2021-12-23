@@ -74,6 +74,8 @@ class NoteSet:
             note.print()
             
     def done(self):
+        if not self.notes:
+            raise Exception('no notes')
         self.done_called = True
         self.notes.sort(key=lambda x: x.time)
         # set perf time and dur in such a way that playback will be at the
@@ -91,6 +93,10 @@ class NoteSet:
                     cnote = chord[i]
                     cnote.nchord = n
                     cnote.chord_pos = i
+                    if i>1 and cnote.pitch == chord[i-1].pitch:
+                        print('warning: 2 notes at time %f have same pitch %d'%(
+                            cnote.time, cnote.pitch
+                        ))
             else:
                 cnote = chord[0]
                 cnote.nchord = 1
@@ -126,9 +132,6 @@ class NoteSet:
     def write_midi(self, filename):
         if not self.done_called:
             raise Exception('Call done() before write_midi()')
-        
-        f = MIDIFile(1)
-        f.addTempo(0, 0, 60)
 
         # shift to avoid negative times; MIDI files don't like them
         #
@@ -137,8 +140,15 @@ class NoteSet:
         if t0 < 0:
             for note in self.notes:
                 note.perf_time -= t0
-            for pedal in self.pedal:
+            for pedal in self.pedals:
                 pedal.perf_time -= t0
+
+        # MIDIutils doesn't handle overlapping notes correctly
+        #
+        self.remove_overlap()
+
+        f = MIDIFile(1)
+        f.addTempo(0, 0, 60)
         for note in self.notes:
             v = int(note.vol * 128)
             if v < 2: v = 2
@@ -159,26 +169,41 @@ class NoteSet:
             raise Exception('Call set_tempo() before done()')
         self.tempo = tempo
 
-    # remove notes that start while a note of the same pitch is active
-    # Useful for cleaning up randomly-generated stuff
+    # ----- implementation ----
+
+    # if a note starts while one of the same pitch is sounding,
+    # truncate the first note.
+    # MIDIUtil doesn't handle this case correctly -
+    # you end up with stuck notes.
     #
     def remove_overlap(self):
-        if not self.done_called:
-            raise Exception('Call done() before remove_overlap()')
         end_time = [0]*128
+        cur_note = [None]*128
         out = []
         for note in self.notes:
             if note.perf_time < end_time[note.pitch]:
-                continue
-            out.append(note)
-            end_time[note.pitch] = note.perf_time+note.perf_dur
+                # note of this pitch is already sounding
+                n2 = cur_note[note.pitch]
+                if n2.perf_time > note.perf_time - epsilon:
+                    # simultaneous -  earlier note subsumes later one
+                    #
+                    n2.vol = max(n2.vol, note.vol)
+                    md = max(n2.perf_dur, note.perf_dur)
+                    nd.perf_dur = md
+                    end_time[note.pitch] = note.perf_time+md
+                else:
+                    # end earlier note early
+                    n2.perf_dur = note.perf_time - n2.perf_time - epsilon
+                    out.append(note)
+                    end_time[note.pitch] = note.perf_time+note.perf_dur
+                    cur_note[note.pitch] = note
+            else:
+                out.append(note)
+                end_time[note.pitch] = note.perf_time+note.perf_dur
+                cur_note[note.pitch] = note
         self.notes = out
 
-    # ----- implementation ----
-
-
-        
-    # make an auxiliary structure with start/end events
+     # make an auxiliary structure with start/end events
     #
     def timing_init(self):
         self.start_end = []

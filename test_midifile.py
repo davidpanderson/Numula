@@ -32,5 +32,3 @@ def mf_bug():
     f.addNote(0, 0, 60, 0, .4, 64);
     with open("test.midi", "wb") as file:
         f.writeFile(file)
-        
-
