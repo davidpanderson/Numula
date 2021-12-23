@@ -1,4 +1,4 @@
-from midiutil import MIDIFile
+from MidiFile import MIDIFile
 
 class Note:
     def __init__(self, time, dur, pitch, vol, tags=[]):
@@ -143,11 +143,11 @@ class NoteSet:
             for pedal in self.pedals:
                 pedal.perf_time -= t0
 
-        # MIDIutils doesn't handle overlapping notes correctly
+        # MIDIutils doesn't handle overlapping notes correctly, so remove them
         #
         self.remove_overlap()
 
-        f = MIDIFile(1)
+        f = MIDIFile(deinterleave=False)
         f.addTempo(0, 0, 60)
         for note in self.notes:
             v = int(note.vol * 128)
@@ -185,6 +185,7 @@ class NoteSet:
                 # note of this pitch is already sounding
                 n2 = cur_note[note.pitch]
                 if n2.perf_time > note.perf_time - epsilon:
+                    # print("simultaneous overlap at time %f"%(note.perf_time))
                     # simultaneous -  earlier note subsumes later one
                     #
                     n2.vol = max(n2.vol, note.vol)
@@ -192,8 +193,9 @@ class NoteSet:
                     nd.perf_dur = md
                     end_time[note.pitch] = note.perf_time+md
                 else:
+                    #print("overlap at times %f %f"%(n2.perf_time, note.perf_time))
                     # end earlier note early
-                    n2.perf_dur = note.perf_time - n2.perf_time - epsilon
+                    n2.perf_dur = (note.perf_time - n2.perf_time) - epsilon
                     out.append(note)
                     end_time[note.pitch] = note.perf_time+note.perf_dur
                     cur_note[note.pitch] = note

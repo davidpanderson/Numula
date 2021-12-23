@@ -1,4 +1,4 @@
-from midiutil import MIDIFile
+from MidiFile import MIDIFile
 
 def chromatic():
     track = 0
@@ -8,7 +8,7 @@ def chromatic():
     tempo = 120
     vol = 80
 
-    f = MIDIFile(1)
+    f = MIDIFile(deinterleave=False)
     f.addTempo(track, time, tempo)
     
     for pitch in range (50,70):
@@ -26,9 +26,11 @@ chromatic()
 # show a bug in MIDIFile: crashes if 2 notes w/ same time and pitch
 #
 def mf_bug():
-    f = MIDIFile(1)
+    f = MIDIFile()
     f.addTempo(0, 0, 120)
     f.addNote(0, 0, 60, 0, .5, 64);
     f.addNote(0, 0, 60, 0, .4, 64);
     with open("test.midi", "wb") as file:
         f.writeFile(file)
+
+mf_bug()

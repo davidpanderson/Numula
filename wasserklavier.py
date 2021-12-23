@@ -96,6 +96,7 @@ def main():
     ns.append_ns([rh5, lh5])
     ns.append_ns([rh6, lh6])
     ns.done()
+    #t_random_normal(ns, .05, 2)
     #set_vol(ns)
     #set_timing(ns)
     ns.print()
