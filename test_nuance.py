@@ -13,9 +13,9 @@ def test1():
 
 def test2():
     ns = NoteSet()
-    ns.add_list(0, n('c d e (foo [f a c] g foo) a b c'))
-    ns.add_measure(0)
-    ns.add_measure(1)
+    ns.insert_ns(0, n('c d e (foo [f a c] g foo) a b c'))
+    ns.insert_measure(Measure(0, 4/4, '4/4'))
+    ns.insert_measure(Measure(1, 4/4, '4/4'))
     ns.done()
     t_adjust_list(ns, [.1, .2], lambda x: 'foo' in x.tags)
     #t_random_uniform(ns, -.1, .1)

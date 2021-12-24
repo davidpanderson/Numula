@@ -95,6 +95,16 @@ def main():
     ns.append_ns([rh4, lh4])
     ns.append_ns([rh5, lh5])
     ns.append_ns([rh6, lh6])
+    for i in range(5):
+        ns.append_measure(6/8, '6/8')
+    for i in range(5):
+        ns.append_measure(9/8, '9/8')
+    for i in range(4):
+        ns.append_measure(6/8, '6/8')
+    for i in range(2):
+        ns.append_measure(9/8, '9/8')
+    for i in range(10):
+        ns.append_measure(3/4, '3/4')
     ns.done()
     #t_random_normal(ns, .05, 2)
     #set_vol(ns)

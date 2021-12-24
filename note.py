@@ -10,8 +10,8 @@ class Note:
         self.measure_offset = -1
     def print(self):
         t = ''
-        if self.measure_offset >= 0:
-            t += 'm_off: %.4f '%self.measure_offset
+        if self.measure_type:
+            t += 'm_off: %.4f %s '%(self.measure_offset, self.measure_type)
         t += ' '.join(self.tags)
         print('t: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %d vol: %.4f chord: (%d/%d) %s'%(
             self.time, self.dur, self.perf_time, self.perf_dur, self.pitch, self.vol,
@@ -24,6 +24,12 @@ class Pedal:
         self.dur = dur
         self.level = level
         self.sostenuto = False
+
+class Measure:
+    def __init__(self, time, dur, type):
+        self.time = time
+        self.dur = dur
+        self.type = type
         
 epsilon = 1e-4    # slop factor for time in case of round-off
 
@@ -35,6 +41,7 @@ class NoteSet:
         self.measures = []
         self.pedals = []
         self.done_called = False
+        self.m_cur_time = 0    # for appending measures
         
     def insert_note(self, note):
         self. notes.append(note)
@@ -56,8 +63,13 @@ class NoteSet:
             self.insert_ns(self.cur_time, ns)
         self.cur_time += longest
             
-    def insert_measure(self, t):
-        self.measures.append(t)
+    def insert_measure(self, m):
+        self.measures.append(m)
+        
+    def append_measure(self, dur, type):
+        m = Measure(self.m_cur_time, dur, type)
+        self.measures.append(m)
+        self.m_cur_time += dur
 
     def insert_pedal(self, pedal):
         self.pedals.append(pedal)
@@ -68,8 +80,9 @@ class NoteSet:
         m_ind = 0
         for note in self.notes:
             if m_ind < len(self.measures):
-                if note.time > self.measures[m_ind] - epsilon:
-                    print('measure %d'%m_ind);
+                m = self.measures[m_ind]
+                if note.time > m.time - epsilon:
+                    print('measure %d: %.4f-%.4f'%(m_ind, m.time, m.time+m.dur));
                     m_ind += 1
             note.print()
             
@@ -220,18 +233,27 @@ class NoteSet:
         self.cur_time = 0
         self.cur_perf_time = 0
         
-    # compute offsets from measure boundaries
+    # for notes that lie in measures,
+    # compute the offset and tag the note with the measure type
     #
     def measure_offsets(self):
         if not self.measures: return
         m_ind = 0
         m_time = -9999
         for note in self.notes:
-            if m_ind < len(self.measures):
-                if note.time > self.measures[m_ind] - epsilon:
-                    m_time = self.measures[m_ind]
+            note.measure_type = None
+            # skip measures that end before this note
+            while m_ind < len(self.measures):
+                m = self.measures[m_ind]
+                if note.time > m.time + m.dur - epsilon:
                     m_ind += 1
-            note.measure_offset = note.time - m_time
+                else:
+                    break
+            if m_ind < len(self.measures):
+                m = self.measures[m_ind]
+                if m.time < note.time + epsilon:
+                    note.measure_type = m.type
+                    note.measure_offset = note.time - m.time
 
     # tag notes that are the highest or lowest sounding notes at their start
     #
