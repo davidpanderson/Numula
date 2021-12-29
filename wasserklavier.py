@@ -1,28 +1,130 @@
+# Example Numula program.
+# "wasserklavier" from Six Encores by Luciano Berio
+
+import numpy as np
+
 from note import *
 from notate import *
 from nuance import *
 
-def sv1(ns):
-    t = ns.cur_vtime
-    vol_seg(ns, ppp, mp, 18/8)
-    vol_seg(ns, mp, pp, 12/8)
-    vol_seg(ns, pp, ppp, 18/8)
-    vol_seg(ns, pp, mp, 18/8)
+# overall volume
 
+def sv1(ns):
+    t = ns.vol_cur_time
+    vol_seg(ns, ppp, pp, 30/8)
+
+def sv2(ns):
+    t = ns.vol_cur_time
+    vol_seg(ns, pp, ppp, 27/8)
+    vol_seg(ns, ppp, mp, 9/8)
+
+def sv3(ns):
+    t = ns.vol_cur_time
+    vol_seg(ns, mp, p, 27/8)
+
+def sv4(ns):
+    t = ns.vol_cur_time
+    vol_seg(ns, p, ppp, 17/8)
+    vol_seg(ns, ppp, pp, 15/8)
+def sv5(ns):
+    t = ns.vol_cur_time
+    vol_seg(ns, pp, f, 24/8)
+def sv6(ns):
+     t = ns.vol_cur_time
+     vol_seg(ns, f, ppp, 30/8)
+   
 def set_vol(ns):
     sv1(ns)
+    sv2(ns)
+    sv3(ns)
+    sv4(ns)
+    sv5(ns)
+    sv6(ns)
+    
+    # voice to top/bottom
     vol_adjust(ns, .7, lambda n: 'highest' not in n.tags and 'lowest' not in n.tags)
-    vol_adjust(ns, .9, lambda n: 'highest' not in n.tags and 'lowest' in n.tags)
+    vol_adjust(ns, .7, lambda n: 'highest' not in n.tags and 'lowest' in n.tags)
+
+    # metric accents
+    #vol_adjust(ns, 1.1, lambda n: n.measure_offset==0)
+    vol_adjust(ns, 0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
+    vol_adjust(ns, 0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
+    vol_adjust(ns, 0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1, 2])
+
+# overall tempo
 
 def st1(ns):
-    t = ns.cur_ttime
-    tempo_seg(ns, 18/8, linear, [60,80])
-    tempo_seg(ns, 12/8, linear, [80,50])
-    tempo_seg(ns, 36/8, linear, [50,70])
-    roll()
-    
-def set_timing(ns):
+    tempo_seg(ns, 30/8, linear, [60,50])
+def st2(ns):
+    tempo_seg(ns, 27/8, linear, [50,45])
+    tempo_seg(ns, 9/8, linear, [45,60])
+def st3(ns):
+    tempo_seg(ns, 27/8, linear, [60,50])
+def st4(ns):
+    tempo_seg(ns, 24/8, linear, [50,45])
+    tempo_seg(ns, 6/8, linear, [30,40])
+def st5(ns):
+    tempo_seg(ns, 24/8, linear, [40, 50])
+def st6(ns):
+     tempo_seg(ns, 30/8, linear, [50, 30])
+   
+def set_tempo(ns):
     st1(ns)
+    st2(ns)
+    st3(ns)
+    st4(ns)
+    st5(ns)
+    st6(ns)
+
+# timing adjustment -  do this after overall tempo
+
+# durations of the 6 lines:
+t1 = 30/8
+t2 = 36/8
+t3 = 27/8
+t4 = 30/8
+t5 = 24/8
+t6 = 30/8
+
+def ta1(ns):
+    t_adjust_notes(ns, -.2, lambda n: 'line1' in n.tags and n.pitch==41)
+def ta2(ns):
+    t = t1
+def ta3(ns):
+    t = t1 + t2
+    roll(ns, t+3/8,  np.linspace(-.5, .1, 7))
+def ta4(ns):
+    t = t1 + t2 + t3
+    roll(ns, t+6/8+3/8,  np.linspace(-.4, .1, 3), pred=lambda n: 'rh' in n.tags)
+def ta5(ns):
+    t = t1 + t2 + t3 + t4
+    roll(ns, t+6/8,  np.linspace(-.4, .1, 6))
+    roll(ns, t+14/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
+    roll(ns, t+16/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
+    roll(ns, t+18/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
+    roll(ns, t+20/8, np.linspace(-.2, .1, 5), pred=lambda n: 'rh' in n.tags)
+    roll(ns, t+22/8, np.linspace(-.2, .1, 5), pred=lambda n: 'rh' in n.tags)
+def ta6(ns):
+    t = t1 + t2 + t3 + t4 + t5
+    roll(ns, t,  np.linspace(-.3, .1, 3), pred=lambda n: 'rh' not in n.tags)
+    roll(ns, t+2/8,  np.linspace(-.4, .1, 7))
+    roll(ns, t+4/8,  np.linspace(-.4, .1, 7))
+    roll(ns, t+6/8,  np.linspace(-.4, .1, 7))
+    roll(ns, t+8/8,  np.linspace(-.4, .1, 7))
+    roll(ns, t+10/8,  np.linspace(-.4, .1, 7))
+    roll(ns, t+12/8,  np.linspace(-.4, .1, 7))
+    roll(ns, t+14/8,  np.linspace(-.4, .1, 5))
+    roll(ns, t+18/8,  np.linspace(-.4, .1, 5))
+    pause(ns, t+14/4, 10, False)
+
+def time_adjust(ns):
+    ta1(ns)
+    ta2(ns)
+    ta3(ns)
+    ta4(ns)
+    ta5(ns)
+    ta6(ns)
+    t_random_normal(ns, .02, 2)
     
 def main():
     rh1 = n('3/16 .  ++d- 2/8 c 1/8 +c \
@@ -46,12 +148,12 @@ def main():
         [f d-] +d- 1/4 ++d- 1/8 c 3/8 b- \
         1/8 [ ---c e 1/4 a-] [f -a-] 1/4 +g 1/8 [d- +a-] [-e- +d-] \
         ')
-    rh5 = n('1/32 _ 1/64 e- +d- 1/6 [e- +d-] 1/12 c 1/4 [b- -d-] +a- \
+    rh5 = n('(rh 1/32 _ 1/64 e- +d- 1/6 [e- +d-] 1/12 c 1/4 [b- -d-] +a- \
         [b- +g] 1/6 --d- 1/12 c 1/8 [+g +e- +b-] -d- \
         1/6 [d- +a- d-] 1/12 c 1/4 [b- g -c -e-] [d- +b- +f a-] \
         1/8 [g e- -a- -c] ++d- [--b- +g +d- f +d-] c [b- -e- c -f -a-] ++d- \
         ')
-    rh6 = n('1/8 [+++d- e- +a- d-] c 1/4 [b- g -c a-] [g b- +f a-] \
+    rh6 = n('(rh 1/8 [+++d- e- +a- d-] c 1/4 [b- g -c a-] [g b- +f a-] \
         [g e- -a- f] [e- g +d- f] [e- c -f -d-] \
         [c e- +b- d-] 1/6 [-d- b-] [+a- c] [-d- b-] \
         1/4 [-f c] 3/8 [+b- d- f a-] 1/8 [3/8 --f] \
@@ -89,12 +191,12 @@ def main():
         ')
 
     ns = NoteSet()
-    ns.append_ns([rh1, lh1])
-    ns.append_ns([rh2, lh2])
-    ns.append_ns([rh3, lh3])
-    ns.append_ns([rh4, lh4])
-    ns.append_ns([rh5, lh5])
-    ns.append_ns([rh6, lh6])
+    ns.append_ns([rh1, lh1], 'line1')
+    ns.append_ns([rh2, lh2], 'line2')
+    ns.append_ns([rh3, lh3], 'line3')
+    ns.append_ns([rh4, lh4], 'line4')
+    ns.append_ns([rh5, lh5], 'line5')
+    ns.append_ns([rh6, lh6], 'line6')
     for i in range(5):
         ns.append_measure(6/8, '6/8')
     for i in range(5):
@@ -106,10 +208,10 @@ def main():
     for i in range(10):
         ns.append_measure(3/4, '3/4')
     ns.done()
-    #t_random_normal(ns, .05, 2)
-    #set_vol(ns)
-    #set_timing(ns)
-    ns.print()
+    set_vol(ns)
+    set_tempo(ns)
+    time_adjust(ns)
+    #ns.print()
     ns.write_midi('wasserklavier.midi')
 
 main()

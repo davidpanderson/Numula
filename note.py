@@ -51,16 +51,18 @@ class NoteSet:
     def advance_time(self, dur):
         self.cur_time += dur
 
-    def insert_ns(self, t, ns):
+    def insert_ns(self, t, ns, tag=None):
         for note in ns.notes:
             note.time += t
+            if tag:
+                note.tags.append(tag)
             self.insert_note(note)
 
-    def append_ns(self, nss):
+    def append_ns(self, nss, tag=None):
         longest = 0
         for ns in nss:
-            if ns.cur_time > longest: longest = ns.cur_time
-            self.insert_ns(self.cur_time, ns)
+            longest = max(longest, ns.cur_time)
+            self.insert_ns(self.cur_time, ns, tag)
         self.cur_time += longest
             
     def insert_measure(self, m):
@@ -237,7 +239,8 @@ class NoteSet:
     # compute the offset and tag the note with the measure type
     #
     def measure_offsets(self):
-        if not self.measures: return
+        if not self.measures:
+            return
         m_ind = 0
         m_time = -9999
         for note in self.notes:
@@ -250,10 +253,11 @@ class NoteSet:
                 else:
                     break
             if m_ind < len(self.measures):
-                m = self.measures[m_ind]
                 if m.time < note.time + epsilon:
                     note.measure_type = m.type
                     note.measure_offset = note.time - m.time
+            if not note.measure_type:
+                raise Exception('note is not in any measure')
 
     # tag notes that are the highest or lowest sounding notes at their start
     #

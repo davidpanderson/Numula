@@ -5,14 +5,14 @@ import numpy, random
 
 # we represent volume level as 0..1
 
-ppp = .01
-pp = .14
-p = .28
-mp = .42
-mf = .56
+ppp = .12
+pp = .22
+p = .34
+mp = .46
+mf = .58
 f = .70
-ff = .84
-fff = .99
+ff = .82
+fff = .94
 
 # linear volume change over a time interval
 # is_closed: include notes at end of interval
@@ -102,7 +102,6 @@ def pause(ns, t, dt, before):
     if before:
         for note in ns.notes:
             if note.time + note.dur < t-epsilon:
-                print('skip')
                 continue
             if note.time < t-epsilon:
                 note.perf_dur += dt
@@ -112,6 +111,8 @@ def pause(ns, t, dt, before):
     else:
         for note in ns.notes:
             if note.time < t-epsilon:
+                if note.time + note.dur > t + epsilon:
+                    note.perf_dur += dt
                 continue
             if note.time > t+epsilon:
                 note.perf_time += dt
@@ -139,7 +140,7 @@ def roll_aux(chord, offsets, is_up, is_delay):
         ind += 1
     return dt
 
-def roll(ns, t, offsets, is_up, is_delay):
+def roll(ns, t, offsets, is_up=True, is_delay=False, pred=None, verbose=False):
     chord = []   # the notes at time t
     rolled = False
     for note in ns.notes:
@@ -148,12 +149,14 @@ def roll(ns, t, offsets, is_up, is_delay):
             if not chord:
                 break
             if not rolled:
+                if verbose: print('roll ', offsets, list(map(lambda n: n.pitch, chord)))
                 dt = roll_aux(chord, offsets, is_up, is_delay)
                 rolled = True
             if not is_delay:
                 break
             note.perf_time += dt
         else:
+            if pred and not pred(note): continue
             chord.append(note)
     # chord might be at end of score
     #
