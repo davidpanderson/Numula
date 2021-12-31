@@ -13,11 +13,16 @@ class Note:
         if self.measure_type:
             t += 'm_off: %.4f %s '%(self.measure_offset, self.measure_type)
         t += ' '.join(self.tags)
-        print('t: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %d vol: %.4f chord: (%d/%d) %s'%(
-            self.time, self.dur, self.perf_time, self.perf_dur, self.pitch, self.vol,
+        print('t: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %s vol: %.4f chord: (%d/%d) %s'%(
+            self.time, self.dur, self.perf_time, self.perf_dur, pitch_name(self.pitch), self.vol,
             self.chord_pos, self.nchord, t
         ))
 
+pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+def pitch_name(n):
+    return '%s%d'%(pitch_names[n%12], n//12)
+    
 class Pedal:
     def __init__(self, time, dur, level=1, sostenuto=False):
         self.time = time
@@ -84,7 +89,7 @@ class NoteSet:
             if m_ind < len(self.measures):
                 m = self.measures[m_ind]
                 if note.time > m.time - epsilon:
-                    print('measure %d: %.4f-%.4f'%(m_ind, m.time, m.time+m.dur));
+                    print('measure %d: %.4f-%.4f'%(m_ind+1, m.time, m.time+m.dur));
                     m_ind += 1
             note.print()
             

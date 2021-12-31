@@ -5,7 +5,7 @@ import numpy, random
 
 # we represent volume level as 0..1
 
-ppp = .12
+ppp = .10
 pp = .22
 p = .34
 mp = .46
@@ -96,29 +96,29 @@ def tempo_seg(ns, dur, func, params):
     ns.cur_time += dur
     ns.cur_perf_time += func(dur, dur, params)
 
-# ------- adjustments start here.  adjustments are to perf_time, and are in seconds
+# ------- time adjustments.  Adjustments are to perf_time, and are in seconds
 
-def pause(ns, t, dt, before):
-    if before:
-        for note in ns.notes:
-            if note.time + note.dur < t-epsilon:
-                continue
-            if note.time < t-epsilon:
-                note.perf_dur += dt
-            else:
-                note.perf_time += dt
-                note.perf_dur += dt
-    else:
-        for note in ns.notes:
-            if note.time < t-epsilon:
-                if note.time + note.dur > t + epsilon:
-                    note.perf_dur += dt
-                continue
-            if note.time > t+epsilon:
-                note.perf_time += dt
-            else:
-                note.perf_dur += dt
+def pause_before(ns, t, dt):
+    for note in ns.notes:
+        if note.time + note.dur < t-epsilon:
+            continue
+        if note.time < t-epsilon:
+            note.perf_dur += dt
+        else:
+            note.perf_time += dt
+            note.perf_dur += dt
 
+def pause_after(ns, t, dt):
+    for note in ns.notes:
+        if note.time < t-epsilon:
+            if note.time + note.dur > t + epsilon:
+                note.perf_dur += dt
+            continue
+        if note.time > t+epsilon:
+            note.perf_time += dt
+        else:
+            note.perf_dur += dt
+                
 def roll_aux(chord, offsets, is_up, is_delay):
     if is_up:
         chord.sort(key=lambda x: x.pitch)
