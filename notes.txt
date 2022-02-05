@@ -274,7 +274,27 @@ Goal: make it easy to enter and test scores in small pieces
     NoteSet.append_note(n)
 
 -------------
-name?
-MNL
-Munula
-numula
+Where to announce
+    Reddit?
+    hacker news (ycombinator.com)
+    Facebook
+    Pianoteq message boards
+    Groupmuse message boards?
+    Marc, Ron, Monica
+    Gareth
+    David Jaffe?
+    Music 21 guy
+-----------------
+adjustments in score time
+
+should it be possible to move notes in score time as well as perf time?
+E.g. t_adjust_notes() and t_adjust_pred()
+could have counterparts that change score time and/or duration.
+and roll() too.
+
+With the caution that if you insert score time,
+you need to take that into account everywhere after that.
+
+Need to change measure and pedal times in that case too
+
+Note: we already have duration adjustment in score time.

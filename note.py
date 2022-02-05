@@ -349,11 +349,3 @@ class Event:
         self.obj = obj
         self.kind = kind
         self.is_start = is_start
-        
-def test():
-    y = NoteSet()
-    y.add(Note(1,2,3,4))
-    y.add(Note(0,2,3,4))
-    y.sort_time()
-    y.remove_overlap()
-    y.print()

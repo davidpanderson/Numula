@@ -5,6 +5,7 @@ import numpy as np
 from note import *
 from notate import *
 from nuance import *
+import pianoteq
 
 # create the score (notes and measures)
 #
@@ -126,9 +127,8 @@ def set_vol(ns):
 
     # inner voices
 
-    vol_adjust(ns, 1.5, lambda n: 'more' in n.tags)
+    vol_adjust(ns, 2.1, lambda n: 'more' in n.tags)
     vol_adjust(ns, .7, lambda n: 'less' in n.tags)
-
     
     # voice to top/bottom
     vol_adjust(ns, 1.2, lambda n: 'top' in n.tags and 'rh' in n.tags)
@@ -239,6 +239,7 @@ def main():
         time_adjust(ns)
         ns.print()
         ns.write_midi('wasserklavier.midi')
+        pianoteq.play('wasserklavier.midi')
     else:
         ns.write_midi('wasserklavier_plain.midi')
 

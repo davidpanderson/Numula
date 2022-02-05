@@ -21,7 +21,18 @@ def chromatic():
     with open("chromatic.midi", "wb") as file:
         f.writeFile(file)
 
-chromatic()
+def vol_sweep():
+    f = MIDIFile(deinterleave=False)
+    t = 0
+    for v in range(0, 128, 8):
+        f.addNote(0, 0, 60, t, 1, v)
+        t += 1
+    with open("vol_sweep.midi", "wb") as file:
+        f.writeFile(file)
+
+vol_sweep()
+        
+#chromatic()
                          
 # show a bug in MIDIFile: crashes if 2 notes w/ same time and pitch
 #
@@ -33,4 +44,4 @@ def mf_bug():
     with open("test.midi", "wb") as file:
         f.writeFile(file)
 
-mf_bug()
+#mf_bug()
