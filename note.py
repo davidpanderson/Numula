@@ -7,6 +7,7 @@ class Note:
         self.pitch = pitch
         self.vol = vol
         self.tags = tags.copy()
+        self.measure_type = None
         self.measure_offset = -1
     def print(self):
         t = ''
@@ -210,7 +211,7 @@ class NoteSet:
                     #
                     n2.vol = max(n2.vol, note.vol)
                     md = max(n2.perf_dur, note.perf_dur)
-                    nd.perf_dur = md
+                    n2.perf_dur = md
                     end_time[note.pitch] = note.perf_time+md
                 else:
                     #print("overlap at times %f %f"%(n2.perf_time, note.perf_time))
@@ -249,7 +250,6 @@ class NoteSet:
         m_ind = 0
         m_time = -9999
         for note in self.notes:
-            note.measure_type = None
             # skip measures that end before this note
             while m_ind < len(self.measures):
                 m = self.measures[m_ind]

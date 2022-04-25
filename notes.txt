@@ -298,3 +298,18 @@ you need to take that into account everywhere after that.
 Need to change measure and pedal times in that case too
 
 Note: we already have duration adjustment in score time.
+
+-----------------
+Kraft:
+
+numula to revolutionize music
+
+pianists don't have conductors
+
+numula as better metronome
+
+graphic expression of nuance
+
+teacher creates "conductor score"
+
+chamber music practice

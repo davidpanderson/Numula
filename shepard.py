@@ -25,7 +25,7 @@ def shepard(pitches, nrep, f):
                 vol = 1 - k/nnotes
             v = int(vol*127)
             p = pitches[i%m]
-            print(i, j, p, dur, vol)
+            print(i, j, p, dt, vol)
             f.addNote(0, 0, p, t, dur, v)
             t += dt
             i += 1
