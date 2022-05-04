@@ -37,10 +37,12 @@ class Measure:
         self.dur = dur
         self.type = type
         
-epsilon = 1e-4    # slop factor for time in case of round-off
+epsilon = 1e-5    # slop factor for time in case of round-off
+event_kind_note = 0
+event_kind_pedal = 1
 
 class NoteSet:
-    def __init__(self):
+    def __init__(self, nss=[]):
         self.notes = []
         self.cur_time = 0
         self.tempo = 60    # beats per minute
@@ -48,9 +50,10 @@ class NoteSet:
         self.pedals = []
         self.done_called = False
         self.m_cur_time = 0    # for appending measures
+        self.append_ns(nss)
         
     def insert_note(self, note):
-        self. notes.append(note)
+        self.notes.append(note)
     def append_note(self, note):
         note.time = self.cur_time
         self.notes.append(note)
@@ -93,7 +96,11 @@ class NoteSet:
                     print('measure %d: %.4f-%.4f'%(m_ind+1, m.time, m.time+m.dur));
                     m_ind += 1
             note.print()
-            
+
+    # convert score time to real time, assuming quarter=60
+    def score_to_perf(self, t):
+        return t*4*60/self.tempo
+    
     def done(self):
         if not self.notes:
             raise Exception('no notes')
@@ -124,8 +131,8 @@ class NoteSet:
                 cnote.chord_pos = 0
                 
         for note in self.notes:
-            note.perf_time = note.time*4*60/ self.tempo
-            note.perf_dur = note.dur*4*60/self.tempo
+            note.perf_time = self.score_to_perf(note.time)
+            note.perf_dur = self.score_to_perf(note.dur)
             if chord:
                 if note.time > chord_time + epsilon:
                     do_chord(chord)
@@ -139,16 +146,13 @@ class NoteSet:
         do_chord(chord)
 
         for pedal in self.pedals:
-            pedal.perf_time = pedal.time*4*60/self.tempo
-            pedal.perf_dur = pedal.dur*4*60/self.tempo
+            pedal.perf_time = self.score_to_perf(pedal.time)
+            pedal.perf_dur = self.score_to_perf(pedal.dur)
                 
         # initialize for nuance stuff
         #
         self.measure_offsets()
         self.flag_outer()
-        self.vol_cur_time = 0
-        self.vol_ind = 0
-        self.timing_init()
         
     def write_midi(self, filename):
         if not self.done_called:
@@ -226,21 +230,31 @@ class NoteSet:
                 cur_note[note.pitch] = note
         self.notes = out
 
-     # make an auxiliary structure with start/end events
+     # make a sorted list of start/end events
     #
-    def timing_init(self):
+    def make_start_end_events(self):
         self.start_end = []
         for note in self.notes:
-            self.start_end.append(Event(note.time, note, event_kind_note, True))
-            self.start_end.append(Event(note.time+note.dur, note, event_kind_note, False))
+            self.start_end.append(Event(note, event_kind_note, True))
+            self.start_end.append(Event(note, event_kind_note, False))
         for pedal in self.pedals:
-            self.start_end.append(Event(pedal.time, pedal, event_kind_pedal, True))
-            self.start_end.append(Event(pedal.time+pedal.dur, pedal, event_kind_pedal, False))
+            self.start_end.append(Event(pedal, event_kind_pedal, True))
+            self.start_end.append(Event(pedal, event_kind_pedal, False))
         self.start_end.sort(key=lambda x: x.time)
         self.cur_ind = 0    # index into ns.start_end
         self.cur_time = 0
         self.cur_perf_time = 0
-        
+
+    # transfer perf times from start/end events back to Note and Pedal
+    #
+    def transfer_start_end_events(self):
+        for event in self.start_end:
+            obj = event.obj
+            if event.is_start:
+                obj.perf_time = event.perf_time
+            else:
+                obj.perf_dur = event.perf_time - obj.perf_time
+                
     # for notes that lie in measures,
     # compute the offset and tag the note with the measure type
     #
@@ -338,14 +352,24 @@ class NoteSet:
                 else:
                     if note.perf_time < cur_ped.perf_time:
                         cur_ped.perf_time = note.perf_time
-            
- # represents the start or end of a note or pedal application
+                        
+    from nuance import vol_adjust_pft, vol_adjust, vol_adjust_func
+    from nuance import tempo_adjust_pft, sustain, pause_before, pause_after
+    from nuance import roll, t_adjust_list, t_adjust_notes, t_adjust_func
+    from nuance import t_random_uniform, t_random_normal
+    from nuance import score_dur_abs, score_dur_rel, score_dur_func
+    from nuance import perf_dur_abs, perf_dur_rel, perf_dur_func
+    
+# represents the start or end of a note or pedal application
 #
-event_kind_note = 0
-event_kind_pedal = 1
 class Event:
-    def __init__(self, time, obj, kind, is_start):
-        self.time = time
+    def __init__(self, obj, kind, is_start):
+        if is_start:
+            self.time = obj.time
+            self.perf_time = obj.perf_time
+        else:
+            self.time = obj.time + obj.dur
+            self.perf_time = obj.perf_time + obj.perf_dur
         self.obj = obj
         self.kind = kind
         self.is_start = is_start

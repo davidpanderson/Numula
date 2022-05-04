@@ -94,79 +94,54 @@ def make_score():
 
 #  volume
 
-def sv1(ns):
-    t = ns.vol_cur_time
-    vol_seg(ns, ppp, pp, 30/8)
-def sv2(ns):
-    t = ns.vol_cur_time
-    vol_seg(ns, pp, ppp, 9/8)
-    vol_seg(ns, ppp, pp, 18/8)
-    vol_seg(ns, pp, p, 9/8)
-def sv3(ns):
-    t = ns.vol_cur_time
-    vol_seg(ns, p, mp, 27/8)
-def sv4(ns):
-    t = ns.vol_cur_time
-    vol_seg(ns, p, ppp, 17/8)
-    vol_seg(ns, ppp, pp, 15/8)
-def sv5(ns):
-    t = ns.vol_cur_time
-    vol_seg(ns, pp, f, 24/8)
-def sv6(ns):
-     t = ns.vol_cur_time
-     vol_seg(ns, f, ppp, 24/8)
-     vol_seg(ns, ppp, ppp, 6/8)
-   
 def set_vol(ns):
-    sv1(ns)
-    sv2(ns)
-    sv3(ns)
-    sv4(ns)
-    sv5(ns)
-    sv6(ns)
+    ns.vol_adjust_pft(
+        [
+            linear(ppp, pp, 30/8),  # line 1
+            linear(pp, ppp, 9/8),   # line 2
+            linear(ppp, pp, 18/8),
+            linear(pp, p, 9/8),
+            linear(p, mp, 27/8, closed_end=False),    # line 3
+            linear(p, ppp, 17/8),   # line 4
+            linear(ppp, pp, 15/8),
+            linear(pp, f, 24/8),    # line 5
+            linear(f, ppp, 24/8),   # line 6
+            linear(ppp, ppp, 6/8)
+        ]
+    )
 
-    # inner voices
-
-    vol_adjust(ns, 2.1, lambda n: 'more' in n.tags)
-    vol_adjust(ns, .7, lambda n: 'less' in n.tags)
+    # bring out inner voices
+    ns.vol_adjust(2.1, lambda n: 'more' in n.tags)
+    ns.vol_adjust(.7, lambda n: 'less' in n.tags)
     
     # voice to top/bottom
-    vol_adjust(ns, 1.2, lambda n: 'top' in n.tags and 'rh' in n.tags)
-    vol_adjust(ns, .6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
-    vol_adjust(ns, .8, lambda n: 'top' not in n.tags and 'bottom' in n.tags)
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags)
+    ns.vol_adjust(.6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
+    ns.vol_adjust(.8, lambda n: 'top' not in n.tags and 'bottom' in n.tags)
 
     # metric accents
-    #vol_adjust(ns, 1.1, lambda n: n.measure_offset==0)
-    vol_adjust(ns, 0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
-    vol_adjust(ns, 0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
-    vol_adjust(ns, 0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1, 2])
+    #ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
+    ns.vol_adjust(0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
+    ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
+    ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1, 2])
 
 #  timing
 
-def st1(ns):
-    tempo_seg(ns, 30/8, linear, [65,60])
-def st2(ns):
-    tempo_seg(ns, 9/8, linear, [65,55])
-    tempo_seg(ns, 9/8, linear, [60,70])
-    tempo_seg(ns, 18/8, linear, [70,80])
-def st3(ns):
-    tempo_seg(ns, 27/8, linear, [65,55])
-def st4(ns):
-    tempo_seg(ns, 24/8, linear, [55,50])
-    # at this point the score has dotted quarter = quarter
-    tempo_seg(ns, 6/8, linear, [30,40])
-def st5(ns):
-    tempo_seg(ns, 24/8, linear, [40, 50])
-def st6(ns):
-     tempo_seg(ns, 30/8, linear, [50, 30])
-   
 def set_tempo(ns):
-    st1(ns)
-    st2(ns)
-    st3(ns)
-    st4(ns)
-    st5(ns)
-    st6(ns)
+    ns.tempo_adjust_pft(
+        [
+            linear(65, 60, 30/8),   # line 1
+            linear(65, 55, 9/8),    # line 2
+            linear(60, 70, 9/8),
+            linear(70, 80, 18/8),
+            linear(65, 55, 27/8),   # line 3
+            linear(55, 50, 24/8),   # line 4
+            # at this point the score has dotted quarter = quarter
+            linear(30, 40, 6/8),
+            linear(40, 50, 24/8),   # line 5
+            linear(50, 30, 30/8)    # line 6
+        ]
+    )
 
 # timing adjustment -  do this after overall tempo
 
@@ -180,47 +155,47 @@ t6 = 30/8
 
 def ta1(ns):
     t = 0
-    t_adjust_notes(ns, -.2, lambda n: 'line1' in n.tags and n.pitch==41)
-    roll(ns, t+6/8,  np.linspace(-.1, 0, 4))
-    pause_after(ns, t+12/8, .2)
-    pause_after(ns, t+30/8, .15)
+    ns.t_adjust_notes(-.2, lambda n: 'line1' in n.tags and n.pitch==41)
+    ns.roll(t+6/8,  np.linspace(-.1, 0, 4))
+    ns.pause_after(t+12/8, .2)
+    ns.pause_after(t+30/8, .15)
 def ta2(ns):
     t = t1
-    pause_after(ns, t+6/8, .15)
-    pause_after(ns, t+33/8, .1)
+    ns.pause_after(t+6/8, .15)
+    ns.pause_after(t+33/8, .1)
 def ta3(ns):
     t = t1 + t2
-    roll(ns, t+3/8,  np.linspace(-.3, .1, 7))
-    pause_after(ns, t+6/8, .15)
-    roll(ns, t+13/8, np.linspace(-.12, .1, 4))
-    pause_after(ns, t+6/8+3/16, .15)
-    roll(ns, t+21/8, np.linspace(-.12, .1, 4), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+3/8,  np.linspace(-.3, .1, 7))
+    ns.pause_after(t+6/8, .15)
+    ns.roll(t+13/8, np.linspace(-.12, .1, 4))
+    ns.pause_after(t+6/8+3/16, .15)
+    ns.roll(t+21/8, np.linspace(-.12, .1, 4), pred=lambda n: 'rh' in n.tags)
 def ta4(ns):
     t = t1 + t2 + t3
-    roll(ns, t+6/8+3/16, np.linspace(-.12, .1, 4), pred=lambda n: 'rh' in n.tags)
-    roll(ns, t+6/8+3/8,  np.linspace(-.2, .1, 3), pred=lambda n: 'rh' in n.tags)
-    pause_after(ns, t+6/8+3/8, .1)
-    pause_after(ns, t+15/8, .2)
+    ns.roll(t+6/8+3/16, np.linspace(-.12, .1, 4), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+6/8+3/8,  np.linspace(-.2, .1, 3), pred=lambda n: 'rh' in n.tags)
+    ns.pause_after(t+6/8+3/8, .1)
+    ns.pause_after(t+15/8, .2)
 def ta5(ns):
     t = t1 + t2 + t3 + t4
-    roll(ns, t+6/8,  np.linspace(-.4, .1, 6))
-    roll(ns, t+14/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
-    roll(ns, t+16/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
-    roll(ns, t+18/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
-    roll(ns, t+20/8, np.linspace(-.2, .1, 5), pred=lambda n: 'rh' in n.tags)
-    roll(ns, t+22/8, np.linspace(-.2, .1, 5), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+6/8,  np.linspace(-.4, .1, 6))
+    ns.roll(t+14/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+16/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+18/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+20/8, np.linspace(-.2, .1, 5), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+22/8, np.linspace(-.2, .1, 5), pred=lambda n: 'rh' in n.tags)
 def ta6(ns):
     t = t1 + t2 + t3 + t4 + t5
-    roll(ns, t,  np.linspace(-.3, .1, 3), pred=lambda n: 'rh' not in n.tags)
-    roll(ns, t+2/8,  np.linspace(-.4, .1, 7))
-    roll(ns, t+4/8,  np.linspace(-.4, .1, 7))
-    roll(ns, t+6/8,  np.linspace(-.4, .1, 7))
-    roll(ns, t+8/8,  np.linspace(-.4, .1, 7))
-    roll(ns, t+10/8,  np.linspace(-.4, .1, 7))
-    roll(ns, t+12/8,  np.linspace(-.4, .1, 7))
-    roll(ns, t+14/8,  np.linspace(-.4, .1, 3), pred=lambda n: 'rh' not in n.tags)
-    roll(ns, t+18/8,  [-.4, -.3, .2, -.1, -.2])
-    pause_after(ns, t+14/4, 10)
+    ns.roll(t,  np.linspace(-.3, .1, 3), pred=lambda n: 'rh' not in n.tags)
+    ns.roll(t+2/8,  np.linspace(-.4, .1, 7))
+    ns.roll(t+4/8,  np.linspace(-.4, .1, 7))
+    ns.roll(t+6/8,  np.linspace(-.4, .1, 7))
+    ns.roll(t+8/8,  np.linspace(-.4, .1, 7))
+    ns.roll(t+10/8,  np.linspace(-.4, .1, 7))
+    ns.roll(t+12/8,  np.linspace(-.4, .1, 7))
+    ns.roll(t+14/8,  np.linspace(-.4, .1, 3), pred=lambda n: 'rh' not in n.tags)
+    ns.roll(t+18/8,  [-.4, -.3, .2, -.1, -.2])
+    ns.pause_after(t+14/4, 10)
 
 def time_adjust(ns):
     ta1(ns)

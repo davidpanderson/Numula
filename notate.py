@@ -78,15 +78,15 @@ def next_pitch(cur_pitch, pitch_class, octave_offset):
             return next_up
     
 # textual note specification
-def n(s):
+def n(s, _tags=[]):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
     ns = note.NoteSet()
     cur_pitch = 60
-    tags = []
     in_chord = False
     vol = .5
     dur = 1/4
+    tags = _tags[:]
     for t in s.split(' '):
         if not t: continue
         if t == '[':
