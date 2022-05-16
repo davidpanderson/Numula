@@ -313,3 +313,45 @@ graphic expression of nuance
 teacher creates "conductor score"
 
 chamber music practice
+
+===============
+4/29/22
+
+new approach to piecewise functions
+
+vol is initially .5
+
+vol_adjust_ptf(
+    ns,
+    selector,
+    start_time,
+    val_linear(pp, p, 30/8),
+    ...
+])
+
+vol_adjust(
+    ns, 
+    selector,
+    factor
+
+vol_adjust_fn(
+    ns.
+    selector,
+    fund
+
+pp, ff etc. are in 0..2
+
+tempo_adjust_ptf(
+    ns,
+    selector= True,
+    start_time = 0,
+    bpm = True,
+    pedal = False,
+    normalize = False
+    [
+        tempo_linear(24/8, [40,50]),
+        tempo_linear(24/8, [50,30]),
+    ]
+)
+
+val_linear and tempo_linear are classes

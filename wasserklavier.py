@@ -127,11 +127,11 @@ def set_vol(ns):
     )
 
     # bring out inner voices
-    ns.vol_adjust(2.1, lambda n: 'more' in n.tags)
+    ns.vol_adjust(2.5, lambda n: 'more' in n.tags)
     ns.vol_adjust(.7, lambda n: 'less' in n.tags)
     
     # voice to top/bottom
-    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags)
+    ns.vol_adjust(1.1, lambda n: 'top' in n.tags and 'rh' in n.tags)
     ns.vol_adjust(.6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
     ns.vol_adjust(.8, lambda n: 'top' not in n.tags and 'bottom' in n.tags)
 

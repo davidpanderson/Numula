@@ -140,8 +140,8 @@ class NoteSet:
                     cnote.nchord = n
                     cnote.chord_pos = i
                     if i>1 and cnote.pitch == chord[i-1].pitch:
-                        print('warning: 2 notes at time %f have same pitch %d'%(
-                            cnote.time, cnote.pitch
+                        print('warning: 2 notes at time %f have same pitch %s'%(
+                            cnote.time, pitch_name(cnote.pitch)
                         ))
             else:
                 cnote = chord[0]
@@ -171,7 +171,7 @@ class NoteSet:
         #
         self.measure_offsets()
         self.flag_outer()
-        
+                
     def write_midi(self, filename):
         if not self.done_called:
             raise Exception('Call done() before write_midi()')
@@ -193,6 +193,10 @@ class NoteSet:
         f = MIDIFile(deinterleave=False)
         f.addTempo(0, 0, 60)
         for note in self.notes:
+            if note.vol > 1:
+                print('%s at time %f has vol %f; setting to 1'%(
+                    pitch_name(note.pitch), note.time, note.vol
+                ))
             v = int(note.vol * 128)
             if v < 2: v = 2
             if v > 127: v = 127

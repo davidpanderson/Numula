@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-import numpy, random
+import numpy, random, copy
 from note import *
 
 class linear:
@@ -38,6 +38,18 @@ class linear:
         self.y1 = 60/self.y1
         self.dy = self.y1 - self.y0
 
+# Dirac delta; used in tempo PFTs to represent pauses
+# if after is True, pause goes after notes at that time
+class delta:
+    def __init__(self, value, after=True):
+        self.value = value
+        self.after = after
+        self.dt = 0
+    def bpm(self):
+        self.value /= 4
+    def integral_total(self):
+        return self.value
+
 #from pprint import pprint
 
 # make sure the pft has well-defined values at segment boundaries
@@ -53,7 +65,7 @@ def pft_check_closure(pft):
             if not seg1.closed_start:
                 raise Exception('missing value in PFT')
 
-# duration of a PFT
+# score-time duration of a PFT
 def pft_dur(pft):
     dt = 0
     for seg in pft:
@@ -147,17 +159,24 @@ def vol_adjust_func(self, func, pred):
 #
 # if "normalize", scale F so that its average is 1.
 #
-def tempo_adjust_pft(self, pft, t0=0, pred=None, normalize=False):
-    pft_bpm(pft)    # convert to inverse tempo function
+def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
+    debug = False
+
+    if bpm:
+        pft = copy.deepcopy(_pft)
+        pft_bpm(pft)    # convert to inverse tempo function
+    else:
+        pft = _pft
+        
     self.make_start_end_events()
+
+    # keep track of our position in the PFT, and the integral so far
     seg_ind = 0
     seg = pft[0]
     seg_start = t0
     seg_end = t0 + seg.dt
     pft_end = t0 + pft_dur(pft)
-    seg_integral = 0
-        # integral up to current seg
-    debug = False
+    seg_integral = 0        # integral up to current seg
 
     scale_factor = 1
     if normalize:
@@ -167,12 +186,12 @@ def tempo_adjust_pft(self, pft, t0=0, pred=None, normalize=False):
     # loop over events.
     # keep track of params of previous event
     #
-    prev_time = 0    # its score time
-    prev_perf = 0     # its perf time
+    prev_time = 0       # its score time
+    prev_perf = 0       # its perf time
     prev_perf_adj = 0   # its adjusted perf time
-    prev_integral = 0    # integral of pft at that point
+    prev_integral = 0   # integral of pft at that point
     for event in self.start_end:
-        if debug: print('event time %f'%event.time)
+        if debug: print('event time %f perf time %f'%(event.time, event.perf_time))
         if event.time < t0+epsilon:
             prev_time = event.time
             prev_perf = event.perf_time
@@ -185,41 +204,59 @@ def tempo_adjust_pft(self, pft, t0=0, pred=None, normalize=False):
             else:
                 continue
         if event.time - prev_time < epsilon:
+            if debug:
+                print('   same score time as prev; set perf time to %f'%prev_perf_adj)
             event.perf_time = prev_perf_adj
             continue
+
+        # loop over PFT primitives
+        # precondition: event.time is not strictly before current seg
         while True:
             if event.time < seg_end + epsilon:
                 if debug:
-                    print('prev_time %f pref_perf %f prev_perf_adj %f prev_integral %f'%(
+                    print('   previous event: score time %f perf %f adjusted perf %f PFT integral %f'%(
                         prev_time, prev_perf, prev_perf_adj, prev_integral
-                    ))  
-                i = seg_integral + seg.integral(event.time - seg_start)
-                    # integral of pft at this point
-                d = i - prev_integral
-                    # integral since previous event
-                avg = scale_factor*d/(event.time - prev_time)
-                    # average tempo since prev event
-                dperf = event.perf_time - prev_perf
-                prev_perf = event.perf_time
-                event.perf_time = prev_perf_adj + dperf*avg
-                prev_perf_adj = event.perf_time
-                prev_integral = i
-                prev_time = event.time
-                if debug:
-                    print('time %f i %f d %f avg %f dperf %f perf_adj %f'%(
-                        event.time, i, d, avg, dperf, prev_perf_adj
                     ))
-                break
-            else:
-                if debug: print('moving to next segment')
-                seg_start  += seg.dt
-                seg_integral += seg.integral_total()
-                seg_ind += 1
-                if seg_ind == len(pft):
-                    if debug: print('end of PFT')
+                if seg.dt == 0:
+                    # dirac delta case
+                    if seg.after:
+                        if debug: print('delta after')
+                        break
+                    if debug: print('delta before')
+                    # fall through, move to next seg
+                else:
+                    i = seg_integral + seg.integral(event.time - seg_start)
+                        # integral of pft at this point
+                    d = i - prev_integral
+                        # integral since previous event
+                    avg = scale_factor*d/(event.time - prev_time)
+                        # average tempo since prev event
+                    dperf = event.perf_time - prev_perf
+                    prev_perf = event.perf_time
+                    new_perf = prev_perf_adj + dperf*avg
+                    event.perf_time = new_perf
+                    prev_perf_adj = event.perf_time
+                    prev_integral = i
+                    if debug:
+                        print('   new PFT integral %f; int since prev event %f; score time dt %f; int avg %f'%(
+                            i, d, event.time-prev_time, avg
+                        ))
+                        print('   changed perf delay from %f to %f'%(
+                            dperf, dperf*avg
+                        ))
+                    prev_time = event.time
                     break
-                seg = pft[seg_ind]
-                seg_end = seg_start + seg.dt
+
+            if debug:
+                print('moving to next segment; dt %f int %f'%(seg.dt, seg.integral_total()))
+            seg_start  += seg.dt
+            seg_integral += seg.integral_total()
+            seg_ind += 1
+            if seg_ind == len(pft):
+                if debug: print('end of PFT')
+                break
+            seg = pft[seg_ind]
+            seg_end = seg_start + seg.dt
         if seg_ind == len(pft):
             break
     self.transfer_start_end_events()
