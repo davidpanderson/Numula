@@ -52,9 +52,11 @@ def main():
     # timing in RH
     ns.tempo_adjust_pft(
         [
-            linear(40, 50, 4/4),
-            delta(.1),
-            linear(50, 30, 5/4)
+            linear(40, 65, 3/4),
+            linear(60, 50, 1/4),
+            delta(.2),
+            linear(30, 70, 3/4),
+            linear(70, 30, 2/4)
         ], 3/4, normalize=True, pred=lambda n: 'rh' in n.tags
     )
     
