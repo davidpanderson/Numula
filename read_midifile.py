@@ -15,32 +15,46 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 # convert a MIDI file to a NoteSet
-import mido
+import mido, copy
 import note
 
+def print_midi_event(e):
+    if e.type == 'note_on':
+        print('note_on pitch %s vel %d time %d'%(note.pitch_name(e.note), e.velocity, e.time))
+    elif e.type == 'note_off':
+        print('note_off pitch %s time %d'%(note.pitch_name(e.note), e.time))
+    else:
+        print(e)
+        
 def read_midifile(file):
+    debug = False
     mf = mido.MidiFile(file)
     ns = note.NoteSet()
     for i, track in enumerate(mf.tracks):
+        if debug:
+            print('track', i)
         t = 0
         notes = [None]*128
         for msg in track:
+            if debug:
+                print_midi_event(msg)
             if msg.type == 'note_on':
-                print(msg)
                 t += msg.time/3840
                 pitch = msg.note
                 if notes[pitch]:
                     # overlap case.  End current note at this pitch, and start a new one
                     n = notes[pitch]
                     n.dur = t-n.time
-                    ns.insert_note(n)
+                    if debug:
+                        print('inserting note, overlap case')
+                        n.print()
+                    ns.insert_note(copy.copy(n))
                     n.time = t
                     n.velocity = msg.velocity/128
                 else:
                     n = note.Note(t, 0, pitch, msg.velocity/128)
                     notes[pitch] = n
             elif msg.type == 'note_off':
-                print(msg)
                 t += msg.time/3840
                 pitch = msg.note
                 if not notes[pitch]:
@@ -50,9 +64,12 @@ def read_midifile(file):
                 notes[pitch] = None
                 n.dur = t-n.time
                 ns.insert_note(n)
+                if debug:
+                    print('inserting note, regular case')
+                    n.print()
     ns.done()
     ns.print()
-    ns.write_midi('test_out.midi')
+    ns.write_midi('test_out.mid')
     
 def test(file):
     mid = mido.MidiFile(file)
@@ -61,5 +78,5 @@ def test(file):
         for msg in track:
             print(msg)
 
-test('cryptogram.mid')
-#read_midifile('cryptogram.mid')
+#test('cryptogram.mid')
+read_midifile('cryptogram.mid')

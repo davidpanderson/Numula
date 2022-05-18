@@ -27,13 +27,18 @@ class Note:
         self.tags = tags.copy()
         self.measure_type = None
         self.measure_offset = -1
+        self.perf_time = 0
+        self.perf_dur = 0
+        self.chord_pos = 0
+        self.nchord = 0
     def print(self):
         t = ''
         if self.measure_type:
             t += 'm_off: %.4f %s '%(self.measure_offset, self.measure_type)
         t += ' '.join(self.tags)
         print('t: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %s vol: %.4f chord: (%d/%d) %s'%(
-            self.time, self.dur, self.perf_time, self.perf_dur, pitch_name(self.pitch), self.vol,
+            self.time, self.dur, self.perf_time, self.perf_dur,
+            pitch_name(self.pitch), self.vol,
             self.chord_pos, self.nchord, t
         ))
 
@@ -232,7 +237,9 @@ class NoteSet:
                 # note of this pitch is already sounding
                 n2 = cur_note[note.pitch]
                 if n2.perf_time > note.perf_time - epsilon:
-                    # print("simultaneous overlap at time %f"%(note.perf_time))
+                    print("simultaneous overlap on %s at time %f"%(
+                        pitch_name(note.pitch), note.perf_time
+                    ))
                     # simultaneous -  earlier note subsumes later one
                     #
                     n2.vol = max(n2.vol, note.vol)
@@ -240,7 +247,9 @@ class NoteSet:
                     n2.perf_dur = md
                     end_time[note.pitch] = note.perf_time+md
                 else:
-                    #print("overlap at times %f %f"%(n2.perf_time, note.perf_time))
+                    print("overlap on %s: notes at %f and %f"%(
+                        pitch_name(note.pitch), n2.perf_time, note.perf_time
+                    ))
                     # end earlier note early
                     n2.perf_dur = (note.perf_time - n2.perf_time) - epsilon
                     out.append(note)
