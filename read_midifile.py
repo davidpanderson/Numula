@@ -15,6 +15,7 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 # convert a MIDI file to a NoteSet
+
 import mido, copy
 import note
 
@@ -26,7 +27,7 @@ def print_midi_event(e):
     else:
         print(e)
         
-def read_midifile(file):
+def read_midifile(file, use_velocity=True):
     debug = False
     mf = mido.MidiFile(file)
     ns = note.NoteSet()
@@ -34,12 +35,17 @@ def read_midifile(file):
         if debug:
             print('track', i)
         t = 0
+        tag = 'track%d'%i
         notes = [None]*128
         for msg in track:
             if debug:
                 print_midi_event(msg)
             if msg.type == 'note_on':
                 t += msg.time/3840
+                if use_velocity:
+                    vol = msg.velocity/128
+                else:
+                    vol = .5
                 pitch = msg.note
                 if notes[pitch]:
                     # overlap case.  End current note at this pitch, and start a new one
@@ -48,11 +54,11 @@ def read_midifile(file):
                     if debug:
                         print('inserting note, overlap case')
                         n.print()
-                    ns.insert_note(copy.copy(n))
+                    ns.insert_note(copy.deepcopy(n))
                     n.time = t
-                    n.velocity = msg.velocity/128
+                    n.vol = vol
                 else:
-                    n = note.Note(t, 0, pitch, msg.velocity/128)
+                    n = note.Note(t, 0, pitch, vol, [tag])
                     notes[pitch] = n
             elif msg.type == 'note_off':
                 t += msg.time/3840
@@ -68,15 +74,11 @@ def read_midifile(file):
                     print('inserting note, regular case')
                     n.print()
     ns.done()
-    ns.print()
-    ns.write_midi('test_out.mid')
+    return ns
     
-def test(file):
+def print_midifile(file):
     mid = mido.MidiFile(file)
     for i, track in enumerate(mid.tracks):
         print('Track {}: {}'.format(i, track.name))
         for msg in track:
             print(msg)
-
-#test('cryptogram.mid')
-read_midifile('cryptogram.mid')

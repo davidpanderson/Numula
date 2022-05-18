@@ -355,3 +355,10 @@ tempo_adjust_ptf(
 )
 
 val_linear and tempo_linear are classes
+
+---------------
+S = score time, P = perf time
+for timing adjustment, the value of a PFT function at score time s
+is dP/dS(s): the rate at which P increases with S.
+Smaller value = faster
+

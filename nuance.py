@@ -18,7 +18,7 @@ import numpy, random, copy
 from note import *
 
 class linear:
-    def __init__(self, y0, y1, dt, closed_start=True, closed_end=True):
+    def __init__(self, y0, y1, dt, closed_start=True, closed_end=False):
         self.y0 = y0
         self.y1 = y1
         self.dy = y1 - y0

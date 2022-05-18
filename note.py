@@ -125,6 +125,8 @@ class NoteSet:
         return t*4*60/self.tempo
     
     def done(self):
+        if len(self.notes) != len(set(self.notes)):
+            raise Exception('self.notes has dups!!')
         if not self.notes:
             raise Exception('no notes')
         self.done_called = True
