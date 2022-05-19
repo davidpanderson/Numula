@@ -3,7 +3,7 @@ import read_midifile, pianoteq
 from nuance import *
 
 def crypto():
-    ns = read_midifile.read_midifile('cryptogram.mid', False)
+    ns = read_midifile.read_midifile('cryptogram.mid', 960, False)
     ns.vol_adjust_pft(
         [
             linear(pp, pp, 3/1),

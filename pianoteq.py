@@ -16,8 +16,11 @@
 
 # play a MIDI file using pianoteq
 
-import os
+import os, platform
 
 def play(file):
-    cmd = '"c:/program files/modartt/pianoteq 7/pianoteq 7.exe"  --play --midi %s'%file
+    if platform.system() == 'Windows':
+        cmd = '"c:/program files/modartt/pianoteq 7/pianoteq 7.exe"  --play --midi %s'%file
+    else:
+        raise Exception("OS not supported")
     os.system(cmd)

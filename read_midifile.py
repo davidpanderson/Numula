@@ -15,6 +15,7 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 # convert a MIDI file to a NoteSet
+# see https://github.com/davidpanderson/Numula/wiki/read_midifile.py
 
 import mido, copy
 import note
@@ -27,8 +28,9 @@ def print_midi_event(e):
     else:
         print(e)
         
-def read_midifile(file, use_velocity=True):
+def read_midifile(file, ticks_per_beat=960, use_velocity=True):
     debug = False
+    ticks_per_measure = ticks_per_beat*4
     mf = mido.MidiFile(file)
     ns = note.NoteSet()
     for i, track in enumerate(mf.tracks):
@@ -41,7 +43,7 @@ def read_midifile(file, use_velocity=True):
             if debug:
                 print_midi_event(msg)
             if msg.type == 'note_on':
-                t += msg.time/3840
+                t += msg.time/ticks_per_measure
                 if use_velocity:
                     vol = msg.velocity/128
                 else:
