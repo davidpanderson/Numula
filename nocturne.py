@@ -40,30 +40,32 @@ def main():
             i*3/4,
             lambda n: 'lh' in n.tags
         )
-    ns.done()  # need this for overlap
+    ns.done()   # need for overlap??
 
     ns.tempo_adjust_pft(
         [
             linear(90, 110, 8/4),
             linear(110, 80, 7/4)
+            #linear(100, 100, 15/4)
         ]
     )
-    
+
     # timing in RH
     ns.tempo_adjust_pft(
         [
-            linear(40, 65, 3/4),
-            linear(60, 50, 1/4),
-            delta(.2),
-            linear(30, 70, 3/4),
-            linear(70, 30, 2/4)
+            linear(40, 50, 2/4),
+            linear(50, 35, 2/4),
+            delta(.15),
+            linear(30, 50, 3/4),
+            linear(50, 30, 2/4),
+            delta(.3, False)
         ], 3/4, normalize=True, pred=lambda n: 'rh' in n.tags
     )
-    
+
     # portamento in RH
     ns.perf_dur_rel(.5, lambda n: 'port' in n.tags)
 
-    #ns.print()
+    ns.print()
     ns.write_midi('nocturne.midi')
     pianoteq.play('nocturne.midi')
 

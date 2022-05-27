@@ -40,6 +40,16 @@ def test2():
     ns.print()
     ns.write_midi('test2.midi')
 
-test1()
-test2()
+def test3():
+    ns = NoteSet([n('c d e f g')])
+    ns.done()
+    ns.tempo_adjust_pft([
+        linear(60, 60, 2/4),
+        delta(.1, False),
+        linear(30, 30, 2/4)
+    ])
+    ns.print()
     
+#test1()
+#test2()
+test3()

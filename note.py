@@ -288,6 +288,10 @@ class NoteSet:
             else:
                 obj.perf_dur = event.perf_time - obj.perf_time
                 
+    def print_start_end_events(self):          
+        for event in self.start_end:
+            print('is_start', event.is_start, ' perf_time', event.perf_time)
+            
     # for notes that lie in measures,
     # compute the offset and tag the note with the measure type
     #
@@ -313,14 +317,14 @@ class NoteSet:
 
     # tag notes that are the highest or lowest sounding notes at their start
     #
-    def flag_outer_aux(active, started):
-        #print('flag_aux: %d active, %d started'%(len(active), len(started)))
+    def flag_outer_aux(active, starting):
+        #print('flag_aux: %d active, %d starting'%(len(active), len(starting)))
         min = 128
         max = -1
         for n in active:
             if n.pitch < min: min = n.pitch
             if n.pitch > max: max = n.pitch
-        for n in started:
+        for n in starting:
             if n.pitch == max:
                 n.tags.append('top')
             if n.pitch == min:
@@ -329,22 +333,22 @@ class NoteSet:
     def flag_outer(self):
         cur_time = 0
         active = []     # notes active at current time
-        started = []    # notes that started at current time
+        starting = []    # notes that started at current time
         for note in self.notes:
             if note.time > cur_time + epsilon:
-                if len(started):
-                    NoteSet.flag_outer_aux(active, started)
+                if len(starting):
+                    NoteSet.flag_outer_aux(active, starting)
                 cur_time = note.time
                 new_active = [note]
                 for n in active:
                     if n.time + n.dur > cur_time + epsilon:
                         new_active.append(n)
                 active = new_active
-                started = [note]
+                starting = [note]
             else:
                 active.append(note)
-                started.append(note)
-        NoteSet.flag_outer_aux(active, started)
+                starting.append(note)
+        NoteSet.flag_outer_aux(active, starting)
 
     # Adjust performance time of pedal events so that they do the right thing
     # even if note start times have been adjusted.

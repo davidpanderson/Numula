@@ -166,9 +166,10 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
         pft = copy.deepcopy(_pft)
         pft_bpm(pft)    # convert to inverse tempo function
     else:
-        pft = _pft
-        
+        pft = copy.copy(_pft)
+
     self.make_start_end_events()
+    #if debug: self.print_start_end_events()
 
     # keep track of our position in the PFT, and the integral so far
     seg_ind = 0
@@ -182,7 +183,11 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
     if normalize:
         scale_factor = 1/pft_avg(pft)
         if debug: print('scale factor: ', scale_factor)
-
+        
+    # append infinite unity segment
+    # needed to handle note-end events that lie beyond PFT domain
+    pft.append(linear(1, 1, 9999999))
+    
     # loop over events.
     # keep track of params of previous event
     #
@@ -191,36 +196,59 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
     prev_perf_adj = 0   # its adjusted perf time
     prev_integral = 0   # integral of pft at that point
     for event in self.start_end:
-        if debug: print('event time %f perf time %f'%(event.time, event.perf_time))
+        if debug: print('event time %f perf time %f prev_time %f'%(event.time, event.perf_time, prev_time))
         if event.time < t0+epsilon:
+            # event is before start of PFT
             prev_time = event.time
             prev_perf = event.perf_time
             prev_perf_adj = event.perf_time
+            if debug: print('   before start of PFT, skipping')
             continue
         if pred:
             if event.kind == event_kind_note:
                 if not pred(event.obj):
+                    if debug: print('   not selected')
                     continue
             else:
                 continue
+        if event.obj.time > pft_end+epsilon:
+            if debug: print('   note starts after PFT; skipping')
+            continue
         if event.time - prev_time < epsilon:
             if debug:
                 print('   same score time as prev; set perf time to %f'%prev_perf_adj)
             event.perf_time = prev_perf_adj
             continue
 
-        # loop over PFT primitives
+        # loop over PFT primitives up to the last one whose domain includes this event
         # precondition: event.time is not strictly before current seg
         while True:
-            if event.time < seg_end + epsilon:
+            if debug: print('   event.time', event.time, 'seg_start', seg_start, ' seg_end', seg_end)
+            use_this_seg = False
+            if event.time < seg_end - epsilon:
+                if debug: print('   strictly in seg; using it')
+                use_this_seg = True
+            elif event.time < seg_end + epsilon:
+                next_seg = pft[seg_ind+1]
+                if debug: print('   event at end of seg. next_seg.dt', next_seg.dt)
+                if next_seg.dt > 0:  
+                    use_this_seg = True
+                else:
+                    if debug: print('   next_seg.after', next_seg.after)
+                    if next_seg.after:
+                        use_this_seg = True
+ 
+            if use_this_seg:
                 if debug:
+                    print('   using this seg')
                     print('   previous event: score time %f perf %f adjusted perf %f PFT integral %f'%(
                         prev_time, prev_perf, prev_perf_adj, prev_integral
                     ))
                 if seg.dt == 0:
-                    # dirac delta case
+                    # Dirac delta case
                     if seg.after:
                         if debug: print('delta after')
+                        prev_time = event.time
                         break
                     if debug: print('delta before')
                     # fall through, move to next seg
@@ -247,18 +275,17 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
                     prev_time = event.time
                     break
 
-            if debug:
-                print('moving to next segment; dt %f int %f'%(seg.dt, seg.integral_total()))
-            seg_start  += seg.dt
+            seg_start += seg.dt
             seg_integral += seg.integral_total()
+            if debug: print('   moving to next seg')
             seg_ind += 1
-            if seg_ind == len(pft):
-                if debug: print('end of PFT')
-                break
             seg = pft[seg_ind]
+            if debug:
+                print('   next segment; dt %f int %f'%(seg.dt, seg.integral_total()))
             seg_end = seg_start + seg.dt
-        if seg_ind == len(pft):
-            break
+        # end loop over PFT segments
+    # end loop over events
+    #if debug: self.print_start_end_events()
     self.transfer_start_end_events()
 
 # change dur of notes starting between t0 and t1 so they end at t1
