@@ -32,21 +32,23 @@ rh = notate.n('2/4 ++d- 1/4 b- 3/44 +b- c d- -a b- a g+ a c b- g- \
 
 def main():
     ns = note.NoteSet([lh, rh])
-    ns.done()  # need this for sort
+
     for i in range(5):
         ns.sustain(i*3/4, (i+1)*3/4, lambda n: 'lh' in n.tags)
+        
+    ns.done()
+    
+    for i in range(5):
         ns.vol_adjust_pft(
             [linear(.3, .8, 2/4), linear(.8, .3, 1/4)],
             i*3/4,
             lambda n: 'lh' in n.tags
         )
-    ns.done()   # need for overlap??
 
     ns.tempo_adjust_pft(
         [
             linear(90, 110, 8/4),
             linear(110, 80, 7/4)
-            #linear(100, 100, 15/4)
         ]
     )
 

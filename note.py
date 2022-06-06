@@ -395,7 +395,7 @@ class NoteSet:
     from nuance import roll, t_adjust_list, t_adjust_notes, t_adjust_func
     from nuance import t_random_uniform, t_random_normal
     from nuance import score_dur_abs, score_dur_rel, score_dur_func
-    from nuance import perf_dur_abs, perf_dur_rel, perf_dur_func
+    from nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
     
 # represents the start or end of a note or pedal application
 #

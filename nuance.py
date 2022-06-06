@@ -145,31 +145,38 @@ def vol_adjust_func(self, func, pred):
             
 # ------------------- Timing ------------------------
 
-# adjust tempo of selected notes.
-# pft is tempo function defined from (score) t0  to t1.
-# Its value is in units of beats per minute
-# (60 = no change, 120 = speed by 2X)
-# conceptually, F is 60 outside this interval
+# adjust the timing of selected notes and pedal events.
+# pft is a tempo function, which can contain segments (such as linear)
+# and Dirac deltas.
+# If bpm is False, its value is performance time per unit score time;
+# larger is slower.
+# If bpm is True, its value is inverted, so that larger is faster
+# (60 = no change, 120 = speed up by 2X)
+# In both cases, the value of Dirac deltas is in performance time.
 #
-# - compute the NoteSet's sorted list of start/end "events",
+# Apply the PFT, starting at score time t0, to the selected notes.
+#
+# If "normalize" is True, scale the PFT so that its average is 1.
+#
+# Implementation:
+# - make a time-sorted list of start/end "events"
+#   for the notes and pedals,
 #   each with (score) time and a perf time.
-# - for each successive pair of events, compute average of PFT
-#   for the score time interval; scale perf time interval by this.
+# - for each successive pair of events A and B,
+#   compute average of the PFT between the score times of A and B.
+#   scale the perf time interval between A and B by this.
 # - update the (perf) time and dur of the corresponding Note and Pedal objects.
-#
-# if "normalize", scale F so that its average is 1.
 #
 def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
     debug = False
 
     if bpm:
         pft = copy.deepcopy(_pft)
-        pft_bpm(pft)    # convert to inverse tempo function
+        pft_bpm(pft)    # invert tempo function
     else:
         pft = copy.copy(_pft)
 
     self.make_start_end_events()
-    #if debug: self.print_start_end_events()
 
     # keep track of our position in the PFT, and the integral so far
     seg_ind = 0
@@ -285,7 +292,6 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
             seg_end = seg_start + seg.dt
         # end loop over PFT segments
     # end loop over events
-    #if debug: self.print_start_end_events()
     self.transfer_start_end_events()
 
 # change dur of notes starting between t0 and t1 so they end at t1
@@ -438,3 +444,43 @@ def perf_dur_func(self, func, pred):
             note.perf_dur = func(note)
 
 
+def perf_dur_pft(self, pft, t0, pred=None, rel=True):
+    pft_check_closure(pft)
+    seg_ind = 0
+    seg = pft[0]
+        # which segment we're on
+    seg_start = t0
+        # start time of that segment
+    seg_end = t0 + seg.dt
+    t_end = t0 + pft_dur(pft)
+        # end time of function
+    for n in self.notes:
+        if n.time > t_end + epsilon:
+            break
+        if n.time < t0 - epsilon:
+            continue
+        if pred and not pred(n):
+            continue
+        while True:
+            # skip segments as needed
+            if n.time < seg_end - epsilon:
+                v = seg.val(n.time - seg_start)
+                break
+            if n.time < seg_end + epsilon:
+                # note is at end of this seg
+                if seg.closed_end:
+                    v = seg.y1
+                    break
+                if seg_ind == len(pft)-1:
+                    return
+            # move to next seg
+            seg_start += seg.dt
+            seg_ind += 1
+            seg = pft[seg_ind]
+            seg_end = seg_start + seg.dt
+        # v is the adjustment factor
+        if rel:
+            n.perf_dur *= v
+        else:
+            n.perf_dur = v
+        

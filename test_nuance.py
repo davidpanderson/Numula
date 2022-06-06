@@ -49,7 +49,28 @@ def test3():
         linear(30, 30, 2/4)
     ])
     ns.print()
-    
+
+def test_dur_pft():
+    ns = NoteSet()
+    for i in range(8):
+        ns.append_ns([n('1/8 c d e f g a b c')])
+    ns.done()
+    ns.perf_dur_pft(
+        [
+            linear(.1, 1.5, 8/4),
+            linear(1.5, .1, 8/4)
+        ], 0, rel=True
+    )
+    ns.perf_dur_pft(
+        [
+            linear(.1, .4, 8/4),
+            linear(.4, .1, 8/4)
+        ], 16/4, rel=False
+    )
+    ns.print()
+    ns.write_midi('test_dur_pft.midi')
+        
 #test1()
 #test2()
-test3()
+#test3()
+test_dur_pft()

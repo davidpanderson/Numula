@@ -362,3 +362,39 @@ for timing adjustment, the value of a PFT function at score time s
 is dP/dS(s): the rate at which P increases with S.
 Smaller value = faster
 
+------------------
+Numula editor GUI
+X = time
+Y = channels
+top channel shows the score
+    maybe piano roll
+    show note tags
+Each channel is a list of non-overlapping operators
+operator
+    tempo_adjust_pft, pause etc.
+    select operators from list
+    drag and drop to place
+    drag to resize
+    selector function: textual
+PFT operators
+    sequence of segments
+    drag, drop, resize
+    drag to change parameters (y0, y1)
+
+Can copy and paste an operator or a segment
+when paste, can "link" the copy
+(changes to one change all)
+
+Can drag start/end markers
+space bar: play selected interval
+-------------------
+panning
+
+- make a MIDI file with lots of notes
+    of different pitches, same volume
+
+- experiment with panning:
+    mono: sum channels
+    stereo: assume some angle between channels
+
+- use PFTs for angle
