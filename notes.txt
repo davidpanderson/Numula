@@ -398,3 +398,12 @@ panning
     stereo: assume some angle between channels
 
 - use PFTs for angle
+
+making a spatialized multi-voice piece:
+- tag notes with voice names
+- ns.write_midi() takes selector; write voices to separate files
+- pianoteq.midi_to_wav(mono) for each voice
+- use write_pos_file() to write pos file for each voice
+    (with its own PFT)
+- make a zero signal
+- for each voice, use pan_signal() to add panned voice

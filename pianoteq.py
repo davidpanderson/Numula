@@ -18,9 +18,16 @@
 
 import os, platform
 
+if platform.system() == 'Windows':
+    prog = "c:/program files/modartt/pianoteq 7/pianoteq 7.exe"
+else:
+    raise Exception("OS not supported")
+    
 def play(file):
-    if platform.system() == 'Windows':
-        cmd = '"c:/program files/modartt/pianoteq 7/pianoteq 7.exe"  --play --midi %s'%file
-    else:
-        raise Exception("OS not supported")
+    cmd = '"%s" --play --midi %s'%(prog, file)
+    os.system(cmd)
+
+def midi_to_wav(ifile, ofile, mono=False):
+    m = if mono then '--mono' else ''
+    cmd = '"%s" %s --wav --headless --midi %s'%(prog, m, file)
     os.system(cmd)

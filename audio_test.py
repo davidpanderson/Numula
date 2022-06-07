@@ -25,4 +25,16 @@ def test():
     write_wav('foo.wav', s)
     graph('foo.wav', 4000)
 
-test()
+#test()
+
+def file_reader(fname):
+    f = open(fname)
+    return lambda x: float(f.readline())
+
+def test_pan():
+    f = file_reader('pan_test.txt')
+    for i in range(10):
+        print(f(0))
+    #s = read_wav('pan_test.wav')
+    #pan_signal(s, 44100, .1,
+test_pan()
