@@ -17,7 +17,7 @@ def merge_test():
     pan_signal(read_wav('nocturne.wav'), 44100, .2, pos_middle, osig)
     write_wav('panned.wav', osig)
 
-merge_test()
+#merge_test()
 
 def test():
     s = read_wav('nocturne.wav')
@@ -25,4 +25,4 @@ def test():
     write_wav('foo.wav', s)
     graph('foo.wav', 4000)
 
-#test()
+test()

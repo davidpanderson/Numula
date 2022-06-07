@@ -69,8 +69,18 @@ def test_dur_pft():
     )
     ns.print()
     ns.write_midi('test_dur_pft.midi')
+
+def test_pft_value():
+    p = [
+            linear(0, 1, 1, closed_end=False),
+            linear(3, 4, 1)
+        ]
+    v = pft_value(p)
+    for i in range(25):
+        x = i/10
+        print(x, v.value(x))
         
 #test1()
 #test2()
 #test3()
-test_dur_pft()
+test_pft_value()

@@ -84,6 +84,27 @@ def pft_bpm(pft):
     for seg in pft:
         seg.bpm()
 
+# class for getting the values of a PFT at increasing times
+class pft_value:
+    def __init__(self, pft):
+        self.pft = pft
+        self.ind = 0            # index of current seg
+        self.prev_dur = 0       # duration of previous segs
+
+    def value(self, t):
+        dt = t - self.prev_dur
+        while True:
+            seg = self.pft[self.ind]
+            if dt < seg.dt - epsilon:
+                return seg.val(dt)
+            if dt < seg.dt + epsilon and seg.closed_end:
+                return seg.y1
+            dt -= seg.dt
+            self.prev_dur += seg.dt
+            self.ind += 1
+            if self.ind == len(self.pft):
+                raise Exception('past end of PFT: t %f'%t)
+            
 # ------------------- Dynamics ------------------------
 
 ppp = .15
@@ -443,7 +464,7 @@ def perf_dur_func(self, func, pred):
         if pred(note):
             note.perf_dur = func(note)
 
-
+# adjust articulation with a PFT
 def perf_dur_pft(self, pft, t0, pred=None, rel=True):
     pft_check_closure(pft)
     seg_ind = 0
@@ -484,3 +505,40 @@ def perf_dur_pft(self, pft, t0, pred=None, rel=True):
         else:
             n.perf_dur = v
         
+# ----------- spatialization ----------------
+
+# write a "position file": per-sample position -1..1,
+# based on a PFT defining position as a function of score time.
+def write_pos_file(self, pos_pft, fname, framerate):
+    self.make_start_end_events()
+    last_time = 0
+    last_perf_time = 0
+    events = []
+    # events are sorted by score time
+    for event in self.start_end:
+        if event.time <= last_time:
+            continue
+        if event.perf_time <= last_perf_time:
+            continue
+        events.append(event)
+        last_time = event.time
+        last_perf_time = event.perf_time
+
+    f = open(fname, 'w')
+    pft_val = pft.pft_value(pos_pft)
+    event_ind = 0
+    ev0 = events[0]
+    ev1 = events[1]
+    slope = (ev1.time - ev0.time)/(ev1.perf_time - ev0.perf_time)
+    for i in range(int(last_perf_time*framerate)):
+        pt = i/framerate
+        while pt > ev1.perf_time:
+            event_ind += 1
+            ev0 = events[event_ind]
+            ev1 = events[event_ind+1]
+            slope = (ev1.time - ev0.time)/(ev1.perf_time - ev0.perf_time)
+        t = ev0.time + (pt-ev0.perf_time)*slope
+        pos = pft_val.value(t)
+        f.write("%f\n"%pos)
+    f.close()
+

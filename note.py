@@ -274,9 +274,6 @@ class NoteSet:
             self.start_end.append(Event(pedal, event_kind_pedal, True))
             self.start_end.append(Event(pedal, event_kind_pedal, False))
         self.start_end.sort(key=lambda x: x.time)
-        self.cur_ind = 0    # index into ns.start_end
-        self.cur_time = 0
-        self.cur_perf_time = 0
 
     # transfer perf times from start/end events back to Note and Pedal
     #
@@ -396,6 +393,7 @@ class NoteSet:
     from nuance import t_random_uniform, t_random_normal
     from nuance import score_dur_abs, score_dur_rel, score_dur_func
     from nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
+    from nuance import write_pos_file
     
 # represents the start or end of a note or pedal application
 #
