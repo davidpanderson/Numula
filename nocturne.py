@@ -68,7 +68,7 @@ def main():
     ns.perf_dur_rel(.5, lambda n: 'port' in n.tags)
 
     ns.print()
-    ns.write_midi('nocturne.midi')
-    pianoteq.play('nocturne.midi')
+    ns.write_midi('data/nocturne.midi')
+    pianoteq.play('data/nocturne.midi')
 
 main()

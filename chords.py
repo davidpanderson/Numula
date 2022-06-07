@@ -44,7 +44,7 @@ def main():
         if i % 30 == 29:
             c[random.randrange(4)] = random.randrange(12)
 
-    with open("chords.midi", "wb") as file:
+    with open("data/chords.midi", "wb") as file:
         f.writeFile(file)
 
 main()

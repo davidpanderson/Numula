@@ -29,4 +29,4 @@ for i in range(200):
 ns.done()
 ns.remove_overlap()
 ns.print()
-ns.write_midi("random.midi")
+ns.write_midi("data/random.midi")

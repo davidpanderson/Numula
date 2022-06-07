@@ -22,7 +22,7 @@ def test1():
     ns.add_list(0, n('c d e f g a b c'))
     ns.add_pedal(Pedal(4/4, 3/4, True))
     ns.done()
-    ns.write_midi('test1.midi')
+    ns.write_midi('data/test1.midi')
 
 test1()
         

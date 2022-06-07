@@ -229,9 +229,9 @@ def main():
         set_tempo(ns)
         time_adjust(ns)
         ns.print()
-        ns.write_midi('wasserklavier.midi')
-        pianoteq.play('wasserklavier.midi')
+        ns.write_midi('data/wasserklavier.midi')
+        pianoteq.play('data/wasserklavier.midi')
     else:
-        ns.write_midi('wasserklavier_plain.midi')
+        ns.write_midi('data/wasserklavier_plain.midi')
 
 main()

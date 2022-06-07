@@ -51,7 +51,7 @@ def main(pitches, nrep, ncycles):
     f = MIDIFile()
     for i in range(ncycles):
         shepard(pitches, nrep, f)
-    with open("shepard.midi", "wb") as file:
+    with open("data/shepard.midi", "wb") as file:
         f.writeFile(file)
         
 main([60, 62, 58, 46, 53], 24, 2)

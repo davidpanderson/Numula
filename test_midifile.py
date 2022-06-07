@@ -34,7 +34,7 @@ def chromatic():
     f.addControllerEvent(track, channel, 5, 64, 70)
     f.addControllerEvent(track, channel, 15, 64, 0)
     
-    with open("chromatic.midi", "wb") as file:
+    with open("data/chromatic.midi", "wb") as file:
         f.writeFile(file)
 
 def vol_sweep():
@@ -43,7 +43,7 @@ def vol_sweep():
     for v in range(0, 128, 8):
         f.addNote(0, 0, 60, t, 1, v)
         t += 1
-    with open("vol_sweep.midi", "wb") as file:
+    with open("data/vol_sweep.midi", "wb") as file:
         f.writeFile(file)
 
 vol_sweep()
@@ -57,7 +57,7 @@ def mf_bug():
     f.addTempo(0, 0, 120)
     f.addNote(0, 0, 60, 0, .5, 64);
     f.addNote(0, 0, 60, 0, .4, 64);
-    with open("test.midi", "wb") as file:
+    with open("data/test.midi", "wb") as file:
         f.writeFile(file)
 
 #mf_bug()

@@ -31,8 +31,8 @@ def scale():
     )
 
     ns.print()
-    ns.write_midi('scale.midi')
-    pianoteq.play('scale.midi')
+    ns.write_midi('data/scale.midi')
+    pianoteq.play('data/scale.midi')
 
 # make some notes with different pitches and same vol
 # (test input for panning)
@@ -43,12 +43,12 @@ def pan_test():
         ns.append_note(Note(0, 1/16, random.randrange(48, 72), .5))
         ns.advance_time(1/16)
     ns.done()
-    ns.write_midi('pan_test.midi')
+    ns.write_midi('data/pan_test.midi')
     ns.write_pos_file(
         [
             linear(-1, 1, 61/4)
-        ], 'pan_test.txt', 44100
+        ], 'data/pan_test.txt', 44100
     )
-    pianoteq.play('pan_test.midi')
+    pianoteq.play('data/pan_test.midi')
 
 pan_test()

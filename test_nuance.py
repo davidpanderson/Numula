@@ -26,7 +26,7 @@ def test1():
     ns.pause_before(3/4, .7)
     ns.roll(3/4, [-.2, -.1, 0], True, True)
     ns.print()
-    ns.write_midi('test1.midi')
+    ns.write_midi('data/test1.midi')
 
 def test2():
     ns = NoteSet()
@@ -38,7 +38,7 @@ def test2():
     ns.t_random_uniform(-.1, .1)
     ns.t_random_normal(.1, 3)
     ns.print()
-    ns.write_midi('test2.midi')
+    ns.write_midi('data/test2.midi')
 
 def test3():
     ns = NoteSet([n('c d e f g')])
@@ -68,7 +68,7 @@ def test_dur_pft():
         ], 16/4, rel=False
     )
     ns.print()
-    ns.write_midi('test_dur_pft.midi')
+    ns.write_midi('data/test_dur_pft.midi')
 
 def test_pft_value():
     p = [

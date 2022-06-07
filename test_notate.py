@@ -23,6 +23,6 @@ def test1():
     ns.append_ns([n(s)])
     ns.done()
     ns.print()
-    ns.write_midi('test1.midi')
+    ns.write_midi('data/test1.midi')
 
 test1()

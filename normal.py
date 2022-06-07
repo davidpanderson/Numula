@@ -42,6 +42,6 @@ def normal_time():
         notes.insert_note(note.Note(time, dur, pitch, vol))
     notes.done()
     notes.remove_overlap()
-    notes.write_midi("normal.midi")
+    notes.write_midi("data/normal.midi")
 
 normal_time()

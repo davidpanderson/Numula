@@ -35,7 +35,7 @@ def cn_test():
         f.addNote(0, 0, int(pitch), time, dur, vol)
         print(pitch, y[i])
         time += 1
-    with open("colored_noise.midi", "wb") as file:
+    with open("data/colored_noise.midi", "wb") as file:
         f.writeFile(file)
         
 cn_test()
