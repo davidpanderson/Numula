@@ -44,10 +44,10 @@ def pan_test():
         ns.advance_time(1/16)
     ns.done()
     ns.write_midi('data/pan_test.midi')
-    ns.write_pos_file(
+    pos_array = ns.get_pos_array(
         [
             linear(-1, 1, 61/4)
-        ], 'data/pan_test.txt', 44100
+        ], 44100
     )
     pianoteq.play('data/pan_test.midi')
 

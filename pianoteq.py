@@ -28,6 +28,6 @@ def play(file):
     os.system(cmd)
 
 def midi_to_wav(ifile, ofile, mono=False):
-    m = if mono then '--mono' else ''
-    cmd = '"%s" %s --wav --headless --midi %s'%(prog, m, file)
+    m = '--mono' if mono else ''
+    cmd = '"%s" %s --wav %s --headless --midi %s'%(prog, m, ofile, ifile)
     os.system(cmd)

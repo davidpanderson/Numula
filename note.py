@@ -178,13 +178,11 @@ class NoteSet:
         #
         self.measure_offsets()
         self.flag_outer()
-                
-    def write_midi(self, filename):
-        if not self.done_called:
-            raise Exception('Call done() before write_midi()')
 
-        # shift to avoid negative times; MIDI files don't like them
-        #
+    # shift perf times if needed to avoid negative times;
+    # MIDI files don't like them
+    #
+    def make_perf_nonnegative(self):
         self.notes.sort(key=lambda x: x.perf_time)
         t0 = self.notes[0].perf_time
         if t0 < 0:
@@ -193,6 +191,23 @@ class NoteSet:
             for pedal in self.pedals:
                 pedal.perf_time -= t0
 
+    # get the max performance time
+    # Note: the .wav file produced by pianoteq
+    # will be a second or two longer than this
+    def perf_dur(self):
+        self.make_perf_nonnegative()
+        x = 0
+        for n in self.notes:
+            t = n.perf_time + n.perf_dur
+            if t>x: x = t
+        return x
+
+    # write selected notes to MIDI file
+    def write_midi(self, filename, pred=None):
+        if not self.done_called:
+            raise Exception('Call done() before write_midi()')
+        self.make_perf_nonnegative()
+
         # MIDIutils doesn't handle overlapping notes correctly, so remove them
         #
         self.remove_overlap()
@@ -200,6 +215,8 @@ class NoteSet:
         f = MIDIFile(deinterleave=False)
         f.addTempo(0, 0, 60)
         for note in self.notes:
+            if pred and not pred(note):
+                continue
             if note.vol > 1:
                 print('%s at time %f has vol %f; setting to 1'%(
                     pitch_name(note.pitch), note.time, note.vol
@@ -393,7 +410,7 @@ class NoteSet:
     from nuance import t_random_uniform, t_random_normal
     from nuance import score_dur_abs, score_dur_rel, score_dur_func
     from nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
-    from nuance import write_pos_file
+    from nuance import get_pos_array
     
 # represents the start or end of a note or pedal application
 #

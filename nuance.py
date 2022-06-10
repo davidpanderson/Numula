@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-import numpy, random, copy
+import numpy, random, copy, math
 from note import *
 
 class linear:
@@ -90,6 +90,7 @@ class pft_value:
         self.pft = pft
         self.ind = 0            # index of current seg
         self.prev_dur = 0       # duration of previous segs
+        self.ended = False
 
     def value(self, t):
         dt = t - self.prev_dur
@@ -103,7 +104,9 @@ class pft_value:
             self.prev_dur += seg.dt
             self.ind += 1
             if self.ind == len(self.pft):
-                raise Exception('past end of PFT: t %f'%t)
+                self.ended = True
+                self.final_value = seg.y1
+                return self.final_value
             
 # ------------------- Dynamics ------------------------
 
@@ -507,9 +510,20 @@ def perf_dur_pft(self, pft, t0, pred=None, rel=True):
         
 # ----------- spatialization ----------------
 
-# write a "position file": per-sample position -1..1,
+# return array of per-frame stereo positions -1..1,
 # based on a PFT defining position as a function of score time.
-def write_pos_file(self, pos_pft, fname, framerate):
+# If the performance times exceed the PFT,
+# use the final PFT value for those frames
+def get_pos_array(self, pos_pft, framerate):
+
+    # get the score's note start/end events.
+    # Then extract a subset which is strictly monotonic
+    # in both score and performance time.
+    # This defines a piecewise linear function F
+    # mapping perf time to score time.
+    # The stereo position at a given frame (perf time t)
+    # is the value of pos_pft at score time F(t)
+    #
     self.make_start_end_events()
     last_time = 0
     last_perf_time = 0
@@ -524,21 +538,28 @@ def write_pos_file(self, pos_pft, fname, framerate):
         last_time = event.time
         last_perf_time = event.perf_time
 
-    f = open(fname, 'w')
-    pft_val = pft.pft_value(pos_pft)
+    # make an object for evaluating pos_pft at increasing times
+    pft_val = pft_value(pos_pft)
     event_ind = 0
     ev0 = events[0]
     ev1 = events[1]
     slope = (ev1.time - ev0.time)/(ev1.perf_time - ev0.perf_time)
-    for i in range(int(last_perf_time*framerate)):
+    nframes = math.ceil(last_perf_time*framerate)
+    pos_array = [0]*nframes
+    print('get_pos_array: nframes', nframes)
+    for i in range(nframes):
         pt = i/framerate
+        # loop overlinear segments of F
         while pt > ev1.perf_time:
             event_ind += 1
             ev0 = events[event_ind]
             ev1 = events[event_ind+1]
             slope = (ev1.time - ev0.time)/(ev1.perf_time - ev0.perf_time)
         t = ev0.time + (pt-ev0.perf_time)*slope
-        pos = pft_val.value(t)
-        f.write("%f\n"%pos)
-    f.close()
+        if pft_val.ended:
+            pos = pft_val.final_value
+        else:
+            pos = pft_val.value(t)
+        pos_array[i] = pos
+    return pos_array
 

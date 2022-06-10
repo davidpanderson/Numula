@@ -18,6 +18,10 @@ def show_info(fname):
     print ( "parameters:",obj.getparams())
     obj.close()
 
+def nframes(fname):
+    obj = wave.open(fname)
+    return obj.getnframes()
+
 # draw a graph of the first N frames of a .wav file
 def graph(fname, nframes):
     obj = wave.open(fname)
@@ -77,7 +81,11 @@ def write_wav(fname, samples):
     print('wrote',nsamples,'to',fname)
 
 # create a zero signal of given length
-def zero_signal(nsamples):
+def zero_signal_t(dur, framerate):
+    nsamples = math.ceil(2*dur*framerate)
+    return [0]*nsamples
+
+def zero_signal_ns(nsamples):
     return [0]*nsamples
 
 # scale signal
@@ -86,15 +94,18 @@ def scale(samples, gain):
         samples[i] *= gain
         
 # add the input signal "isig" to the output signal "osig",
-# panning it according to the function pos(): time->-1..1
-# "ang" is the separation (0..1) between the input channels.
+# panning it according to the array pos: -1..1
+# "ang" is the separation (0..1) between the input chans.
 # if 0, the channels are summed (mono)
-def pan_signal(isig, framerate, ang, pos, osig):
+def pan_signal(isig, framerate, ang, pos_array, osig):
     nframes = len(isig)//2
+    if len(pos_array) < nframes:
+        nframes = len(pos_array)
+    print('pan_signal; input %d samples, output %d samples'%(len(isig), len(osig)))
     for i in range(nframes):
         a = isig[i*2]
         b = isig[i*2+1]
-        p = pos(i/framerate)
+        p = pos_array[i]
         if ang == 0:
             avg = (a+b)/2
             pp = p*math.pi

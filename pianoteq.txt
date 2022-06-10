@@ -1,0 +1,39 @@
+Options from command-line:
+ --help             : show this help, and quit
+ --version          : show current version number and date, and quit
+ --no-prefs         : start Pianoteq without using any saved preference
+ --no-audio-prefs   : start Pianoteq with a clean audio/midi configuration
+ --prefs FILENAME   : stores the preferences in the specified file
+ --fxp FILENAME     : load an FXP file on startup
+ --preset NAME      : load a preset on startup
+ --list-presets     : display the list of all presets
+ --midimapping NAME : load a midimapping preset on startup
+ --midi-channel CH  : listen only to MIDI events on the specified channel (1<=value<=16 or 'all')
+ --midi-transpose x : transpose note events by the specified amount (-36<=x<=36)
+ --midi FILENAME    : load a midi file, or a *.m3u playlist content. If filename is a folder,
+                      the midi files contained in that folder
+ --open file1 file2 ...     : load files, which can be midi, fxp, mfxp, ptq, scl or kbm files.
+                      Must be used as the *last* option
+ --wav FILENAME     : export midi file as WAV file, and quit
+ --flac FILENAME    : export as FLAC
+ --mp3 FILENAME     : export as MP3
+ --rate FREQ        : change the sample rate for the exported wav
+ --bit-depth D      : change the bit-depth for the exported wav (16,24 or 32)
+ --dither ON/OFF    : turn dithering when exporting on or off
+ --normalize        : turn on volume normalization for the exported wav
+ --normalize-db DB  : change the normalization level (default value is -1dB)
+ --mono             : export the wav file as mono
+ --headless         : do not show the graphical interface
+ --fullscreen       : start in fullscreen mode
+ --export-vst3-presets PATH : export all presets as VST3 presets
+ --export-vst3-presets-std  : export VST3 preset to their default location, which is:
+                    C:\Users\davea\AppData\Roaming\VST3 Presets\
+ --export-presets-filter all|builtin|ptq|user : select which presets are exported, default is 'builtin'
+ --restore-windows  : restore the a previously saved set of windows
+ --do-not-block-screensaver : prevent Pianoteq from keeping the screen on
+ --quiet            : be less verbose
+ --play             : immediately start playing the midi file
+ --play-and-quit    : start playing the midi file, and quit when it ends
+ --activate SERIAL or --activate COMPUTER_NAME:SERIAL activate this computer using the supplied serial
+ --serve [IP:]PORT  : start a JSON-RPC server for remote control of Pianoteq.
+                      When using --serve "" , the server listens on localhost:8081
