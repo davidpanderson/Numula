@@ -141,6 +141,8 @@ def n(s, _tags=[]):
             if tag not in tags:
                 raise Exception('unopened tag %s'%tag)
             tags.remove(tag)
+        elif t == '|':
+            continue
         else:
             # note
             x = parse_note(t)

@@ -83,7 +83,7 @@ class NoteSet:
     def advance_time(self, dur):
         self.cur_time += dur
 
-    def insert_ns(self, t, ns, tag=None):
+    def insert_ns(self, ns, t=0, tag=None):
         for note in ns.notes:
             note.time += t
             if tag:
@@ -94,7 +94,7 @@ class NoteSet:
         longest = 0
         for ns in nss:
             longest = max(longest, ns.cur_time)
-            self.insert_ns(self.cur_time, ns, tag)
+            self.insert_ns(ns, self.cur_time, tag)
         self.cur_time += longest
             
     def insert_measure(self, m):

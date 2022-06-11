@@ -23,7 +23,7 @@ def nframes(fname):
     return obj.getnframes()
 
 # draw a graph of the first N frames of a .wav file
-def graph(fname, nframes):
+def graph_wav(fname, nframes):
     obj = wave.open(fname)
     x = obj.readframes(nframes)
     obj.close()
@@ -39,6 +39,13 @@ def graph(fname, nframes):
     plot.plot(range(nframes), y2, label='R')
     plot.show()
 
+# graph a position array
+def graph_pos(pos_array):
+    nframes = len(pos_array)
+    plot.rcParams['figure.figsize'] = (12,8)
+    plot.plot(range(nframes), pos_array)
+    plot.show()
+    
 # read .wav file as array of floats
 def read_wav(fname):
     f = wave.open(fname)
@@ -56,7 +63,7 @@ def read_wav(fname):
             a = float(s[i])
             samples[ns] = a
             ns += 1
-    print('read',nsamples,'samples from', fname)
+    print('read',nsamples//2,'frames from', fname)
     return samples      
 
 # write array of floats as .wav file
@@ -78,7 +85,7 @@ def write_wav(fname, samples):
         x = struct.pack("%dh"%(ns), *isamples)
         f.writeframes(x)
         nwritten += ns
-    print('wrote',nsamples,'to',fname)
+    print('wrote',nsamples//2,'frames to',fname)
 
 # create a zero signal of given length
 def zero_signal_t(dur, framerate):
@@ -94,26 +101,28 @@ def scale(samples, gain):
         samples[i] *= gain
         
 # add the input signal "isig" to the output signal "osig",
-# panning it according to the array pos: -1..1
+# panning it according to the array pos: 0..1
 # "ang" is the separation (0..1) between the input chans.
 # if 0, the channels are summed (mono)
 def pan_signal(isig, framerate, ang, pos_array, osig):
-    nframes = len(isig)//2
-    if len(pos_array) < nframes:
-        nframes = len(pos_array)
-    print('pan_signal; input %d samples, output %d samples'%(len(isig), len(osig)))
-    for i in range(nframes):
+    inframes = len(isig)//2
+    pnframes = len(pos_array)
+    print('pan_signal; input %d frames, pos_array %d frames'%(inframes, pnframes))
+    for i in range(inframes):
         a = isig[i*2]
         b = isig[i*2+1]
-        p = pos_array[i]
+        if i < pnframes:
+            p = pos_array[i]
+        else:
+            p = pos_array[pnframes-1]
         if ang == 0:
             avg = (a+b)/2
-            pp = p*math.pi
+            pp = p*math.pi/2
             osig[i*2] += avg*math.cos(pp)
             osig[i*2+1] += avg*math.sin(pp)
         else:
-            p0 = max(p-ang, -1)*math.pi
-            p1 = min(p+ang, 1)*math.pi
+            p0 = max(p-ang, 0)*math.pi/2
+            p1 = min(p+ang, 1)*math.pi/2
             osig[i*2] += a*math.cos(p0)
             osig[i*2+1] += a*math.sin(p0)
             osig[i*2] += b*math.cos(p1)

@@ -1,6 +1,6 @@
 # combine signals with panning
 
-from numula_audio import *
+from spatialize import *
 
 def pos_func(t):
     m = t % 16
@@ -23,13 +23,9 @@ def test():
     s = read_wav('data/nocturne.wav')
     scale(s, 2.)
     write_wav('data/foo.wav', s)
-    graph('data/foo.wav', 4000)
+    graph_wav('data/foo.wav', 4000)
 
 #test()
-
-def file_reader(fname):
-    f = open(fname)
-    return lambda x: float(f.readline())
 
 def test_pan():
     f = file_reader('data/pan_test.txt')
