@@ -1,6 +1,5 @@
-# demo of spatialized polyphony
-# Three voices, each with the same tempo adjustment,
-# are written to separate .wav files,
+# demo of spatialized polyphony using Bach's Fugue 18 from WTC II
+# Three voices are written to separate .wav files,
 # then combined with independent panning
 
 import math
@@ -8,8 +7,6 @@ from note import *
 from notate import *
 from nuance import *
 import spatialize, pianoteq
-
-# spatialization demo using Bach's Fugue 18 from WTC II
 
 def main():
     v0 = n('1/8 (theme +g+ a+ b a+ d+ -d+ | g+ b a+ b a+ g+ | a+ b c+ b e -g+ | a+ c+ b c+ b a+ | 1/4 b theme) 1/8 b+ 6/8 c+ \
@@ -50,6 +47,7 @@ def main():
         ns.vol_adjust(1.4, lambda n: 'theme' in n.tags)
 
     if True:
+
         def tempo_pft():
             x = []
             for i in range(8):
@@ -86,12 +84,18 @@ def main():
         ]
     ]
 
+    presets = [
+        'NY Steinway Model D',
+        'C. Grimaldi Harpsichord A',
+        'Pleyel Close Mic'
+    ]
+        
     # make MIDI and WAV files for each of the voices,
     # and get the max length.
     max_nframes = 0
     for i in range(3):
         ns.write_midi('data/v%d.mid'%i, lambda n: 'v%d'%i in n.tags)
-        pianoteq.midi_to_wav('data/v%d.mid'%i, 'data/v%d.wav'%i)
+        pianoteq.midi_to_wav('data/v%d.mid'%i, 'data/v%d.wav'%i, preset=presets[i])
         nf = spatialize.nframes('data/v%d.wav'%i)
         if nf > max_nframes:
             max_nframes = nf

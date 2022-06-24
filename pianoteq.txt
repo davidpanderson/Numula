@@ -1,3 +1,8 @@
+There is no official command-line option for that, but with Pianoteq 6.1 you can use:
+--list-param to get a list of public parameters (similar to the list VST parameters).
+--set-param name=value to change the value of a parameter . If the parameter name contains spaces you must quote it , for example:
+
+./Pianoteq 6  --set-param "Reverb Duration=5"
 Options from command-line:
  --help             : show this help, and quit
  --version          : show current version number and date, and quit
@@ -37,3 +42,213 @@ Options from command-line:
  --activate SERIAL or --activate COMPUTER_NAME:SERIAL activate this computer using the supplied serial
  --serve [IP:]PORT  : start a JSON-RPC server for remote control of Pianoteq.
                       When using --serve "" , the server listens on localhost:8081
+
+Example of use: Pianoteq --preset "U4 Small" --midi foo.mid --wav foo.wav
+"Pianoteq 7.exe" --list-param
+
+c:\Program Files\Modartt\Pianoteq 7>   1;                                Condition;          0..10.00
+   2;                                 Dynamics;          1..100
+   3;                               Pitch Bend;      -2400..+2400
+   4;                             Unison Width;          0..20.00
+   5;                             Stereo Width;          0..5.00
+   6;                             Hammer Noise;       0.10..3.00
+   7;                            Sustain Pedal;          0..1.00
+   8;                               Soft Pedal;          0..1.00
+   9;                          Sostenuto Pedal;          0..1.00
+  10;                           Harmonic Pedal;          0..1.00
+  11;                             Rattle Pedal;          0..1.00
+  12;                          Buff Stop Pedal;          0..1.00
+  13;                            Celeste Pedal;          0..1.00
+  14;                              Mozart Rail;          0..1.00
+  15;                          Super Sostenuto;          0..1.00
+  16;                     Pinch Harmonic Pedal;          0..1.00
+  17;                          Glissando Pedal;          0..1.00
+  18;                   Harpsichord Register 1;          0..1
+  19;                   Harpsichord Register 2;          0..1
+  20;                   Harpsichord Register 3;          0..1
+  21;                         Reversed Sustain;          0..1
+  22;                                   Volume;        Off..+12.0
+  23;                         Post Effect Gain;      -12.0..+12.0
+  24;                                 Diapason;      220.0..880.0
+  25;                        Octave Stretching;       0.95..3.00
+  26;                           Unison Balance;      -1.00..+1.00
+  27;                    Direct Sound Duration;          0..5.00
+  28;                       Hammer Hard. Piano;          0..2.00
+  29;                       Hammer Hard. Mezzo;          0..2.00
+  30;                       Hammer Hard. Forte;          0..2.00
+  31;                       Spectrum Profile 1;     -15.00..+15.00
+  32;                       Spectrum Profile 2;     -15.00..+15.00
+  33;                       Spectrum Profile 3;     -15.00..+15.00
+  34;                       Spectrum Profile 4;     -15.00..+15.00
+  35;                       Spectrum Profile 5;     -15.00..+15.00
+  36;                       Spectrum Profile 6;     -15.00..+15.00
+  37;                       Spectrum Profile 7;     -15.00..+15.00
+  38;                       Spectrum Profile 8;     -15.00..+15.00
+  39;                             Strike Point;     1/64.0..1/2.0
+  40;                     Pinch Harmonic Point;     1/64.0..1/2.0
+  41;                          Pickup Symmetry;          0..1.00
+  42;                          Pickup Distance;       0.20..2.00
+  43;                               Soft Level;          0..1.00
+  44;                         Clavinet Low Mic;      -1.00..+1.00
+  45;                        Clavinet High Mic;      -1.00..+1.00
+  46;                                Impedance;       0.30..3.00
+  47;                                   Cutoff;       0.30..3.00
+  48;                                 Q Factor;       0.20..5.00
+  49;                            String Length;       0.80..10.00
+  50;                    Sympathetic Resonance;          0..5.00
+  51;                   Duplex Scale Resonance;          0..20.00
+  52;                         Quadratic Effect;          0..20.00
+  53;                        Hammer Tine Noise;    -100.00..+25.00
+  54;                          Blooming Energy;          0..2.00
+  55;                         Blooming Inertia;       0.10..3.00
+  56;                         Equalizer Switch;        Off..On
+  57;                               Aftertouch;          0..1.00
+  58;                                 Morphing;          0..100
+  59;                            Bounce Switch;        Off..On
+  60;                             Bounce Delay;      10.00..250.00
+  61;                              Bounce Sync;        Off..On
+  62;                        Bounce Sync Speed;        16d..1/8t
+  63;              Bounce Velocity Sensitivity;          0..100
+  64;                        Bounce Delay Loss;          0..100
+  65;                     Bounce Velocity Loss;          0..100
+  66;                      Bounce Humanization;          0..100
+  67;                             Eff 1 Switch;        Off..On
+  68;                             Eff 1 DelMix;          0..100
+  69;                            Eff 1 DelTime;          1..1000
+  70;                              Eff 1 DelFb;          0..100
+  71;                            Eff 1 DelTone;      -1.00..+1.00
+  72;                             Eff 1 DelPol;        Off..On
+  73;                            Eff 1 Param 6;          0..1.00
+  74;                            Eff 1 Param 7;          0..1.00
+  75;                            Eff 1 Param 8;          0..1.00
+  76;                             Eff 2 Switch;        Off..On
+  77;                              Eff 2 PEQ1F;         40..22050
+  78;                              Eff 2 PEQ1G;      -25.0..+25.0
+  79;                              Eff 2 PEQ1Q;       0.01..100.00
+  80;                              Eff 2 PEQ2F;         40..22050
+  81;                              Eff 2 PEQ2G;      -25.0..+25.0
+  82;                              Eff 2 PEQ2Q;       0.01..100.00
+  83;                              Eff 2 PEQ3F;         40..22050
+  84;                              Eff 2 PEQ3G;      -25.0..+25.0
+  85;                             Eff 3 Switch;        Off..On
+  86;                              Eff 3 PEQ1F;         40..22050
+  87;                              Eff 3 PEQ1G;      -25.0..+25.0
+  88;                              Eff 3 PEQ1Q;       0.01..100.00
+  89;                              Eff 3 PEQ2F;         40..22050
+  90;                              Eff 3 PEQ2G;      -25.0..+25.0
+  91;                              Eff 3 PEQ2Q;       0.01..100.00
+  92;                              Eff 3 PEQ3F;         40..22050
+  93;                              Eff 3 PEQ3G;      -25.0..+25.0
+  94;                            Reverb Switch;        Off..On
+  95;                          Reverb Duration;          0..5.00
+  96;                               Reverb Mix;        Off..+50.0
+  97;                          Room Dimensions;       5.00..50.00
+  98;                         Reverb Pre-delay;          0..0.200
+  99;                 Reverb Early Reflections;      -20.0..+20.0
+ 100;                              Reverb Tone;      -1.00..+1.00
+ 101;                          Reverb Envelope;     -200.0..0
+ 102;                        Reverb Resampling;         50..200
+ 103;                           Limiter Switch;        Off..On
+ 104;                        Limiter Sharpness;          0..2.00
+ 105;                        Limiter Threshold;        -25..0
+ 106;                             Limiter Gain;        -30..+6
+ 107;                                     Mute;          0..1.00
+ 108;                             Damper Noise;        Off..+24.00
+ 109;                          Damper Position;     1/64.0..1/2.0
+ 110;                              Last Damper;          0..128
+ 111;                              Pedal Noise;        Off..+25
+ 112;                        Key Release Noise;        Off..+25
+ 113;                         Damping Duration;       0.03..10.00
+ 114;                    Keyboard Range Switch;        Off..On
+ 115;                             Lid Position;          0..1.00
+ 116;                              Output Mode; Sterophonic..Binaural
+ 117;                   Mic Level Compensation;        Off..On
+ 118;                   Mic Delay Compensation;        Off..On
+ 119;                          Head X position;    -10.000..+10.000
+ 120;                          Head Y position;     -6.000..+6.000
+ 121;                          Head Z position;          0..3.500
+ 122;                            Head Diameter;     10.000..50.000
+ 123;                               Head Angle;     -180.0..+180.0
+ 124;                         Mic 1 Mic Switch;        Off..On
+ 125;                         Mic 1 X position;    -10.000..+10.000
+ 126;                         Mic 1 Y position;     -6.000..+6.000
+ 127;                         Mic 1 Z position;          0..3.500
+ 128;                            Mic 1 Azimuth;     -180.0..+180.0
+ 129;                          Mic 1 Elevation;     -180.0..+180.0
+ 130;                            Mic 1 Level 1;        Off..+6
+ 131;                            Mic 1 Delay 1;     -250.0..+250.0
+ 132;                            Mic 1 Level 2;        Off..+6
+ 133;                            Mic 1 Delay 2;     -250.0..+250.0
+ 134;                            Mic 1 Level 3;        Off..+6
+ 135;                            Mic 1 Delay 3;     -250.0..+250.0
+ 136;                            Mic 1 Level 4;        Off..+6
+ 137;                            Mic 1 Delay 4;     -250.0..+250.0
+ 138;                            Mic 1 Level 5;        Off..+6
+ 139;                            Mic 1 Delay 5;     -250.0..+250.0
+ 140;                         Mic 2 Mic Switch;        Off..On
+ 141;                         Mic 2 X position;    -10.000..+10.000
+ 142;                         Mic 2 Y position;     -6.000..+6.000
+ 143;                         Mic 2 Z position;          0..3.500
+ 144;                            Mic 2 Azimuth;     -180.0..+180.0
+ 145;                          Mic 2 Elevation;     -180.0..+180.0
+ 146;                            Mic 2 Level 1;        Off..+6
+ 147;                            Mic 2 Delay 1;     -250.0..+250.0
+ 148;                            Mic 2 Level 2;        Off..+6
+ 149;                            Mic 2 Delay 2;     -250.0..+250.0
+ 150;                            Mic 2 Level 3;        Off..+6
+ 151;                            Mic 2 Delay 3;     -250.0..+250.0
+ 152;                            Mic 2 Level 4;        Off..+6
+ 153;                            Mic 2 Delay 4;     -250.0..+250.0
+ 154;                            Mic 2 Level 5;        Off..+6
+ 155;                            Mic 2 Delay 5;     -250.0..+250.0
+ 156;                         Mic 3 Mic Switch;        Off..On
+ 157;                         Mic 3 X position;    -10.000..+10.000
+ 158;                         Mic 3 Y position;     -6.000..+6.000
+ 159;                         Mic 3 Z position;          0..3.500
+ 160;                            Mic 3 Azimuth;     -180.0..+180.0
+ 161;                          Mic 3 Elevation;     -180.0..+180.0
+ 162;                            Mic 3 Level 1;        Off..+6
+ 163;                            Mic 3 Delay 1;     -250.0..+250.0
+ 164;                            Mic 3 Level 2;        Off..+6
+ 165;                            Mic 3 Delay 2;     -250.0..+250.0
+ 166;                            Mic 3 Level 3;        Off..+6
+ 167;                            Mic 3 Delay 3;     -250.0..+250.0
+ 168;                            Mic 3 Level 4;        Off..+6
+ 169;                            Mic 3 Delay 4;     -250.0..+250.0
+ 170;                            Mic 3 Level 5;        Off..+6
+ 171;                            Mic 3 Delay 5;     -250.0..+250.0
+ 172;                         Mic 4 Mic Switch;        Off..On
+ 173;                         Mic 4 X position;    -10.000..+10.000
+ 174;                         Mic 4 Y position;     -6.000..+6.000
+ 175;                         Mic 4 Z position;          0..3.500
+ 176;                            Mic 4 Azimuth;     -180.0..+180.0
+ 177;                          Mic 4 Elevation;     -180.0..+180.0
+ 178;                            Mic 4 Level 1;        Off..+6
+ 179;                            Mic 4 Delay 1;     -250.0..+250.0
+ 180;                            Mic 4 Level 2;        Off..+6
+ 181;                            Mic 4 Delay 2;     -250.0..+250.0
+ 182;                            Mic 4 Level 3;        Off..+6
+ 183;                            Mic 4 Delay 3;     -250.0..+250.0
+ 184;                            Mic 4 Level 4;        Off..+6
+ 185;                            Mic 4 Delay 4;     -250.0..+250.0
+ 186;                            Mic 4 Level 5;        Off..+6
+ 187;                            Mic 4 Delay 5;     -250.0..+250.0
+ 188;                         Mic 5 Mic Switch;        Off..On
+ 189;                         Mic 5 X position;    -10.000..+10.000
+ 190;                         Mic 5 Y position;     -6.000..+6.000
+ 191;                         Mic 5 Z position;          0..3.500
+ 192;                            Mic 5 Azimuth;     -180.0..+180.0
+ 193;                          Mic 5 Elevation;     -180.0..+180.0
+ 194;                            Mic 5 Level 1;        Off..+6
+ 195;                            Mic 5 Delay 1;     -250.0..+250.0
+ 196;                            Mic 5 Level 2;        Off..+6
+ 197;                            Mic 5 Delay 2;     -250.0..+250.0
+ 198;                            Mic 5 Level 3;        Off..+6
+ 199;                            Mic 5 Delay 3;     -250.0..+250.0
+ 200;                            Mic 5 Level 4;        Off..+6
+ 201;                            Mic 5 Delay 4;     -250.0..+250.0
+ 202;                            Mic 5 Level 5;        Off..+6
+ 203;                            Mic 5 Delay 5;     -250.0..+250.0
+ 204;                              Sound Speed;        200..500
+ 205;                            Wall distance;          0..6.00
+ 206;                                      Lid;        Off..On

@@ -1,0 +1,644 @@
+"Pianoteq 7.exe" --list-presets
+
+c:\Program Files\Modartt\Pianoteq 7>NY Steinway D Classical
+NY Steinway D Jazz
+NY Steinway D Prelude
+NY Steinway D Blues
+NY Steinway D Pop
+NY Steinway D New Age
+NY Steinway D Felt I
+NY Steinway D Felt II
+NY Steinway Model D
+NY Steinway D Classical Recording
+NY Steinway D Jazz Recording
+NY Steinway D Chamber Recording
+NY Steinway D Studio Recording
+NY Steinway D Bass & Piano split
+NY Steinway D Gentle
+NY Steinway D Warm
+NY Steinway D Cinematic
+NY Steinway D Close Mic
+NY Steinway D Player Wide
+NY Steinway D Player Clean
+NY Steinway D Under Lid
+NY Steinway D Wide Unison
+NY Steinway D Prepared
+NY Steinway D Honky Tonk
+NY Steinway D Super Tonk
+NY Steinway D Worn Out
+NY Steinway D Ruined
+NY Steinway D Hybrid
+My Presets/NY Steinway D Classical (for wasser)
+HB Steinway D Jazz
+HB Steinway D Classical
+HB Steinway D Prelude
+HB Steinway D Blues
+HB Steinway D Pop
+HB Steinway D New Age
+HB Steinway D Felt I
+HB Steinway D Felt II
+HB Steinway Model D
+HB Steinway D Classical Recording
+HB Steinway D Jazz Recording
+HB Steinway D Chamber Recording
+HB Steinway D Studio Recording
+HB Steinway D Bass & Piano split
+HB Steinway D Intimate
+HB Steinway D Cinematic
+HB Steinway D Close Mic Classical
+HB Steinway D Close Mic Jazz
+HB Steinway D Player Wide
+HB Steinway D Player Clean
+HB Steinway D Under Lid
+HB Steinway D Binaural
+HB Steinway D 3 Mics
+HB Steinway D Trio
+HB Steinway D Duo
+HB Steinway D Cabaret
+HB Steinway D Bright
+HB Steinway D Hyper Bright
+HB Steinway D Prepared
+HB Steinway D Honky Tonk
+HB Steinway D Super Tonk
+HB Steinway D Worn Out
+HB Steinway D Ruined
+HB Steinway D Hybrid
+Steinway B Improv
+Steinway B Prelude
+Steinway B Bright
+Steinway B Gentle
+Steinway B Felt I
+Steinway B Felt II
+Steinway B Binaural
+Steinway B Wide
+Steinway Model B
+Steinway B Recording 1
+Steinway B Recording 2
+Steinway B Recording 3
+Steinway B Intimate
+Steinway B Player
+Steinway B Under Lid
+Steinway B Close Mic
+Steinway B Distant Mic
+Steinway B Late Evening
+Steinway B Cinematic
+Steinway B Dreamy
+Steinway B Cosmic
+C. Bechstein DG Prelude
+C. Bechstein DG Sweet
+C. Bechstein DG Felt I
+C. Bechstein DG Felt II
+C. Bechstein DG D 282
+C. Bechstein DG Recording 1
+C. Bechstein DG Recording 2
+C. Bechstein DG Recording 3
+C. Bechstein DG Cinematic
+C. Bechstein DG Snappy
+C. Bechstein DG Bass & Piano split
+C. Bechstein DG Venue
+C. Bechstein DG Player
+C. Bechstein DG Under Lid
+C. Bechstein DG Cosmic
+C. Bechstein DG Broken
+Ant. Petrof Warm
+Ant. Petrof Prelude
+Ant. Petrof Felt I
+Ant. Petrof Felt II
+Ant. Petrof Venue
+Ant. Petrof 275
+Ant. Petrof Recording 1
+Ant. Petrof Recording 2
+Ant. Petrof Recording 3
+Ant. Petrof Cinematic
+Ant. Petrof Bass & Piano split
+Ant. Petrof Intimate
+Ant. Petrof Player
+Ant. Petrof Under Lid
+Ant. Petrof Duo
+Ant. Petrof Dreamy
+Ant. Petrof Cosmic
+Ant. Petrof Broken
+Petrof Mistral Warm
+Petrof Mistral Prelude
+Petrof Mistral Felt I
+Petrof Mistral Felt II
+Petrof Mistral Venue
+Petrof 284 Mistral
+Petrof Mistral Classical Recording
+Petrof Mistral Jazz Recording
+Petrof Mistral Cinematic
+Petrof Mistral Bass & Piano split
+Petrof Mistral Intimate
+Petrof Mistral Player
+Petrof Mistral Under Lid
+Petrof Mistral Gentle
+Petrof Mistral Dreamy
+Petrof Mistral Cosmic
+Petrof Mistral Broken
+Steingraeber Warm
+Steingraeber Prelude
+Steingraeber Bright
+Steingraeber Felt I
+Steingraeber Felt II
+Steingraeber E-272
+Steingraeber Recording 1
+Steingraeber Recording 2
+Steingraeber Recording 3
+Steingraeber Cinematic
+Steingraeber Bass & Piano split
+Steingraeber Player
+Steingraeber Intimate
+Steingraeber Under Lid
+Steingraeber Dreamy
+Steingraeber Cosmic
+Steingraeber Prepared
+Steingraeber Broken
+Grotrian Prelude
+Grotrian Felt I
+Grotrian Felt II
+Grotrian Concert Royal
+Grotrian Recording 1
+Grotrian Recording 2
+Grotrian Recording 3
+Grotrian Intimate
+Grotrian Cabaret
+Grotrian Player
+Grotrian Player Wide
+Grotrian Under Lid
+Bluethner Improv
+Bluethner Model One
+Bluethner Prelude
+Bluethner Felt I
+Bluethner Felt II
+Bluethner Model One AB
+Bluethner Studio Recording BA
+Bluethner Studio Recording AB
+Bluethner Chamber Recording BA
+Bluethner Chamber Recording AB
+Bluethner Concert Recording BA
+Bluethner Concert Recording AB
+Bluethner Cinematic
+Bluethner Player
+Bluethner Intimate
+YC5 Basic
+YC5 Felt I
+YC5 Felt II
+YC5 Solo Recording
+YC5 Mix Recording
+YC5 Vintage
+YC5 Pop
+YC5 Close Mic
+YC5 Player
+YC5 Worn Out
+K2 Prelude
+K2 Warm
+K2 Felt I
+K2 Felt II
+K2 Basic
+K2 Close Mic fig8
+K2 Dreamy
+K2 Studio Recording BA
+K2 Studio Recording AB
+K2 Concert Recording BA
+K2 Concert Recording AB
+K2 Mix Recording
+K2 Bass & Piano split
+K2 Under Lid
+K2 3 Mics
+K2 Player Jazz
+K2 Player Clean
+K2 Mono Compatible
+K2 Duophonic
+K2 Binaural
+U4 Midnight
+U4 Felt I
+U4 Felt II
+U4 Recording
+U4 Tall
+U4 Small
+U4 Player Open
+U4 Player Closed
+U4 Player Dry
+U4 Back
+U4 Americana
+U4 Jazz
+U4 Pop
+U4 Vintage
+U4 Living Room
+U4 Club
+U4 in Hall
+U4 Bierkeller
+U4 Weathered
+U4 a la Monk
+U4 Tacky
+U4 Honky Tonk
+U4 Ruined
+MKI Tremo
+MKI Basic
+MKI Bark
+MKI Soft
+MKI Bright
+MKI Low Dyn
+MKI Wet EP
+MKI Cinematic
+MKI Gentle Chorus 1
+MKI Gentle Chorus 2
+MKI Soft Chorus
+MKI Punchy Chorus
+MKI Groovy Chorus
+MKI Sweet Flanger
+MKI Leslie
+MKI Comp 1
+MKI Comp 2
+MKI Gritty 1
+MKI Gritty 2
+MKI Amped
+MKI Overdriven
+MKI Octave
+MKI Roomy
+MKI Bamboo
+MKI Rain Stick
+MKI Thick Pad
+MKI Warm Lead 1
+MKI Warm Lead 2
+MKI Wailing Overdrive
+MKI Blooming Grit
+MKI Organish 1
+MKI Organish 2
+MKII Spark
+MKII Room Close Mic
+MKII Room Distant Mic
+MKII Jazzy
+MKII Soft
+MKII Bark
+MKII Super Bark
+MKII Piano Bass Gritty
+MKII Piano Bass Snappy
+MKII Bass & Piano split
+MKII Dirty Bass
+MKII 60s Beat
+MKII 70s Fusion
+MKII Dogs EP
+MKII DynaComp EP
+MKII EAP Piano
+MKII FM alike
+MKII Flower Power
+MKII Jazzrocker
+MKII New Age Dreams
+MKII Paddy
+MKII Pinhead EP
+MKII RMI Clone
+MKII Rocks
+MKII Smooth
+MKII Songwriter
+MKII Split Manual
+MKII Stage EP
+MKII Sweet n Dyna
+MKII Tremolo EP
+MKII Vibrant
+MKII Wurhds
+MKII Basic Mono
+MKII Basic Stereo
+MKII Broken
+W1 Roomy
+W1 Logical
+W1 You're my best friend
+W1 Where it's at
+W1 Warm
+W1 Flange
+W1 Wah
+W1 Bright
+W1 Soft
+W1 Tremo
+W1 Comp
+W1 Overdriven
+W1 Octave
+W1 Basic Stereo
+W1 Basic Mono
+Clavinet D6 Basic
+Clavinet D6 Stage
+Clavinet D6 Mono
+Clavinet D6 Dirty
+Clavinet D6 Auto-Wah
+Clavinet D6 Envelope-Wah
+Clavinet D6 Warm Amp
+Clavinet D6 Comp
+Clavinet D6 Overdriven
+Clavinet D6 Growl
+Clavinet D6 Roomy
+Clavinet D6 BD
+Pianet N Basic
+Pianet N 80s Band
+Pianet N Jazz Trio
+Pianet N Comp
+Pianet N Roomy
+Pianet N Funky
+Pianet N Little Fuzzy
+Pianet N Metalizer
+Pianet N Orion Echo
+Pianet N Psychedelics
+Pianet N Studio
+Pianet N The 60s Beat
+Pianet N Wired
+Pianet N Mono
+Pianet T Basic
+Pianet T Mono
+Pianet T Bamboo
+Pianet T Bright
+Pianet T Concrete
+Pianet T Cosmic
+Pianet T Jazzy
+Pianet T Regular
+Pianet T Roomy
+Pianet T Roomy 2
+Pianet T Soft Pan Tremolo
+Pianet T Wooden
+Electra Basic
+Electra Mono
+Electra Calma Pacifica
+Electra Danseuse
+Electra Dyna 1
+Electra Dyna 2
+Electra Fatty
+Electra Overdrive Lead
+Electra Overdrive Lead 2
+Electra Roomy
+Electra RubberChorus
+Electra Soft Rock
+Electra Spacy
+Electra Stacc
+Electra Strong
+Vibraphone V-B Tremo
+Vibraphone V-B Humanized
+Vibraphone V-B Original
+Vibraphone V-B Soft
+Vibraphone V-B Bright
+Vibraphone V-B Mute 1
+Vibraphone V-B Mute 2
+Vibraphone V-M Tremo
+Vibraphone V-M Humanized
+Vibraphone V-M Original
+Vibraphone V-M Soft
+Vibraphone V-M Bright
+Vibraphone V-M Mute 1
+Vibraphone V-M Mute 2
+Celesta Tremo
+Celesta Original
+Celesta Bright
+Celesta Sustain
+Celesta Mute 1
+Celesta Mute 2
+Glockenspiel Humanized
+Glockenspiel Soft
+Glockenspiel Original
+Glockenspiel Sustain
+Glockenspiel Mute 1
+Glockenspiel Mute 2
+Glockenspiel a la piano
+Toy Piano for Amelie
+Toy Piano Original
+Toy Piano Dry
+Toy Piano a la piano
+Toy Piano Muted
+Kalimba Original
+Kalimba Spacey
+Marimba Humanized
+Marimba Original
+Marimba Soft
+Marimba Bright
+Marimba Edge
+Marimba Muted
+Marimba a la piano
+Xylophone Humanized
+Xylophone Original
+Xylophone Soft
+Xylophone Bright
+Xylophone Edge
+Xylophone a la piano
+Steel Drum - natural
+Steel Drum - sustain
+Steel Drum - dampers
+Steel Drum Spacious
+Steel Drum Dreamy
+Steel Drum Cinematic
+Spacedrum - natural, hand played
+Spacedrum - sustain, hand played
+Spacedrum - dampers, hand played
+Spacedrum - dreamy, hand played
+Spacedrum - natural, mallets
+Spacedrum - sustain, mallets
+Spacedrum - dampers, mallets
+Spacedrum - dreamy, mallets
+Hand Pan - natural, hand played
+Hand Pan - sustain, hand played
+Hand Pan - dampers, hand played
+Hand Pan - dreamy, hand played
+Hand Pan - natural, mallets
+Hand Pan - sustain, mallets
+Hand Pan - dampers, mallets
+Hand Pan - dreamy, mallets
+Tank Drum - natural
+Tank Drum - thin metal
+Tank Drum - dampers
+Tank Drum - thin metal, dampers
+Tank Drum - dreamy I
+Tank Drum - dreamy II
+H. Ruckers II Harpsichord L8'
+H. Ruckers II Harpsichord U8'
+H. Ruckers II Harpsichord 4'
+H. Ruckers II Harpsichord L8' + U8'
+H. Ruckers II Harpsichord L8' + 4'
+H. Ruckers II Harpsichord U8' + 4'
+H. Ruckers II Harpsichord L8' + U8' + 4'
+H. Ruckers II Harpsichord Player
+H. Ruckers II Harpsichord Recording
+H. Ruckers II Harpsichord Dynamic
+Concert Harp Daily
+Concert Harp Recording
+Concert Harp Lyrical
+Concert Harp Diatonic
+Concert Harp Player
+Concert Harp Brighter
+Concert Harp Binaural
+Concert Harp a la piano
+Concert Harp Dreamy
+Celtic Harp Daily
+Celtic Harp Delicate
+Celtic Harp Recording
+Celtic Harp Sweet
+Celtic Harp Bright
+Celtic Harp Diatonic
+Celtic Harp Player
+Celtic Harp a la piano
+Celtic Harp Dreamy
+Cimbalom basic
+Cimbalom hard
+Cimbalom soft
+Cimbalom a la piano
+Cimbalom Tzigane
+Cimbalom 415
+Cimbalom 392
+Neupert Clavichord single
+Neupert Clavichord double
+Neupert Clavichord lute
+Neupert Clavichord 415
+Neupert Clavichord 392
+F.E. Blanchet Harpsichord
+F.E. Blanchet Harpsichord 415
+F.E. Blanchet Harpsichord 392
+C. Grimaldi Harpsichord A
+C. Grimaldi Harpsichord A 415
+C. Grimaldi Harpsichord A 392
+C. Grimaldi Harpsichord B
+C. Grimaldi Harpsichord B 415
+C. Grimaldi Harpsichord B 392
+C. Grimaldi Harpsichord A+B
+C. Grimaldi Harpsichord A+B 415
+C. Grimaldi Harpsichord A+B 392
+J. Schantz
+J. Schantz 415
+J. Schantz 415 Player
+J. Schantz 415 Recording
+J. Schantz 392
+J.E. Schmidt
+J.E. Schmidt 415
+J.E. Schmidt 415 Player
+J.E. Schmidt 415 Recording
+J.E. Schmidt 392
+A. Walter
+A. Walter 415
+A. Walter 415 Player
+A. Walter 415 Recording
+A. Walter 392
+D. Schoffstoss
+D. Schoffstoss 415
+D. Schoffstoss 415 Player
+D. Schoffstoss 415 Recording
+D. Schoffstoss 392
+C. Graf
+C. Graf 415
+C. Graf 415 Player
+C. Graf 415 Recording
+C. Graf 392
+Erard Close Mic
+Erard Player
+Erard Recording
+Pleyel Close Mic
+Pleyel Player
+Pleyel Recording
+CP-80 Line Output
+CP-80 Tremolo
+CP-80 Amped
+CP-80 Recording
+CP-80 Soundboarded
+Church Bells original
+Bell-the-fly
+Church Bells soft clapper
+Church Bells tremolo
+Church Bells sustain
+Tubular Bells original
+Tubular Bells major
+Tubular Bells minor
+J. Salodiensis Virginal Original
+J. Salodiensis Virginal Recording
+J. Salodiensis Virginal Equal temp
+J. Salodiensis Virginal Werckmeister III
+J. Salodiensis Virginal Neidhardt III
+J. Salodiensis Virginal Mesotonic
+J. Salodiensis Virginal Well temp
+G. Giusti Harpsichord Original
+G. Giusti Harpsichord Recording
+G. Giusti Harpsichord Equal temp
+G. Giusti Harpsichord Werckmeister III
+G. Giusti Harpsichord Neidhardt III
+G. Giusti Harpsichord Mesotonic
+G. Giusti Harpsichord Well temp
+Ph. Schmidt Square Original
+Ph. Schmidt Square Recording
+Ph. Schmidt Square Equal temp
+Ph. Schmidt Square Werckmeister III
+Ph. Schmidt Square Neidhardt III
+Ph. Schmidt Square Mesotonic
+Ph. Schmidt Square Well temp
+J. Weimes Pianoforte Original
+J. Weimes Pianoforte Recording
+J. Weimes Pianoforte Equal temp
+J. Weimes Pianoforte Werckmeister III
+J. Weimes Pianoforte Neidhardt III
+J. Weimes Pianoforte Mesotonic
+J. Weimes Pianoforte Well temp
+NY Steinway Square Original
+NY Steinway Square Recording
+NY Steinway Square Equal temp
+NY Steinway Square Werckmeister III
+NY Steinway Square Neidhardt III
+NY Steinway Square Mesotonic
+NY Steinway Square Well temp
+J. Dohnal
+J. Dohnal Close Mic
+J. Dohnal 440
+J. Dohnal Recording
+J. Dohnal Werckmeister III
+J. Dohnal Neidhardt III
+J. Dohnal mesotonic
+J. Dohnal well tempered
+I. Besendorfer
+I. Besendorfer Close Mic
+I. Besendorfer 440
+I. Besendorfer Recording
+I. Besendorfer Werckmeister III
+I. Besendorfer Neidhardt III
+I. Besendorfer mesotonic
+I. Besendorfer well tempered
+S. Erard
+S. Erard Close Mic
+S. Erard 440
+S. Erard Recording
+S. Erard Werckmeister III
+S. Erard Neidhardt III
+S. Erard mesotonic
+S. Erard well tempered
+J.B. Streicher
+J.B. Streicher Close Mic
+J.B. Streicher 440
+J.B. Streicher Recording
+J.B. Streicher Werckmeister III
+J.B. Streicher Neidhardt III
+J.B. Streicher mesotonic
+J.B. Streicher well tempered
+J. Broadwood
+J. Broadwood Close Mic
+J. Broadwood 440
+J. Broadwood Recording
+J. Broadwood Werckmeister III
+J. Broadwood Neidhardt III
+J. Broadwood mesotonic
+J. Broadwood well tempered
+I. Pleyel
+I. Pleyel Close Mic
+I. Pleyel 440
+I. Pleyel Revoiced
+I. Pleyel Recording
+I. Pleyel Werckmeister III
+I. Pleyel Neidhardt III
+I. Pleyel mesotonic
+I. Pleyel well tempered
+J. Frenzel
+J. Frenzel Close Mic
+J. Frenzel 440
+J. Frenzel Recording
+J. Frenzel Werckmeister III
+J. Frenzel Neidhardt III
+J. Frenzel mesotonic
+J. Frenzel well tempered
+C. Bechstein
+C. Bechstein Close Mic
+C. Bechstein Under Lid
+C. Bechstein 440
+C. Bechstein Recording
+C. Bechstein Werckmeister III
+C. Bechstein Neidhardt III
+C. Bechstein mesotonic
+C. Bechstein well tempered
+
+

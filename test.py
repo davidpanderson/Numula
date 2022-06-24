@@ -51,4 +51,10 @@ def pan_test():
     )
     pianoteq.play('data/pan_test.midi')
 
-pan_test()
+#pan_test()
+
+def preset_test():
+    pianoteq.play('data/scale.midi', preset='C. Grimaldi Harpsichord A')
+    #pianoteq.midi_to_wav('data/scale.midi', 'data/scale.wav', preset='Celesta Tremo')
+preset_test()
+    

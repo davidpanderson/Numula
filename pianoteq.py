@@ -16,18 +16,24 @@
 
 # play a MIDI file using pianoteq
 
-import os, platform
+import platform, subprocess
 
-if platform.system() == 'Windows':
+s = platform.system()
+if s == 'Windows':
     prog = "c:/program files/modartt/pianoteq 7/pianoteq 7.exe"
+elif s == 'Darwin':
+    prog = "/Applications/Pianoteq 7/Pianoteq 7.app/Contents/MacOS/Pianoteq 7"
 else:
     raise Exception("OS not supported")
     
-def play(file):
-    cmd = '"%s" --play --midi %s'%(prog, file)
-    os.system(cmd)
+def play(file, preset=None):
+    p = ' --preset "%s"'%preset if preset else ''
+    cmd = '"%s" --play --midi %s%s'%(prog, file, p)
+    subprocess.call(cmd, shell=True)
 
-def midi_to_wav(ifile, ofile, mono=False):
-    m = '--mono' if mono else ''
-    cmd = '"%s" %s --wav %s --headless --midi %s'%(prog, m, ofile, ifile)
-    os.system(cmd)
+def midi_to_wav(ifile, ofile, mono=False, preset=None):
+    m = ' --mono' if mono else ''
+    p = ' --preset "%s"'%preset if preset else ''
+    cmd = '"%s"%s --wav %s --headless --midi %s%s'%(prog, m, ofile, ifile, p)
+    print(cmd)
+    subprocess.call(cmd, shell=True)
