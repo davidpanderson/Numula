@@ -31,8 +31,63 @@ class linear:
         return t*(self.y0+self.val(t))/2
     def integral_total(self):
         return self.dt*(self.y0+self.y1)/2
-    # convert from tempo function in BPM
+    # convert from tempo function in BPM (60-centered)
     # to 1-centered inverse tempo function
+    def bpm(self):
+        self.y0 = 60/self.y0
+        self.y1 = 60/self.y1
+        self.dy = self.y1 - self.y0
+
+# An exponential parameterized by "curvature".
+# Normalized to 0..1 for both x and y, the value is
+# y = (1 - c^x)/(1-c)
+# where c is e^curvature
+# If curvature > 0 more of the change happens later;
+# i.e. if y1 > y0 then the curve is concave up
+# and if curvature < 0 more of the change happens earlier.
+# If curvature = 0 then y = x; this is handled as a special case
+class exp_curve:
+    def __init__(self, curvature, y0, y1, dt, closed_start=True, closed_end=False):
+        if abs(curvature) < .001:
+            self.linear = True
+        else:
+            self.linear = False
+            self.c = math.exp(curvature)
+            self.logc = math.log(self.c)
+        self.y0 = y0
+        self.y1 = y1
+        self.dy = y1 - y0
+        self.dt = dt
+        self.closed_start = closed_start
+        self.closed_end = closed_end
+    def val(self, t):
+        if self.linear:
+            return self.y0 + self.dy*(t/self.dt)
+        tn = t/self.dt
+        y = (1 - math.pow(self.c, tn))/(1-self.c)
+        return self.y0 + y*self.dy
+    def integral(self, t):
+        if self.linear:
+            return t*(self.y0+self.val(t))/2
+        if t == 0:
+            return 0
+        # I assume you know that the integral of c^x is c^x/ln(c) + C
+        # (admittedly I had to look it up)
+        #
+        # compute in 0..1 normalized space
+        tn = t/self.dt
+        # a is the integral of c^x from 0 to tn
+        a = (math.pow(self.c, tn) - 1)/self.logc
+        # b is the integral of y from 0 to tn
+        b = (tn-a)/(1-self.c)
+        # convert from normalized coords
+        int = t*self.y0 + b*self.dy
+        #print(t, a, b, int)
+        return int
+    def integral_total(self):
+        if self.linear:
+            return self.dt*(self.y0+self.y1)/2
+        return self.integral(self.dt)
     def bpm(self):
         self.y0 = 60/self.y0
         self.y1 = 60/self.y1

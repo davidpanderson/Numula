@@ -1,11 +1,12 @@
 # code to:
-# read .wav files into signals (arrays of float samples)
-# manipulate and combine signals (e.g. scale, pan)
-# write signals as .wv files
+# - read .wav files into signals (arrays of float samples)
+# - manipulate and combine signals (e.g. scale, pan)
+# - write signals as .wav files
+# - play .wav files using
 
 # see https://docs.python.org/3/library/wave.html
 
-import wave, struct, math
+import wave, struct, math, subprocess, platform
 import matplotlib.pyplot as plot
 
 # print params of a .wav file
@@ -127,3 +128,18 @@ def pan_signal(isig, framerate, ang, pos_array, osig):
             osig[i*2+1] += a*math.sin(p0)
             osig[i*2] += b*math.cos(p1)
             osig[i*2+1] += b*math.sin(p1)
+
+def play_wav(fname):
+    s = platform.system()
+    if s == 'Windows':
+        prog = "C:\Program Files (x86)\Windows Media Player/wmplayer.exe"
+        cmd = '"%s" %%cd%%/%s'%(prog, fname)
+            # wmplayer requires full path
+    else:
+        raise Exception("OS not supported")
+
+    print(cmd)
+    subprocess.call(cmd, shell=True)
+
+play_wav("data/pan_test.wav")
+    
