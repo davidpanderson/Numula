@@ -15,16 +15,18 @@ def draw_curve(curvature, y0, y1, dt):
         y[i] = e.val(t)
         yint[i] = e.integral(t)
     plot.rcParams['figure.figsize'] = (6,4)
+    plot.suptitle('Curvature = %d'%curvature)
     plot.plot(x, y)
     #plot.plot(x, yint)
     plot.show()
 
-draw_curve(-5, 1, 4, 10)
+#draw_curve(5, 1, 4, 10)
    
 def exp_tempo(curvature):
     ns = note.NoteSet()
     for i in range(64):
-        ns.insert_note(note.Note(i/64, 1/64, 60, .5))
+        p = 60 + (i*7)%12
+        ns.insert_note(note.Note(i/64, 1/64, p, .5))
     ns.set_tempo(30)
     ns.done()
     ns.tempo_adjust_pft(
@@ -32,21 +34,40 @@ def exp_tempo(curvature):
             nuance.exp_curve(curvature, 40, 80, 1)
         ]
     )
-    ns.write_midi('data/exp_tempo.midi')
-    pianoteq.play('data/exp_tempo.midi')
+    ns.write_midi('data/exp_tempo_%d.midi'%curvature)
+    #pianoteq.play('data/exp_tempo_%d.midi'%curvature)
+    pianoteq.midi_to_wav(
+        'data/exp_tempo_%d.midi'%curvature,
+        'data/exp_tempo_%d.wav'%curvature
+    )
 
 #exp_tempo(-5)
+#exp_tempo(-2)
+exp_tempo(0)
+#exp_tempo(2)
+#exp_tempo(5)
 
 def exp_vol(curvature):
     ns = note.NoteSet()
     for i in range(64):
-        ns.insert_note(note.Note(i/64, 1/64, 60, .5))
+        p = 60 + (i*7)%12
+        ns.insert_note(note.Note(i/64, 1/64, p, .5))
     ns.set_tempo(30)
     ns.done()
-    ns.tempo_adjust_vol(
+    ns.vol_adjust_pft(
         [
-            nuance.exp_curve(curvature, .5, 1.5, 1)
+            nuance.exp_curve(curvature, .2, 1.9, 1)
         ]
     )
-    ns.write_midi('data/exp_vol.midi')
-    pianoteq.play('data/exp_vol.midi')
+    ns.write_midi('data/exp_vol_%d.midi'%curvature)
+    #pianoteq.play('data/exp_vol_%d.midi'%curvature)
+    pianoteq.midi_to_wav(
+        'data/exp_vol_%d.midi'%curvature,
+        'data/exp_vol_%d.wav'%curvature
+    )
+
+#exp_vol(-5)
+#exp_vol(-2)
+exp_vol(0)
+#exp_vol(2)
+#exp_vol(5)

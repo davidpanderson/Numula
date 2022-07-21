@@ -72,7 +72,7 @@ class exp_curve:
         if t == 0:
             return 0
         # I assume you know that the integral of c^x is c^x/ln(c) + C
-        # (admittedly I had to look it up)
+        # (OK, so I had to look it up)
         #
         # compute in 0..1 normalized space
         tn = t/self.dt
