@@ -20,6 +20,8 @@ from MidiFile import MIDIFile
 
 class Note:
     def __init__(self, time, dur, pitch, vol, tags=[]):
+        if pitch < 0 or pitch > 127:
+            raise Exception('illegal pitch %d at time %f'%(pitch, time))
         self.time = time
         self.dur = dur
         self.pitch = pitch
