@@ -67,10 +67,7 @@ def parse_pitch2(s):
             octave = int(s[i:])
             break
     n = x + octave*12
-    print(n)
     return n
-
-print(parse_pitch2('c5'))
 
 # if octave_offset is 0,
 # return instance of the pitch class closest to the current pitch (tie: upward)
@@ -145,6 +142,24 @@ def expand(input):
         raise Exception('unclosed *n')
     return out
 
+# in case of error, show context
+def show_context(items, i):
+    n = len(items)
+    print('context: ')
+    for j in range(i-4, i+5):
+        if j<0: continue;
+        if j>=n: continue;
+        if j==i:
+            print(' ', items[j], end='   ')
+        else:
+            print(items[j], end=' ')
+    print('')
+
+def check_pitch(items, i, pitch, time):
+    if pitch<0 or pitch>127:
+        show_context(items, i)
+        raise Exception('illegal pitch %d at time %f'%(pitch, time))
+    
 # textual note specification
 def n(s, _tags=[]):
     s = s.replace('[', ' [ ')
@@ -156,18 +171,21 @@ def n(s, _tags=[]):
     dur = 1/4
     tags = _tags[:]
     par = []
-    x = s.split()
-    if '*' in x:
-        x = expand(x)
-    for t in x:
+    items = s.split()
+    if '*' in items:
+        items = expand(items)
+    for i in range(len(items)):
+        t = items[i]
         if not t: continue
         if t == '[':
             if in_chord:
+                show_context(items, i)
                 raise Exception("Can't nest [")
             in_chord = True
             chord_dur = dur
         elif t == ']':
             if not in_chord:
+                show_context(items, i)
                 raise Exception("] not in chord")
             in_chord = False
             ns.advance_time(dur)
@@ -176,7 +194,7 @@ def n(s, _tags=[]):
         elif '/' in t:
             # rhythm notation
             a = t.split('/')
-            num = 1 if a[0] == '' else int(a[0])
+            num = int(a[0])
             denom = int(a[1])
             d = num/denom
             if in_chord:
@@ -185,22 +203,26 @@ def n(s, _tags=[]):
                 dur = d
         elif t == '.':
             if in_chord:
+                show_context(items, i)
                 raise Exception('no rests in chords')
             ns.advance_time(dur)
         elif t[0] == '(':
             tag = t[1:]
             if tag in tags:
+                show_context(items, i)
                 raise Exception('tag %s already in effect'%tag)
             tags.append(tag)
         elif t[-1] == ')':
             tag = t[0:-1]
             if tag not in tags:
+                show_context(items, i)
                 raise Exception('unopened tag %s'%tag)
             tags.remove(tag)
         elif t[0] == '|':
             continue
         elif t == 'par':
             if not par:
+                show_context(items, i)
                 raise Exception('unmatched closing par')
             par.pop()
         elif t[0:3] == 'par':
@@ -217,14 +239,16 @@ def n(s, _tags=[]):
             pitch_class = (pitch_class + 12) % 12
             pitch = next_pitch(cur_pitch, pitch_class, octave_offset)
             d = chord_dur if in_chord else dur
+            check_pitch(items, i, pitch, ns.cur_time)
             ns.append_note(note.Note(0, d, pitch, vol, tags))
             for p in par:
+                check_pitch(items, i, pitch+p, ns.cur_time)
                 ns.append_note(note.Note(0, d, pitch+p, vol, tags))
             if not in_chord:
                 ns.advance_time(dur)
             cur_pitch = pitch
     if in_chord:
-        raise Exception('missing ]')
+        raise Exception('unmatched [')
     if par:
         raise Exception('unmatched opening par')
     return ns

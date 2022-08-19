@@ -226,6 +226,7 @@ class NoteSet:
             v = int(note.vol * 128)
             if v < 2: v = 2
             if v > 127: v = 127
+            #print('pitch', note.pitch, 'time', note.perf_time, 'dur', note.perf_dur, 'v', v)
             f.addNote(0, 0, note.pitch, note.perf_time, note.perf_dur, v)
         if self.pedals:
             self.adjust_pedal_times()
@@ -250,29 +251,36 @@ class NoteSet:
     # you end up with stuck notes.
     #
     def remove_overlap(self):
-        end_time = [0]*128
+        end_time = [-1]*128
         cur_note = [None]*128
         out = []
+        midi_eps = .001
+            # make sure MIDI events on a given pitch are separated by this
         for note in self.notes:
-            if note.perf_time < end_time[note.pitch]:
-                # note of this pitch is already sounding
+            if note.perf_time < end_time[note.pitch]+midi_eps:
+                # note start while a note of this pitch is already sounding
                 n2 = cur_note[note.pitch]
-                if n2.perf_time > note.perf_time - epsilon:
-                    print("simultaneous overlap on %s at time %f"%(
+                if note.perf_time - n2.perf_time < epsilon:
+                    print("simultaneous start overlap on %s at time %f"%(
                         pitch_name(note.pitch), note.perf_time
                     ))
-                    # simultaneous -  earlier note subsumes later one
+                    # simultaneous start - combine notes
+                    # by modifying first note (already in out) in place
                     #
                     n2.vol = max(n2.vol, note.vol)
                     md = max(n2.perf_dur, note.perf_dur)
                     n2.perf_dur = md
                     end_time[note.pitch] = note.perf_time+md
                 else:
-                    print("overlap on %s: notes at %f and %f"%(
-                        pitch_name(note.pitch), n2.perf_time, note.perf_time
-                    ))
+                    if note.perf_time < end_time[note.pitch] - epsilon:
+                        # show warning if overlap is nontrivial
+                        print("overlap on %s: notes [%f %f] and [%f %f]"%(
+                            pitch_name(note.pitch),
+                            n2.perf_time, n2.perf_time+n2.perf_dur,
+                            note.perf_time, note.perf_time+note.perf_dur
+                        ))
                     # end earlier note early
-                    n2.perf_dur = (note.perf_time - n2.perf_time) - epsilon
+                    n2.perf_dur = (note.perf_time - n2.perf_time) - midi_eps
                     out.append(note)
                     end_time[note.pitch] = note.perf_time+note.perf_dur
                     cur_note[note.pitch] = note

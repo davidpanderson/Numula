@@ -492,35 +492,35 @@ def t_random_normal(self, stddev, max_sigma, pred=None):
                 
 # --------------- Articulation ----------------------
 
-def score_dur_abs(self, dur, pred):
+def score_dur_abs(self, dur, pred=None):
     for note in self.notes:
-        if pred(note):
-            note.dur = dur
+        if pred and not pred(note): continue
+        note.dur = dur
 
-def score_dur_rel(self, factor, pred):
+def score_dur_rel(self, factor, pred=None):
     for note in self.notes:
-        if pred(note):
-            note.dur *= factor
+        if pred and not pred(note): continue
+        note.dur *= factor
 
-def score_dur_func(self, func, pred):
+def score_dur_func(self, func, pred=None):
     for note in self.notes:
-        if pred(note):
-            note.dur = func(note)
+        if pred and not pred(note): continue
+        note.dur = func(note)
             
-def perf_dur_abs(self, dur, pred):
+def perf_dur_abs(self, dur, pred=None):
     for note in self.notes:
-        if pred(note):
-            note.perf_dur = dur
+        if pred and not pred(note): continue
+        note.perf_dur = dur
 
-def perf_dur_rel(self, factor, pred):
+def perf_dur_rel(self, factor, pred=None):
     for note in self.notes:
-        if pred(note):
-            note.perf_dur *= factor
+        if pred and not pred(note): continue
+        note.perf_dur *= factor
 
-def perf_dur_func(self, func, pred):
+def perf_dur_func(self, func, pred=None):
     for note in self.notes:
-        if pred(note):
-            note.perf_dur = func(note)
+        if pred and not pred(note): continue
+        note.perf_dur = func(note)
 
 # adjust articulation with a PFT
 def perf_dur_pft(self, pft, t0, pred=None, rel=True):
