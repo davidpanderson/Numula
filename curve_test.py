@@ -1,4 +1,4 @@
-import note, nuance, pianoteq
+import nscore, nuance, pianoteq
 import matplotlib.pyplot as plot
 
 # plot an exponential curve and its integral
@@ -48,7 +48,7 @@ exp_tempo(0)
 #exp_tempo(5)
 
 def exp_vol(curvature):
-    ns = note.NoteSet()
+    ns = nscore.Score()
     for i in range(64):
         p = 60 + (i*7)%12
         ns.insert_note(note.Note(i/64, 1/64, p, .5))

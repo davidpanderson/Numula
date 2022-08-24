@@ -18,7 +18,7 @@
 # E.g. n('1/8 a b c') returns a list of Note objects for 8th note A, B, C
 # see https://github.com/davidpanderson/music/wiki
 
-import note
+import nscore
 
 note_names = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
 pitch_offset = [0, 2, 4, 5, 7, 9, 11]
@@ -195,7 +195,7 @@ def check_pitch(items, i, pitch, time):
 def n(s, _tags=[]):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
-    ns = note.NoteSet()
+    ns = nscore.Score()
     cur_pitch = 60
     in_chord = False
     vol = .5

@@ -1,11 +1,11 @@
 import random
-from note import *
+from nscore import *
 from notate import *
 from nuance import *
 import pianoteq
 
 def scale():
-    ns = NoteSet([
+    ns = Score([
         #n('c d e', ['rh'])
         n('c d e f g a b c d', ['rh']),
         n('-c d e f g a b c d', ['lh'])
@@ -38,7 +38,7 @@ def scale():
 # (test input for panning)
 # Also make a "pan position file"
 def pan_test():
-    ns = NoteSet()
+    ns = Score()
     for i in range(240):
         ns.append_note(Note(0, 1/16, random.randrange(48, 72), .5))
         ns.advance_time(1/16)

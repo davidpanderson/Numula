@@ -407,3 +407,33 @@ making a spatialized multi-voice piece:
     (with its own PFT)
 - make a zero signal
 - for each voice, use pan_signal() to add panned voice
+===========================
+exponential PFT primitive:
+===========================
+repetition in notation
+
+do it in notate, or using python stuff?
+
+
+maintain a stack of (nleft, start)
+
+maintain a "program counter" i
+
+while i < len(input)
+    token = input[i]
+    if token is *n
+        push (n, i)
+    elif token is *
+        t = top of stack
+        if t.nleft == 0
+            pop stack
+        else
+            t.nleft -= 1
+            i = t.start
+    else
+        output token
+------------
+notate: support
+    _4
+    .4
+    c5+ (or c+5?)

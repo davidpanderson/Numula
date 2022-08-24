@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-# classes for notes and sets of notes
+# classes for notes and scores
 
 from MidiFile import MIDIFile
 
@@ -68,8 +68,8 @@ epsilon = 1e-5    # slop factor for time round-off
 event_kind_note = 0
 event_kind_pedal = 1
 
-class NoteSet:
-    def __init__(self, nss=[]):
+class Score:
+    def __init__(self, scores=[]):
         self.notes = []
         self.cur_time = 0
         self.tempo = 60    # beats per minute
@@ -77,7 +77,7 @@ class NoteSet:
         self.pedals = []
         self.done_called = False
         self.m_cur_time = 0    # for appending measures
-        self.append_ns(nss)
+        self.append_score(scores)
         
     def insert_note(self, note):
         self.notes.append(note)
@@ -87,34 +87,38 @@ class NoteSet:
     def advance_time(self, dur):
         self.cur_time += dur
 
-    # Merge a NoteSet into this one, starting at time t0,
+    # Merge a Score into this one, starting at time t0,
     # optionally tagging the notes.
-    # This doesn't copy anything; if you're going to insert a NoteSet
-    # more than once, do a deep copy on it
+    # This doesn't copy anything, and the Notes are modified.
+    # to insert a Score more than once, do a deep copy on it
     #
-    def insert_ns(self, ns, t=0, tag=None):
-        for note in ns.notes:
+    def insert_score(self, score, t=0, tag=None):
+        for note in score.notes:
             note.time += t
             if tag:
                 note.tags.append(tag)
             self.insert_note(note)
-        for pedal in ns.pedals:
+        for pedal in score.pedals:
             pedal.time += t
             self.insert_pedal(pedal)
-        for measure in ns.measures:
+        for measure in score.measures:
             measure.time += t
             self.insert_measure(measure)
 
-    def append_ns(self, nss, tag=None):
+    # append a score to this one.
+    # You can also give a list of scores, in which case
+    # they're inserted in parallel
+    #
+    def append_score(self, scores, tag=None):
         if type(nss) == list:
             longest = 0
-            for ns in nss:
-                longest = max(longest, ns.cur_time)
-                self.insert_ns(ns, self.cur_time, tag)
+            for score in scores:
+                longest = max(longest, score.cur_time)
+                self.insert_score(score, self.cur_time, tag)
             self.cur_time += longest
         else:
-            self.insert_ns(nss, self.cur_time, tag)
-            self.cur_time += nss.cur_time
+            self.insert_score(scores, self.cur_time, tag)
+            self.cur_time += scores.cur_time
             
     def insert_measure(self, m):
         self.measures.append(m)
@@ -378,7 +382,7 @@ class NoteSet:
         for note in self.notes:
             if note.time > cur_time + epsilon:
                 if len(starting):
-                    NoteSet.flag_outer_aux(active, starting)
+                    Score.flag_outer_aux(active, starting)
                 cur_time = note.time
                 new_active = [note]
                 for n in active:
@@ -389,7 +393,7 @@ class NoteSet:
             else:
                 active.append(note)
                 starting.append(note)
-        NoteSet.flag_outer_aux(active, starting)
+        Score.flag_outer_aux(active, starting)
 
     # Adjust performance time of pedal events so that they do the right thing
     # even if note start times have been adjusted.

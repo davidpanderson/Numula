@@ -17,7 +17,7 @@
 # example of using tempo_adjust_pft() for rubato.
 # a few measures from Chopin's Nocturne no 1
 
-import note,  notate, pianoteq
+import nscore,  notate, pianoteq
 from nuance import *
 
 lh = notate.n('1/8 --b- +f +d- b- +f -f -b- +f +d- b- +f -f \
@@ -31,7 +31,7 @@ rh = notate.n('2/4 ++d- 1/4 b- 3/44 +b- c d- -a b- a g+ a c b- g- \
 ', ['rh'])
 
 def main():
-    ns = note.NoteSet([lh, rh])
+    ns = nscore.Score([lh, rh])
 
     for i in range(5):
         ns.sustain(i*3/4, (i+1)*3/4, lambda n: 'lh' in n.tags)

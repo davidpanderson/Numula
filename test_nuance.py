@@ -15,12 +15,12 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 from notate import *
-from note import *
+from nscore import *
 from nuance import *
 
 def test1():
-    ns = NoteSet()
-    ns.insert_ns(0, n('c d e [f a c] g a b c'))
+    ns = Score()
+    ns.insert_score(0, n('c d e [f a c] g a b c'))
     ns.done()
     ns.tempo_adjust_pft([linear(60, 120, 8/4)])
     ns.pause_before(3/4, .7)
@@ -29,8 +29,8 @@ def test1():
     ns.write_midi('data/test1.midi')
 
 def test2():
-    ns = NoteSet()
-    ns.insert_ns(0, n('c d e (foo [f a c] g foo) a b c'))
+    ns = Score()
+    ns.insert_score(0, n('c d e (foo [f a c] g foo) a b c'))
     ns.insert_measure(Measure(0, 4/4, '4/4'))
     ns.insert_measure(Measure(1, 4/4, '4/4'))
     ns.done()
@@ -41,7 +41,7 @@ def test2():
     ns.write_midi('data/test2.midi')
 
 def test3():
-    ns = NoteSet([n('c d e f g')])
+    ns = Score([n('c d e f g')])
     ns.done()
     ns.tempo_adjust_pft([
         linear(60, 60, 2/4),
@@ -51,9 +51,9 @@ def test3():
     ns.print()
 
 def test_dur_pft():
-    ns = NoteSet()
+    ns = Score()
     for i in range(8):
-        ns.append_ns([n('1/8 c d e f g a b c')])
+        ns.append_score([n('1/8 c d e f g a b c')])
     ns.done()
     ns.perf_dur_pft(
         [

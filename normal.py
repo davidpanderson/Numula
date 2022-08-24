@@ -17,10 +17,10 @@
 # basic test program: generate notes with everything normally distributed
 
 import random, numpy, math
-import note
+import nscore
 
 def normal_time():
-    notes = note.NoteSet()
+    ns = nscore.Score()
     z = []
     min = 0
     for i in range(400):
@@ -39,9 +39,9 @@ def normal_time():
         time = 15*(x-min)   # 4 min long
         dur = random.randrange(1,6)
         vol = .02 + y*0.9*random.random()
-        notes.insert_note(note.Note(time, dur, pitch, vol))
-    notes.done()
-    notes.remove_overlap()
-    notes.write_midi("data/normal.midi")
+        ns.insert_note(note.Note(time, dur, pitch, vol))
+    ns.done()
+    ns.remove_overlap()
+    ns.write_midi("data/normal.midi")
 
 normal_time()

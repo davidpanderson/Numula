@@ -3,7 +3,7 @@
 # then combined with independent panning
 
 import math
-from note import *
+from nscore import *
 from notate import *
 from nuance import *
 import spatialize, pianoteq
@@ -30,10 +30,10 @@ def main():
         1/4 f+ 1/8 f++ 6/8 g+ | 3/8 f++ | g+ f+ | e d+ | 1/8 c+ +g+ 2/8 c+ 1/8 a+ b+ \
         3/8 c+ 4/8 b | 1/8 a+ g+ f++ a+ -d+ | 1/4 g+ 1/8 -g+ 4/8 +g+ | 1/8 f+ e+ d+ f+ -a+ | 1/24 b c+ b c+ b c+ b c+ b c+ b c+ b c+ b 1/16 a+ b \
         6/8 a+ | . d+ ')
-    ns = NoteSet()
-    ns.insert_ns(v0, tag='v0')
-    ns.insert_ns(v1, tag='v1')
-    ns.insert_ns(v2, tag='v2')
+    ns = Score()
+    ns.insert_score(v0, tag='v0')
+    ns.insert_score(v1, tag='v1')
+    ns.insert_score(v2, tag='v2')
     ns.done()
     
     if True:

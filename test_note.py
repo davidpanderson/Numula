@@ -15,10 +15,10 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 from notate import *
-from note import *
+from nscore import *
 
 def test1():
-    ns = NoteSet()
+    ns = Score()
     ns.add_list(0, n('c d e f g a b c'))
     ns.add_pedal(Pedal(4/4, 3/4, True))
     ns.done()

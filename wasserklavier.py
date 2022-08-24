@@ -18,7 +18,7 @@
 # "wasserklavier" from Six Encores by Luciano Berio
 
 import numpy as np
-from note import *
+from nscore import *
 from notate import *
 from nuance import *
 import pianoteq
@@ -88,13 +88,13 @@ def make_score():
         [f a- +g] 1/2 [e -g f] \
         3/4 [ (more g more) 6/4 -c -f] +f \
         ')
-    ns = NoteSet()
-    ns.append_ns([rh1, lh1], 'line1')
-    ns.append_ns([rh2, lh2], 'line2')
-    ns.append_ns([rh3, lh3], 'line3')
-    ns.append_ns([rh4, lh4], 'line4')
-    ns.append_ns([rh5, lh5], 'line5')
-    ns.append_ns([rh6, lh6], 'line6')
+    ns = Score()
+    ns.append_score([rh1, lh1], 'line1')
+    ns.append_score([rh2, lh2], 'line2')
+    ns.append_score([rh3, lh3], 'line3')
+    ns.append_score([rh4, lh4], 'line4')
+    ns.append_score([rh5, lh5], 'line5')
+    ns.append_score([rh6, lh6], 'line6')
     for i in range(5):
         ns.append_measure(6/8, '6/8')
     for i in range(5):

@@ -1,6 +1,6 @@
 # Beethoven sonata op 57, 3rd mvt
 
-from note import *
+from nscore import *
 from notate import *
 from nuance import *
 import pianoteq
@@ -310,21 +310,21 @@ def make_score():
         |349 1/8 --c 1/4 f 1/8 . c 1/4 -f 1/8 . c 1/4 -f 1/8 . c -f +c -f +c \
         |353 1/16 *12 -f a- c f * 1/8 *3 [-f a- c f] . . . * \
     ')
-    ns = NoteSet()
-    # must make copies first; append_ns() changes note times
+    ns = Score()
+    # must make copies first; append_score() changes note times
     lh_118_211_copy = copy.deepcopy(lh_118_211)
     rh_118_211_copy = copy.deepcopy(rh_118_211)
     lh_212_299_copy = copy.deepcopy(lh_212_299)
     rh_212_299_copy = copy.deepcopy(rh_212_299)
-    ns.append_ns([rh_1_49, lh_1_49])
-    ns.append_ns([lh_50_117, rh_50_117])
-    #ns.append_ns(lh_118_211)
-    ns.append_ns([lh_118_211, rh_118_211])
-    ns.append_ns([lh_212_299, rh_212_299])
-    ns.append_ns([rh_300_307, lh_300_307])
-    ns.append_ns([lh_118_211_copy, rh_118_211_copy])
-    ns.append_ns([lh_212_299_copy, rh_212_299_copy])
-    ns.append_ns([rh_300_end, lh_300_end])
+    ns.append_score([rh_1_49, lh_1_49])
+    ns.append_score([lh_50_117, rh_50_117])
+    #ns.append_score(lh_118_211)
+    ns.append_score([lh_118_211, rh_118_211])
+    ns.append_score([lh_212_299, rh_212_299])
+    ns.append_score([rh_300_307, lh_300_307])
+    ns.append_score([lh_118_211_copy, rh_118_211_copy])
+    ns.append_score([lh_212_299_copy, rh_212_299_copy])
+    ns.append_score([rh_300_end, lh_300_end])
     #ns.insert_pedal(Pedal(92*2/4, 6*2/4))
     ns.set_tempo(144)
     ns.done()

@@ -16,10 +16,10 @@
 
 # test program: play random notes
 
-from note import *
+from nscore import *
 import random
 
-ns = NoteSet()
+ns = Score()
 for i in range(200):
     pitch = random.randrange(40, 80)
     time = random.uniform(0, 10)
