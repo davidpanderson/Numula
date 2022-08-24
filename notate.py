@@ -23,34 +23,54 @@ import note
 note_names = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
 pitch_offset = [0, 2, 4, 5, 7, 9, 11]
 
-# parse a string of the form ++b-
-# return list of pitch class, octave offset, accidental offset
+# Parse a string of the form ++b- or b5-.
+# Return a pitch.
 #
-def parse_pitch(s):
+def parse_pitch(items, i, cur_pitch):
     got_pitch = False
     off = [0,0]
+    s = items[i]
+    absolute = False
     for c in s:
         if c in note_names:
             if got_pitch:
+                show_context(items, i)
                 raise Exception('already have pitch in %s'%s)
             pitch_class = pitch_offset[note_names.index(c)]
             got_pitch = True
         elif c == '+':
             i = 1 if got_pitch else 0
             if off[i] < 0:
+                show_context(items, i)
                 raise Exception('bad offset')
             off[i] += 1
         elif c == '-':
             i = 1 if got_pitch else 0
             if off[i] > 1:
+                show_context(items, i)
                 raise Exception('bad offset')
             off[i] -= 1
+        elif c.isnumeric():
+            if off[0] or absolute:
+                show_context(items, i)
+                raise Exception('bad octave notation %s'%s)
+            octave = int(c)
+            absolute = True
         else:
+            show_context(items, i)
             raise Exception("can't parse %s"%s)
     if not got_pitch:
+        show_context(items, i)
         raise Exception('no pitch specified in %s'%s)
-    return [pitch_class, off[0], off[1]]
-
+    if absolute:
+        return pitch_class + off[1] + octave*12
+    else:
+        octave_offset = off[0]
+        accidental = off[1]
+        pitch_class += accidental
+        pitch_class = (pitch_class + 12) % 12
+        return next_pitch(cur_pitch, pitch_class, octave_offset)
+      
 # parse a string of the form c+5
 # return pitch index
 #
@@ -68,8 +88,9 @@ def parse_pitch2(s):
             break
     n = x + octave*12
     return n
-
-# if octave_offset is 0,
+    
+# compute pitch specified relative to current pitch.
+# If octave_offset is 0,
 # return instance of the pitch class closest to the current pitch (tie: upward)
 # if it's -1, return the first instance below the current pitch;
 # -2, the octave below that etc.
@@ -113,18 +134,19 @@ def next_pitch(cur_pitch, pitch_class, octave_offset):
 
 # expand '*4 foo *' into 'foo foo foo foo', with nesting
 #
-def expand(input):
+def expand(items):
     # stacks
     nleft = []
     start = []
 
     out = []
     i = 0
-    while i < len(input):
-        t = input[i]
+    while i < len(items):
+        t = items[i]
         if t == '*':
             if not nleft:
-                raise Exception('bad nesting of *')
+                show_context(items, i)
+                raise Exception('unmatched *')
             nl = nleft[-1]
             if nl == 1:
                 nleft.pop()
@@ -133,12 +155,21 @@ def expand(input):
                 nleft[-1] = nl-1
                 i = start[-1]
         elif t[0] == '*':
-            nleft.append(int(t[1:]))
+            try:
+                nleft.append(int(t[1:]))
+            except:
+                show_context(items, i)
+                raise Exception("can't parse "%t)
             start.append(i)
+        elif '*' in t:
+            show_context(items, i)
+            raise Exception('bad token %s'%t)
         else:
             out.append(t)
         i += 1
     if nleft:
+        j = start.pop()
+        show_context(items, j)
         raise Exception('unclosed *n')
     return out
 
@@ -146,7 +177,7 @@ def expand(input):
 def show_context(items, i):
     n = len(items)
     print('context: ')
-    for j in range(i-4, i+5):
+    for j in range(i-5, i+6):
         if j<0: continue;
         if j>=n: continue;
         if j==i:
@@ -172,6 +203,8 @@ def n(s, _tags=[]):
     tags = _tags[:]
     par = []
     items = s.split()
+    ped_start = -1
+    ped_start_index = -1
     if '*' in items:
         items = expand(items)
     for i in range(len(items)):
@@ -194,8 +227,12 @@ def n(s, _tags=[]):
         elif '/' in t:
             # rhythm notation
             a = t.split('/')
-            num = int(a[0])
-            denom = int(a[1])
+            try:
+                num = int(a[0])
+                denom = int(a[1])
+            except:
+                show_context(items, i)
+                raise Exception('bad values in %s'%t)
             d = num/denom
             if in_chord:
                 chord_dur = d
@@ -229,15 +266,21 @@ def n(s, _tags=[]):
             par.append(int(t[3:]))
         elif t[0] == '#':
             cur_pitch = parse_pitch2(t[1:])
+        elif t == '+p':
+            if ped_start >= 0:
+                show_context(items, ped_start_index)
+                raise Exception('unclosed +p')
+            ped_start = ns.cur_time
+            ped_start_index = i
+        elif t == '-p':
+            if ped_start < 0:
+                show_context(items, i)
+                raise Exception('-p with no matching +p')
+            ns.sustain(ped_start, ns.cur_time)
+            ped_start = -1
         else:
             # note
-            x = parse_pitch(t)
-            pitch_class = x[0]
-            octave_offset = x[1]
-            accidental = x[2]
-            pitch_class += accidental
-            pitch_class = (pitch_class + 12) % 12
-            pitch = next_pitch(cur_pitch, pitch_class, octave_offset)
+            pitch = parse_pitch(items, i, cur_pitch)
             d = chord_dur if in_chord else dur
             check_pitch(items, i, pitch, ns.cur_time)
             ns.append_note(note.Note(0, d, pitch, vol, tags))
@@ -251,4 +294,8 @@ def n(s, _tags=[]):
         raise Exception('unmatched [')
     if par:
         raise Exception('unmatched opening par')
+    if ped_start >= 0:
+        show_context(items, ped_start_index)
+        raise Exception('unclosed +p')
     return ns
+

@@ -375,7 +375,7 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
 
 # change dur of notes starting between t0 and t1 so they end at t1
 # (like a local sustain pedal)
-def sustain(self, t0, t1, pred):
+def sustain(self, t0, t1, pred=None):
     for n in self.notes:
         if n.time<t0-epsilon:
             continue

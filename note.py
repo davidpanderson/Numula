@@ -93,11 +93,15 @@ class NoteSet:
             self.insert_note(note)
 
     def append_ns(self, nss, tag=None):
-        longest = 0
-        for ns in nss:
-            longest = max(longest, ns.cur_time)
-            self.insert_ns(ns, self.cur_time, tag)
-        self.cur_time += longest
+        if type(nss) == list:
+            longest = 0
+            for ns in nss:
+                longest = max(longest, ns.cur_time)
+                self.insert_ns(ns, self.cur_time, tag)
+            self.cur_time += longest
+        else:
+            self.insert_ns(nss, self.cur_time, tag)
+            self.cur_time += nss.cur_time
             
     def insert_measure(self, m):
         self.measures.append(m)
