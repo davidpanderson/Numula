@@ -62,7 +62,9 @@ class Measure:
         self.dur = dur
         self.type = type
         
-epsilon = 1e-5    # slop factor for time in case of round-off
+epsilon = 1e-5    # slop factor for time round-off
+    # don't compare times for equality
+    
 event_kind_note = 0
 event_kind_pedal = 1
 
@@ -85,12 +87,23 @@ class NoteSet:
     def advance_time(self, dur):
         self.cur_time += dur
 
+    # Merge a NoteSet into this one, starting at time t0,
+    # optionally tagging the notes.
+    # This doesn't copy anything; if you're going to insert a NoteSet
+    # more than once, do a deep copy on it
+    #
     def insert_ns(self, ns, t=0, tag=None):
         for note in ns.notes:
             note.time += t
             if tag:
                 note.tags.append(tag)
             self.insert_note(note)
+        for pedal in ns.pedals:
+            pedal.time += t
+            self.insert_pedal(pedal)
+        for measure in ns.measures:
+            measure.time += t
+            self.insert_measure(measure)
 
     def append_ns(self, nss, tag=None):
         if type(nss) == list:
