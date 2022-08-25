@@ -110,7 +110,7 @@ class Score:
     # they're inserted in parallel
     #
     def append_score(self, scores, tag=None):
-        if type(nss) == list:
+        if type(scores) == list:
             longest = 0
             for score in scores:
                 longest = max(longest, score.cur_time)

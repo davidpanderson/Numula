@@ -39,7 +39,7 @@ def normal_time():
         time = 15*(x-min)   # 4 min long
         dur = random.randrange(1,6)
         vol = .02 + y*0.9*random.random()
-        ns.insert_note(note.Note(time, dur, pitch, vol))
+        ns.insert_note(nscore.Note(time, dur, pitch, vol))
     ns.done()
     ns.remove_overlap()
     ns.write_midi("data/normal.midi")

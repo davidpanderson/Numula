@@ -15,7 +15,7 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 import numpy, random, copy, math
-from note import *
+from nscore import *
 
 class linear:
     def __init__(self, y0, y1, dt, closed_start=True, closed_end=False):

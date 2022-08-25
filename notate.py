@@ -283,10 +283,10 @@ def n(s, _tags=[]):
             pitch = parse_pitch(items, i, cur_pitch)
             d = chord_dur if in_chord else dur
             check_pitch(items, i, pitch, ns.cur_time)
-            ns.append_note(note.Note(0, d, pitch, vol, tags))
+            ns.append_note(nscore.Note(0, d, pitch, vol, tags))
             for p in par:
                 check_pitch(items, i, pitch+p, ns.cur_time)
-                ns.append_note(note.Note(0, d, pitch+p, vol, tags))
+                ns.append_note(nscore.Note(0, d, pitch+p, vol, tags))
             if not in_chord:
                 ns.advance_time(dur)
             cur_pitch = pitch

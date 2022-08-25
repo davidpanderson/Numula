@@ -112,11 +112,11 @@ def make_score():
         |163 c d- c b- a b- c a \
         |164 b- f b- d- f g- f e- d- c b- a- g- f e- d- \
         c b- a- g- f e- d- c b- c d- c 1/8 b- [b d f a- ] \
-        |168 1/16 [g e c] par+12 -c *7 . c * \
+        |168 1/16 [g e c] par+12 c *7 . c * \
         #c5 *8 . c * #c6 *8 . c * #c7 *8 . c * par \
         |176 1/16 . d4- g- b- d- --b- d- g- \
         |177 b- d- g- b- d- --b- d- g- b- d- g- b- 1/8 d- . 2/4 . \
-        |180 1/16 . e4 g b- +e --c +g b- c e g b- +e --c g b- \
+        |180 1/16 . e4 g b- +e --c +g b- c e g b- +e --c +g b- \
         |182 c e g b- 1/8 +e . 46/4 . \
         |206 2/4 [g3 b- c e] . *3 [g b- c e] * [g3 b- c e] \
     ')

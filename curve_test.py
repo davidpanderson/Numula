@@ -23,10 +23,10 @@ def draw_curve(curvature, y0, y1, dt):
 #draw_curve(5, 1, 4, 10)
    
 def exp_tempo(curvature):
-    ns = note.NoteSet()
+    ns = nscore.Score()
     for i in range(64):
         p = 60 + (i*7)%12
-        ns.insert_note(note.Note(i/64, 1/64, p, .5))
+        ns.insert_note(nscore.Note(i/64, 1/64, p, .5))
     ns.set_tempo(30)
     ns.done()
     ns.tempo_adjust_pft(
