@@ -7,7 +7,7 @@ import pianoteq
 
 def make_score():
     # measures 1-49
-    rh_1_49 = n('1/16 \
+    rh_20_49 = n('1/16 \
         . *2 \
         *2 -c f a- c d- c b- | a- b- a- g f g a- f . * \
         d- g- b- d- e- d- c | b- c b- a- g- a- g- f \
@@ -18,8 +18,8 @@ def make_score():
         *3 . -f a c f -f a c * \
         [-f a] +f [-f b-] +f [-f +c] f [-f +d-] f \
         . --c f a- c -c f a- c -c +g b- c -c e g \
-    ')
-    lh_1_49 = n('*2 #f2 1/4 f . . 3/16 . 1/16 +f * \
+    ').tag('rh')
+    lh_20_49 = n('*2 #f2 1/4 f . . 3/16 . 1/16 +f * \
         1/4 -b- . . 3/16 . 1/16 d- \
         1/8 c . d- . b- . c . \
         *2 #f2 1/4 [f +f] 3/16 . 1/16 #c6 [c -a-] 1/4 [c -a-] [a- f] * \
@@ -31,7 +31,7 @@ def make_score():
         1/8 [f a-] . 1/4 . [f -f] 3/16 . 1/16 [++c e-] 1/4 [c e-] 3/16 . 1/16 [c e-] \
         |46 5/8 [b- c e-] 1/8 [d- b-] [c a-] [b- g] \
         1/4 [a- f c] 3/16 . 1/16 [f a-] 1/4 [b- g -c] 3/16 . 1/16 [e g] \
-    ')
+    ').tag('lh')
     # measures 50-117
     rh_50_117 = n(' \
         1/4 [c f a- c] 3/16 . 1/16 [f a-] 1/4 [f a-] 3/16 . 1/16 [f a-] \
@@ -63,7 +63,8 @@ def make_score():
         1/16 #c6 [c a -e- c] a c e- g- a c e- \
         g- a c e- g- e- c a g- e- c a g- e- c a \
         g- e- c a g- e- c a *4 -g- a c e- * \
-    ')
+    ').tag('rh')
+    
     lh_50_117 = n('1/16 -f +c a- f c +a- f c a- +f c a- f +c a- f \
         c f a- c b c b c b c g c -e +c g c \
         |54 -c e g c -e g c e -g c e g -c e g c \
@@ -90,7 +91,8 @@ def make_score():
         c d e- f g a b c b- a- g f e d c b- \
         a- b- c d e f g a- g f e d c b- a- g \
         1/8 [g- -g-] 3/8 . 10/4 . \
-    ')
+    ').tag('lh')
+    
     rh_118_211 = n(' \
         1/16 *2 . a c e- g- a- g- f e- f e- d- c d- e- c * \
         . a c e- g- a- g- f *2 1/8 e- 1/16 e- f g- a- g- f * \
@@ -119,7 +121,42 @@ def make_score():
         |180 1/16 . e4 g b- +e --c +g b- c e g b- +e --c +g b- \
         |182 c e g b- 1/8 +e . 46/4 . \
         |206 2/4 [g3 b- c e] . *3 [g b- c e] * [g3 b- c e] \
-    ')
+    ').tag('rh')
+    
+    lh_118_211 = n(' \
+        1/4 ---f . . 3/16 . 1/16 +f 1/4 -f . . 3/16 . 1/16 +f \
+        |122 1/4 -f 1/16 . . +++a b- *2 c d- c b- 1/8 a 1/16 a b- * \
+        c d- c b- a g- f e- *2 4/4 d- _ 1/16 . f *7 b- f * * \
+        |130 4/4 e- _ 1/16 . g- *7 c- g- * \
+        2/4 f _ 1/16 . b- *3 d- b- * 2/4 -e- _ 1/16 . f *3 +c -f * \
+        |134 *2 -d- ++f . .  1/4 -b- a b- _ _ _ 1/16 *3 . d- f d- * * \
+        |138 -e- [++g- c-] *7 -e- [g- c-] * *4 -f [a c e-] * \
+        -f a f a --f +f -f +f \
+        |142 1/8 --b- 1/16 *4 [b4- d-] f * *3 [-b- d-] e * \
+        [-a c] e *7 [-a c] f * *5 [-b- d-] f * *3 [-b- d-] e * \
+        |148 [-a c] e *7 [-a c] f * \
+        [-b- d-] f *3 [e4 g] c * [-f a-] c *3 [-f a-] +d * \
+        |152 [-e g] +d *7 [-e g] c * *5 [-f a-] c * *3 [-f a-] +d * \
+        |156 [-e g] +d *7 [-e g] c * \
+        |158 1/4 [--f a- c f] 1/16 . c f a- c d- c b- a- b- c a- \
+        |160 b- c b- a- g- d- g- b- \
+        |161 d- e- d- c b- c d- b- \
+        c d- c b- a -e- +a c \
+        |163 e- f e- d- c d- e- c \
+        d- -f b- d- f g- f e- d- c b- a- g- f e- d- \
+        c b- a- g- f e- d- c b- c d- c 1/8 b- b \
+        |168 c e c f c +g -c +a- -c +b- -c +a- -c +g -c f \
+        c e c f c +g -c +a- -c +a -c +b- -c +b -c +c \
+        |176 [b- g- d- b- ] 15/8 . 1/8 [c +g b- c] 15/8 . \
+        |184 1/12 d3- +d- e 1/16 g b- d- e 1/8 g . . . \
+        1/12 e3 +e g 1/16 b- d- e g 1/8 b- . . . \
+        1/12 g3 +g b- 1/16 d- e g b- 1/8 d- . . . \
+        1/12 b3- +b- d- 1/16 e g b- d- 1/8 e . . . \
+        |192 d4- e g b- d- e g b- d- e g b- d- e g b- \
+        g e d- b- g e d- b- g e d- b- g e d- b- \
+        1/2 g e d- b- 4/4 g 47/16 c 1/16 c \
+    ').tag('lh')
+    
     rh_212_299 = n(' \
         |212 1/16 *2 . c4 f a- c d- c b- a- b- a- g f g a- f * \
         . d- g- b- d- e- d- c b- c b- a- g- a- g- f \
@@ -155,40 +192,8 @@ def make_score():
         |294 b- a- g f 1/8 e [c e g c] *4 [-c e +b- c] * \
         1/4 [-c f a- c] 1/8 . [c f a- c] *4 [-c e +b- c] * \
         1/4 [-c f a- c] 1/8 . [-c a- f c] *4 [+c b- -e c] * \
-    ')
-    lh_118_211 = n(' \
-        1/4 ---f . . 3/16 . 1/16 +f 1/4 -f . . 3/16 . 1/16 +f \
-        |122 1/4 -f 1/16 . . +++a b- *2 c d- c b- 1/8 a 1/16 a b- * \
-        c d- c b- a g- f e- *2 4/4 d- _ 1/16 . f *7 b- f * * \
-        |130 4/4 e- _ 1/16 . g- *7 c- g- * \
-        2/4 f _ 1/16 . b- *3 d- b- * 2/4 -e- _ 1/16 . f *3 +c -f * \
-        |134 *2 -d- ++f . .  1/4 -b- a b- _ _ _ 1/16 *3 . d- f d- * * \
-        |138 -e- [++g- c-] *7 -e- [g- c-] * *4 -f [a c e-] * \
-        -f a f a --f +f -f +f \
-        |142 1/8 --b- 1/16 *4 [b4- d-] f * *3 [-b- d-] e * \
-        [-a c] e *7 [-a c] f * *5 [-b- d-] f * *3 [-b- d-] e * \
-        |148 [-a c] e *7 [-a c] f * \
-        [-b- d-] f *3 [e4 g] c * [-f a-] c *3 [-f a-] +d * \
-        |152 [-e g] +d *7 [-e g] c * *5 [-f a-] c * *3 [-f a-] +d * \
-        |156 [-e g] +d *7 [-e g] c * \
-        |158 1/4 [--f a- c f] 1/16 . c f a- c d- c b- a- b- c a- \
-        |160 b- c b- a- g- d- g- b- \
-        |161 d- e- d- c b- c d- b- \
-        c d- c b- a -e- +a c \
-        |163 e- f e- d- c d- e- c \
-        d- -f b- d- f g- f e- d- c b- a- g- f e- d- \
-        c b- a- g- f e- d- c b- c d- c 1/8 b- b \
-        |168 c e c f c +g -c +a- -c +b- -c +a- -c +g -c f \
-        c e c f c +g -c +a- -c +a -c +b- -c +b -c +c \
-        |176 [b- g- d- b- ] 15/8 . 1/8 [c +g b- c] 15/8 . \
-        |184 1/12 d3- +d- e 1/16 g b- d- e 1/8 g . . . \
-        1/12 e3 +e g 1/16 b- d- e g 1/8 b- . . . \
-        1/12 g3 +g b- 1/16 d- e g b- 1/8 d- . . . \
-        1/12 b3- +b- d- 1/16 e g b- d- 1/8 e . . . \
-        |192 d4- e g b- d- e g b- d- e g b- d- e g b- \
-        g e d- b- g e d- b- g e d- b- g e d- b- \
-        1/2 g e d- b- 4/4 g 47/16 c 1/16 c \
-    ')
+    ').tag('rh')
+    
     lh_212_299 = n(' \
         1/4 [f3 -f] . . . [f +f] 3/16 . 1/16 [c6 a-] 1/4 [c a-] 1/8 [a- f] . \
         1/4 [b3- -b-] 3/16 . 1/16 [b5- d-] 1/2 [b- d-] \
@@ -226,16 +231,18 @@ def make_score():
         |292 1/8 [f a- c f] . 1/16 . c5 f a- c d- c b- a- g f e- \
         d- c b- a- g a- b- a- g f e d c b- a- g \
         |296 *2 f g a- b- c d e f g f e d c b- a- g * \
-    ')
+    ').tag('lh')
+    
     # first ending 300-307
     rh_300_307 = n(' \
         1/8[c f a- c] *3 [+c a- f c] * *4 [+c b- -e c] * \
         1/16 [c e- +a c] a4 d e- g- a c e- g- a c e- g- e- c a \
         g- e- c a g- e- c a g- e- c a g- e- c a *4 g- +e- c a * \
-    ')
+    ').tag('rh')
     lh_300_307 = n(' \
         1/16 f3 e d c b- a- g f g a- b- c d e f g 1/18 [g- -g-] . . . 10/4 . \
-    ')
+    ').tag('lh')
+    
     # second ending onward
     rh_300_end = n(' \
         1/16 [c f a- c] g a- b- c d e f \
@@ -280,7 +287,7 @@ def make_score():
         +a- f c a- +f c a- f +c a- f c +a- f c a- \
         +f c a- f +c a- f c +a- f c a- +f c a- c \
         1/8 [a- c f] . . . [+f a- c f] . . . [-f c a- f] . . . \
-    ')
+    ').tag('rh')
     lh_300_end = n(' \
         1/4 --f 1/8 . [c f a- c] *4 [-c e g b- c] * \
         1/4 [-c f a- c] 1/8 . [c f a- c] *4 [-c e g b- c] * \
@@ -309,31 +316,83 @@ def make_score():
         |347 . . 1/16 +p +c f 3/8 a- -p \
         |349 1/8 --c 1/4 f 1/8 . c 1/4 -f 1/8 . c 1/4 -f 1/8 . c -f +c -f +c \
         |353 1/16 *12 -f a- c f * 1/8 *3 [-f a- c f] . . . * \
-    ')
+    ').tag('lh')
     ns = Score()
     # must make copies first; append_score() changes note times
     lh_118_211_copy = copy.deepcopy(lh_118_211)
     rh_118_211_copy = copy.deepcopy(rh_118_211)
     lh_212_299_copy = copy.deepcopy(lh_212_299)
     rh_212_299_copy = copy.deepcopy(rh_212_299)
-    ns.append_score([rh_1_49, lh_1_49])
-    ns.append_score([lh_50_117, rh_50_117])
-    #ns.append_score(lh_118_211)
-    ns.append_score([lh_118_211, rh_118_211])
-    ns.append_score([lh_212_299, rh_212_299])
-    ns.append_score([rh_300_307, lh_300_307])
-    ns.append_score([lh_118_211_copy, rh_118_211_copy])
-    ns.append_score([lh_212_299_copy, rh_212_299_copy])
-    ns.append_score([rh_300_end, lh_300_end])
+    ns.append_score([rh_20_49, lh_20_49])
+    #ns.append_score([lh_50_117, rh_50_117])
+    #ns.append_score([lh_118_211, rh_118_211])
+    #ns.append_score([lh_212_299, rh_212_299])
+    #ns.append_score([rh_300_307, lh_300_307])
+    #ns.append_score([lh_118_211_copy, rh_118_211_copy])
+    #ns.append_score([lh_212_299_copy, rh_212_299_copy])
+    #ns.append_score([rh_300_end, lh_300_end])
     #ns.insert_pedal(Pedal(92*2/4, 6*2/4))
     ns.set_tempo(144)
     ns.done()
     return ns
 
+# volume:
+# for each hand, we generate two PFTs:
+# one for continuous change,
+# the other for single-note and short-scale adjustment
+
+def va_20_49(ns):
+    rh1 = []
+    rh2 = []
+    for i in range(2):
+        for j in range(3):
+            rh1.extend([linear(pp, p, 1/4), linear(p, pp, 3/4)])
+            rh2.extend([
+                unity(1/4), accent(1.4),
+                unity(1/4), accent(1.3),
+                unity(1/4), accent(1.2),
+                unity(1/4)
+            ])
+        rh1.extend([linear(pp, p, 2/4), linear(p, pp, 2/4)])
+        rh2.extend([
+            unity(1/8), accent(1.2),
+            unity(1/4), accent(1.2),
+            unity(1/4), accent(1.2),
+            unity(1/4), accent(1.2),
+            unity(1/8)
+        ])
+    # 36
+    rh1.extend([linear(pp, p, 4/4), linear(p, pp, 4/4)])
+    rh1.extend([linear(pp, mp, 6/4), linear(mp, pp, 2/4), linear(pp, pp, 4/4)])
+
+    ns.vol_adjust_pft(
+        [
+            linear(pp, p, 1/4),
+            linear(p, pp, 3/4),
+            linear(pp, p, 1/4),
+            linear(p, pp, 3/4),
+            linear(pp, p, 1/4),
+            linear(p, pp, 3/4),
+            linear(pp, p, 2/4),
+            linear(p, pp, 2/4)
+        ],
+        0,
+        lambda n: 'rh' in n.tags
+    )
+    ns.vol_adjust_pft(
+        [
+            linear(mp, mf, 30*2/4)
+        ],
+        0,
+        lambda n: 'lh' in n.tags
+    )
+    
 def main():
     ns = make_score()
+    va_20_49(ns)
+    ns.t_random_normal(.012, 2)
     #ns.perf_dur_rel(1.3)
-    #ns.print()
+    print(ns)
     ns.write_midi('data/app57.midi')
     pianoteq.play('data/app57.midi')
 

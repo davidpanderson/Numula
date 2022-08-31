@@ -25,8 +25,9 @@ def test1():
     ns.tempo_adjust_pft([linear(60, 120, 8/4)])
     ns.pause_before(3/4, .7)
     ns.roll(3/4, [-.2, -.1, 0], True, True)
-    ns.print()
+    print(ns)
     ns.write_midi('data/test1.midi')
+#test1()
 
 def test2():
     ns = Score()
@@ -37,8 +38,9 @@ def test2():
     ns.t_adjust_list([.1, .2], lambda x: 'foo' in x.tags)
     ns.t_random_uniform(-.1, .1)
     ns.t_random_normal(.1, 3)
-    ns.print()
+    print(ns)
     ns.write_midi('data/test2.midi')
+#test2()
 
 def test3():
     ns = Score([n('c d e f g')])
@@ -48,7 +50,8 @@ def test3():
         delta(.1, False),
         linear(30, 30, 2/4)
     ])
-    ns.print()
+    print(ns)
+#test3()
 
 def test_dur_pft():
     ns = Score()
@@ -67,7 +70,7 @@ def test_dur_pft():
             linear(.4, .1, 8/4)
         ], 16/4, rel=False
     )
-    ns.print()
+    print(ns)
     ns.write_midi('data/test_dur_pft.midi')
 
 def test_pft_value():
@@ -79,8 +82,23 @@ def test_pft_value():
     for i in range(25):
         x = i/10
         print(x, v.value(x))
-        
-#test1()
-#test2()
-#test3()
-test_pft_value()
+#test_pft_value()
+
+# use a PFT to emphasize particular beats
+def test_vol():
+    ns = Score()
+    for i in range(2):
+        ns.append_score([n('1/8 c d e f g a b c')])
+    ns.done()
+    ns.vol_adjust_pft(
+        [
+            unity(2/4),
+            accent(1.3),
+            unity(1/4),
+            accent(1.5)
+        ], 0
+    )
+    print(ns)
+
+test_vol()
+

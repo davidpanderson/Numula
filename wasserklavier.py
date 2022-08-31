@@ -220,7 +220,7 @@ def time_adjust(ns):
     ta4(ns)
     ta5(ns)
     ta6(ns)
-    t_random_normal(ns, .015, 2)
+    ns.t_random_normal(.015, 2)
     
 def main():
     ns = make_score()

@@ -25,6 +25,13 @@ class linear:
         self.dt = dt
         self.closed_start = closed_start
         self.closed_end = closed_end
+    def __str__(self):
+        return 'linear: %s %f %f %s, dt %f'%(
+            '[' if self.closed_start else '(',
+            self.y0, self.y1,
+            ']' if self.closed_end else ')',
+            self.dt
+        )
     def val(self, t):
         return self.y0 + self.dy*(t/self.dt)
     def integral(self, t):
@@ -38,6 +45,22 @@ class linear:
         self.y1 = 60/self.y1
         self.dy = self.y1 - self.y0
 
+def unity(dt):
+    return linear(1, 1, dt)
+
+# for volume PFTs: a momentary value
+class accent:
+    def __init__(self, y):
+        self.y0 = y
+        self.y1 = y
+        self.closed_start = True
+        self.closed_end = True
+        self.dt = 0
+    def __str__(self):
+        return 'accent %f'%self.y0
+    def val(self, t):
+        return y0
+    
 # An exponential parameterized by "curvature".
 # Normalized to 0..1 for both x and y, the value is
 # y = (1 - c^x)/(1-c)
@@ -60,6 +83,14 @@ class exp_curve:
         self.dt = dt
         self.closed_start = closed_start
         self.closed_end = closed_end
+        self.curvature = curvature
+    def __str__(self):
+        return 'exp_curve: %s %f %f %s, dt %f curvature %f'%(
+            '[' if self.closed_start else '(',
+            self.y0, self.y1,
+            ']' if self.closed_end else ')',
+            self.dt, self.curvature
+        )       
     def val(self, t):
         if self.linear:
             return self.y0 + self.dy*(t/self.dt)
@@ -100,6 +131,11 @@ class delta:
         self.value = value
         self.after = after
         self.dt = 0
+    def __str__(self):
+        return 'delta %f %s'%(
+            self.value,
+            'after' if self.after else 'before'
+        )
     def bpm(self):
         self.value /= 4
     def integral_total(self):
@@ -113,6 +149,12 @@ def pft_check_closure(pft):
     for i in range(n-1):
         seg0 = pft[i]
         seg1 = pft[i+1]
+        if isinstance(seg0, accent):
+            seg1.closed_start = False
+            continue
+        if isinstance(seg1, accent):
+            seg0.closed_end = False
+            continue
         if seg0.closed_end:
             if seg1.closed_start and seg0.y1 != seg1.y0:
                 raise Exception('conflicting values in PFT')
@@ -221,7 +263,23 @@ def vol_adjust_func(self, func, pred):
     for note in self.notes:
         if pred(note):
             note.vol *= func(note)
-            
+
+# randomly perturb volume
+#
+def v_random_uniform(self, min, max, pred=None):
+    for note in self.notes:
+        if pred and not pred(note): continue
+        note.vol *= random.uniform(min, max)
+
+def v_random_normal(self, stddev, max_sigma=2, pred=None):
+    for note in self.notes:
+        if pred and not pred(note): continue
+        while True:
+            x = numpy.random.normal()
+            if abs(x) < max_sigma: break
+        y = stddev*(1+y)
+        note.vol *= y
+
 # ------------------- Timing ------------------------
 
 # adjust the timing of selected notes and pedal events.
@@ -480,7 +538,7 @@ def t_random_uniform(self, min, max, pred=None):
         note.perf_time += x
         note.perf_dur -= x
 
-def t_random_normal(self, stddev, max_sigma, pred=None):
+def t_random_normal(self, stddev, max_sigma=2, pred=None):
     for note in self.notes:
         if pred and not pred(note): continue
         while True:

@@ -33,16 +33,16 @@ class Note:
         self.perf_dur = 0
         self.chord_pos = 0
         self.nchord = 0
-    def print(self):
+    def __str__(self):
         t = ''
         if self.measure_type:
             t += 'm_off: %.4f %s '%(self.measure_offset, self.measure_type)
         t += ' '.join(self.tags)
-        print('t: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %s vol: %.4f chord: (%d/%d) %s'%(
+        return 't: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %s vol: %.4f chord: (%d/%d) %s'%(
             self.time, self.dur, self.perf_time, self.perf_dur,
             pitch_name(self.pitch), self.vol,
             self.chord_pos, self.nchord, t
-        ))
+        )
 
 pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
@@ -78,6 +78,17 @@ class Score:
         self.done_called = False
         self.m_cur_time = 0    # for appending measures
         self.append_score(scores)
+    def __str__(self):
+        m_ind = 0
+        x = ''
+        for note in self.notes:
+            if m_ind < len(self.measures):
+                m = self.measures[m_ind]
+                if note.time > m.time - epsilon:
+                    x += 'measure %d: %.4f-%.4f'%(m_ind+1, m.time, m.time+m.dur)
+                    m_ind += 1
+            x += str(note) + '\n'
+        return x
         
     def insert_note(self, note):
         self.notes.append(note)
@@ -130,19 +141,12 @@ class Score:
 
     def insert_pedal(self, pedal):
         self.pedals.append(pedal)
-        
-    def print(self):
-        if not self.done_called:
-            raise Exception('Call done() before print()')
-        m_ind = 0
-        for note in self.notes:
-            if m_ind < len(self.measures):
-                m = self.measures[m_ind]
-                if note.time > m.time - epsilon:
-                    print('measure %d: %.4f-%.4f'%(m_ind+1, m.time, m.time+m.dur));
-                    m_ind += 1
-            note.print()
 
+    def tag(self, tag):
+        for note in self.notes:
+            note.tags.append(tag)
+        return self
+        
     # convert score time to real time, assuming quarter=60
     def score_to_perf(self, t):
         return t*4*60/self.tempo
@@ -241,7 +245,7 @@ class Score:
             if pred and not pred(note):
                 continue
             if note.vol > 1:
-                print('%s at time %f has vol %f; setting to 1'%(
+                print('%s at time %f has vol %f > 1; setting to 1'%(
                     pitch_name(note.pitch), note.time, note.vol
                 ))
             v = int(note.vol * 128)
