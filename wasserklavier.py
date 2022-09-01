@@ -14,8 +14,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-# Example Numula program.
+
 # "wasserklavier" from Six Encores by Luciano Berio
+# see https://github.com/davidpanderson/Numula/wiki/Example:-wasserklavier
 
 import numpy as np
 from nscore import *
@@ -228,7 +229,7 @@ def main():
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)
-        ns.print()
+        print(ns)
         ns.write_midi('data/wasserklavier.midi')
         pianoteq.play('data/wasserklavier.midi')
     else:

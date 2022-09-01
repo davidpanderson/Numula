@@ -14,7 +14,9 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
+
 # play a MIDI file using pianoteq
+# see https://github.com/davidpanderson/Numula/wiki/pianoteq.py
 
 import platform, subprocess
 

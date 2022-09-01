@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
+
+# functions for expressing nuance
+# see https://github.com/davidpanderson/Numula/wiki/nuance.py
+
 import numpy, random, copy, math
 from nscore import *
 

@@ -16,7 +16,7 @@
 
 # textual music notation
 # E.g. n('1/8 a b c') returns a list of Note objects for 8th note A, B, C
-# see https://github.com/davidpanderson/music/wiki
+# see https://github.com/davidpanderson/Numula/wiki/notate.py
 
 import nscore
 

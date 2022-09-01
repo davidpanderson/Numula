@@ -28,5 +28,5 @@ for i in range(200):
     ns.insert_note(Note(time, dur, pitch, vol))
 ns.done()
 ns.remove_overlap()
-ns.print()
+print(ns)
 ns.write_midi("data/random.midi")

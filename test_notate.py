@@ -22,7 +22,7 @@ def test1():
     ns = Score()
     ns.append_score([n(s)])
     ns.done()
-    ns.print()
+    print(ns)
     ns.write_midi('data/test1.midi')
 
 test1()

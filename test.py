@@ -19,7 +19,7 @@ def scale():
         ], pred=lambda n: 'rh' in n.tags
     )
 
-    ns.print()
+    print(ns)
     print('---')
     ns.tempo_adjust_pft(
         [
@@ -30,7 +30,7 @@ def scale():
         pred=lambda n: 'rh' in n.tags
     )
 
-    ns.print()
+    print(ns)
     ns.write_midi('data/scale.midi')
     pianoteq.play('data/scale.midi')
 

@@ -15,6 +15,7 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 # classes for notes and scores
+# see https://github.com/davidpanderson/Numula/wiki/nscore.py
 
 from MidiFile import MIDIFile
 
