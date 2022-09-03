@@ -49,19 +49,32 @@ pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 def pitch_name(n):
     return '%s%d'%(pitch_names[n%12], n//12)
-    
-class Pedal:
-    def __init__(self, time, dur, level=1, sostenuto=False):
+
+pedal_sustain = 64
+pedal_sostenuto = 66
+pedal_soft = 67
+
+# represents the use of a pedal (both depress and release)
+class PedalUse:
+    def __init__(self, time, dur, level=1, pedal_type=pedal_sustain):
         self.time = time
         self.dur = dur
         self.level = level
-        self.sostenuto = False
-
+        self.pedal_type = pedal_type
+        self.perf_time = 0
+        self.perf_dur = 0
+    def __str__(self):
+        return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d level %f'%(
+            self.time, self.dur, self.perf_time, self.perf_dur, self.pedal_type, self.level
+        )
+    
 class Measure:
     def __init__(self, time, dur, type):
         self.time = time
         self.dur = dur
         self.type = type
+    def __str__(self):
+        return 'measure: %.4f-%.4f'%(self.time, self.time+self.dur)
         
 epsilon = 1e-5    # slop factor for time round-off
     # don't compare times for equality
@@ -81,13 +94,19 @@ class Score:
         self.append_score(scores)
     def __str__(self):
         m_ind = 0
+        pedal_ind = 0
         x = ''
         for note in self.notes:
             if m_ind < len(self.measures):
                 m = self.measures[m_ind]
                 if note.time > m.time - epsilon:
-                    x += 'measure %d: %.4f-%.4f'%(m_ind+1, m.time, m.time+m.dur)
+                    x += str(m) + '\n'
                     m_ind += 1
+            if pedal_ind < len(self.pedals):
+                p = self.pedals[pedal_ind]
+                if note.time > p.time - epsilon:
+                    x += str(p) + '\n'
+                    pedal_ind += 1
             x += str(note) + '\n'
         return x
         
@@ -257,7 +276,7 @@ class Score:
         if self.pedals:
             self.adjust_pedal_times()
             for pedal in self.pedals:
-                c = 66 if pedal.sostenuto else 64
+                c = pedal.pedal_type
                 level = int(64+pedal.level*63)
                 f.addControllerEvent(0, 0, pedal.perf_time, c, level)
                 f.addControllerEvent(0, 0, pedal.perf_time + pedal.perf_dur, c, 0)
@@ -447,6 +466,7 @@ class Score:
     from nuance import score_dur_abs, score_dur_rel, score_dur_func
     from nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
     from nuance import get_pos_array
+    from nuance import vsustain_pft, pedal_pft
     
 # represents the start or end of a note or pedal application
 #

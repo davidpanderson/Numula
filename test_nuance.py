@@ -17,7 +17,9 @@
 from notate import *
 from nscore import *
 from nuance import *
+from nuance_notate import *
 
+# various timing-related functions
 def test1():
     ns = Score()
     ns.insert_score(0, n('c d e [f a c] g a b c'))
@@ -31,7 +33,7 @@ def test1():
 
 def test2():
     ns = Score()
-    ns.insert_score(0, n('c d e (foo [f a c] g foo) a b c'))
+    ns.insert_score(n('c d e (foo [f a c] g foo) a b c'), 0)
     ns.insert_measure(Measure(0, 4/4, '4/4'))
     ns.insert_measure(Measure(1, 4/4, '4/4'))
     ns.done()
@@ -53,6 +55,16 @@ def test3():
     print(ns)
 #test3()
 
+def test4():
+    ns = Score([n('c d e f g')])
+    ns.done()
+    ns.vol_adjust_pft([
+        linear(pp, ff, 1/8),
+        linear(ff, p, 2/4)
+    ])
+    print(ns)
+#test4()
+    
 def test_dur_pft():
     ns = Score()
     for i in range(8):
@@ -100,5 +112,16 @@ def test_vol():
     )
     print(ns)
 
-test_vol()
+#test_vol()
 
+def test_ped():
+    ns = Score()
+    for i in range(2):
+        ns.append_score([n('1/8 c d e f g a b c')])
+    #ns.insert_pedal(PedalUse(1/4, 3/4))
+    #ns.pedal_pft([Pedal(3/16, 0), Pedal(2/4, 1)])
+    ns.pedal_pft(pedal('- 1/4 + 1/8 + 1/4 - 4/4'))
+    ns.done()
+    print(ns)
+
+test_ped()

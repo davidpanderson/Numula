@@ -20,7 +20,7 @@ from nscore import *
 def test1():
     ns = Score()
     ns.add_list(0, n('c d e f g a b c'))
-    ns.add_pedal(Pedal(4/4, 3/4, True))
+    ns.add_pedal(PedalUse(4/4, 3/4, True))
     ns.done()
     ns.write_midi('data/test1.midi')
 

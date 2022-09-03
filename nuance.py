@@ -21,6 +21,8 @@
 import numpy, random, copy, math
 from nscore import *
 
+# -------- PFT primitives ----------
+
 class linear:
     def __init__(self, y0, y1, dt, closed_start=True, closed_end=False):
         self.y0 = y0
@@ -145,13 +147,30 @@ class delta:
     def integral_total(self):
         return self.value
 
+# a pedal PFT is a list of these.
+# level 0 is a period of no pedal
+# pedal types don't have to all be the same
+class Pedal:
+    def __init__(self, dt, level, pedal_type=pedal_sustain):
+        self.dt = dt
+        self.level = level
+        self.pedal_type = pedal_type
+    def __str__(self):
+        return 'Pedal: dt %f type %d level %f'%(
+            self.dt, self.pedal_type, self.level
+        )
+
+# ------------ end of PFT primitives
+
 #from pprint import pprint
 
 # make sure the pft has well-defined values at segment boundaries
 def pft_check_closure(pft):
     n = len(pft)
+    t = 0
     for i in range(n-1):
         seg0 = pft[i]
+        t += seg0.dt
         seg1 = pft[i+1]
         if isinstance(seg0, accent):
             seg1.closed_start = False
@@ -161,10 +180,10 @@ def pft_check_closure(pft):
             continue
         if seg0.closed_end:
             if seg1.closed_start and seg0.y1 != seg1.y0:
-                raise Exception('conflicting values in PFT')
+                raise Exception('conflicting values in PFT at time %f'%t)
         else:
             if not seg1.closed_start:
-                raise Exception('missing value in PFT')
+                raise Exception('missing value in PFT at time %f'%t)
 
 # score-time duration of a PFT
 def pft_dur(pft):
@@ -173,6 +192,14 @@ def pft_dur(pft):
         dt += seg.dt
     return dt
 
+# verify that the PFT has the given duration
+def pft_verify_dur(pft, dur):
+    x = pft_dur(pft)
+    if x < dur-epsilon:
+        raise Exception('PFT is too short: %f < %f'%(x, dur))
+    if x > dur+epsilon:
+        raise Exception('PFT is too long: %f > %f'%(x, dur))
+    
 # average value of pft
 def pft_avg(pft):
     sum = 0
@@ -624,7 +651,44 @@ def perf_dur_pft(self, pft, t0, pred=None, rel=True):
             n.perf_dur *= v
         else:
             n.perf_dur = v
-        
+
+# ----------- pedals -------------
+
+# apply a virtual sustain PFT
+def vsustain_pft(self, pft, t0=0, pred=None):
+    seg_ind = 0
+    seg = pft[0]
+    seg_start = t0
+    seg_end = t0 + seg.dt
+    t_end = t0 + pft_dur(pft)
+    for n in self.notes:
+        if n.time > t_end + epsilon:
+            break
+        if n.time < t0 - epsilon:
+            continue
+        if pred and not pred(n):
+            continue
+        while True:
+            if n.time < seg_end:
+                if seg_end > n.time + n.dur:
+                    if seg.level > 0:
+                        n.dur = seg_end - n.time
+                break
+            seg_ind += 1
+            if seg_ind == len(pft):
+                return
+            seg_start += seg.dt
+            seg = pft[seg_ind]
+            seg_end = seg_start + seg.dt
+
+# apply a pedal PFT (sustain, sostenuto, or soft)
+def pedal_pft(self, pft, t0=0):
+    t = t0
+    for seg in pft:
+        if seg.level > 0:
+            self.insert_pedal(PedalUse(t, seg.dt, seg.level, seg.pedal_type))
+        t += seg.dt
+
 # ----------- spatialization ----------------
 
 # return array of per-frame stereo positions -1..1,

@@ -3,6 +3,7 @@
 from nscore import *
 from notate import *
 from nuance import *
+from nuance_notate import *
 import pianoteq
 
 def make_score():
@@ -323,7 +324,8 @@ def make_score():
     rh_118_211_copy = copy.deepcopy(rh_118_211)
     lh_212_299_copy = copy.deepcopy(lh_212_299)
     rh_212_299_copy = copy.deepcopy(rh_212_299)
-    ns.append_score([rh_20_49, lh_20_49])
+    #ns.append_score([rh_20_49, lh_20_49])
+    ns.append_score(rh_20_49)
     #ns.append_score([lh_50_117, rh_50_117])
     #ns.append_score([lh_118_211, rh_118_211])
     #ns.append_score([lh_212_299, rh_212_299])
@@ -331,7 +333,7 @@ def make_score():
     #ns.append_score([lh_118_211_copy, rh_118_211_copy])
     #ns.append_score([lh_212_299_copy, rh_212_299_copy])
     #ns.append_score([rh_300_end, lh_300_end])
-    #ns.insert_pedal(Pedal(92*2/4, 6*2/4))
+    #ns.insert_pedal(PedalUse(92*2/4, 6*2/4))
     ns.set_tempo(144)
     ns.done()
     return ns
@@ -342,50 +344,24 @@ def make_score():
 # the other for single-note and short-scale adjustment
 
 def va_20_49(ns):
-    rh1 = []
-    rh2 = []
-    for i in range(2):
-        for j in range(3):
-            rh1.extend([linear(pp, p, 1/4), linear(p, pp, 3/4)])
-            rh2.extend([
-                unity(1/4), accent(1.4),
-                unity(1/4), accent(1.3),
-                unity(1/4), accent(1.2),
-                unity(1/4)
-            ])
-        rh1.extend([linear(pp, p, 2/4), linear(p, pp, 2/4)])
-        rh2.extend([
-            unity(1/8), accent(1.2),
-            unity(1/4), accent(1.2),
-            unity(1/4), accent(1.2),
-            unity(1/4), accent(1.2),
-            unity(1/8)
-        ])
-    # 36
-    rh1.extend([linear(pp, p, 4/4), linear(p, pp, 4/4)])
-    rh1.extend([linear(pp, mp, 6/4), linear(mp, pp, 2/4), linear(pp, pp, 4/4)])
-
-    ns.vol_adjust_pft(
-        [
-            linear(pp, p, 1/4),
-            linear(p, pp, 3/4),
-            linear(pp, p, 1/4),
-            linear(p, pp, 3/4),
-            linear(pp, p, 1/4),
-            linear(p, pp, 3/4),
-            linear(pp, p, 2/4),
-            linear(p, pp, 2/4)
-        ],
-        0,
-        lambda n: 'rh' in n.tags
-    )
-    ns.vol_adjust_pft(
-        [
-            linear(mp, mf, 30*2/4)
-        ],
-        0,
-        lambda n: 'lh' in n.tags
-    )
+    rh1 = vol(' \
+        *2 *3 pp 1/4 p 3/4 pp * 2/4 p 2/4 pp * \
+        |36 pp 4/4 p 4/4 p \
+        |44 [ pp 6/4 mp 2/4 pp 4/4 pp \
+    ')
+    print(*rh1, sep='\n')
+    rh2 = accents(' \
+        *2 \
+            *3 1. 1/4 1.4 1/4 1.3 1/4 1.2 1/4 * \
+            1/8 1.2 1/4 1.2 1/4 1.2 1/4 1.2 1/8 \
+        * \
+    ')
+    pft_verify_dur(rh1, 52/4)
+    ns.vol_adjust_pft(rh1, 0, lambda n: 'rh' in n.tags)
+    ns.vol_adjust_pft(rh2, 0, lambda n: 'rh' in n.tags)
+        
+    lh1 = vol('mp 60/4 mf')
+    ns.vol_adjust_pft(lh1, 0, lambda n: 'lh' in n.tags)
     
 def main():
     ns = make_score()

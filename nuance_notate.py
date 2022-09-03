@@ -31,6 +31,7 @@ from notate import *
 vol_name = {
     'ppp': ppp,
     'pp': pp,
+    'p': p,
     'mp': mp,
     'mf': mf,
     'f': f,
@@ -78,7 +79,7 @@ def vol(s):
             dur = num/denom
             state = GOT_DUR
         elif t == ']':
-            if state != GOT_V1:
+            if state != GOT_V0:
                 show_context(items, i)
                 raise Exception('unexpected ]')
             last_seg.closed_end = True
@@ -104,12 +105,9 @@ def vol(s):
                 v = float(t)
             else:
                 v = vol_name[t]
-            if state == INIT:
+            if state == INIT or state == GOT_V0:
                 v0 = v
                 state = GOT_V0
-            elif state == GOT_V0:
-                show_context(items, i)
-                raise Exception('unexpected volume')
             elif state == GOT_DUR:
                 v1 = v
                 if segtype == SEGTYPE_LINEAR:
@@ -124,17 +122,22 @@ def vol(s):
                     got_rb = False
                 pft.append(last_seg)
                 v0 = v1
-                state = GOT_V1
+                state = GOT_V0
             elif state == GOT_V1:
                 if v != v0 and not got_rb and not got_lb:
                     show_context(items, i)
                     raise Exception('inconsistent volumes')
                 v0 = v
                 state = GOT_V0
+        else:
+            show_context(items, i)
+            raise Exception('unrecognized item')
+    pft_check_closure(pft)
     return pft
 
-x = vol('pp 1/4 mf [ exp3 ppp 1/2 pp')
-print(*x, sep='\n')
+#x = vol('pp 1/4 mf [ exp3 ppp 1/2 pp')
+#x = vol('pp 1/4 p 3/4 pp [ p   1/4 p 3/4 pp')
+#print(*x, sep='\n')
 
 # e.g. '1/8 1.2 1/4 1.2 1/4 1.2 1/8'
 
@@ -235,4 +238,36 @@ def tempo(s):
     return pft
 
 #x = tempo('*2 60 8/4 80 p.01 60 3/4 120 0.2p *')
+#print(*x, sep='\n')
+
+# e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
+def pedal(s):
+    items = s.split()
+    pft = []
+    pedal_type = pedal_sustain
+    on = False
+    if '*' in items:
+        items = expand(items)
+    for i in range(len(items)):
+        t = items[i]
+        if '/' in t:
+            a = t.split('/')
+            try:
+                num = int(a[0])
+                denom = int(a[1])
+            except:
+                show_context(items, i)
+                raise Exception('bad values in %s'%t)
+            dur = num/denom
+            if on:
+                pft.append(Pedal(dur, 1, pedal_type))
+            else:
+                pft.append(Pedal(dur, 0, pedal_type))      
+        elif t == '-':
+            on = False
+        elif t == '+':
+            on = True
+    return pft
+
+#x = pedal('- 1/4 + 1/8 + 1/4 - 4/4')
 #print(*x, sep='\n')
