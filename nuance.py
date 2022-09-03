@@ -150,13 +150,13 @@ class delta:
 # a pedal PFT is a list of these.
 # level 0 is a period of no pedal
 # pedal types don't have to all be the same
-class Pedal:
+class PedalSeg:
     def __init__(self, dt, level, pedal_type=pedal_sustain):
         self.dt = dt
         self.level = level
         self.pedal_type = pedal_type
     def __str__(self):
-        return 'Pedal: dt %f type %d level %f'%(
+        return 'PedalSeg: dt %f type %d level %f'%(
             self.dt, self.pedal_type, self.level
         )
 

@@ -119,7 +119,7 @@ def test_ped():
     for i in range(2):
         ns.append_score([n('1/8 c d e f g a b c')])
     #ns.insert_pedal(PedalUse(1/4, 3/4))
-    #ns.pedal_pft([Pedal(3/16, 0), Pedal(2/4, 1)])
+    #ns.pedal_pft([PedalSeg(3/16, 0), PedalSeg(2/4, 1)])
     ns.pedal_pft(pedal('- 1/4 + 1/8 + 1/4 - 4/4'))
     ns.done()
     print(ns)

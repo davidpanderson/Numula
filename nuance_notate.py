@@ -260,9 +260,9 @@ def pedal(s):
                 raise Exception('bad values in %s'%t)
             dur = num/denom
             if on:
-                pft.append(Pedal(dur, 1, pedal_type))
+                pft.append(PedalSeg(dur, 1, pedal_type))
             else:
-                pft.append(Pedal(dur, 0, pedal_type))      
+                pft.append(PedalSeg(dur, 0, pedal_type))      
         elif t == '-':
             on = False
         elif t == '+':
