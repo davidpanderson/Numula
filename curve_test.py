@@ -4,7 +4,7 @@ import matplotlib.pyplot as plot
 # plot an exponential curve and its integral
 #
 def draw_curve(curvature, y0, y1, dt):
-    e = nuance.exp_curve(curvature, y0, y1, dt)
+    e = nuance.ExpCurve(curvature, y0, y1, dt)
     n = 100
     x = [0]*n
     y = [0]*n
@@ -31,7 +31,7 @@ def exp_tempo(curvature):
     ns.done()
     ns.tempo_adjust_pft(
         [
-            nuance.exp_curve(curvature, 40, 80, 1)
+            nuance.ExpCurve(curvature, 40, 80, 1)
         ]
     )
     ns.write_midi('data/exp_tempo_%d.midi'%curvature)
@@ -56,7 +56,7 @@ def exp_vol(curvature):
     ns.done()
     ns.vol_adjust_pft(
         [
-            nuance.exp_curve(curvature, .2, 1.9, 1)
+            nuance.ExpCurve(curvature, .2, 1.9, 1)
         ]
     )
     ns.write_midi('data/exp_vol_%d.midi'%curvature)

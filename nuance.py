@@ -23,7 +23,7 @@ from nscore import *
 
 # -------- PFT primitives ----------
 
-class linear:
+class Linear:
     def __init__(self, y0, y1, dt, closed_start=True, closed_end=False):
         self.y0 = y0
         self.y1 = y1
@@ -32,7 +32,7 @@ class linear:
         self.closed_start = closed_start
         self.closed_end = closed_end
     def __str__(self):
-        return 'linear: %s %f %f %s, dt %f'%(
+        return 'Linear: %s %f %f %s, dt %f'%(
             '[' if self.closed_start else '(',
             self.y0, self.y1,
             ']' if self.closed_end else ')',
@@ -51,11 +51,11 @@ class linear:
         self.y1 = 60/self.y1
         self.dy = self.y1 - self.y0
 
-def unity(dt):
-    return linear(1, 1, dt)
+def Unity(dt):
+    return Linear(1, 1, dt)
 
 # for volume PFTs: a momentary value
-class accent:
+class Accent:
     def __init__(self, y):
         self.y0 = y
         self.y1 = y
@@ -63,7 +63,7 @@ class accent:
         self.closed_end = True
         self.dt = 0
     def __str__(self):
-        return 'accent %f'%self.y0
+        return 'Accent %f'%self.y0
     def val(self, t):
         return y0
     
@@ -75,7 +75,7 @@ class accent:
 # i.e. if y1 > y0 then the curve is concave up
 # and if curvature < 0 more of the change happens earlier.
 # If curvature = 0 then y = x; this is handled as a special case
-class exp_curve:
+class ExpCurve:
     def __init__(self, curvature, y0, y1, dt, closed_start=True, closed_end=False):
         if abs(curvature) < .001:
             self.linear = True
@@ -91,7 +91,7 @@ class exp_curve:
         self.closed_end = closed_end
         self.curvature = curvature
     def __str__(self):
-        return 'exp_curve: %s %f %f %s, dt %f curvature %f'%(
+        return 'ExpCurve: %s %f %f %s, dt %f curvature %f'%(
             '[' if self.closed_start else '(',
             self.y0, self.y1,
             ']' if self.closed_end else ')',
@@ -132,13 +132,13 @@ class exp_curve:
 
 # Dirac delta; used in tempo PFTs to represent pauses
 # if after is True, pause goes after notes at that time
-class delta:
+class Delta:
     def __init__(self, value, after=True):
         self.value = value
         self.after = after
         self.dt = 0
     def __str__(self):
-        return 'delta %f %s'%(
+        return 'Delta %f %s'%(
             self.value,
             'after' if self.after else 'before'
         )
@@ -172,10 +172,10 @@ def pft_check_closure(pft):
         seg0 = pft[i]
         t += seg0.dt
         seg1 = pft[i+1]
-        if isinstance(seg0, accent):
+        if isinstance(seg0, Accent):
             seg1.closed_start = False
             continue
-        if isinstance(seg1, accent):
+        if isinstance(seg1, Accent):
             seg0.closed_end = False
             continue
         if seg0.closed_end:
@@ -213,7 +213,7 @@ def pft_bpm(pft):
         seg.bpm()
 
 # class for getting the values of a PFT at increasing times
-class pft_value:
+class PftValue:
     def __init__(self, pft):
         self.pft = pft
         self.ind = 0            # index of current seg
@@ -314,7 +314,7 @@ def v_random_normal(self, stddev, max_sigma=2, pred=None):
 # ------------------- Timing ------------------------
 
 # adjust the timing of selected notes and pedal events.
-# pft is a tempo function, which can contain segments (such as linear)
+# pft is a tempo function, which can contain segments (such as Linear)
 # and Dirac deltas.
 # If bpm is False, its value is performance time per unit score time;
 # larger is slower.
@@ -361,7 +361,7 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
         
     # append infinite unity segment
     # needed to handle note-end events that lie beyond PFT domain
-    pft.append(linear(1, 1, 9999999))
+    pft.append(Unity(9999999))
     
     # loop over events.
     # keep track of params of previous event
@@ -720,7 +720,7 @@ def get_pos_array(self, pos_pft, framerate):
         last_perf_time = event.perf_time
 
     # make an object for evaluating pos_pft at increasing times
-    pft_val = pft_value(pos_pft)
+    pft_val = PftValue(pos_pft)
     event_ind = 0
     ev0 = events[0]
     ev1 = events[1]
@@ -730,7 +730,7 @@ def get_pos_array(self, pos_pft, framerate):
     print('get_pos_array: nframes', nframes)
     for i in range(nframes):
         pt = i/framerate
-        # loop overlinear segments of F
+        # loop over linear segments of F
         while pt > ev1.perf_time:
             event_ind += 1
             ev0 = events[event_ind]

@@ -40,8 +40,8 @@ def main():
         def vol_pft():
             x = []
             for i in range(33):
-                x.append(linear(.3, .4, 3/8))
-                x.append(linear(.4, .3, 3/8))
+                x.append(Linear(.3, .4, 3/8))
+                x.append(Linear(.4, .3, 3/8))
             return x
         ns.vol_adjust_pft(vol_pft())
         ns.vol_adjust(1.4, lambda n: 'theme' in n.tags)
@@ -52,12 +52,12 @@ def main():
             x = []
             for i in range(8):
                 for j in range(3):
-                    x.append(linear(90, 93, 3/8))
-                    x.append(linear(93, 90, 3/8))
-                    x.append(delta(.015, False))
-                x.append(linear(90, 85, 6/8))
-                x.append(delta(.02, False))
-            x.append(delta(.02, False))
+                    x.append(Linear(90, 93, 3/8))
+                    x.append(Linear(93, 90, 3/8))
+                    x.append(Delta(.015, False))
+                x.append(Linear(90, 85, 6/8))
+                x.append(Delta(.02, False))
+            x.append(Delta(.02, False))
             return x
                     
         ns.tempo_adjust_pft(tempo_pft())
@@ -71,16 +71,16 @@ def main():
     # panning pattern:
     pos_pft = [
         [
-            linear(.5, 1, 4*6/8),
-            linear(1, 1, 28*6/8)
+            Linear(.5, 1, 4*6/8),
+            Linear(1, 1, 28*6/8)
         ],
         [
-            linear(.5, .5, 4*6/8),
-            linear(.5, 0, 8*6/8),
-            linear(0, 0, 20*6/8)
+            Linear(.5, .5, 4*6/8),
+            Linear(.5, 0, 8*6/8),
+            Linear(0, 0, 20*6/8)
         ],
         [
-            linear(.5, .5, 32*6/8)
+            Linear(.5, .5, 32*6/8)
         ]
     ]
 

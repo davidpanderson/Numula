@@ -14,8 +14,8 @@ def scale():
 
     ns.vol_adjust_pft(
         [
-            linear(pp, ff, 4/4),
-            linear(f, p, 4/4, closed_start=False)
+            Linear(pp, ff, 4/4),
+            Linear(f, p, 4/4, closed_start=False)
         ], pred=lambda n: 'rh' in n.tags
     )
 
@@ -23,9 +23,9 @@ def scale():
     print('---')
     ns.tempo_adjust_pft(
         [
-            #linear(1, 2, 2/4)
-            linear(60, 120, 4/4),
-            linear(120, 60, 4/4)
+            #Linear(1, 2, 2/4)
+            Linear(60, 120, 4/4),
+            Linear(120, 60, 4/4)
         ], normalize=True,
         pred=lambda n: 'rh' in n.tags
     )
@@ -46,7 +46,7 @@ def pan_test():
     ns.write_midi('data/pan_test.midi')
     pos_array = ns.get_pos_array(
         [
-            linear(-1, 1, 61/4)
+            Linear(-1, 1, 61/4)
         ], 44100
     )
     pianoteq.play('data/pan_test.midi')

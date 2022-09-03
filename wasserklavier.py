@@ -114,16 +114,16 @@ def make_score():
 def set_vol(ns):
     ns.vol_adjust_pft(
         [
-            linear(ppp, pp, 30/8),  # line 1
-            linear(pp, ppp, 9/8),   # line 2
-            linear(ppp, pp, 18/8),
-            linear(pp, p, 9/8),
-            linear(p, mp, 27/8, closed_end=False),    # line 3
-            linear(p, ppp, 17/8),   # line 4
-            linear(ppp, pp, 15/8),
-            linear(pp, f, 24/8),    # line 5
-            linear(f, ppp, 24/8),   # line 6
-            linear(ppp, ppp, 6/8)
+            Linear(ppp, pp, 30/8),  # line 1
+            Linear(pp, ppp, 9/8),   # line 2
+            Linear(ppp, pp, 18/8),
+            Linear(pp, p, 9/8),
+            Linear(p, mp, 27/8, closed_end=False),    # line 3
+            Linear(p, ppp, 17/8),   # line 4
+            Linear(ppp, pp, 15/8),
+            Linear(pp, f, 24/8),    # line 5
+            Linear(f, ppp, 24/8),   # line 6
+            Linear(ppp, ppp, 6/8)
         ]
     )
 
@@ -147,16 +147,16 @@ def set_vol(ns):
 def set_tempo(ns):
     ns.tempo_adjust_pft(
         [
-            linear(65, 60, 30/8),   # line 1
-            linear(65, 55, 9/8),    # line 2
-            linear(60, 70, 9/8),
-            linear(70, 80, 18/8),
-            linear(65, 55, 27/8),   # line 3
-            linear(55, 50, 24/8),   # line 4
+            Linear(65, 60, 30/8),   # line 1
+            Linear(65, 55, 9/8),    # line 2
+            Linear(60, 70, 9/8),
+            Linear(70, 80, 18/8),
+            Linear(65, 55, 27/8),   # line 3
+            Linear(55, 50, 24/8),   # line 4
             # at this point the score has dotted quarter = quarter
-            linear(30, 40, 6/8),
-            linear(40, 50, 24/8),   # line 5
-            linear(50, 30, 30/8)    # line 6
+            Linear(30, 40, 6/8),
+            Linear(40, 50, 24/8),   # line 5
+            Linear(50, 30, 30/8)    # line 6
         ]
     )
 

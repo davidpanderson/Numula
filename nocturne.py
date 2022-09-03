@@ -40,27 +40,27 @@ def main():
     
     for i in range(5):
         ns.vol_adjust_pft(
-            [linear(.3, .8, 2/4), linear(.8, .3, 1/4)],
+            [Linear(.3, .8, 2/4), Linear(.8, .3, 1/4)],
             i*3/4,
             lambda n: 'lh' in n.tags
         )
 
     ns.tempo_adjust_pft(
         [
-            linear(90, 110, 8/4),
-            linear(110, 80, 7/4)
+            Linear(90, 110, 8/4),
+            Linear(110, 80, 7/4)
         ]
     )
 
     # timing in RH
     ns.tempo_adjust_pft(
         [
-            linear(40, 50, 2/4),
-            linear(50, 35, 2/4),
-            delta(.15),
-            linear(30, 50, 3/4),
-            linear(50, 30, 2/4),
-            delta(.3, False)
+            Linear(40, 50, 2/4),
+            Linear(50, 35, 2/4),
+            Delta(.15),
+            Linear(30, 50, 3/4),
+            Linear(50, 30, 2/4),
+            Delta(.3, False)
         ], 3/4, normalize=True, pred=lambda n: 'rh' in n.tags
     )
 

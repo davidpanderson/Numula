@@ -24,7 +24,7 @@ def test1():
     ns = Score()
     ns.insert_score(0, n('c d e [f a c] g a b c'))
     ns.done()
-    ns.tempo_adjust_pft([linear(60, 120, 8/4)])
+    ns.tempo_adjust_pft([Linear(60, 120, 8/4)])
     ns.pause_before(3/4, .7)
     ns.roll(3/4, [-.2, -.1, 0], True, True)
     print(ns)
@@ -48,9 +48,9 @@ def test3():
     ns = Score([n('c d e f g')])
     ns.done()
     ns.tempo_adjust_pft([
-        linear(60, 60, 2/4),
-        delta(.1, False),
-        linear(30, 30, 2/4)
+        Linear(60, 60, 2/4),
+        Delta(.1, False),
+        Linear(30, 30, 2/4)
     ])
     print(ns)
 #test3()
@@ -59,8 +59,8 @@ def test4():
     ns = Score([n('c d e f g')])
     ns.done()
     ns.vol_adjust_pft([
-        linear(pp, ff, 1/8),
-        linear(ff, p, 2/4)
+        Linear(pp, ff, 1/8),
+        Linear(ff, p, 2/4)
     ])
     print(ns)
 #test4()
@@ -72,14 +72,14 @@ def test_dur_pft():
     ns.done()
     ns.perf_dur_pft(
         [
-            linear(.1, 1.5, 8/4),
-            linear(1.5, .1, 8/4)
+            Linear(.1, 1.5, 8/4),
+            Linear(1.5, .1, 8/4)
         ], 0, rel=True
     )
     ns.perf_dur_pft(
         [
-            linear(.1, .4, 8/4),
-            linear(.4, .1, 8/4)
+            Linear(.1, .4, 8/4),
+            Linear(.4, .1, 8/4)
         ], 16/4, rel=False
     )
     print(ns)
@@ -87,10 +87,10 @@ def test_dur_pft():
 
 def test_pft_value():
     p = [
-            linear(0, 1, 1, closed_end=False),
-            linear(3, 4, 1)
+            Linear(0, 1, 1, closed_end=False),
+            Linear(3, 4, 1)
         ]
-    v = pft_value(p)
+    v = PftValue(p)
     for i in range(25):
         x = i/10
         print(x, v.value(x))
@@ -104,10 +104,10 @@ def test_vol():
     ns.done()
     ns.vol_adjust_pft(
         [
-            unity(2/4),
-            accent(1.3),
-            unity(1/4),
-            accent(1.5)
+            Unity(2/4),
+            Accent(1.3),
+            Unity(1/4),
+            Accent(1.5)
         ], 0
     )
     print(ns)

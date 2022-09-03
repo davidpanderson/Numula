@@ -452,4 +452,55 @@ tempo('linear 60 8/4 80 p0.1 60 3/4 120 0.2p')
 
 These all return PFTs (lists of primitives)
 which you can catenate etc.
+--------
+PFTs and textual notation for pedal?
 
+you can do virtual sustain in the score notation (+p ... -p)
+but in general it doesn't belong there.
+
+probably should add real pedal to score notation
+
+sustain() does a complete scan of the score,
+    so can't use it a lot
+
+sustain PFT primitives
+    Pedal(dt, value, type)
+        value: 0 = off 1 = on
+        type: sustain, sostenuto, soft
+
+ns.vsustain_pft(pft, pred)
+    traverse score, pft in parallel
+ns.pedal_pft(pft)
+    Don't need to traverse.
+    insert pedal events, re-sort
+    make sure final order is right
+        (do this in write_midi?)
+
+textual notation
+pedal('- 1/4 + 1/8 + 1/4 - 4/4')
+    off for 1/4
+    on for 1/8
+    momentary lift, then on for 1/4
+    off for 4/4
+
+    can use *2, | notation
+----
+terminology?
+
+PedalUse()
+PedalSeg()
+---------------
+Document structure
+
+Scores
+    including text notation
+Piecewise fUnctions of time (PFTs)
+Volume control
+    including text notation
+Timing control
+    including text notation
+Pedals
+    including text notation
+PianoTeq
+Spatialization
+Importing MIDI files

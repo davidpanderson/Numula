@@ -23,7 +23,7 @@ from nuance import *
 from notate import *
 
 # continuous volume change
-# e.g.: 'linear *2 f 1/4 pp ] mp 2/4 p *'
+# e.g.: 'Linear *2 f 1/4 pp ] mp 2/4 p *'
 # means: go from f to pp over 1/4 (closed at end)
 # then go from mp to p over 2/4
 # repeat this twice
@@ -111,9 +111,9 @@ def vol(s):
             elif state == GOT_DUR:
                 v1 = v
                 if segtype == SEGTYPE_LINEAR:
-                    last_seg = linear(v0, v1, dur, closed_end=True)
+                    last_seg = Linear(v0, v1, dur, closed_end=True)
                 else:
-                    last_seg = exp_curve(curvature, v0, v1, dur, closed_end=True)
+                    last_seg = ExpCurve(curvature, v0, v1, dur, closed_end=True)
                 if got_lb:
                     last_seg.closed_start = True
                     got_lb = False
@@ -157,7 +157,7 @@ def accents(s):
                 show_context(items, i)
                 raise Exception('bad values in %s'%t)
             dur = num/denom
-            pft.append(unity(dur))
+            pft.append(Unity(dur))
         elif t[0] == '|':
             continue
         else:
@@ -166,7 +166,7 @@ def accents(s):
             except:
                 show_context(items, i)
                 raise Exception('bad value')
-            pft.append(accent(val))
+            pft.append(Accent(val))
     return pft
 
 #x = accents('1/8 1.2 1/4 1.3 1/2')
@@ -202,14 +202,14 @@ def tempo(s):
             except:
                 show_context(items, i)
                 raise Exception('bad pause value')
-            pft.append(delta(val, after=False))
+            pft.append(Delta(val, after=False))
         elif t[-1] == 'p':
             try:
                 val = float(t[0:-1])
             except:
                 show_context(items, i)
                 raise Exception('bad pause value')
-            pft.append(delta(val, after=True))
+            pft.append(Delta(val, after=True))
         elif t == 'linear':
             segtype = SEGTYPE_LINEAR
         elif t[0:3] == 'exp':
@@ -231,7 +231,7 @@ def tempo(s):
                 if segtype == SEGTYPE_LINEAR:
                     seg = linear(t0, val, dur)
                 else:
-                    seg = exp_curve(curvature, t0, val, dur)
+                    seg = ExpCurve(curvature, t0, val, dur)
                 pft.append(seg)
                 dur = None
             t0 = val
