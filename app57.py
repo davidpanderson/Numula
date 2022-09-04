@@ -1,9 +1,9 @@
 # Beethoven sonata op 57, 3rd mvt
 
 from nscore import *
-from notate import *
+from notate_score import *
 from nuance import *
-from nuance_notate import *
+from notate_nuance import *
 import pianoteq
 
 def make_score():

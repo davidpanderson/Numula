@@ -15,7 +15,7 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 from nscore import *
-from notate import *
+from notate_score import *
 
 def test1():
     s = 'c (foo d 1/8 _ e foo)'

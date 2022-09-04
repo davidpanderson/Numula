@@ -54,8 +54,7 @@ GOT_RB = 5
 
 def vol(s):
     items = s.split()
-    if '*' in items:
-        items = expand_iter(items)
+    items = expand_all(items)
     state = INIT
     pft = []
     last_seg = None
@@ -89,8 +88,6 @@ def vol(s):
                 last_seg.closed_end = False
             state = INIT
             got_lb = True
-        elif t[0] == '|':
-            continue
         elif t == 'linear':
             segtype = SEGTYPE_LINEAR
         elif t[0:3] == 'exp':
@@ -143,9 +140,8 @@ def vol(s):
 
 def accents(s):
     items = s.split()
+    items = expand_all(items)
     pft = []
-    if '*' in items:
-        items = expand_iter(items)
     for i in range(len(items)):
         t = items[i]
         if '/' in t:
@@ -158,8 +154,6 @@ def accents(s):
                 raise Exception('bad values in %s'%t)
             dur = num/denom
             pft.append(Unity(dur))
-        elif t[0] == '|':
-            continue
         else:
             try:
                 val = float(t)
@@ -176,12 +170,11 @@ def accents(s):
 
 def tempo(s):
     items = s.split()
+    items = expand_all(items)
     pft = []
     t0 = None
     dur = None
     segtype = SEGTYPE_LINEAR
-    if '*' in items:
-        items = expand_iter(items)
     for i in range(len(items)):
         t = items[i]
         if '/' in t:
@@ -219,8 +212,6 @@ def tempo(s):
             except:
                 show_context(items, i)
                 raise Exception('bad curvature')
-        elif t[0] == '|':
-            continue
         else:
             try:
                 val = float(t)

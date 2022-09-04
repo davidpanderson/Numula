@@ -485,22 +485,6 @@ pedal('- 1/4 + 1/8 + 1/4 - 4/4')
 
     can use *2, | notation
 ----
-terminology?
-
-PedalUse()
-PedalSeg()
----------------
-Document structure
-
-Scores
-    including text notation
-Piecewise fUnctions of time (PFTs)
-Volume control
-    including text notation
-Timing control
-    including text notation
-Pedals
-    including text notation
-PianoTeq
-Spatialization
-Importing MIDI files
+textual notation
+'c b d <x> d g'
+means evaluate x

@@ -14,10 +14,10 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-from notate import *
 from nscore import *
+from notate_score import *
 from nuance import *
-from nuance_notate import *
+from notate_nuance import *
 
 # various timing-related functions
 def test1():

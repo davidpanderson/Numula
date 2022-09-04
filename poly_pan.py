@@ -4,7 +4,7 @@
 
 import math
 from nscore import *
-from notate import *
+from notate_score import *
 from nuance import *
 import spatialize, pianoteq
 

@@ -14,8 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-from notate import *
 from nscore import *
+from notate_score import *
 
 def test1():
     ns = Score()
