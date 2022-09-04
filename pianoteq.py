@@ -15,8 +15,8 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# play a MIDI file using pianoteq
-# see https://github.com/davidpanderson/Numula/wiki/pianoteq.py
+# play (or render to .WAV) a MIDI file using pianoteq
+# see https://github.com/davidpanderson/Numula/wiki/Pianoteq
 
 import platform, subprocess
 
@@ -32,6 +32,11 @@ def play(file, preset=None):
     p = ' --preset "%s"'%preset if preset else ''
     cmd = '"%s" --play --midi %s%s'%(prog, file, p)
     subprocess.call(cmd, shell=True)
+
+def play_score(ns):
+    # TODO: use tempfile
+    ns.write_midi('data/temp.midi')
+    play('data/temp.midi')
 
 def midi_to_wav(ifile, ofile, mono=False, preset=None):
     m = ' --mono' if mono else ''

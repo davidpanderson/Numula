@@ -18,22 +18,22 @@ from nscore import *
 from notate_score import *
 from nuance import *
 from notate_nuance import *
+import pianoteq
 
 # various timing-related functions
 def test1():
-    ns = Score()
-    ns.insert_score(0, n('c d e [f a c] g a b c'))
+    ns = n('c d e [f a c] g a b c')
     ns.done()
     ns.tempo_adjust_pft([Linear(60, 120, 8/4)])
     ns.pause_before(3/4, .7)
     ns.roll(3/4, [-.2, -.1, 0], True, True)
     print(ns)
-    ns.write_midi('data/test1.midi')
+    pianoteq.play_score(ns)
 #test1()
 
 def test2():
     ns = Score()
-    ns.insert_score(n('c d e (foo [f a c] g foo) a b c'), 0)
+    ns.insert_score(n('c d e (foo [f a c] g foo) a b c'))
     ns.insert_measure(Measure(0, 4/4, '4/4'))
     ns.insert_measure(Measure(1, 4/4, '4/4'))
     ns.done()
@@ -124,4 +124,4 @@ def test_ped():
     ns.done()
     print(ns)
 
-test_ped()
+#test_ped()

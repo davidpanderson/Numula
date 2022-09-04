@@ -1,14 +1,29 @@
-# utility functions for textual notation:
+# utility functions for shorthand notation
+
+import sys, os
+
+def print_red(x):
+    try:
+        # in Idle
+        color = sys.stdout.shell
+        color.write(x, 'COMMENT')
+    except AttributeError:
+        # in terminal
+        os.system('')
+        CRED = '\033[91m'
+        CEND = '\033[0m'
+        print(CRED+x+CEND)
+    print(' ', end='')
 
 # in case of error, show context
 def show_context(items, i):
     n = len(items)
-    print('error in notation: ')
+    print('error in shorthand: ', end='')
     for j in range(i-5, i+6):
         if j<0: continue;
         if j>=n: continue;
         if j==i:
-            print(' ', items[j], end='   ')
+            print_red(items[j])
         else:
             print(items[j], end=' ')
     print('')
@@ -65,7 +80,6 @@ def expand_eval(items):
     out = []
     for i in range(len(items)):
         t = items[i]
-        print(t)
         if t[0] == '<':
             try:
                 x = eval(t[1:-1])
