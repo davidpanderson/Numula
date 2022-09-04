@@ -55,7 +55,7 @@ GOT_RB = 5
 def vol(s):
     items = s.split()
     if '*' in items:
-        items = expand(items)
+        items = expand_iter(items)
     state = INIT
     pft = []
     last_seg = None
@@ -145,7 +145,7 @@ def accents(s):
     items = s.split()
     pft = []
     if '*' in items:
-        items = expand(items)
+        items = expand_iter(items)
     for i in range(len(items)):
         t = items[i]
         if '/' in t:
@@ -181,7 +181,7 @@ def tempo(s):
     dur = None
     segtype = SEGTYPE_LINEAR
     if '*' in items:
-        items = expand(items)
+        items = expand_iter(items)
     for i in range(len(items)):
         t = items[i]
         if '/' in t:
@@ -229,7 +229,7 @@ def tempo(s):
                 raise Exception('bad value')
             if dur != None:
                 if segtype == SEGTYPE_LINEAR:
-                    seg = linear(t0, val, dur)
+                    seg = Linear(t0, val, dur)
                 else:
                     seg = ExpCurve(curvature, t0, val, dur)
                 pft.append(seg)
@@ -247,7 +247,7 @@ def pedal(s):
     pedal_type = pedal_sustain
     on = False
     if '*' in items:
-        items = expand(items)
+        items = expand_iter(items)
     for i in range(len(items)):
         t = items[i]
         if '/' in t:

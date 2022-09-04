@@ -343,17 +343,17 @@ def make_score():
 # one for continuous change,
 # the other for single-note and short-scale adjustment
 
-def va_20_49(ns):
+def v20_49(ns):
     rh1 = vol(' \
-        *2 *3 pp 1/4 p 3/4 pp * 2/4 p 2/4 pp * \
+        *2 *3 pp 3/4 mp 1/4 pp * 2/4 p 2/4 pp * \
         |36 pp 4/4 p 4/4 p \
         |44 [ pp 6/4 mp 2/4 pp 4/4 pp \
     ')
-    print(*rh1, sep='\n')
+    #print(*rh1, sep='\n')
     rh2 = accents(' \
         *2 \
-            *3 1. 1/4 1.4 1/4 1.3 1/4 1.2 1/4 * \
-            1/8 1.2 1/4 1.2 1/4 1.2 1/4 1.2 1/8 \
+            *3 1. 1/4 1.3 1/4 1.2 1/4 1.1 1/4 * \
+            1/8 1.4 1/4 1.4 1/4 1.4 1/4 1.4 1/8 \
         * \
     ')
     pft_verify_dur(rh1, 52/4)
@@ -363,12 +363,17 @@ def va_20_49(ns):
     lh1 = vol('mp 60/4 mf')
     ns.vol_adjust_pft(lh1, 0, lambda n: 'lh' in n.tags)
     
+def t20_49(ns):
+    x = tempo('*2 *4 60 2/4 65 2/4 55 .1p * *')
+    ns.tempo_adjust_pft(x, 0)
+    
 def main():
     ns = make_score()
-    va_20_49(ns)
-    ns.t_random_normal(.012, 2)
+    v20_49(ns)
+    t20_49(ns)
+    ns.t_random_normal(.010, 2)
     #ns.perf_dur_rel(1.3)
-    print(ns)
+    #print(ns)
     ns.write_midi('data/app57.midi')
     pianoteq.play('data/app57.midi')
 

@@ -134,7 +134,7 @@ def next_pitch(cur_pitch, pitch_class, octave_offset):
 
 # expand '*4 foo *' into 'foo foo foo foo', with nesting
 #
-def expand(items):
+def expand_iter(items):
     # stacks
     nleft = []
     start = []
@@ -173,6 +173,24 @@ def expand(items):
         raise Exception('unclosed *n')
     return out
 
+# expand ... <foo>... by evaluating foo
+def expand_eval(items):
+    out = []
+    for i in range(len(items)):
+        t = items[i]
+        print(t)
+        if t[0] == '<':
+            try:
+                x = eval(t[1:-1])
+            except:
+                show_context(items, i)
+                raise Exception('eval error')
+            y = x.split()
+            out.extend(y)
+        else:
+            out.append(t)
+    return out
+
 # in case of error, show context
 def show_context(items, i):
     n = len(items)
@@ -206,7 +224,7 @@ def n(s, _tags=[]):
     ped_start = -1
     ped_start_index = -1
     if '*' in items:
-        items = expand(items)
+        items = expand_iter(items)
     for i in range(len(items)):
         t = items[i]
         if not t: continue
