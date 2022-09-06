@@ -22,6 +22,7 @@ import numpy as np
 from nscore import *
 from notate_score import *
 from nuance import *
+from notate_nuance import *
 import pianoteq
 
 # create the score (notes and measures)
@@ -113,18 +114,14 @@ def make_score():
 
 def set_vol(ns):
     ns.vol_adjust_pft(
-        [
-            Linear(ppp, pp, 30/8),  # line 1
-            Linear(pp, ppp, 9/8),   # line 2
-            Linear(ppp, pp, 18/8),
-            Linear(pp, p, 9/8),
-            Linear(p, mp, 27/8, closed_end=False),    # line 3
-            Linear(p, ppp, 17/8),   # line 4
-            Linear(ppp, pp, 15/8),
-            Linear(pp, f, 24/8),    # line 5
-            Linear(f, ppp, 24/8),   # line 6
-            Linear(ppp, ppp, 6/8)
-        ]
+        vol('ppp 30/8 pp \
+            pp 9/8 ppp 18/8 pp 9/8 p \
+            p 27/8 mp \
+            [ p 17/8 ppp 15/8 pp \
+            pp 24/8 f \
+            f 24/8 ppp \
+            ppp 6/8 ppp \
+        ')
     )
 
     # bring out inner voices
@@ -146,18 +143,13 @@ def set_vol(ns):
 
 def set_tempo(ns):
     ns.tempo_adjust_pft(
-        [
-            Linear(65, 60, 30/8),   # line 1
-            Linear(65, 55, 9/8),    # line 2
-            Linear(60, 70, 9/8),
-            Linear(70, 80, 18/8),
-            Linear(65, 55, 27/8),   # line 3
-            Linear(55, 50, 24/8),   # line 4
-            # at this point the score has dotted quarter = quarter
-            Linear(30, 40, 6/8),
-            Linear(40, 50, 24/8),   # line 5
-            Linear(50, 30, 30/8)    # line 6
-        ]
+        tempo('65 30/8 60 \
+            65 9/8 55 60 9/8 70 18/8 80 \
+            65 27/8 55 \
+            55 24/8 50 |time_change 30 6/8 40 \
+            40 24/8 50 \
+            50 30/8 30 \
+        ')
     )
 
 # timing adjustment -  do this after overall tempo

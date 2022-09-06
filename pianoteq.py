@@ -15,18 +15,22 @@
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
 
-# play (or render to .WAV) a MIDI file using pianoteq
+# play (or render to .WAV) a MIDI file using Pianoteq
 # see https://github.com/davidpanderson/Numula/wiki/Pianoteq
 
-import platform, subprocess
+import platform, subprocess, os
 
 s = platform.system()
 if s == 'Windows':
     prog = "c:/program files/modartt/pianoteq 7/pianoteq 7.exe"
 elif s == 'Darwin':
     prog = "/Applications/Pianoteq 7/Pianoteq 7.app/Contents/MacOS/Pianoteq 7"
+elif s == 'Linux':
+    prog = './Pianoteq 7/amd64/Pianoteq 7'
 else:
     raise Exception("OS not supported")
+if not os.path.isfile(prog):
+    raise Exception('Pianoteq missing: %s'%prog)
     
 def play(file, preset=None):
     p = ' --preset "%s"'%preset if preset else ''
