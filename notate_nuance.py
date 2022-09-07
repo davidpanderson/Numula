@@ -21,6 +21,7 @@
 import nscore
 from nuance import *
 from notate import *
+from vol_name import *
 
 # continuous volume change
 # e.g.: 'Linear *2 f 1/4 pp ] mp 2/4 p *'
@@ -29,14 +30,36 @@ from notate import *
 # repeat this twice
 
 vol_name = {
+    'pppp': pppp,
+    'pppp_': pppp_,
+    '_ppp': _ppp,
     'ppp': ppp,
+    'ppp_': ppp_,
+    '_pp': _pp,
     'pp': pp,
+    'pp_': pp_,
+    '_p': _p,
     'p': p,
+    'p_': p_,
+    '_mp': _mp,
     'mp': mp,
+    'mp_': mp_,
+    'mm': mm,
+    '_mf': _mf,
     'mf': mf,
+    'mf_': mf_,
+    '_f': _f,
     'f': f,
+    'f_': f_,
+    '_ff': _ff,
     'ff': ff,
-    'fff': fff
+    'ff_': ff_,
+    '_fff': _fff,
+    'fff': fff,
+    'fff_': fff_,
+    '_ffff': _ffff,
+    'ffff': ffff
+
 }
 
 vol_keys = vol_name.keys()

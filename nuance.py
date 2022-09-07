@@ -238,15 +238,6 @@ class PftValue:
             
 # ------------------- Dynamics ------------------------
 
-ppp = .15
-pp = .4
-p = .65
-mp = .9
-mf = 1.05
-f = 1.3
-ff = 1.55
-fff = 1.8
-
 # adjust volume of selected notes by PFT starting at t0
 def vol_adjust_pft(self, pft, t0=0, pred=None):
     pft_check_closure(pft)

@@ -4,6 +4,7 @@ from nscore import *
 from notate_score import *
 from nuance import *
 from notate_nuance import *
+from vol_name import *
 import pianoteq
 
 def make_score():
@@ -334,8 +335,6 @@ def make_score():
     #ns.append_score([lh_212_299_copy, rh_212_299_copy])
     #ns.append_score([rh_300_end, lh_300_end])
     #ns.insert_pedal(PedalUse(92*2/4, 6*2/4))
-    ns.set_tempo(144)
-    ns.done()
     return ns
 
 # volume:
@@ -344,36 +343,54 @@ def make_score():
 # the other for single-note and short-scale adjustment
 
 def v20_49(ns):
-    rh1 = vol(' \
+    rhv = vol(' \
         *2 *3 pp 3/4 mp 1/4 pp * 2/4 p 2/4 pp * \
-        |36 pp 4/4 p 4/4 p \
+        |36 *2 [ pp 8/4 p * \
         |44 [ pp 6/4 mp 2/4 pp 4/4 pp \
     ')
-    #print(*rh1, sep='\n')
-    rh2 = accents(' \
+    print(*rhv, sep='\n')
+    pft_verify_dur(rhv, 60/4)
+    rha = accents(' \
         *2 \
             *3 1. 1/4 1.3 1/4 1.2 1/4 1.1 1/4 * \
             1/8 1.4 1/4 1.4 1/4 1.4 1/4 1.4 1/8 \
         * \
+        |36 *2 *3 1 1/4 1.3 1/4 * 1.3 1/4 1.3 1/4 * \
+        |44 *3 1. 1/4 1.3 1/4 * 1 2/4 *4 1.3 1/4 * \
     ')
-    pft_verify_dur(rh1, 52/4)
-    ns.vol_adjust_pft(rh1, 0, lambda n: 'rh' in n.tags)
-    ns.vol_adjust_pft(rh2, 0, lambda n: 'rh' in n.tags)
+    pft_verify_dur(rha, 60/4)
+    ns.vol_adjust_pft(rhv, 0, lambda n: 'rh' in n.tags)
+    ns.vol_adjust_pft(rha, 0, lambda n: 'rh' in n.tags)
         
-    lh1 = vol('mp 60/4 mf')
-    ns.vol_adjust_pft(lh1, 0, lambda n: 'lh' in n.tags)
+    lhv = vol('mp 60/4 mf')
+    ns.vol_adjust_pft(lhv, 0, lambda n: 'lh' in n.tags)
     
 def t20_49(ns):
-    x = tempo('*2 *4 60 2/4 65 2/4 55 .1p * *')
+    x = tempo(' \
+        *2 *4 60 2/4 65 2/4 55 .1p * * \
+        |36 *2 60 4/4 65 4/4 60 * \
+        60 4/4 65 50 4/4 60 4/4 60 \
+    ')
+    pft_verify_dur(x, 60/4)
     ns.tempo_adjust_pft(x, 0)
+
+def p20_49(ns):
+    rh = pedal('- 32/4 *2 *3 + 2/4 * + 1/4 + 1/4 * \
+        |44 *3 + 2/4 * *4 + 1/8 * *2 + 2/4 * \
+    ')
+    pft_verify_dur(rh, 60/4)
+    ns.vsustain_pft(rh, 0, lambda n: 'rh' in n.tags)
     
 def main():
     ns = make_score()
+    ns.set_tempo(144)
+    p20_49(ns)
+    ns.done()
     v20_49(ns)
     t20_49(ns)
     ns.t_random_normal(.010, 2)
     #ns.perf_dur_rel(1.3)
-    #print(ns)
+    print(ns)
     ns.write_midi('data/app57.midi')
     pianoteq.play('data/app57.midi')
 

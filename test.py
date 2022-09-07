@@ -2,6 +2,7 @@ import random
 from nscore import *
 from notate_score import *
 from nuance import *
+from vol_name import *
 import pianoteq
 
 def scale():

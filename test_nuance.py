@@ -18,6 +18,7 @@ from nscore import *
 from notate_score import *
 from nuance import *
 from notate_nuance import *
+from vol_name import *
 import pianoteq
 
 # various timing-related functions
