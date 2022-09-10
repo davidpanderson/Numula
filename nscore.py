@@ -317,6 +317,7 @@ class Score:
                     n2.perf_dur = md
                     end_time[note.pitch] = note.perf_time+md
                 else:
+                    '''
                     if note.perf_time < end_time[note.pitch] - epsilon:
                         # show warning if overlap is nontrivial
                         print("overlap on %s: notes [%f %f] and [%f %f]"%(
@@ -324,6 +325,7 @@ class Score:
                             n2.perf_time, n2.perf_time+n2.perf_dur,
                             note.perf_time, note.perf_time+note.perf_dur
                         ))
+                    '''
                     # end earlier note early
                     n2.perf_dur = (note.perf_time - n2.perf_time) - midi_eps
                     out.append(note)

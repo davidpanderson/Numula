@@ -139,7 +139,7 @@ def check_pitch(items, i, pitch, time):
         raise Exception('illegal pitch %d at time %f'%(pitch, time))
     
 # textual note specification
-def n(s, _tags=[]):
+def n(s, _tags=[], debug=False, mstart=0, mdur=1):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
     ns = nscore.Score()
@@ -152,6 +152,7 @@ def n(s, _tags=[]):
     items = s.split()
     ped_start = -1
     ped_start_index = -1
+    dt = 0
     items = expand_all(items)
     for i in range(len(items)):
         t = items[i]
@@ -167,8 +168,12 @@ def n(s, _tags=[]):
                 raise Exception("] not in chord")
             in_chord = False
             ns.advance_time(dur)
+            dt += dur
+        elif t[0] == '|':
+            comment(t, debug, dt, mstart, mdur)
         elif t == '_':
             ns.advance_time(-dur)
+            dt -= dur
         elif '/' in t:
             # rhythm notation
             a = t.split('/')
@@ -232,6 +237,7 @@ def n(s, _tags=[]):
                 ns.append_note(nscore.Note(0, d, pitch+p, vol, tags))
             if not in_chord:
                 ns.advance_time(dur)
+                dt += dur
             cur_pitch = pitch
     if in_chord:
         raise Exception('unmatched [')

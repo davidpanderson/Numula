@@ -75,7 +75,7 @@ GOT_V1 = 3
 GOT_LB = 4
 GOT_RB = 5
 
-def vol(s):
+def vol(s, debug=False, mstart=0, mdur=1):
     items = s.split()
     items = expand_all(items)
     state = INIT
@@ -84,10 +84,12 @@ def vol(s):
     got_rb = False
     got_lb = False
     segtype = SEGTYPE_LINEAR
-    
+    dt = 0
     for i in range(len(items)):
         t = items[i]
-        if '/' in t:
+        if t[0] == '|':
+            comment(t, debug, dt, mstart, mdur)
+        elif '/' in t:
             if state != GOT_V0:
                 show_context(items, i)
                 raise Exception('unexpected duration')
@@ -120,16 +122,23 @@ def vol(s):
             except:
                 show_context(items, i)
                 raise Exception('bad curvature')
-        elif '.' in t or t in vol_keys:
-            if '.' in t:
-                v = float(t)
-            else:
+        else:
+            if t in vol_keys:
                 v = vol_name[t]
+            else:
+                try:
+                    v = float(t)
+                except:
+                    show_context(items, i)
+                    raise Exception('unrecognized item')
             if state == INIT or state == GOT_V0:
                 v0 = v
                 state = GOT_V0
             elif state == GOT_DUR:
                 v1 = v
+                if not got_lb and not got_rb and last_seg and last_seg.y1 != v0:
+                    show_context(items, i)
+                    raise Exception('Inconsistent values: %f and %f'%(last_seg.y1, v0))
                 if segtype == SEGTYPE_LINEAR:
                     last_seg = Linear(v0, v1, dur, closed_end=True)
                 else:
@@ -143,15 +152,13 @@ def vol(s):
                 pft.append(last_seg)
                 v0 = v1
                 state = GOT_V0
+                dt += dur
             elif state == GOT_V1:
                 if v != v0 and not got_rb and not got_lb:
                     show_context(items, i)
                     raise Exception('inconsistent volumes')
                 v0 = v
                 state = GOT_V0
-        else:
-            show_context(items, i)
-            raise Exception('unrecognized item')
     pft_check_closure(pft)
     return pft
 
@@ -161,9 +168,10 @@ def vol(s):
 
 # e.g. '1/8 1.2 1/4 1.2 1/4 1.2 1/8'
 
-def accents(s):
+def accents(s, debug=False, mstart=0, mdur=1):
     items = s.split()
     items = expand_all(items)
+    dt = 0
     pft = []
     for i in range(len(items)):
         t = items[i]
@@ -177,13 +185,19 @@ def accents(s):
                 raise Exception('bad values in %s'%t)
             dur = num/denom
             pft.append(Unity(dur))
+            dt += dur
+        elif t[0] == '|':
+            comment(t, debug, dt, mstart, mdur)
         else:
-            try:
-                val = float(t)
-            except:
-                show_context(items, i)
-                raise Exception('bad value')
-            pft.append(Accent(val))
+            if t in vol_keys:
+                v = vol_name[t]
+            else:
+                try:
+                    v = float(t)
+                except:
+                    show_context(items, i)
+                    raise Exception('unrecognized item')
+            pft.append(Accent(v))
     return pft
 
 #x = accents('1/8 1.2 1/4 1.3 1/2')
@@ -191,12 +205,13 @@ def accents(s):
 
 # e.g.: 'linear 60 8/4 80 p0.1 60 3/4 120 0.2p'
 
-def tempo(s):
+def tempo(s, debug=False, mstart=0, mdur=1):
     items = s.split()
     items = expand_all(items)
     pft = []
     t0 = None
     dur = None
+    dt = 0
     segtype = SEGTYPE_LINEAR
     for i in range(len(items)):
         t = items[i]
@@ -212,6 +227,8 @@ def tempo(s):
                 show_context(items, i)
                 raise Exception('bad values in %s'%t)
             dur = num/denom
+        elif t[0] == '|':
+            comment(t, debug, dt, mstart, mdur)
         elif t[0] == 'p':
             try:
                 val = float(t[1:])
@@ -247,6 +264,7 @@ def tempo(s):
                 else:
                     seg = ExpCurve(curvature, t0, val, dur)
                 pft.append(seg)
+                dt += dur
                 dur = None
             t0 = val
     return pft
@@ -255,11 +273,12 @@ def tempo(s):
 #print(*x, sep='\n')
 
 # e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
-def pedal(s):
+def pedal(s, debug=False, mstart=0, mdur=1):
     items = s.split()
     pft = []
     pedal_type = pedal_sustain
     on = False
+    dt = 0
     if '*' in items:
         items = expand_iter(items)
     for i in range(len(items)):
@@ -276,7 +295,10 @@ def pedal(s):
             if on:
                 pft.append(PedalSeg(dur, 1, pedal_type))
             else:
-                pft.append(PedalSeg(dur, 0, pedal_type))      
+                pft.append(PedalSeg(dur, 0, pedal_type))
+            dt += dur
+        elif t[0] == '|':
+            comment(t, debug, dt, mstart, mdur)
         elif t == '-':
             on = False
         elif t == '+':

@@ -28,9 +28,6 @@ def show_context(items, i):
             print(items[j], end=' ')
     print('')
 
-def strip_comments(items):
-    return [x for x in items if x[0] != '|']
-
 # expand '*4 foo *' into 'foo foo foo foo', with nesting
 #
 def expand_iter(items):
@@ -92,5 +89,15 @@ def expand_eval(items):
             out.append(t)
     return out
 
+# if item is of the form |M (measure number)
+# verify that dt corresponds to that measure
+def comment(item, debug, dt, mstart, mdur):
+    if not debug: return
+    if not item[1:].isnumeric(): return
+    m1 = float(item[1:])
+    m2 = mstart + dt/mdur
+    if abs(m1-m2) > 1e-5:
+        raise Exception('Inconsistent measure number: %f != %f'%(m1, m2))
+    
 def expand_all(items):
-    return expand_iter(expand_eval(strip_comments(items)))
+    return expand_iter(expand_eval(items))

@@ -326,7 +326,7 @@ def make_score():
     lh_212_299_copy = copy.deepcopy(lh_212_299)
     rh_212_299_copy = copy.deepcopy(rh_212_299)
     #ns.append_score([rh_20_49, lh_20_49])
-    ns.append_score(rh_20_49)
+    ns.append_score(lh_50_117)
     #ns.append_score([lh_50_117, rh_50_117])
     #ns.append_score([lh_118_211, rh_118_211])
     #ns.append_score([lh_212_299, rh_212_299])
@@ -344,26 +344,37 @@ def make_score():
 
 def v20_49(ns):
     rhv = vol(' \
-        *2 *3 pp 3/4 mp 1/4 pp * 2/4 p 2/4 pp * \
+        *2 *3 ppp 3/4 p 1/4 ppp * 2/4 p 2/4 ppp * \
         |36 *2 [ pp 8/4 p * \
-        |44 [ pp 6/4 mp 2/4 pp 4/4 pp \
+        |44 [ pp 6/4 p 2/4 pp 4/4 pp \
     ')
     print(*rhv, sep='\n')
     pft_verify_dur(rhv, 60/4)
     rha = accents(' \
         *2 \
-            *3 1. 1/4 1.3 1/4 1.2 1/4 1.1 1/4 * \
-            1/8 1.4 1/4 1.4 1/4 1.4 1/4 1.4 1/8 \
+            *3 mm 1/4 f 1/4 mf_ 1/4 mf 1/4 * \
+            1/8 f 1/4 f 1/4 f 1/4 f 1/8 \
         * \
-        |36 *2 *3 1 1/4 1.3 1/4 * 1.3 1/4 1.3 1/4 * \
-        |44 *3 1. 1/4 1.3 1/4 * 1 2/4 *4 1.3 1/4 * \
+        |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
+        |44 *3 mm 1/4 _f 1/4 * mm 2/4 *4 _f 1/4 * \
     ')
     pft_verify_dur(rha, 60/4)
     ns.vol_adjust_pft(rhv, 0, lambda n: 'rh' in n.tags)
     ns.vol_adjust_pft(rha, 0, lambda n: 'rh' in n.tags)
         
-    lhv = vol('mp 60/4 mf')
+    lhv = vol(' \
+        *2 p 8/4 mp 8/4 p * \
+        |36 *3 p 4/4 mp 4/4 p * p 2/4 mp 2/4 p \
+    ')
+    pft_verify_dur(lhv, 60/4)
+    lha = accents(' \
+        *3 mf 4/4 * 4/4 \
+        |28 *3 2/4 f 2/4 * 4/4 \
+        |36 *3 4/4 f 4/4 * *2 mf 2/4 * \
+    ')
+    pft_verify_dur(lha, 60/4)
     ns.vol_adjust_pft(lhv, 0, lambda n: 'lh' in n.tags)
+    ns.vol_adjust_pft(lha, 0, lambda n: 'lh' in n.tags)
     
 def t20_49(ns):
     x = tempo(' \
@@ -375,22 +386,53 @@ def t20_49(ns):
     ns.tempo_adjust_pft(x, 0)
 
 def p20_49(ns):
+    # virtual pedal RH arpeggios starting in m16
     rh = pedal('- 32/4 *2 *3 + 2/4 * + 1/4 + 1/4 * \
         |44 *3 + 2/4 * *4 + 1/8 * *2 + 2/4 * \
     ')
     pft_verify_dur(rh, 60/4)
     ns.vsustain_pft(rh, 0, lambda n: 'rh' in n.tags)
-    
+
+def v50_117(ns):
+    lhv = vol(' \
+        *2 p 4/4 mp 2/4 mp 2/4 p * \
+        |58 [ mp 4/4 mf 4/4 mp 4/4 mf \
+        |64 ] *5 mp 2/4 mf 2/4 mp * \
+        |74 mp 4/4 mf \
+        |76 *2 *2 [ mf 1/2 mp 1/2 mf * [ mp 4/2 f 2/2 mp * \
+        |96 *2 [ mf 4/2 f * ] \
+        |104 *4 mf 1/2 f 1/2 mf * \
+        |112 [ ff 6/2 ff \
+    ', debug=True, mstart=50, mdur=2/4)
+    pft_verify_dur(lhv, 68/2)
+    ns.vol_adjust_pft(lhv, 0, lambda n: 'lh' in n.tags)
+
+def t50_117(ns):
+    pass
+def p50_117(ns):
+    lh = pedal(' \
+        *2 + 1/4 1/4 1/4 1/4 1/4 - 3/4 * \
+        |58 + 1/4 1/4 1/4 1/4 - 4/4 + 1/4 - 1/4 + 2/4 \
+        |64 + 4/4 4/4 *2 + 2/4 1/4 1/4 * \
+        |72 *2 + 4/4 * \
+        |76 - 84/4 \
+    ')
+    pft_verify_dur(lh, 68/2)
+    ns.vsustain_pft(lh, 0, lambda n: 'lh' in n.tags)
+
 def main():
     ns = make_score()
     ns.set_tempo(144)
-    p20_49(ns)
+    #p20_49(ns)
+    p50_117(ns)
     ns.done()
-    v20_49(ns)
-    t20_49(ns)
-    ns.t_random_normal(.010, 2)
+    #v20_49(ns)
+    #t20_49(ns)
+    v50_117(ns)
+    t50_117(ns)
+    ns.t_random_normal(.008, 2)
     #ns.perf_dur_rel(1.3)
-    print(ns)
+    #print(ns)
     ns.write_midi('data/app57.midi')
     pianoteq.play('data/app57.midi')
 
