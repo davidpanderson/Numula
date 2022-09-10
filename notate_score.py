@@ -139,7 +139,7 @@ def check_pitch(items, i, pitch, time):
         raise Exception('illegal pitch %d at time %f'%(pitch, time))
     
 # textual note specification
-def n(s, _tags=[], debug=False, mstart=0, mdur=1):
+def n(s, mdur=0):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
     ns = nscore.Score()
@@ -147,7 +147,7 @@ def n(s, _tags=[], debug=False, mstart=0, mdur=1):
     in_chord = False
     vol = .5
     dur = 1/4
-    tags = _tags[:]
+    tags = []
     par = []
     items = s.split()
     ped_start = -1
@@ -170,7 +170,7 @@ def n(s, _tags=[], debug=False, mstart=0, mdur=1):
             ns.advance_time(dur)
             dt += dur
         elif t[0] == '|':
-            comment(t, debug, dt, mstart, mdur)
+            comment(t, dt, mdur)
         elif t == '_':
             ns.advance_time(-dur)
             dt -= dur

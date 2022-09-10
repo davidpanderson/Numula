@@ -91,10 +91,15 @@ def expand_eval(items):
 
 # if item is of the form |M (measure number)
 # verify that dt corresponds to that measure
-def comment(item, debug, dt, mstart, mdur):
-    if not debug: return
+mstart = 0
+def comment(item, dt, mdur):
+    global mstart
     if not item[1:].isnumeric(): return
+    if mdur == 0: return
     m1 = float(item[1:])
+    if dt == 0:
+        mstart = m1
+        return
     m2 = mstart + dt/mdur
     if abs(m1-m2) > 1e-5:
         raise Exception('Inconsistent measure number: %f != %f'%(m1, m2))

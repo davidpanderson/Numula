@@ -344,58 +344,58 @@ def make_score():
 
 def v20_49(ns):
     rhv = vol(' \
-        *2 *3 ppp 3/4 p 1/4 ppp * 2/4 p 2/4 ppp * \
+        |20 *2 *3 ppp 3/4 p 1/4 ppp * 2/4 p 2/4 ppp * \
         |36 *2 [ pp 8/4 p * \
         |44 [ pp 6/4 p 2/4 pp 4/4 pp \
-    ')
-    print(*rhv, sep='\n')
-    pft_verify_dur(rhv, 60/4)
+        |50 \
+    ', 2/4)
     rha = accents(' \
-        *2 \
+        |20 *2 \
             *3 mm 1/4 f 1/4 mf_ 1/4 mf 1/4 * \
             1/8 f 1/4 f 1/4 f 1/4 f 1/8 \
         * \
         |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
         |44 *3 mm 1/4 _f 1/4 * mm 2/4 *4 _f 1/4 * \
-    ')
-    pft_verify_dur(rha, 60/4)
+        |50 \
+    ', 2/4)
     ns.vol_adjust_pft(rhv, 0, lambda n: 'rh' in n.tags)
     ns.vol_adjust_pft(rha, 0, lambda n: 'rh' in n.tags)
         
     lhv = vol(' \
-        *2 p 8/4 mp 8/4 p * \
+        |20 *2 p 8/4 mp 8/4 p * \
         |36 *3 p 4/4 mp 4/4 p * p 2/4 mp 2/4 p \
-    ')
-    pft_verify_dur(lhv, 60/4)
+        |50 \
+    ', 2/4)
     lha = accents(' \
-        *3 mf 4/4 * 4/4 \
+        |20 *3 mf 4/4 * 4/4 \
         |28 *3 2/4 f 2/4 * 4/4 \
         |36 *3 4/4 f 4/4 * *2 mf 2/4 * \
+        |50 \
     ')
-    pft_verify_dur(lha, 60/4)
     ns.vol_adjust_pft(lhv, 0, lambda n: 'lh' in n.tags)
     ns.vol_adjust_pft(lha, 0, lambda n: 'lh' in n.tags)
     
 def t20_49(ns):
     x = tempo(' \
-        *2 *4 60 2/4 65 2/4 55 .1p * * \
+        |20 *2 *4 60 2/4 65 2/4 55 .1p * * \
         |36 *2 60 4/4 65 4/4 60 * \
         60 4/4 65 50 4/4 60 4/4 60 \
-    ')
-    pft_verify_dur(x, 60/4)
+        |50 \
+    ', 2/4)
     ns.tempo_adjust_pft(x, 0)
 
 def p20_49(ns):
     # virtual pedal RH arpeggios starting in m16
-    rh = pedal('- 32/4 *2 *3 + 2/4 * + 1/4 + 1/4 * \
+    rh = pedal(' \
+        |20 - 32/4 *2 *3 + 2/4 * + 1/4 + 1/4 * \
         |44 *3 + 2/4 * *4 + 1/8 * *2 + 2/4 * \
-    ')
-    pft_verify_dur(rh, 60/4)
+        |50 \
+    ', 2/4)
     ns.vsustain_pft(rh, 0, lambda n: 'rh' in n.tags)
 
 def v50_117(ns):
     lhv = vol(' \
-        *2 p 4/4 mp 2/4 mp 2/4 p * \
+        |50 *2 p 4/4 mp 2/4 mp 2/4 p * \
         |58 [ mp 4/4 mf 4/4 mp 4/4 mf \
         |64 ] *5 mp 2/4 mf 2/4 mp * \
         |74 mp 4/4 mf \
@@ -403,21 +403,21 @@ def v50_117(ns):
         |96 *2 [ mf 4/2 f * ] \
         |104 *4 mf 1/2 f 1/2 mf * \
         |112 [ ff 6/2 ff \
-    ', debug=True, mstart=50, mdur=2/4)
-    pft_verify_dur(lhv, 68/2)
+        |118 \
+    ', 2/4)
     ns.vol_adjust_pft(lhv, 0, lambda n: 'lh' in n.tags)
 
 def t50_117(ns):
     pass
 def p50_117(ns):
     lh = pedal(' \
-        *2 + 1/4 1/4 1/4 1/4 1/4 - 3/4 * \
+        |50 *2 + 1/4 1/4 1/4 1/4 1/4 - 3/4 * \
         |58 + 1/4 1/4 1/4 1/4 - 4/4 + 1/4 - 1/4 + 2/4 \
         |64 + 4/4 4/4 *2 + 2/4 1/4 1/4 * \
         |72 *2 + 4/4 * \
         |76 - 84/4 \
-    ')
-    pft_verify_dur(lh, 68/2)
+        |118 \
+    ', 2/4)
     ns.vsustain_pft(lh, 0, lambda n: 'lh' in n.tags)
 
 def main():

@@ -75,7 +75,7 @@ GOT_V1 = 3
 GOT_LB = 4
 GOT_RB = 5
 
-def vol(s, debug=False, mstart=0, mdur=1):
+def vol(s, mdur=0):
     items = s.split()
     items = expand_all(items)
     state = INIT
@@ -88,7 +88,7 @@ def vol(s, debug=False, mstart=0, mdur=1):
     for i in range(len(items)):
         t = items[i]
         if t[0] == '|':
-            comment(t, debug, dt, mstart, mdur)
+            comment(t, dt, mdur)
         elif '/' in t:
             if state != GOT_V0:
                 show_context(items, i)
@@ -168,7 +168,7 @@ def vol(s, debug=False, mstart=0, mdur=1):
 
 # e.g. '1/8 1.2 1/4 1.2 1/4 1.2 1/8'
 
-def accents(s, debug=False, mstart=0, mdur=1):
+def accents(s, mdur=0):
     items = s.split()
     items = expand_all(items)
     dt = 0
@@ -187,7 +187,7 @@ def accents(s, debug=False, mstart=0, mdur=1):
             pft.append(Unity(dur))
             dt += dur
         elif t[0] == '|':
-            comment(t, debug, dt, mstart, mdur)
+            comment(t, dt, mdur)
         else:
             if t in vol_keys:
                 v = vol_name[t]
@@ -205,7 +205,7 @@ def accents(s, debug=False, mstart=0, mdur=1):
 
 # e.g.: 'linear 60 8/4 80 p0.1 60 3/4 120 0.2p'
 
-def tempo(s, debug=False, mstart=0, mdur=1):
+def tempo(s, mdur=0):
     items = s.split()
     items = expand_all(items)
     pft = []
@@ -228,7 +228,7 @@ def tempo(s, debug=False, mstart=0, mdur=1):
                 raise Exception('bad values in %s'%t)
             dur = num/denom
         elif t[0] == '|':
-            comment(t, debug, dt, mstart, mdur)
+            comment(t, dt, mdur)
         elif t[0] == 'p':
             try:
                 val = float(t[1:])
@@ -273,7 +273,7 @@ def tempo(s, debug=False, mstart=0, mdur=1):
 #print(*x, sep='\n')
 
 # e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
-def pedal(s, debug=False, mstart=0, mdur=1):
+def pedal(s, mdur=1):
     items = s.split()
     pft = []
     pedal_type = pedal_sustain
@@ -298,7 +298,7 @@ def pedal(s, debug=False, mstart=0, mdur=1):
                 pft.append(PedalSeg(dur, 0, pedal_type))
             dt += dur
         elif t[0] == '|':
-            comment(t, debug, dt, mstart, mdur)
+            comment(t, dt, mdur)
         elif t == '-':
             on = False
         elif t == '+':
