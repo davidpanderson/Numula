@@ -25,12 +25,12 @@ import pianoteq
 def test1():
     ns = n('c d e [f a c] g a b c')
     ns.done()
-    ns.tempo_adjust_pft([Linear(60, 120, 8/4)])
-    ns.pause_before(3/4, .7)
-    ns.roll(3/4, [-.2, -.1, 0], True, True)
+    #ns.tempo_adjust_pft([Linear(60, 120, 8/4)])
+    ns.pause_before(3/4, .7, False)
+    #ns.roll(3/4, [-.2, -.1, 0], True, True)
     print(ns)
     pianoteq.play_score(ns)
-#test1()
+test1()
 
 def test2():
     ns = Score()

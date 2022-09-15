@@ -467,26 +467,53 @@ def sustain(self, t0, t1, pred=None):
         if end < t1:
             n.dur = t1 - n.time
 
-def pause_before(self, t, dt):
+# insert a pause of dt before time t.
+# If connect is True, extend earlier notes ending at t to preserve legato
+def pause_before(self, t, dt, connect=True):
     for note in self.notes:
         if note.time + note.dur < t-epsilon:
+            # note ends before t
             continue
         if note.time < t-epsilon:
-            note.perf_dur += dt
+            # note starts before t and ends t or later
+            if connect:
+                note.perf_dur += dt
         else:
+            # note starts t or later
             note.perf_time += dt
-            note.perf_dur += dt
+    for pedal in self.pedals:
+        if pedal.time + pedal.dur < t-epsilon:
+            continue
+        if pedal.time < t-epsilon:
+            if connect:
+                pedal.perf_dur += dt
+        else:
+            pedal.perf_time += dt
 
+# pause after notes at t.
 def pause_after(self, t, dt):
     for note in self.notes:
         if note.time < t-epsilon:
+            # note starts before t
             if note.time + note.dur > t + epsilon:
+                # not ends after t - elongate it
                 note.perf_dur += dt
             continue
         if note.time > t+epsilon:
+            # note starts after t
             note.perf_time += dt
         else:
+            # note starts at t
             note.perf_dur += dt
+    for pedal in self.pedals:
+        if pedal.time < t-epsilon:
+            if pedal.time + pedal.dur > t + epsilon:
+                pedal.perf_dur += dt
+            continue
+        if pedal.time > t+epsilon:
+            pedal.perf_time += dt
+        else:
+            pedal.perf_dur += dt
                 
 def roll_aux(chord, offsets, is_up, is_delay):
     if is_up:

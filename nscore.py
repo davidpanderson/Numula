@@ -178,6 +178,7 @@ class Score:
             raise Exception('no notes')
         self.done_called = True
         self.notes.sort(key=lambda x: x.time)
+        self.pedals.sort(key=lambda x: x.time)
         # set perf time and dur in such a way that playback will be at the
         # tempo given by self.tempo.
         # These will be modified if you use nuance functions.
@@ -299,8 +300,12 @@ class Score:
         end_time = [-1]*128
         cur_note = [None]*128
         out = []
-        midi_eps = .001
+        midi_eps = .1
             # make sure MIDI events on a given pitch are separated by this
+            # Originally this was .001.
+            # But it turns out that with Pianoteq, if a note is playing loud,
+            # that loudness will bleed into a subsequent soft note
+            # unless the two are separated by something like this.
         for note in self.notes:
             if note.perf_time < end_time[note.pitch]+midi_eps:
                 # note start while a note of this pitch is already sounding
@@ -317,16 +322,12 @@ class Score:
                     n2.perf_dur = md
                     end_time[note.pitch] = note.perf_time+md
                 else:
-                    '''
-                    if note.perf_time < end_time[note.pitch] - epsilon:
+                    if False and note.perf_time < end_time[note.pitch] + midi_eps:
                         # show warning if overlap is nontrivial
-                        print("overlap on %s: notes [%f %f] and [%f %f]"%(
-                            pitch_name(note.pitch),
-                            n2.perf_time, n2.perf_time+n2.perf_dur,
-                            note.perf_time, note.perf_time+note.perf_dur
-                        ))
-                    '''
-                    # end earlier note early
+                        print("overlap on %s:"%(pitch_name(note.pitch)))
+                        print(n2)
+                        print(note)
+                   # end earlier note early
                     n2.perf_dur = (note.perf_time - n2.perf_time) - midi_eps
                     out.append(note)
                     end_time[note.pitch] = note.perf_time+note.perf_dur
@@ -443,7 +444,7 @@ class Score:
         for note in notes2:
             if ped_ind == len(self.pedals):
                 break
-            if cur_ped.sostenuto:
+            if cur_ped.pedal_type == pedal_sostenuto:
                 if note.time + note.dur < cur_ped.time - epsilon:
                     continue
                 if note.time > cur_ped.time + epsilon:

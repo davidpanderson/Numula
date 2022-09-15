@@ -193,6 +193,7 @@ def n(s, mdur=0):
                 show_context(items, i)
                 raise Exception('no rests in chords')
             ns.advance_time(dur)
+            dt += dur
         elif t[0] == '(':
             tag = t[1:]
             if tag in tags:
