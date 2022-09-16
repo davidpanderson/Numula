@@ -488,3 +488,71 @@ pedal('- 1/4 + 1/8 + 1/4 - 4/4')
 textual notation
 'c b d <x> d g'
 means evaluate x
+
+volumes
+pppp    = .01
+pppp_   = .08
+_ppp    = .16
+ppp     = .23
+ppp_    = .30
+_pp     = .38
+pp      = .45
+pp_     = .52
+_p      = .60
+p       = .67
+p_      = .74
+_mp     = .82
+mp      = .89
+mp_     = .96
+mm      = 1
+_mf     = 1.04
+mf      = 1.11
+mf_     = 1.18
+_f      = 1.26
+f       = 1.33
+f_      = 1.40
+_ff     = 1.48
+ff      = 1.55
+ff_     = 1.62
+_fff    = 1.68
+fff     = 1.77
+fff_    = 1.84
+_ffff   = 1.92
+ffff    = 1.99
+
+=====================
+
+It would be good - both for efficiency and generality - to be able to
+create nuanced "sub-scores", and then combine them by either
+overlay or concatenation.
+
+This means that a score must have a notion of end time,
+both score time and perf time:
+where a score starts if we append it to this one.
+In score time this is ns.cur_time, but we need it in perf time too.
+To do this, create an "end marker" class.
+As time adjustments are made, they affect the end marker too.
+
+Also: eliminate the need for "done".
+
+What done() does:
+1) sort notes by score time
+2) set nchord and chord_pos for Notes
+3) initialize perf_time and perf_dur for Notes, based on tempo
+4) same, for pedal
+5) add measure offsets to Notes
+6) set bottom and top tags for Notes
+
+Can eliminate 3,4): initialize these when add to score;
+make tempo a constructor arg
+
+Instead maintain:
+Score.sorted
+    - set this to False each time we add anything to the score
+    - in any function that assumes notes are sorted,
+        or that can use selectors:
+        check flag; if false, sort/flag and set to true
+
+constraints
+using virtual sustain pedals must precede tempo adjustment
+    (need to know when notes end)

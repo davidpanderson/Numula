@@ -27,8 +27,8 @@ lh_20_49 = n('*2 #f2 1/4 f . . 3/16 . 1/16 +f * \
     #c3 1/4 [b- +b-] 3/16 . 1/16 #c6 [b- d-] 1/2 [b- d-] \
     1/8 [c b-] [--c -c] . [d- +d-] . [b- -b-] . [c +c] \
     |36 1/4 [--f +f] 3/16 . 1/16 [+f a-] 1/4 [a- f] 3/16 . 1/16 [a- f] \
-    2/4 [a- f c] 1/8 [c e g] . 1/4 . [-c -c] 3/16 . 1/16 [++g b-] \
-    1/4 [g b-] 3/16 . 1/16 [g b-] 2/4 [f g b-] \
+    1/2 [a- f c] 1/8 [c e g] . 1/4 . [-c -c] 3/16 . 1/16 [++g b-] \
+    1/4 [g b-] 3/16 . 1/16 [g b-] 1/2 [f g b-] \
     1/8 [f a-] . 1/4 . [f -f] 3/16 . 1/16 [++c e-] 1/4 [c e-] 3/16 . 1/16 [c e-] \
     |46 5/8 [b- c e-] 1/8 [d- b-] [c a-] [b- g] \
     1/4 [a- f c] 3/16 . 1/16 [f a-] 1/4 [b- g -c] 3/16 . 1/16 [e g] \
@@ -79,7 +79,7 @@ lh_50_117 = n('1/16 -f +c a- f c +a- f c a- +f c a- f +c a- f \
     1/8 --c 1/16 ++g e- +c g c g +e- c e- c +g e- g e- \
     |76 *2 3/8 [f a-] 1/8 [g e-] 1/4 [f d] [e- g] * \
     |80 3/8 [f a-] 1/8 [g e-] 1/4 [f d] [e- c] [d b] [c a] [c a-] [c g] \
-    2/4 f+ 1/4 _ a 2/4 [g -g] 1/4 _ _ +e- d \
+    1/2 f+ 1/4 _ a 1/2 [g -g] 1/4 _ _ +e- d \
     |86 *2 3/8 [d- a- f] 1/8 [e- g c] 1/4 [b f d] [e- g c] * \
     3/8 [d- a- f] 1/8 [e- g c] 1/4 [b f d] [c e- a-] \
     [g d b] [a c e- f+] [f d b] [c e-] \
@@ -118,18 +118,18 @@ rh_118_211 = n(' \
     |168 1/16 [g e c] par+12 c *7 . c * \
     #c5 *8 . c * #c6 *8 . c * #c7 *8 . c * par \
     |176 1/16 . d4- g- b- d- --b- d- g- \
-    |177 b- d- g- b- d- --b- d- g- b- d- g- b- 1/8 d- . 2/4 . \
+    |177 b- d- g- b- d- --b- d- g- b- d- g- b- 1/8 d- . 1/2 . \
     |180 1/16 . e4 g b- +e --c +g b- c e g b- +e --c +g b- \
     |182 c e g b- 1/8 +e . 46/4 . \
-    |206 2/4 [g3 b- c e] . *3 [g b- c e] * [g3 b- c e] \
+    |206 1/2 [g3 b- c e] . *3 [g b- c e] * [g3 b- c e] \
 ').tag('rh')
 
 lh_118_211 = n(' \
     1/4 ---f . . 3/16 . 1/16 +f 1/4 -f . . 3/16 . 1/16 +f \
     |122 1/4 -f 1/16 . . +++a b- *2 c d- c b- 1/8 a 1/16 a b- * \
-    c d- c b- a g- f e- *2 4/4 d- _ 1/16 . f *7 b- f * * \
-    |130 4/4 e- _ 1/16 . g- *7 c- g- * \
-    2/4 f _ 1/16 . b- *3 d- b- * 2/4 -e- _ 1/16 . f *3 +c -f * \
+    c d- c b- a g- f e- *2 2/2 d- _ 1/16 . f *7 b- f * * \
+    |130 2/2 e- _ 1/16 . g- *7 c- g- * \
+    1/2 f _ 1/16 . b- *3 d- b- * 1/2 -e- _ 1/16 . f *3 +c -f * \
     |134 *2 -d- ++f . .  1/4 -b- a b- _ _ _ 1/16 *3 . d- f d- * * \
     |138 -e- [++g- c-] *7 -e- [g- c-] * *4 -f [a c e-] * \
     -f a f a --f +f -f +f \
@@ -155,7 +155,7 @@ lh_118_211 = n(' \
     1/12 b3- +b- d- 1/16 e g b- d- 1/8 e . . . \
     |192 d4- e g b- d- e g b- d- e g b- d- e g b- \
     g e d- b- g e d- b- g e d- b- g e d- b- \
-    1/2 g e d- b- 4/4 g 47/16 c 1/16 c \
+    1/2 g e d- b- 2/2 g 47/16 c 1/16 c \
 ').tag('lh')
 
 rh_212_299 = n(' \
@@ -163,7 +163,7 @@ rh_212_299 = n(' \
     . d- g- b- d- e- d- c b- c b- a- g- a- g- f \
     |218 e f g e f g a- f g a- b- g e f g e \
     |220 1/4 f 1/8 . +e f g a- f . . . par+12 e f g a- f \
-    . . . f g- b- d- d- 1/4 d- 2/4 c 1/4 -e 1/16 f par \
+    . . . f g- b- d- d- 1/4 d- 1/2 c 1/4 -e 1/16 f par \
     |228 *2 #c5 c f a- c -c f a- . * \
     -b d +a- b -b d +a- b -b e g c -c e g \
     *3 . -c e g c -c e g * c -c e g c -c f a- \
@@ -250,25 +250,25 @@ rh_300_end = n(' \
     *2 g f e d- c b- a- g f g a- b- c d e f * \
     *8 g f+ * g f e d- c b- a- g \
     |presto \
-    2/4 [f c a-] [a- c +a-] \
+    1/2 [f c a-] [a- c +a-] \
     1/8 (stac *2 [g -b- g] [g b- +e] [c b- g] [g b- +e] \
     [f c a-] [a- c] [f c a-] [a- c +a-] * \
     [g -c g] [g c e-] [d b g] [g b +g] stac) \
     |315 1/4 -c 1/8 . 1/24 c d e \
-    2/4 [f c a-] [a- c +a-] \
+    1/2 [f c a-] [a- c +a-] \
     1/8 (stac *2 [g -b- g] [g b- +e] [c b- g] [g b- +e] \
     [f c a-] [a- c] [f c a-] [a- c +a-] * \
     [g -c g] [g c e-] [d b g] [g b +g] stac) \
     |316 1/4 -c 1/8 . 1/24 e- f g \
     |317 \
-    2/4 [a- e- c] [c e- +c] \
+    1/2 [a- e- c] [c e- +c] \
     1/8 (stac *2 [b- -d- b-] [b- d- g] [e- d- b-] [b- d- g] \
     [a- e- c] [c e-] [a- e- c] [c e- +c] * \
     [a e- c] [c e- f] [a e- c] [c e- +c] \
     [b- f d-] [d- f] [b- f d-] [d- f +d-] \
     [c -f c] [c f a-] [g e c] [c e +c] stac) \
     |325 1/4 -f 1/8 . 1/24 e- f g \
-    2/4 [a- e- c] [c e- +c] \
+    1/2 [a- e- c] [c e- +c] \
     1/8 (stac *2 [b- -d- b-] [b- d- g] [e- d- b-] [b- d- g] \
     [a- e- c] [c e-] [a- e- c] [c e- +c] * \
     [a e- c] [c e- f] [a e- c] [c e- +c] \
@@ -317,7 +317,7 @@ lh_300_end = n(' \
     1/8 --c 1/4 f 1/8 . c 1/4 -f 1/8 . c 1/4 -f 1/8 . c -f +c -f +c \
     |371 1/16 *12 -f a- c f * 1/8 *3 [-f a- c f] . . . * \
     |380 \
-', 2/4).tag('lh')
+', 1/2).tag('lh')
 
 # volume:
 # for each hand, we generate two PFTs:
@@ -326,67 +326,67 @@ lh_300_end = n(' \
 
 def v20_49(ns, t0):
     rhv = vol(' \
-        |20 *2 *3 ppp 3/4 p 1/4 ppp * 2/4 p 2/4 ppp * \
-        |36 *2 [ pp 8/4 p * \
-        |44 [ pp 6/4 p 2/4 pp 4/4 pp \
+        |20 *2 *3 ppp 3/4 p 1/4 ppp * 1/2 p 1/2 ppp * \
+        |36 *2 [ pp 4/2 p * \
+        |44 [ pp 6/4 p 1/2 pp 2/2 pp \
         |50 \
-    ', 2/4)
+    ', 1/2)
     rha = accents(' \
         |20 *2 \
             *3 mm 1/4 f 1/4 mf_ 1/4 mf 1/4 * \
             1/8 f 1/4 f 1/4 f 1/4 f 1/8 \
         * \
         |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
-        |44 *3 mm 1/4 _f 1/4 * mm 2/4 *4 _f 1/4 * \
+        |44 *3 mm 1/4 _f 1/4 * mm 1/2 *4 _f 1/4 * \
         |50 \
-    ', 2/4)
+    ', 1/2)
     ns.vol_adjust_pft(rhv, t0, lambda n: 'rh' in n.tags)
     ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
         
     lhv = vol(' \
-        |20 *2 p 8/4 mp 8/4 p * \
-        |36 *3 p 4/4 mp 4/4 p * p 1/2 mp 1/2 p \
+        |20 *2 p 4/2 mp 4/2 p * \
+        |36 *3 p 2/2 mp 2/2 p * p 1/2 mp 1/2 p \
         |50 \
-    ', 2/4)
+    ', 1/2)
     lha = accents(' \
         |20 *3 mf 2/2 * mf 1/2 mf 1/2 \
         |28 *3 1/2 mf 1/2 * 2/2 \
         |36 *3 2/2 mf 2/2 * *2 mp 1/2 * \
         |50 \
-    ', 2/4)
+    ', 1/2)
     ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
     
 def t20_49(ns, t0):
     x = tempo(' \
         |20 *2 *4 60 1/2 65 1/2 55 .1p * * \
-        |36 *2 60 4/4 65 4/4 60 * \
-        60 4/4 65 50 4/4 60 4/4 60 \
+        |36 *2 60 2/2 65 2/2 60 * \
+        60 2/2 65 50 2/2 60 2/2 60 \
         |50 \
-    ', 2/4)
+    ', 1/2)
     ns.tempo_adjust_pft(x, t0)
 
 def p20_49(ns, t0):
     # virtual pedal RH arpeggios starting in m16
     rh = pedal(' \
-        |20 - 32/4 *2 *3 + 1/2 * + 1/4 + 1/4 * \
+        |20 - 16/2 *2 *3 + 1/2 * + 1/4 + 1/4 * \
         |44 *3 + 1/2 * *4 + 1/8 * *2 + 1/2 * \
         |50 \
-    ', 2/4)
+    ', 1/2)
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
 
 def v50_117(ns, t0):
     lhv = vol(' \
-        |50 *2 p 4/4 mp 2/4 mp 1/2 p * \
-        |58 [ mp 4/4 mf 4/4 mp 4/4 mf \
-        |64 ] *5 mp 1/2 mf 2/4 mp * \
-        |74 mp 4/4 mf \
+        |50 *2 p 2/2 mp 1/2 mp 1/2 p * \
+        |58 [ mp 2/2 mf 2/2 mp 2/2 mf \
+        |64 ] *5 mp 1/2 mf 1/2 mp * \
+        |74 mp 2/2 mf \
         |76 *2 *2 [ mf 1/2 mp 1/2 mf * [ mp 4/2 f 2/2 mp * \
         |96 *2 [ mf 4/2 f * ] \
         |104 *4 mf 1/2 f 1/2 mf * \
         |112 [ ff 6/2 ff \
         |118 \
-    ', 2/4)
+    ', 1/2)
     ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
 
 def t50_117(ns, t0):
@@ -394,30 +394,30 @@ def t50_117(ns, t0):
 def p50_117(ns, t0):
     lh = pedal(' \
         |50 *2 + 1/4 1/4 1/4 1/4 1/4 - 3/4 * \
-        |58 + 1/4 1/4 1/4 1/4 - 4/4 + 1/4 - 1/4 + 2/4 \
-        |64 + 4/4 4/4 *2 + 2/4 1/4 1/4 * \
-        |72 *2 + 4/4 * \
-        |76 - 84/4 \
+        |58 + 1/4 1/4 1/4 1/4 - 2/2 + 1/4 - 1/4 + 1/2 \
+        |64 + 2/2 2/2 *2 + 1/2 1/4 1/4 * \
+        |72 *2 + 2/2 * \
+        |76 - 42/2 \
         |118 \
-    ', 2/4)
+    ', 1/2)
     ns.vsustain_pft(lh, t0, lambda n: 'lh' in n.tags)
 
 def v118_211(ns, t0):
     rh = vol(' \
-        |118 *2 pp 2/4 _p 2/4 pp * pp 3/2 mp 1/2 pp \
-        |126 *2 pp 2/4 _p 2/4 pp * pp 2/2 mp 2/2 mp \
+        |118 *2 pp 1/2 _p 1/2 pp * pp 3/2 mp 1/2 pp \
+        |126 *2 pp 1/2 _p 1/2 pp * pp 2/2 mp 2/2 mp \
         |134 pp 4/2 f 4/2 pp \
         |142 [ p 4/2 p ] f 4/2 f ] p 4/2 p ] f 4/2 f \
         |158 f 6/2 ff 4/2 f \
         |168 [ mf 2/2 f 2/2 mf 4/2 ff 8/2 ff \
         |184 [ p 8/2 pp 20/2 pp \
         |212 \
-    ', 2/4)
+    ', 1/2)
     rha = accents(' \
         |118 24/2 \
-        |142 *2 *3 1/8 mf 3/8 * 2/4 *3 1/8 f 3/8 * 2/4 * \
+        |142 *2 *3 1/8 mf 3/8 * 1/2 *3 1/8 f 3/8 * 1/2 * \
         |158 54/2 \
-    ', 2/4)
+    ', 1/2)
     lh = vol(' \
         |118 p 7/2 p 1/2 pp \
         |126 pp 4/2 pp [ p 2/2 p [ _p 2/2 _p \
@@ -427,7 +427,7 @@ def v118_211(ns, t0):
         |168 p 2/2 mp 2/2 p 4/2 f \
         |176 ff 8/2 ff [ p 8/2 pp 20/2 pp \
         |212 \
-    ', 2/4)
+    ', 1/2)
     ns.vol_adjust_pft(lh, t0, lambda n: 'lh' in n.tags)
     ns.vol_adjust_pft(rh, t0, lambda n: 'rh' in n.tags)
     ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
@@ -439,7 +439,7 @@ def t118_211(ns, t0):
         |142 34/2 65 \
         |176 8/2 65 55 28/2 50 \
         |212 \
-    ', 2/4)
+    ', 1/2)
     ns.tempo_adjust_pft(t, t0)
 
 def p118_211(ns, t0):
@@ -450,14 +450,14 @@ def p118_211(ns, t0):
         |142 *2 *2 5/8 3/8 1/8 7/8 * * \
         |158 - 54/2 \
         |212 \
-    ', 2/4)
+    ', 1/2)
     p = pedal(' \
         |118 - 58/2 \
         |176 *2 + 7/4 - 1/4 * \
         |184 *4 + 3/4 - 1/4 * \
         |192 + 13/2 - 1/2 + 6/2 \
         |212 \
-    ', 2/4)
+    ', 1/2)
     ns.vsustain_pft(lh, t0, lambda n: 'lh' in n.tags)
     ns.pedal(p)
 
@@ -477,7 +477,7 @@ def v300_end(ns, t0):
         |343 [ f 8/2 f_ 8/2 _ff 8/2 ff_ \
         |367 [ _ff 4/2 ff 6/2 fff [ fff_ 3/2 fff_ \
         |380 \
-    ', 2/4)
+    ', 1/2)
     ns.vol_adjust_pft(v, t0)
     a8 = 'mf'    # accents on 8th-note chords in 310 onward
     lha = accents(' \
@@ -488,7 +488,7 @@ def v300_end(ns, t0):
         |359 *4 1/2 mf 1/2 * \
         |367 *10 mf 1/4 mf 1/4 * 3/2 \
         |380 \
-    ', 2/4, locals())
+    ', 1/2, locals())
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
     rha = accents(' \
         |300 8/2 \
@@ -498,7 +498,7 @@ def v300_end(ns, t0):
         |359 *4 1/4 mf 3/4 * \
         |367 2/2 1/4 mf 1/4 *7 mf 1/4 mf 1/4 * 3/2 \
         |380 \
-    ', 2/4, locals())
+    ', 1/2, locals())
     ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
     ns.vol_adjust(
         .9,
@@ -514,7 +514,7 @@ def t300_end(ns, t0):
         |343 70 34/2 70 \
         |377 50 3/2 50 \
         |380 \
-    ', 2/4)
+    ', 1/2)
     ns.tempo_adjust_pft(t, t0)
     ns.pause_before(t0+8/2, .1, False)
     ns.pause_before(t0+10/2, .2, False)
@@ -526,7 +526,7 @@ def p300_end(ns, t0):
         |324 - 3/4 - 1/4 8/2 - 3/4 - 1/4 7/2 \
         |343 - 28/2 + 6/2 - 3/2 \
         |380 \
-    ', 2/4)
+    ', 1/2)
     ns.pedal_pft(p, t0)
 
 def main():
@@ -551,7 +551,7 @@ def main():
     if do_50:
         t_50 = ns.cur_time
         ns.append_score([lh_50_117, rh_50_117])
-        ns.insert_pedal(PedalUse(t_50+42*2/4, 6*2/4))
+        ns.insert_pedal(PedalUse(t_50+42*1/2, 6*1/2))
     if do_118:
         t_118 = ns.cur_time
         ns.append_score([lh_118_211, rh_118_211])
