@@ -30,7 +30,7 @@ def test1():
     #ns.roll(3/4, [-.2, -.1, 0], True, True)
     print(ns)
     pianoteq.play_score(ns)
-test1()
+#test1()
 
 def test2():
     ns = Score()
@@ -126,3 +126,10 @@ def test_ped():
     print(ns)
 
 #test_ped()
+
+def foo(loc):
+    print(eval('x', globals(), loc)) 
+def test_sub():
+    x = 1
+    foo(locals())
+test_sub()

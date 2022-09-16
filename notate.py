@@ -73,13 +73,13 @@ def expand_iter(items):
     return out
 
 # expand ... <foo>... by evaluating foo
-def expand_eval(items):
+def expand_eval(items, locs):
     out = []
     for i in range(len(items)):
         t = items[i]
         if t[0] == '<':
             try:
-                x = eval(t[1:-1])
+                x = eval(t[1:-1], globals(), locs)
             except:
                 show_context(items, i)
                 raise Exception('eval error')
@@ -104,5 +104,5 @@ def comment(item, dt, mdur):
     if abs(m1-m2) > 1e-5:
         raise Exception('Inconsistent measure number: %f != %f'%(m1, m2))
     
-def expand_all(items):
-    return expand_iter(expand_eval(items))
+def expand_all(items, locs):
+    return expand_iter(expand_eval(items, locs))

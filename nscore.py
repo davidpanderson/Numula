@@ -209,14 +209,19 @@ class Score:
             if chord:
                 if note.time > chord_time + epsilon:
                     do_chord(chord)
+                    chord = []
+                    if 'ch' in note.tags:
+                        chord = [note]
+                        chord_time = note.time
+                else:
+                    if 'ch' in note.tags:
+                        chord.append(note)
+            else:
+                if 'ch' in note.tags:
                     chord = [note]
                     chord_time = note.time
-                else:
-                    chord.append(note)
-            else:
-                chord = [note]
-                chord_time = note.time
-        do_chord(chord)
+        if chord:
+            do_chord(chord)
 
         for pedal in self.pedals:
             pedal.perf_time = self.score_to_perf(pedal.time)

@@ -469,19 +469,45 @@ def p212_299(ns, t0):
     pass
 
 def v300_end(ns, t0):
-    lh = vol(' \
-        |300 f_ 2/2 f_ [ _ff 6/2 ff_ \
-        |308 *2 [ ff 2/2 ff_ [ p 5/2 p ] f 1/2 ff * \
-        |324 ff 2/2 ff [ p 7/2 p [ f 1/2 ff 2/2 ff [ p 7/2 p \
-        |343 [ f 8/2 f_ 8/2 ff 8/2 ff_ \
-        |367 ff_ 4/2 fff 9/2 fff_ \
+    v = vol(' \
+        |300 f 8/2 _ff \
+        |308 *2 [ ff 1/2 fff 1/2 fff [ p 5/2 mf ] mf 1/2 ff * \
+        |324 ff 1/2 fff 1/2 fff [ mp 7/2 mf [ f 1/2 ff \
+        |334 ff 1/2 fff 1/2 fff [ p 7/2 f \
+        |343 [ f 8/2 f_ 8/2 _ff 8/2 ff_ \
+        |367 [ _ff 4/2 ff 6/2 fff [ fff_ 3/2 fff_ \
         |380 \
     ', 2/4)
-    ns.vol_adjust_pft(lh, t0)
+    ns.vol_adjust_pft(v, t0)
+    a8 = 'f'    # accents on 8th-note chords in 310 onward
+    lha = accents(' \
+        |300 *3 3/8 mf 5/8 * mf 1/2 mf 1/2 \
+        |308 *2 2/2 *6 <a8> 1/2 * * \
+        |324 2/2 *8 <a8> 1/2 * 2/2 *7 <a8> 1/2 * \
+        |343 *16 1/4 mf 1/4 * \
+        |359 *4 1/2 mf 1/2 * \
+        |367 *10 mf 1/4 mf 1/4 * 3/2 \
+        |380 \
+    ', 2/4, locals())
+    ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
+    rha = accents(' \
+        |300 8/2 \
+        |308 *2 2/2 *6 <a8> 1/2 * * \
+        |324 2/2 *8 <a8> 1/2 * 2/2 *7 <a8> 1/2 * \
+        |343 16/2 \
+        |359 *4 1/4 mf 3/4 * \
+        |367 2/2 1/4 mf 1/4 *7 mf 1/4 mf 1/4 * 3/2 \
+        |380 \
+    ', 2/4, locals())
+    ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
+    ns.vol_adjust(
+        .9,
+        lambda n: 'ch' in n.tags and n.chord_pos < n.nchord-1
+    )
     
 def t300_end(ns, t0):
     t = tempo(' \
-        |300 60 4/2 60 4/2 70 \
+        |300 *3 60 2/2 p.05 * 60 2/2 70 p.1 \
         |308 *2 70 8/2 70 * \
         |324 70 10/2 70 \
         |334 70 9/2 70 \
@@ -491,13 +517,13 @@ def t300_end(ns, t0):
     ', 2/4)
     ns.tempo_adjust_pft(t, t0)
     ns.pause_before(t0+8/2, .1, False)
-    ns.pause_before(t0+10/2, .3, False)
-    ns.pause_before(t0+18/2, .3, False)
+    ns.pause_before(t0+10/2, .2, False)
+    ns.pause_before(t0+18/2, .2, False)
     
 def p300_end(ns, t0):
     p = pedal(' \
-        |300 - 8/2 *2 + 2/2 - 6/2 * \
-        |324 + 2/2 - 8/2 + 2/2 - 7/2 \
+        |300 - 8/2 *2 - 3/4 - 1/4 6/2 * \
+        |324 - 3/4 - 1/4 8/2 - 3/4 - 1/4 7/2 \
         |343 - 28/2 + 6/2 - 3/2 \
         |380 \
     ', 2/4)
