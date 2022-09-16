@@ -345,21 +345,21 @@ def v20_49(ns, t0):
         
     lhv = vol(' \
         |20 *2 p 8/4 mp 8/4 p * \
-        |36 *3 p 4/4 mp 4/4 p * p 2/4 mp 2/4 p \
+        |36 *3 p 4/4 mp 4/4 p * p 1/2 mp 1/2 p \
         |50 \
     ', 2/4)
     lha = accents(' \
-        |20 *3 mf 4/4 * 4/4 \
-        |28 *3 2/4 f 2/4 * 4/4 \
-        |36 *3 4/4 f 4/4 * *2 mf 2/4 * \
+        |20 *3 mf 2/2 * mf 1/2 mf 1/2 \
+        |28 *3 1/2 mf 1/2 * 2/2 \
+        |36 *3 2/2 mf 2/2 * *2 mp 1/2 * \
         |50 \
-    ')
+    ', 2/4)
     ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
     
 def t20_49(ns, t0):
     x = tempo(' \
-        |20 *2 *4 60 2/4 65 2/4 55 .1p * * \
+        |20 *2 *4 60 1/2 65 1/2 55 .1p * * \
         |36 *2 60 4/4 65 4/4 60 * \
         60 4/4 65 50 4/4 60 4/4 60 \
         |50 \
@@ -369,17 +369,17 @@ def t20_49(ns, t0):
 def p20_49(ns, t0):
     # virtual pedal RH arpeggios starting in m16
     rh = pedal(' \
-        |20 - 32/4 *2 *3 + 2/4 * + 1/4 + 1/4 * \
-        |44 *3 + 2/4 * *4 + 1/8 * *2 + 2/4 * \
+        |20 - 32/4 *2 *3 + 1/2 * + 1/4 + 1/4 * \
+        |44 *3 + 1/2 * *4 + 1/8 * *2 + 1/2 * \
         |50 \
     ', 2/4)
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
 
 def v50_117(ns, t0):
     lhv = vol(' \
-        |50 *2 p 4/4 mp 2/4 mp 2/4 p * \
+        |50 *2 p 4/4 mp 2/4 mp 1/2 p * \
         |58 [ mp 4/4 mf 4/4 mp 4/4 mf \
-        |64 ] *5 mp 2/4 mf 2/4 mp * \
+        |64 ] *5 mp 1/2 mf 2/4 mp * \
         |74 mp 4/4 mf \
         |76 *2 *2 [ mf 1/2 mp 1/2 mf * [ mp 4/2 f 2/2 mp * \
         |96 *2 [ mf 4/2 f * ] \
@@ -479,7 +479,7 @@ def v300_end(ns, t0):
         |380 \
     ', 2/4)
     ns.vol_adjust_pft(v, t0)
-    a8 = 'f'    # accents on 8th-note chords in 310 onward
+    a8 = 'mf'    # accents on 8th-note chords in 310 onward
     lha = accents(' \
         |300 *3 3/8 mf 5/8 * mf 1/2 mf 1/2 \
         |308 *2 2/2 *6 <a8> 1/2 * * \
@@ -507,10 +507,10 @@ def v300_end(ns, t0):
     
 def t300_end(ns, t0):
     t = tempo(' \
-        |300 *3 60 2/2 p.05 * 60 2/2 70 p.1 \
-        |308 *2 70 8/2 70 * \
-        |324 70 10/2 70 \
-        |334 70 9/2 70 \
+        |300 *3 60 2/2 p.05 * 60 2/2 70 \
+        |308 *2 p.15 65 2/2 65 p.1 70 6/2 70 * \
+        |324 p.15 70 10/2 70 \
+        |334 p.15 70 9/2 70 \
         |343 70 34/2 70 \
         |377 50 3/2 50 \
         |380 \
@@ -530,14 +530,14 @@ def p300_end(ns, t0):
     ns.pedal_pft(p, t0)
 
 def main():
-    do_20 = False
-    do_50 = False
+    do_20 = True
+    do_50 = True
     do_118 = False
     do_212 = False
     do_300_1 = False
     do_118_rep = False
     do_212_rep = False
-    do_300_2 = True
+    do_300_2 = False
     
     ns = Score()
     # must make copies first; append_score() changes note times
