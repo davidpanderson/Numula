@@ -328,7 +328,7 @@ lh_300_end = n(' \
 # one for continuous change,
 # the other for single-note and short-scale adjustment
 
-# measures 20..107 are analogous to 212..219
+# measures 20..107 are analogous to 212..299
 
 def v20_117(ns, t0):
     rhv = vol(' \
@@ -464,6 +464,7 @@ def p118_211(ns, t0):
     ns.vsustain_pft(lh, t0, lambda n: 'lh' in n.tags)
     ns.pedal_pft(p, t0)
 
+# measures 212..299 are analogous to 20..107
 def v212_299(ns, t0):
     rhv = vol(' \
         |212 *2 *3 ppp 3/4 p 1/4 ppp * 1/2 p 1/2 ppp * \
