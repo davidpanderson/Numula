@@ -335,6 +335,10 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
     else:
         pft = copy.copy(_pft)
 
+    # append infinite unity segment
+    # needed to handle note-end events that lie beyond PFT domain
+    pft.append(Unity(9999999))
+    
     self.make_start_end_events()
 
     # keep track of our position in the PFT, and the integral so far
@@ -349,11 +353,7 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
     if normalize:
         scale_factor = 1/pft_avg(pft)
         if debug: print('scale factor: ', scale_factor)
-        
-    # append infinite unity segment
-    # needed to handle note-end events that lie beyond PFT domain
-    pft.append(Unity(9999999))
-    
+
     # loop over events.
     # keep track of params of previous event
     #
@@ -389,7 +389,8 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
         # loop over PFT primitives up to the last one whose domain includes this event
         # precondition: event.time is not strictly before current seg
         while True:
-            if debug: print('   event.time', event.time, 'seg_start', seg_start, ' seg_end', seg_end)
+            if debug:
+                print('   event.time', event.time, 'seg_start', seg_start, ' seg_end', seg_end)
             use_this_seg = False
             if event.time < seg_end - epsilon:
                 if debug: print('   strictly in seg; using it')
