@@ -324,57 +324,89 @@ lh_300_end = n(' \
 ').tag('lh')
 
 # volume:
-# for each hand, we generate two PFTs:
-# one for continuous change,
-# the other for single-note and short-scale adjustment
-
+# in general we use
+# v = overall volume, 4-16 measure time scale
+# lhv, rhv = L/R hand shapes, 1-4 measure time scale
+# lha, rha = L/R hand accents
+#
 # measures 20..107 are analogous to 212..299
 
 def v20_117(ns, t0):
-    rhv = vol(' \
-        |20 *2 *3 ppp 3/4 p 1/4 ppp * 1/2 p 1/2 ppp * \
-        |36 *2 [ pp 4/2 p * \
-        |44 [ pp 6/4 p 1/2 pp 2/2 pp \
-        |50 \
+    # overall shape of exposition
+    v0 = vol(' \
+        |20 ppp 44/2 f \
+        |64 ] pp 32/2 f \
+        |96 f 16/2 ff \
+        |112 ff 6/2 pp \
+        |118 \
     ', 1/2)
+
+    # swells at 8 measure level
+    v1 = vol(' \
+        |20 *2 mm 6/2 mf 2/2 mm * \
+        |36 *2 \
+            *2 mm 2/2 mf 2/2 mm * mm 2/2 mf_ 4/2 mm \
+            * \
+        |64 *5 mm 1/2 _mf 1/2 mm * \
+        |74 mm 2/2 mf *2 mf 1/2 mp 1/2 mf * \
+        |80 mp 4/2 mf 4/2 mp \
+        |88 *2 mf 1/2 mp 1/2 mf * 4/2 mm \
+        |94 *4 mm 2/2 mf 2/2 mm \
+        |112 6/2 mm \
+        |118 \
+    ', 1/2)
+
+    # swells at 1 measure level
+    rhv = vol(' \
+        |20 *8 mm 1/2 _mf 1/2 mm * \
+        |36 *2 *2 mm 1/4 _mf 1/4 mm * mm 1/2 _mf 2/3 mm * \
+        |44 mm 20/2 mm \
+        |64 mm 32/2 mm \
+        |96 *2 *3 mm 1/4 mf 1/4 mm * 1/2 mm * \
+        |104 14/2 mm \
+        |118 \
+    ', 1/2)
+
     rha = accents(' \
         |20 *2 \
-            *3 mm 1/4 f 1/4 mf_ 1/4 mf 1/4 * \
-            1/8 f 1/4 f 1/4 f 1/4 f 1/8 \
-        * \
+            *3 mm 1/4 mf_ 1/4 mf 1/4 _mf 1/4 * \
+            1/8 mf 1/4 mf 1/4 mf 1/4 mf 1/8 \
+            * \
         |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
         |44 *3 mm 1/4 _f 1/4 * mm 1/2 *4 _f 1/4 * \
-        |50 \
+        |50 *2 1/2 mf 1/2 f 2/2 * \
+        |58 1/2 mf 1/2 f 3/2 f 1/2 f \
+        |64 32/2 \
+        |96 *2 2/2 3/8 f 5/8 * \
+        |104 *4 3/8 f 5/8 * \
+        |112 *6 mf 1/2 \
+        |118 \
     ', 1/2)
-    ns.vol_adjust_pft(rhv, t0, lambda n: 'rh' in n.tags)
-    ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
         
     lhv = vol(' \
-        |20 *2 p 4/2 mp 4/2 p * \
-        |36 *3 p 2/2 mp 2/2 p * p 1/2 mp 1/2 p \
-        |50 \
+        |20 mm 30/2 mm \
+        |50 *2 mm 2/2 mf 2/2 mm * mm 2/2 mf 4/2 mm \
+        |64 mm 32/2 mm \
+        |96 *16 [ mf 1/4 mm 1/4 mf * \
+        |112 mm 6/2 mm \
+        |118 \
     ', 1/2)
     lha = accents(' \
         |20 *3 mf 2/2 * mf 1/2 mf 1/2 \
         |28 *3 1/2 mf 1/2 * 2/2 \
         |36 *3 2/2 mf 2/2 * *2 mp 1/2 * \
-        |50 \
-    ', 1/2)
-    ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
-    ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
-
-    lhv = vol(' \
-        |50 *2 p 2/2 mp 1/2 mp 1/2 p * \
-        |58 [ mp 2/2 mf 2/2 mp 2/2 mf \
-        |64 ] *5 mp 1/2 mf 1/2 mp * \
-        |74 mp 2/2 mf \
-        |76 *2 *2 [ mf 1/2 mp 1/2 mf * [ mp 4/2 f 2/2 mp * \
-        |96 *2 [ mf 4/2 f * ] \
-        |104 *4 mf 1/2 f 1/2 mf * \
-        |112 [ ff 6/2 ff \
+        |50 14/2 \
+        |64 *8 f 2/2 \
+        |80 f 6/2 *3 f 2/2 4/2 \
+        |96 22/2 \
         |118 \
     ', 1/2)
-    ns.vol_adjust_pft(lhv, t0+30/2, lambda n: 'lh' in n.tags)
+    ns.vol_adjust_pft(v0, t0)
+    ns.vol_adjust_pft(v1, t0)
+    ns.vol_adjust_pft(rhv, t0, lambda n: 'rh' in n.tags)
+    ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
+    ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
+    ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
 
 def t20_117(ns, t0):
     x = tempo(' \

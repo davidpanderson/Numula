@@ -556,3 +556,24 @@ Score.sorted
 constraints
 using virtual sustain pedals must precede tempo adjustment
     (need to know when notes end)
+==============
+volume control in op57: how to structure?
+v0
+    applies to both hands
+    overall volume
+    8-32 measure time scale
+    Schenker middle-ground
+v1
+    applies to both hands
+    volume adjustment
+    1-4 measure time scale
+LH, RH vol
+    volume adjustment
+    1-4 measure time scale
+LH, RH accents
+    volume adjustment
+
+Notes:
+1) it may not always be clear where to put structure, e.g. in v0 or v1
+2) not all are active all the time.
+    Use e.g. "mm 8/2 mm" when not active.
