@@ -334,10 +334,10 @@ lh_300_end = n(' \
 def v20_117(ns, t0):
     # overall shape of exposition
     v0 = vol(' \
-        |20 ppp 44/2 f \
-        |64 ] pp 32/2 f \
-        |96 f 16/2 ff \
-        |112 ff 6/2 pp \
+        |20 pp 44/2 mf \
+        |64 ] pp 32/2 _f \
+        |96 _f 16/2 f_ \
+        |112 f_ 6/2 pp \
         |118 \
     ', 1/2)
 
@@ -349,9 +349,9 @@ def v20_117(ns, t0):
             * \
         |64 *5 mm 1/2 _mf 1/2 mm * \
         |74 mm 2/2 mf *2 mf 1/2 mp 1/2 mf * \
-        |80 mp 4/2 mf 4/2 mp \
-        |88 *2 mf 1/2 mp 1/2 mf * 4/2 mm \
-        |94 *4 mm 2/2 mf 2/2 mm \
+        |80 [ mp 4/2 mf 2/2 mp \
+        |86 *2 [ mf 1/2 mp 1/2 mf * 2/2 mp 2/2 mf 2/2 mm \
+        |96 *4 mm 2/2 mf 2/2 mm * \
         |112 6/2 mm \
         |118 \
     ', 1/2)
@@ -359,7 +359,7 @@ def v20_117(ns, t0):
     # swells at 1 measure level
     rhv = vol(' \
         |20 *8 mm 1/2 _mf 1/2 mm * \
-        |36 *2 *2 mm 1/4 _mf 1/4 mm * mm 1/2 _mf 2/3 mm * \
+        |36 *2 *2 mm 1/4 _mf 1/4 mm * mm 1/2 _mf 1/2 mm * \
         |44 mm 20/2 mm \
         |64 mm 32/2 mm \
         |96 *2 *3 mm 1/4 mf 1/4 mm * 1/2 mm * \
@@ -377,9 +377,9 @@ def v20_117(ns, t0):
         |50 *2 1/2 mf 1/2 f 2/2 * \
         |58 1/2 mf 1/2 f 3/2 f 1/2 f \
         |64 32/2 \
-        |96 *2 2/2 3/8 f 5/8 * \
-        |104 *4 3/8 f 5/8 * \
-        |112 *6 mf 1/2 \
+        |96 *2 2/2 3/8 mf 5/8 * \
+        |104 *4 3/8 mf 5/8 * \
+        |112 *6 mf 1/2 * \
         |118 \
     ', 1/2)
         
@@ -388,16 +388,16 @@ def v20_117(ns, t0):
         |50 *2 mm 2/2 mf 2/2 mm * mm 2/2 mf 4/2 mm \
         |64 mm 32/2 mm \
         |96 *16 [ mf 1/4 mm 1/4 mf * \
-        |112 mm 6/2 mm \
+        |112 [ mm 6/2 mm \
         |118 \
     ', 1/2)
     lha = accents(' \
-        |20 *3 mf 2/2 * mf 1/2 mf 1/2 \
+        |20 *3 ff 2/2 * f 1/2 f 1/2 \
         |28 *3 1/2 mf 1/2 * 2/2 \
         |36 *3 2/2 mf 2/2 * *2 mp 1/2 * \
         |50 14/2 \
-        |64 *8 f 2/2 \
-        |80 f 6/2 *3 f 2/2 4/2 \
+        |64 *8 f 2/2 * \
+        |80 f 6/2 *3 mf 2/2 * 4/2 \
         |96 22/2 \
         |118 \
     ', 1/2)
@@ -410,22 +410,34 @@ def v20_117(ns, t0):
 
 def t20_117(ns, t0):
     x = tempo(' \
-        |20 *2 *4 60 1/2 65 1/2 55 .1p * * \
-        |36 *2 60 2/2 65 2/2 60 * \
-        60 2/2 65 50 2/2 60 2/2 60 \
-        |50 \
+        |20 *2 \
+            *3 60 2/2 60 .1p * 3/4 60 1/4 55 .1p\
+            * \
+        |36 *2 \
+            *2 60 4/2 60 .1p * \
+            6/2 60 .1p \
+            * \
+        |64 *8 60 2/2 60 .1p * \
+        |80 4/2 60 .1p *6 2/2 60 .1p * \
+        |96 |p.1 *2 4/2 60 * \
+        |104 7/2 60 1/2 55 .2p \
+        |112 5/2 60 1/2 55 .2p \
+        |118 \
     ', 1/2)
+    print(*x, sep='\n')
     ns.tempo_adjust_pft(x, t0)
 
 def p20_117(ns, t0):
-    # virtual pedal RH arpeggios starting in m16
+    # virtual pedal RH arpeggios starting in m36
     rh = pedal(' \
-        |20 - 16/2 *2 *3 + 1/2 * + 1/4 + 1/4 * \
+        |20 - 16/2 \
+        |36 *2 *3 + 1/2 * + 1/4 + 1/4 * \
         |44 *3 + 1/2 * *4 + 1/8 * *2 + 1/2 * \
-        |50 \
+        |50 - 68/2 \
+        |118 \
     ', 1/2)
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
-    ns.insert_pedal(PedalUse(t0+92/2, 6/2))
+    ns.insert_pedal(PedalUse(t0+92/2, 4/2))
 
     lh = pedal(' \
         |50 *2 + 1/4 1/4 1/4 1/4 1/4 - 3/4 * \
@@ -597,9 +609,9 @@ def p300_end(ns, t0):
     ns.pedal_pft(p, t0)
 
 def main():
-    do_20 = False
-    do_118 = True
-    do_212 = True
+    do_20 = True
+    do_118 = False
+    do_212 = False
     do_300_1 = False
     do_118_rep = False
     do_212_rep = False
@@ -678,7 +690,7 @@ def main():
         t300_end(ns, t_300_2)
 
     ns.perf_dur_rel(.5, lambda n: 'stac' in n.tags)
-    ns.t_random_normal(.008, 2)
+    #ns.t_random_normal(.008, 2)
     print(ns)
     ns.write_midi('data/app57.midi')
     pianoteq.play('data/app57.midi')

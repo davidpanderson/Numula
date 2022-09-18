@@ -48,13 +48,16 @@ def test2():
 def test3():
     ns = Score([n('c d e f g')])
     ns.done()
-    ns.tempo_adjust_pft([
+    x = [
         Linear(60, 60, 2/4),
         Delta(.1, False),
-        Linear(30, 30, 2/4)
-    ])
+        Delta(.05, True),
+        Linear(60, 60, 2/4)
+    ]
+    print(*x, sep='\n')
+    ns.tempo_adjust_pft(x)
     print(ns)
-#test3()
+test3()
 
 def test4():
     ns = Score([n('c d e f g')])
@@ -127,9 +130,4 @@ def test_ped():
 
 #test_ped()
 
-def foo(loc):
-    print(eval('x', globals(), loc)) 
-def test_sub():
-    x = 1
-    foo(locals())
-test_sub()
+

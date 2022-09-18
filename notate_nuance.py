@@ -235,14 +235,14 @@ def tempo(s, mdur=0, locs=None):
             except:
                 show_context(items, i)
                 raise Exception('bad pause value')
-            pft.append(Delta(val, after=False))
+            pft.append(Delta(val, after=True))
         elif t[-1] == 'p':
             try:
                 val = float(t[0:-1])
             except:
                 show_context(items, i)
                 raise Exception('bad pause value')
-            pft.append(Delta(val, after=True))
+            pft.append(Delta(val, after=False))
         elif t == 'linear':
             segtype = SEGTYPE_LINEAR
         elif t[0:3] == 'exp':
