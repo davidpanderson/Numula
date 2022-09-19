@@ -237,7 +237,7 @@ lh_212_299 = n(' \
 # first ending 300-307
 rh_300_307 = n(' \
     |300 1/8[c f a- c] *3 [+c a- f c] * *4 [+c b- -e c] * \
-    1/16 [c e- +a c] a4 d e- g- a c e- g- a c e- g- e- c a \
+    1/16 [c e- +a c] a4 c e- g- a c e- g- a c e- g- e- c a \
     g- e- c a g- e- c a g- e- c a g- e- c a *4 g- +e- c a * \
     |308 \
 ', 1/2).tag('rh')
@@ -607,11 +607,27 @@ def p212_299(ns, t0):
     ns.vsustain_pft(lh, t0+30/2, lambda n: 'lh' in n.tags)
 
 def v300_1(ns, t0):
-    pass
+    v = vol(' \
+        |300 ff 2/2 ff_ 6/2 p \
+        |308 \
+    ', 1/2)
+    ns.vol_adjust_pft(v, t0)
+    
 def t300_1(ns, t0):
-    pass
+    t = tempo(' \
+        |300 60 2/2 50 .2p p.2 60 6/2 60 \
+        |308 \
+    ', 1/2)
+    print(*t, sep='\n')
+    ns.tempo_adjust_pft(t, t0)
+    
 def p300_1(ns, t0):
-    pass
+    p = pedal(' \
+        |300 - 2/2 + 4/2 - 2/2 \
+        |308 \
+    ', 1/2)
+    ns.pedal_pft(p, t0)
+    
 def v300_end(ns, t0):
     v = vol(' \
         |300 f 8/2 _ff \
@@ -674,13 +690,13 @@ def p300_end(ns, t0):
     ns.pedal_pft(p, t0)
 
 def main():
-    do_20 = True
-    do_118 = True
-    do_212 = True
+    do_20 = False
+    do_118 = False
+    do_212 = False
     do_300_1 = True
-    do_118_rep = True
-    do_212_rep = True
-    do_300_2 = True
+    do_118_rep = False
+    do_212_rep = False
+    do_300_2 = False
     
     ns = Score()
     # must make copies first; append_score() changes note times
@@ -711,7 +727,7 @@ def main():
         ns.append_score([rh_300_end, lh_300_end])
         #ns.append_score([lh_300_end])
 
-    ns.set_tempo(144)
+    ns.set_tempo(120)
 
     # pedal control
     if do_20:
@@ -755,9 +771,9 @@ def main():
         t300_end(ns, t_300_2)
 
     ns.perf_dur_rel(.5, lambda n: 'stac' in n.tags)
-    ns.t_random_normal(.008, 2)
+    #ns.t_random_normal(.008, 2)
     print(ns)
-    ns.write_midi('data/app57.midi')
-    pianoteq.play('data/app57.midi')
+    ns.write_midi('data/op57.midi')
+    pianoteq.play('data/op57.midi')
 
 main()

@@ -408,7 +408,8 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
  
             if use_this_seg:
                 # either:
-                # - the event is strictly
+                # - the event is strictly contained in or at the end of a non-Delta seg
+                # - the event is at an "after" Delta
                 if debug:
                     print('    using this seg')
                     print('    previous event: score time %f perf %f adjusted perf %f PFT integral %f'%(
