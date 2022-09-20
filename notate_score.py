@@ -139,7 +139,7 @@ def check_pitch(items, i, pitch, time):
         raise Exception('illegal pitch %d at time %f'%(pitch, time))
     
 # textual note specification
-def n(s, mdur=0, locs=None):
+def n(s, mdur=0):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
     ns = nscore.Score()
@@ -153,7 +153,7 @@ def n(s, mdur=0, locs=None):
     ped_start = -1
     ped_start_index = -1
     dt = 0
-    items = expand_all(items, locs)
+    items = expand_all(items)
     for i in range(len(items)):
         t = items[i]
         if t == '[':

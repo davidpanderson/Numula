@@ -75,9 +75,9 @@ GOT_V1 = 3
 GOT_LB = 4
 GOT_RB = 5
 
-def vol(s, mdur=0, locs=None):
+def vol(s, mdur=0):
     items = s.split()
-    items = expand_all(items, locs)
+    items = expand_all(items)
     state = INIT
     pft = []
     last_seg = None
@@ -168,9 +168,9 @@ def vol(s, mdur=0, locs=None):
 
 # e.g. '1/8 1.2 1/4 1.2 1/4 1.2 1/8'
 
-def accents(s, mdur=0, locs=None):
+def accents(s, mdur=0):
     items = s.split()
-    items = expand_all(items, locs)
+    items = expand_all(items)
     dt = 0
     pft = []
     for i in range(len(items)):
@@ -205,9 +205,9 @@ def accents(s, mdur=0, locs=None):
 
 # e.g.: 'linear 60 8/4 80 p0.1 60 3/4 120 0.2p'
 
-def tempo(s, mdur=0, locs=None):
+def tempo(s, mdur=0):
     items = s.split()
-    items = expand_all(items, locs)
+    items = expand_all(items)
     pft = []
     t0 = None
     dur = None
@@ -273,9 +273,9 @@ def tempo(s, mdur=0, locs=None):
 #print(*x, sep='\n')
 
 # e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
-def pedal(s, mdur=1, pedal_type=pedal_sustain, locs=None):
+def pedal(s, mdur=1, pedal_type=pedal_sustain):
     items = s.split()
-    items = expand_all(items, locs)
+    items = expand_all(items)
     pft = []
     on = False
     dt = 0

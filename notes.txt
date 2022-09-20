@@ -577,3 +577,37 @@ Notes:
 1) it may not always be clear where to put structure, e.g. in v0 or v1
 2) not all are active all the time.
     Use e.g. "mm 8/2 mm" when not active.
+=================
+tempo_adjust_pft() logic
+
+This works by traversing in parallel
+- the list of events (note and pedal starts/ends)
+- the list of PFT segments
+
+The outer loop is over events E.
+The inner loop scans PFT segments until we find S(E):
+the last segment that affects E, i.e. either:
+- E lies strictly within S
+- E is at the endpoint of S,
+    and the next segment is not a before-Delta
+    (i.e. we skip over before-Deltas)
+
+At that point we compute the integral of the PFT at E.time,
+and the PFT average since the last event,
+and use that to compute E.perf_time
+
+variables:
+PFT:
+    seg_ind         index of current PFT seg
+    seg             that seg
+    seg_start       seg start score time
+    seg_end         seg end time
+    seg_integral    integral of previous segments
+event:
+    prev_time       score time of previous event
+    prev_integral   PFT integral at that time
+    prev_perf       its initial perf time
+    prev_perf_adj   its perf time after this adjustment
+
+Note: we assume before-Deltas precede after-Deltas at a given time.
+We should reorder if needed to make this so.
