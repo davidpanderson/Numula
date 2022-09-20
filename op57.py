@@ -615,10 +615,9 @@ def v300_1(ns, t0):
     
 def t300_1(ns, t0):
     t = tempo(' \
-        |300 60 2/2 50 .2p p.2 60 6/2 60 \
+        |300 60 2/2 40 .1p p.08 60 6/2 50 \
         |308 \
     ', 1/2)
-    print(*t, sep='\n')
     ns.tempo_adjust_pft(t, t0)
     
 def p300_1(ns, t0):
@@ -690,10 +689,10 @@ def p300_end(ns, t0):
     ns.pedal_pft(p, t0)
 
 def main():
-    do_20 = False
+    do_20 = True
     do_118 = False
     do_212 = False
-    do_300_1 = True
+    do_300_1 = False
     do_118_rep = False
     do_212_rep = False
     do_300_2 = False
@@ -727,7 +726,7 @@ def main():
         ns.append_score([rh_300_end, lh_300_end])
         #ns.append_score([lh_300_end])
 
-    ns.set_tempo(120)
+    ns.set_tempo(144)
 
     # pedal control
     if do_20:

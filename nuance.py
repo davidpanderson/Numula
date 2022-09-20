@@ -143,7 +143,7 @@ class Delta:
             'after' if self.after else 'before'
         )
     def bpm(self):
-        self.value /= 4
+        return
     def integral_total(self):
         return self.value
 
@@ -335,8 +335,17 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
     else:
         pft = copy.copy(_pft)
 
+    if debug:
+        print('after BPM:')
+        print(*pft, sep='\n')
+
+    scale_factor = 1
+    if normalize:
+        scale_factor = 1/pft_avg(pft)
+        if debug: print('scale factor: ', scale_factor)
+
     # append infinite unity segment
-    # needed to handle note-end events that lie beyond PFT domain
+    # needed to handle events that lie beyond PFT domain
     pft.append(Unity(9999999))
     
     self.make_start_end_events()
@@ -346,24 +355,86 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
     seg = pft[0]
     seg_start = t0
     seg_end = t0 + seg.dt
-    pft_end = t0 + pft_dur(pft)
     seg_integral = 0        # integral up to current seg
 
-    scale_factor = 1
-    if normalize:
-        scale_factor = 1/pft_avg(pft)
-        if debug: print('scale factor: ', scale_factor)
-
-    # loop over events.
     # keep track of params of previous event
     #
-    prev_time = 0       # its score time
+    prev_time = -999    # its score time
     prev_perf = 0       # its perf time
     prev_perf_adj = 0   # its adjusted perf time
     prev_integral = 0   # integral of pft at that point
+
+    # perf time is score time * 240/tempo
+    # so the integral of the PFT is scaled by this.
+    # If we want to add a pause (in seconds) to the integral
+    # we need to undo this scaling first.
+    def dt_to_integral(dt):
+        return dt*self.tempo/240
+    
+    def advance_seg():
+        nonlocal seg_start, seg_integral, seg_ind, seg, seg_end
+        seg_start += seg.dt
+        if seg.dt == 0:
+            si = dt_to_integral(seg.value)
+        else:
+            si = seg.integral_total()
+        seg_integral += si
+        if debug: print('    moving to next seg')
+        seg_ind += 1
+        seg = pft[seg_ind]
+        if debug:
+            print('    next segment: dt %f integral %f'%(seg.dt, seg.integral_total()))
+        seg_end = seg_start + seg.dt
+
+    def use_seg():
+        nonlocal prev_integral, prev_time, prev_perf, prev_perf_adj
+        if seg.dt == 0:
+            si = dt_to_integral(seg.value)
+        else:
+            si = seg.integral(event.time - seg_start)
+        i = seg_integral + si
+            # integral of pft at this point
+        if debug:
+            print('    i = seg_integral + si')
+            print('    %f = %f + %f '%(
+                i, seg_integral, si
+            ))
+        d = i - prev_integral
+            # integral since previous event
+        if debug:
+            print('    d = i - prev_integral')
+            print('    %f = %f - %f'%(d, i, prev_integral))
+        avg = scale_factor*d/(event.time - prev_time)
+            # average tempo since prev event
+        if debug:
+            print('    avg = scale_factor*d/(event.time - prev_time)')
+            print('    %f = %f*%f/(%f-%f)'%(
+                avg, scale_factor, d, event.time, prev_time
+            ))
+        dperf = event.perf_time - prev_perf
+        prev_perf = event.perf_time
+        new_perf = prev_perf_adj + dperf*avg
+        if debug:
+            print('    new perf = prev_perf_adj + dperf*avg')
+            print('   ', new_perf, '=', prev_perf_adj, '+', dperf,'*', avg)
+        event.perf_time = new_perf
+        prev_perf_adj = event.perf_time
+        prev_integral = i
+        if debug:
+            print('    new PFT integral %f; int since prev event %f; score time dt %f; int avg %f'%(
+                i, d, event.time-prev_time, avg
+            ))
+            print('    changed perf delay from %f to %f'%(
+                dperf, dperf*avg
+            ))
+        prev_time = event.time
+
     for event in self.start_end:
-        if debug: print('event time %f perf time %f prev_time %f'%(event.time, event.perf_time, prev_time))
-        if event.time < t0+epsilon:
+        if debug:
+            print('event time %f perf time %f prev_time %f'%(
+                event.time, event.perf_time, prev_time)
+            )
+        if event.time < t0-epsilon:
             # event is before start of PFT
             prev_time = event.time
             prev_perf = event.perf_time
@@ -375,114 +446,49 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
                 if not pred(event.obj):
                     if debug: print('  not selected')
                     continue
-            else:
-                continue
-        if event.obj.time > pft_end+epsilon:
-            if debug: print('  event is after PFT; skipping')
-            continue
         if event.time - prev_time < epsilon:
             if debug:
                 print('  same score time as prev; set perf time to %f'%prev_perf_adj)
             event.perf_time = prev_perf_adj
             continue
+        # handle case where PFT starts with before-Delta and event occurs then
+        if seg_ind==0 and seg.dt==0 and not seg.after and event.time < seg_start+epsilon:
+            if debug: print('  before-Delta at start')
+            prev_time = event.time
+            prev_perf = event.perf_time
+            event.perf_time += seg.value
+            prev_perf_adj = event.perf_time
+            prev_integral = seg.value * self.tempo/240
+            advance_seg() 
+            continue
 
-        # loop over PFT primitives up to the last one whose domain includes this event
+        # loop over PFT segments until last one that affects the event, i.e. either
+        # E lies strictly within S, or
+        # E is at the endpoint of S and the next seg is not a before-Delta
         # precondition: event.time is not strictly before current seg
         while True:
             if debug:
                 print('  Seg loop: seg_start', seg_start, ' seg_end', seg_end, ' seg integral', seg_integral)
-            use_this_seg = False
             if event.time < seg_end - epsilon:
                 if debug: print('   event is strictly in seg; using it')
-                use_this_seg = True
+                use_seg()
+                break
             elif event.time < seg_end + epsilon:
+                if debug: print('    event is at end of seg')
                 next_seg = pft[seg_ind+1]
-                if debug: print('    event is at end of seg. next_seg.dt', next_seg.dt)
-                if next_seg.dt > 0:  
-                    use_this_seg = True
-                else:
-                    # next seg is a Delta
-                    if debug: print('    next_seg is Delta; after', next_seg.after)
-                    if next_seg.after:
-                        use_this_seg = True
- 
-            if use_this_seg:
-                # either:
-                # - the event is strictly contained in or at the end of a non-Delta seg
-                # - the event is at an "after" Delta
-                if debug:
-                    print('    using this seg')
-                    print('    previous event: score time %f perf %f adjusted perf %f PFT integral %f'%(
-                        prev_time, prev_perf, prev_perf_adj, prev_integral
-                    ))
-                if seg.dt == 0:
-                    # Dirac delta case
-                    if seg.after:
-                        if debug: print('    delta after')
-                        d = seg_integral - prev_integral
-                        avg = scale_factor*d/(event.time - prev_time)
-                        dperf = event.perf_time - prev_perf
-                        prev_perf = event.perf_time
-                        new_perf = prev_perf_adj + dperf*avg
-                        if debug:
-                            print('    After: new perf = prev_perf_adj + dperf*avg')
-                            print('   ', new_perf, '=', prev_perf_adj, '+', dperf,'*', avg)
-                        event.perf_time = new_perf
-                        prev_perf_adj = event.perf_time
-                        prev_time = event.time
-                        prev_integral = seg_integral
-                        break
-                    if debug: print('    delta before')
-                    # fall through, move to next seg
-                else:
-                    i = seg_integral + seg.integral(event.time - seg_start)
-                        # integral of pft at this point
-                    if debug:
-                        print('    i = seg_integral + seg.integral(event.time - seg_start)')
-                        print('    %f = %f + %f (%f - %f)'%(
-                            i, seg_integral, seg.integral(event.time-seg_start),
-                            event.time, seg_start
-                        ))
-                    d = i - prev_integral
-                        # integral since previous event
-                    if debug:
-                        print('    d = i - prev_integral')
-                        print('    %f = %f - %f'%(d, i, prev_integral))
-                    avg = scale_factor*d/(event.time - prev_time)
-                        # average tempo since prev event
-                    if debug:
-                        print('    avg = scale_factor*d/(event.time - prev_time)')
-                        print('    %f = %f*%f/(%f-%f)'%(
-                            avg, scale_factor, d, event.time, prev_time
-                        ))
-                    dperf = event.perf_time - prev_perf
-                    prev_perf = event.perf_time
-                    new_perf = prev_perf_adj + dperf*avg
-                    if debug:
-                        print('    new perf = prev_perf_adj + dperf*avg')
-                        print('   ', new_perf, '=', prev_perf_adj, '+', dperf,'*', avg)
-                    event.perf_time = new_perf
-                    prev_perf_adj = event.perf_time
-                    prev_integral = i
-                    if debug:
-                        print('    new PFT integral %f; int since prev event %f; score time dt %f; int avg %f'%(
-                            i, d, event.time-prev_time, avg
-                        ))
-                        print('    changed perf delay from %f to %f'%(
-                            dperf, dperf*avg
-                        ))
-                    prev_time = event.time
+                if next_seg.dt > 0:
+                    if debug: print('    next seg not Delta; using and advancing')
+                    use_seg()
+                    advance_seg()
                     break
-
-            seg_start += seg.dt
-            seg_integral += seg.integral_total()
-            if debug: print('    moving to next seg')
-            seg_ind += 1
-            seg = pft[seg_ind]
-            if debug:
-                print('    next segment: dt %f integral %f'%(seg.dt, seg.integral_total()))
-            seg_end = seg_start + seg.dt
-        # end loop over PFT segments
+                else:
+                    if next_seg.after:
+                        if debug: print('    next seg is after-Delta: use and advance')
+                        use_seg()
+                        advance_seg()
+                        break
+                    if debug: print('    next seg is before-Delta: advance')
+            advance_seg()
         if debug:
             print('  Done with event: perf time ', event.perf_time)
     # end loop over events

@@ -47,9 +47,10 @@ def test2():
 
 def test3():
     ns = Score([n('c d e f g')])
-    ns.set_tempo(60)
+    ns.set_tempo(120)
     ns.done()
     x = [
+        Delta(.05, False),
         Linear(60, 60, 2/4),
         Delta(.1, False),
         Delta(.2, True),
