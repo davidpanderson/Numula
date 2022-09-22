@@ -88,4 +88,4 @@ def comment(item, dt, mdur):
         raise Exception('Inconsistent measure number: %f != %f'%(m1, m2))
     
 def expand_all(items):
-    return expand_iter()
+    return expand_iter(items)
