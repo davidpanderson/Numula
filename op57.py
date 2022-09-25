@@ -122,7 +122,7 @@ rh_118_211 = n(' \
 ', 1/2).tag('rh')
 
 lh_118_211 = n(' \
-    |118 1/4 ---f . . 3/16 . 1/16 +f 1/4 -f . . 3/16 . 1/16 +f \
+    |118 1/4 f2 . . 3/16 . 1/16 +f 1/4 -f . . 3/16 . 1/16 +f \
     |122 1/4 -f 1/16 . . +++a b- *2 c d- c b- 1/8 a 1/16 a b- * \
     c d- c b- a g- f e- *2 2/2 d- _ 1/16 . f *7 b- f * * \
     |130 2/2 e- _ 1/16 . g- *7 c- g- * \
@@ -329,96 +329,102 @@ lh_300_end = n(' \
 # lhv, rhv = L/R hand shapes, 1-4 measure time scale
 # lha, rha = L/R hand accents
 #
-# measures 20..107 are analogous to 212..299,
-# so define strings that we can reuse for the later part.
+# measures 36..107 are analogous to 228..299;
+# 20..107 are analogous to 212..299 for overall volume
+# so define strings we can reuse for the later part.
 
-v020 = ' \
-        |20 ppp_ 44/2 _mf \
-        |64 ] pp 32/2 mf \
-        |96 mf 8/2 mf_ 4/2 _f \
+v0_20 = ' \
+    |20 ppp_ 44/2 _mf \
+    |64 ] pp 32/2 mf \
+    |96 mf 8/2 mf_ 4/2 _f \
 '
-v120 = ' \
-        |20 *2 mm 6/2 mf 2/2 mm * \
-        |36 *2 \
-            *2 mm 2/2 mf 2/2 mm * mm 2/2 mf_ 4/2 mm \
-            * \
-        |64 *5 [ mp 1/2 f 1/2 mm * \
-        |74 mm 2/2 mf *2 mf 1/2 mp 1/2 mf * \
-        |80 [ mp 4/2 mf 2/2 mp \
-        |86 *2 [ mf 1/2 mp 1/2 mf * 2/2 mp 2/2 mf 2/2 mm \
-        |96 *3 mm 2/2 mf 2/2 mm * \
+v1_20 = ' \
+    |20 *2 mm 6/2 mf 2/2 mm * \
+    |36 *2 \
+        *2 mm 2/2 mf 2/2 mm * mm 2/2 mf_ 4/2 mm \
+        * \
+    |64 *5 [ mp 1/2 f 1/2 mm * \
+    |74 mm 2/2 mf *2 mf 1/2 mp 1/2 mf * \
+    |80 [ mp 4/2 mf 2/2 mp \
+    |86 *2 [ mf 1/2 mp 1/2 mf * 2/2 mp 2/2 mf 2/2 mm \
+    |96 *3 mm 2/2 mf 2/2 mm * \
 '
-rhv20 = ' \
+rhv_36 = ' \
+    |36 *2 *2 [ mp 1/4 mm 1/4 mp * mp 1/2 mm 1/2 mp * \
+    |44 mp 6/2 mp \
+    |50 ] mf 11/2 mf 3/2 mp \
+    |64 ] mm 32/2 mm \
+    |96 *2 *3 [ mp 1/4 _mf 1/4 mp * 1/2 mm * \
+    |104 4/2 mm \
+'
+rha_36 = ' \
+    |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
+    |44 *3 mm 1/4 _f 1/4 * mm 1/2 *4 _f 1/4 * \
+    |50 *2 1/2 mf 1/2 f 2/2 * \
+    |58 1/2 mf 1/2 f 3/2 f 1/2 f \
+    |64 32/2 \
+    |96 *2 2/2 3/8 mf 5/8 * \
+    |104 *2 3/8 mf 5/8 * \
+'
+lhv_36 = ' \
+    |36 [ mf_ 14/2 mf_ \
+    |50 *2 [ p 2/2 mp 2/2 p * p 2/2 mp 4/2 p \
+    |64 [ p 12/2 p [ mp 20/2 mp \
+    |96 *12 [ mf 1/4 mm 1/4 mf * \
+'
+lha_36 = ' \
+    |36 *3 2/2 mf 2/2 * *2 mp 1/2 * \
+    |50 14/2 \
+    |64 fff 2/2 *5 2.2 2/2 * *2 f 2/2 * \
+    |80 f 6/2 *3 f 2/2 * 4/2 \
+    |96 12/2 \
+'
+def v20_117(ns, t0):
+    # overall shape of exposition
+    v0 = vol(v0_20 + ' \
+        |108 _f 4/2 f \
+        |112 f 6/2 pp \
+        |118 [ \
+    ', 1/2)
+
+    # swells at 8 measure level
+    v1 = vol(v1_20 + ' \
+        |108 mm 2/2 mf 2/2 mm \
+        |112 6/2 mm \
+        |118 [ \
+    ', 1/2)
+
+    # swells at 1 measure level
+    rhv = vol(' \
         |20 *8 p 1/2 mf_ 1/2 p * \
-        |36 *2 *2 [ mm 1/4 _mf 1/4 mm * mm 1/2 _mf 1/2 mm * \
-        |44 mm 6/2 mm \
-        |50 ] mf 14/2 mf \
-        |64 ] mm 32/2 mm \
-        |96 *2 *3 [ mp 1/4 _mf 1/4 mp * 1/2 mm * \
-        |104 4/2 mm \
-'
-rha20 = ' \
+        ' + rhv_36 + ' \
+        |108 10/2 mm \
+        |118 [ \
+    ', 1/2)
+
+    rha = accents(' \
         |20 *2 \
             *3 mm 1/4 mf_ 1/4 mf 1/4 _mf 1/4 * \
             1/8 mf 1/4 mf 1/4 mf 1/4 mf 1/8 \
             * \
-        |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
-        |44 *3 mm 1/4 _f 1/4 * mm 1/2 *4 _f 1/4 * \
-        |50 *2 1/2 mf 1/2 f 2/2 * \
-        |58 1/2 mf 1/2 f 3/2 f 1/2 f \
-        |64 32/2 \
-        |96 *2 2/2 3/8 mf 5/8 * \
-        |104 *2 3/8 mf 5/8 * \
-'
-lhv20 = ' \
-        |20 mf 30/2 mf_ \
-        |50 *2 [ p 2/2 mp 2/2 p * p 2/2 mp 4/2 p \
-        |64 [ p 12/2 p [ mp 20/2 mp \
-        |96 *12 [ mf 1/4 mm 1/4 mf * \
-'
-lha20 = ' \
-        |20 *3 fff 2/2 * \
-        |26 ff 1/4 f 1/4 ff 1/4 f 1/4 \
-        |28 *3 1/2 mf 1/2 * 2/2 \
-        |36 *3 2/2 mf 2/2 * *2 mp 1/2 * \
-        |50 14/2 \
-        |64 *6 ffff 2/2 * *2 ff 2/2 * \
-        |80 f 6/2 *3 f 2/2 * 4/2 \
-        |96 12/2 \
-'
-def v20_117(ns, t0):
-    # overall shape of exposition
-    v0 = vol(v020 + ' \
-        |108 _f 4/2 f \
-        |112 f 6/2 pp \
-        |118 \
-    ', 1/2)
-
-    # swells at 8 measure level
-    v1 = vol(v120 + ' \
-        |108 mm 2/2 mf 2/2 mm \
-        |112 6/2 mm \
-        |118 \
-    ', 1/2)
-
-    # swells at 1 measure level
-    rhv = vol(rhv20 + ' \
-        |108 10/2 mm \
-        |118 \
-    ', 1/2)
-
-    rha = accents(rha20 + ' \
+        ' + rha_36 + ' \
         |108 *2 3/8 mf 5/8 * \
         |112 *6 mf 1/2 * \
         |118 \
     ', 1/2)
         
-    lhv = vol(lhv20 + ' \
+    lhv = vol(' \
+        |20 mf_ 16/2 mf_ \
+        ' + lhv_36 + ' \
         |108 *4 [ mf 1/4 mm 1/4 mf * \
         |112 [ mm 6/2 mm \
-        |118 \
+        |118 [ \
     ', 1/2)
-    lha = accents(lha20 + ' \
+    lha = accents(' \
+        |20 *3 f 2/2 * \
+        |26 f 1/4 f 1/4 f 1/4 f 1/4 \
+        |28 *3 1/2 mf 1/2 * 2/2 \
+        ' + lha_36 + ' \
         |108 10/2 \
         |118 \
     ', 1/2)
@@ -441,7 +447,7 @@ t20 = f' \
             *3 60 2/2 60 {dt0}p * 2/4 60 2/4 50 {dt0}p\
             * \
         |36 p{dt0} *2 \
-            *2 60 4/2 60 {dt0}p * \
+            *2 55 4/2 60 {dt0}p * \
             6/2 60 {dt0}p \
             * \
         |64 p{dt2} *8 60 2/2 60 {dt0}p * \
@@ -490,11 +496,11 @@ def v118_211(ns, t0):
     v0 = vol(' \
         |118 pp 7/2 mf 1/2 p 6/2 mf 2/2 p 4/2 f \
         |138 4/2 f \
-        |142 *2 ] p 4/2 p ] f 4/2 f * \
-        |158 f 6/2 ff 4/2 ff \
+        |142 *2 ] p 4/2 p ] _f 4/2 _f * \
+        |158 _f 6/2 ff 4/2 ff \
         |168 ] p 8/2 ff 8/2 ff \
-        |184 [ p 8/2 pp 20/2 pp \
-        |212 \
+        |184 [ p 8/2 pp 20/2 pp  \
+        |212 [ \
     ', 1/2)
     rh = vol(' \
         |118 *2 mp 1/2 mm 1/2 mp * *3 mp 1/4 mm 1/4 mp * [ mm 1/2 p \
@@ -502,13 +508,15 @@ def v118_211(ns, t0):
         |134 *4 [ mp 1/2 mm 1/2 mp * \
         |142 [ mm 16/2 mm \
         |158 *5 [ mm 1/4 mf 3/4 mm * \
-        |168 ] p 44/2 p \
-        |212 \
+        |168 ] p 8/2 p \
+        |176 [ *2 [ mp 4/2 mf * \
+        |184 [ mm 28/2 mm \
+        |212 [ \
     ', 1/2)
     rha = accents(' \
         |118 16/2 \
         |134 1/2 1/4 f 1/4 f 1/4 f 1/4 1/4 f 1/4 f 4/2 \
-        |142 *2 *3 1/8 mf 3/8 * 1/2 *3 1/8 f 3/8 * 1/2 * \
+        |142 *2 *3 1/8 mf 3/8 * 1/2 *3 1/8 mf 3/8 * 1/2 * \
         |158 9/2 3/8 mf 1/8 mf 44/2 \
         |212 \
     ', 1/2)
@@ -520,11 +528,11 @@ def v118_211(ns, t0):
         |142 [ mp 16/2 mp \
         |158 [ mm 1/4 mm *2 [ mp 1/4 mf 3/4 mp * mp 1/4 mf 2/4 mp \
         |164 [ mm 48/2 mm \
-        |212 \
+        |212 [ \
     ', 1/2)
     # attenuate off-beat chords from 138 to 140
     lha = accents(' \
-        |118 fff 2/2 fff 2/2 fff 1/2 ff 1/2 f 2/2 \
+        |118 ff 2/2 mf 2/2 mf 1/2 f 1/2 f 2/2 \
         |126 *3 f 2/2 * f 1/2 f 1/2 \
         |134 *2 1/4 mf 1/4 mf 1/4 mf 1/4 * \
         |138 mf 1/16 mp 1/16 *7 1/16 mp 1/16 * *4 1/16 p 1/16 * 1/2 \
@@ -542,11 +550,13 @@ def v118_211(ns, t0):
     
 def t118_211(ns, t0):
     t = tempo(f' \
-        |118 *2 p{dt0} 60 2/2 60 * p{dt0} 4/2 55 \
+        |118 {dt2}p *2 p{dt0} 60 2/2 60 * p{dt0} 4/2 55 \
         |126 p{dt1} 55 7/2 60 1/2 50 \
         |134 p{dt0} 60 8/2 55 \
-        |142 25/2 60 \
-        |167 3/8 60 {dt1}p p{dt1} 1/8 60 p{dt0} 8/2 64 \
+        |142 16/2 60 \
+        |158 {dt1}p p{dt0} 6/2 60 \
+        |164 {dt1}p 3/2 60 \
+        |167 3/8 62 {dt1}p p{dt1} 1/8 62 p{dt0} 8/2 64 \
         |176 {dt2}p 8/2 64 55 28/2 50 \
         |212 \
     ', 1/2)
@@ -573,30 +583,39 @@ def p118_211(ns, t0):
     ns.pedal_pft(p, t0)
 
 # measures 212..299 are analogous to 20..107
+# (except the first 16 measures are kind of different)
 def v212_299(ns, t0):
-    # overall shape of exposition
-    v0 = vol(v020 + ' \
-        |108 \
+    v0 = vol(v0_20 + ' \
+        |108 [ \
     ', 1/2)
 
-    # swells at 8 measure level
-    v1 = vol(v120 + ' \
-        |108 \
+    v1 = vol(v1_20 + ' \
+        |108 [ \
     ', 1/2)
 
-    # swells at 1 measure level
-    rhv = vol(rhv20 + ' \
-        |108 \
+    rhv = vol(' \
+        |20 *4 p 1/2 mf_ 1/2 p * \
+        |28 [ mm 1/2 mf 1/2 mm [ _mf 1/2 mf_ 1/2 _mf [ mf 2/2 _f 2/2 mf \
+        ' + rhv_36 + ' \
+        |108 [ \
     ', 1/2)
 
-    rha = accents(rha20 + ' \
+    rha = accents(' \
+        |20 16/2 \
+        ' + rha_36 + ' \
         |108 \
     ', 1/2)
         
-    lhv = vol(lhv20 + ' \
-        |108 \
+    lhv = vol(' \
+        |20 mf_ 8/2 mf_ \
+        |28 ] *4 mp 1/2 mm 1/2 mp * \
+        ' + lhv_36 + ' \
+        |108 [ \
     ', 1/2)
-    lha = accents(lha20 + ' \
+    lha = accents(' \
+        |20 f 2/2 f 1/2 f 1/2 f 1/2 f 3/2 \
+        |28 8/2 \
+        ' + lha_36 + ' \
         |108 \
     ', 1/2)
     ns.vol_adjust_pft(v0, t0)
@@ -627,7 +646,7 @@ def p212_299(ns, t0):
 def v300_1(ns, t0):
     v = vol(' \
         |300 ff 2/2 ff_ 6/2 p \
-        |308 \
+        |308 [ \
     ', 1/2)
     ns.vol_adjust_pft(v, t0)
     
@@ -651,18 +670,19 @@ def v300_end(ns, t0):
         |308 *2 [ ff 1/2 fff 1/2 fff [ p 5/2 mf ] mf 1/2 ff * \
         |324 ff 1/2 fff 1/2 fff [ mp 7/2 mf [ f 1/2 ff \
         |334 ff 1/2 fff 1/2 fff [ p 7/2 f \
-        |343 [ f 8/2 f_ 8/2 _ff 8/2 ff_ \
-        |367 [ _ff 4/2 ff 6/2 fff [ fff_ 3/2 fff_ \
+        |343 [ _f 8/2 f [ f_ 8/2 _ff \
+        |359 ] mf 8/2 ff_ \
+        |367 [ _ff 4/2 ff 6/2 _fff [ fff 3/2 fff_ \
         |380 \
     ', 1/2)
     ns.vol_adjust_pft(v, t0)
     a8 = 'mf'    # accents on 8th-note chords in 310 onward
     lha = accents(f' \
-        |300 *3 3/8 mf 5/8 * mf 1/2 mf 1/2 \
-        |308 *2 2/2 *6 {a8} 1/2 * * \
+        |300 *3 3/8 mf 5/8 mf * mf 1/2 mf 1/2 \
+        |308 *2 2/2 *5 {a8} 1/2 * f 1/2 * \
         |324 2/2 *8 {a8} 1/2 * 2/2 *7 {a8} 1/2 * \
         |343 *16 1/4 mf 1/4 * \
-        |359 *4 1/2 mf 1/2 * \
+        |359 *4 1/2 f 1/2 * \
         |367 *10 mf 1/4 mf 1/4 * 3/2 \
         |380 \
     ', 1/2)
@@ -671,8 +691,8 @@ def v300_end(ns, t0):
         |300 8/2 \
         |308 *2 2/2 *6 {a8} 1/2 * * \
         |324 2/2 *8 {a8} 1/2 * 2/2 *7 {a8} 1/2 * \
-        |343 16/2 \
-        |359 *4 1/4 mf 3/4 * \
+        |343 *8 mf 2/2 * \
+        |359 *4 1/4 f 3/4 * \
         |367 2/2 1/4 mf 1/4 *7 mf 1/4 mf 1/4 * 3/2 \
         |380 \
     ', 1/2)
@@ -684,12 +704,13 @@ def v300_end(ns, t0):
     
 def t300_end(ns, t0):
     t = tempo(f' \
-        |300 *3 60 2/2 p{dt1} * 60 2/2 70 \
+        |300 *3 60 2/2 {dt0}p p{dt0} * 60 2/2 70 \
         |308 *2 p{dt1} 65 2/2 65 p{dt0} 70 6/2 70 * \
         |324 p{dt0} 70 10/2 70 \
         |334 p{dt0} 70 9/2 70 \
-        |343 70 34/2 70 \
-        |377 50 3/2 50 \
+        |343 70 16/2 70 \
+        |359 70 18/2 75 \
+        |377 {dt2}p 50 3/2 45 \
         |380 \
     ', 1/2)
     ns.tempo_adjust_pft(t, t0)
@@ -701,15 +722,16 @@ def p300_end(ns, t0):
     p = pedal(' \
         |300 - 8/2 *2 - 3/4 - 1/4 6/2 * \
         |324 - 3/4 - 1/4 8/2 - 3/4 - 1/4 7/2 \
-        |343 - 28/2 + 6/2 - 3/2 \
+        |343 - 28/2 \
+        |371 + 6/2 - 3/2 \
         |380 \
     ', 1/2)
     ns.pedal_pft(p, t0)
 
 def main():
     do_20 = True
-    do_118 = False
-    do_212 = False
+    do_118 = True
+    do_212 = True
     do_300_1 = False
     do_118_rep = False
     do_212_rep = False
@@ -787,7 +809,7 @@ def main():
         v300_end(ns, t_300_2)
         t300_end(ns, t_300_2)
 
-    ns.perf_dur_rel(.5, lambda n: 'stac' in n.tags)
+    ns.perf_dur_rel(.3, lambda n: 'stac' in n.tags)
     #ns.t_random_normal(.01, 2)
     print(ns)
     ns.write_midi('data/op57.midi')

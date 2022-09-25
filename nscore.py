@@ -466,6 +466,9 @@ class Score:
                 else:
                     if note.perf_time < cur_ped.perf_time:
                         cur_ped.perf_time = note.perf_time
+        for pedal in self.pedals:
+            # don't want pedal down during attack of notes right at end
+            pedal.perf_dur -= .01
                         
     from nuance import vol_adjust_pft, vol_adjust, vol_adjust_func
     from nuance import tempo_adjust_pft, sustain, pause_before, pause_after
