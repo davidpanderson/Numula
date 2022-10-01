@@ -326,9 +326,9 @@ def v_random_normal(self, stddev, max_sigma=2, pred=None):
 #   scale the perf time interval between A and B by this.
 # - update the (perf) time and dur of the corresponding Note and Pedal objects.
 #
-def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
-    debug = False
-
+def tempo_adjust_pft(
+    self, _pft, t0=0, pred=None, normalize=False, bpm=True, debug=False
+):
     if bpm:
         pft = copy.deepcopy(_pft)
         pft_bpm(pft)    # invert tempo function
@@ -429,18 +429,19 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
             ))
         prev_time = event.time
 
+    first = True
     for event in self.start_end:
-        if debug:
-            print('event time %f perf time %f prev_time %f'%(
-                event.time, event.perf_time, prev_time)
-            )
         if event.time < t0-epsilon:
             # event is before start of PFT
             prev_time = event.time
             prev_perf = event.perf_time
             prev_perf_adj = event.perf_time
-            if debug: print('  before start of PFT, skipping')
+            #if debug: print('  before start of PFT, skipping')
             continue
+        if debug:
+            print('event time %f perf time %f prev_time %f'%(
+                event.time, event.perf_time, prev_time)
+            )
         if pred:
             if event.kind == event_kind_note:
                 if not pred(event.obj):
@@ -469,6 +470,9 @@ def tempo_adjust_pft(self, _pft, t0=0, pred=None, normalize=False, bpm=True):
         while True:
             if debug:
                 print('  Seg loop: seg_start', seg_start, ' seg_end', seg_end, ' seg integral', seg_integral)
+            if first:
+                first = False
+                prev_integral = prev_time - t0
             if event.time < seg_end - epsilon:
                 if debug: print('   event is strictly in seg; using it')
                 use_seg()

@@ -177,9 +177,10 @@ rh_212_299 = n(' \
     *2 c f a- c d- c b- a- b- a- g f g a- f . * \
     g- +c e- g- a- g- f e- f e- d- c d- e- c \
     . -g- +c e- g- a- g- f e- f e- d- c b- a- g- \
-    |264 f *2 a- d- f a- b- a- g- f g- f e- d- e- f d- . * \
-    *2 g- a- g- a- g- f g- . e f e . f g f . * \
-    g- a- g- a- g- f g . e f e . d- e- d- . c d- c . b c b \
+    |264 f a- d- f a- b- a- g- f g- f e- d- e- f d- \
+    |266 . a- d- f a- b- a- g- f g- a- g- f g- a- f \
+    |268 *2 . g- a- g- a- g- f g- . e f e . f g f * \
+    |272 . g- a- g- a- g- f g . e f e . d- e- d- . c d- c . b c b \
     |275 . b- c b- . a- b- a- . a- b- a- . g a- g . f g f . e f e \
     |278 #c5 *2 . +d- *3 +d- -d- * . d- +d- c b- a- g f * \
     . d5- *3 +d- -d- * . +d- -d- +d- . +d- -d- +d- \
@@ -323,15 +324,22 @@ lh_300_end = n(' \
     |380 \
 ').tag('lh')
 
+# nuance: in general we use some or all of
 # volume:
-# in general we use
-# v = overall volume, 4-16 measure time scale
-# lhv, rhv = L/R hand shapes, 1-4 measure time scale
-# lha, rha = L/R hand accents
+#   v0 = overall volume, 4-16 measure time scale
+#   v1 = fluctuations, shorter time scale
+#   lhv, rhv = L/R hand shapes, 1-4 measure time scale
+#   lha, rha = L/R hand accents
+# tempo:
+#   t0 = overall tempo
+#   t1 = pauses and shorter-scale change
+# pedal:
+#   rhp, lhp: per-hand virtual sustain pedal
+#   p: MIDI sustain pedal
 #
 # measures 36..107 are analogous to 228..299;
 # 20..107 are analogous to 212..299 for overall volume
-# so define strings we can reuse for the later part.
+# so define pieces we can reuse for the latter part.
 
 v0_20 = ' \
     |20 ppp_ 44/2 _mf \
@@ -360,7 +368,7 @@ rhv_36 = ' \
 rha_36 = ' \
     |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
     |44 *3 mm 1/4 _f 1/4 * mm 1/2 *4 _f 1/4 * \
-    |50 *2 1/2 mf 1/2 f 2/2 * \
+    |50 *2 1/2 mf 1/2 f 1/2 mp 1/2 * \
     |58 1/2 mf 1/2 f 3/2 f 1/2 f \
     |64 32/2 \
     |96 *2 2/2 3/8 mf 5/8 * \
@@ -373,7 +381,7 @@ lhv_36 = ' \
     |96 *12 [ mf 1/4 mm 1/4 mf * \
 '
 lha_36 = ' \
-    |36 *3 2/2 mf 2/2 * *2 mp 1/2 * \
+    |36 *3 2/2 mf 1/2 p 1/2 * *2 mp 1/2 * \
     |50 14/2 \
     |64 fff 2/2 *5 2.2 2/2 * *2 f 2/2 * \
     |80 f 6/2 *3 f 2/2 * 4/2 \
@@ -423,7 +431,7 @@ def v20_117(ns, t0):
     lha = accents(' \
         |20 *3 f 2/2 * \
         |26 f 1/4 f 1/4 f 1/4 f 1/4 \
-        |28 *3 1/2 mf 1/2 * 2/2 \
+        |28 *3 1/2 mf 1/4 p 1/4 * 2/2 \
         ' + lha_36 + ' \
         |108 10/2 \
         |118 \
@@ -442,51 +450,64 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 
-t20 = f' \
-        |20 *2 \
-            *3 60 2/2 60 {dt0}p * 2/4 60 2/4 50 {dt0}p\
-            * \
-        |36 p{dt0} *2 \
-            *2 55 4/2 60 {dt0}p * \
-            6/2 60 {dt0}p \
-            * \
-        |64 p{dt2} *8 60 2/2 60 {dt0}p * \
-        |80 4/2 60 {dt0}p *6 2/2 60 {dt0}p * \
-        |96 {dt2}p p{dt1} 4/2 60 \
-        |100 {dt0}p p{dt1} 4/2 60 \
-        |104 60 4/2 57 \
+t_20 = f' \
+    |20 *2 \
+        *3 60 2/2 60 {dt0}p * 1/2 60 1/2 50 {dt0}p \
+        * \
+    |36 p{dt0} *2 \
+        *2 55 4/2 60 {dt0}p * \
+        6/2 60 {dt0}p \
+        * \
+    |64 p{dt2} *8 60 2/2 60 {dt0}p * \
+    |80 4/2 60 {dt0}p *6 2/2 60 {dt0}p * \
+    |96 {dt2}p p{dt1} 4/2 60 \
+    |100 {dt0}p p{dt1} 4/2 60 \
+    |104 60 4/2 57 \
 '
+t0_20 = f' \
+    |20 *2 60 7/2 60 1/2 50 * \
+    |36 *2 \
+        *2 55 4/2 60 * \
+        6/2 60 \
+        * \
+    |64 40/2 60 \
+    |104 \
+'
+t1_20 = f' \
+    |20 *2 \
+'
+
 def t20_117(ns, t0):
-    t = tempo(t20 + f' \
+    t = tempo(t_20 + f' \
         |108 57 2/2 55 2/2 50 {dt4}p p{dt0} \
         |112 4/2 60 2/2 50 {dt0}p \
         |118 \
     ', 1/2)
     ns.tempo_adjust_pft(t, t0)
 
-rhp20 = ' \
-        |20 - 16/2 \
-        |36 *2 *3 + 1/2 * + 1/4 + 1/4 * \
-        |44 *3 + 1/2 * *4 + 1/8 * *2 + 1/2 * \
-        |50 - 58/2 \
+rhp_20 = ' \
+    |20 - 16/2 \
+    |36 *2 *3 + 1/2 * + 1/4 + 1/4 * \
+    |44 *3 + 1/2 * *4 + 1/8 * *2 + 1/2 * \
+    |50 - 58/2 \
 '
-lhp20 = ' \
-        |50 *2 + 1/4 1/4 1/4 1/4 1/4 - 3/4 * \
-        |58 + 1/4 1/4 1/4 1/4 - 2/2 + 1/4 - 1/4 + 1/2 \
-        |64 + 2/2 2/2 *2 + 1/2 1/4 1/4 * \
-        |72 *2 + 2/2 * \
-        |76 - 32/2 \
+lhp_20 = ' \
+    |50 *2 + 1/4 1/4 1/4 1/4 1/4 - 3/4 * \
+    |58 + 1/4 1/4 1/4 1/4 - 2/2 + 1/4 - 1/4 + 1/2 \
+    |64 + 2/2 2/2 *2 + 1/2 1/4 1/4 * \
+    |72 *2 + 2/2 * \
+    |76 - 32/2 \
 '
 def p20_117(ns, t0):
     # virtual pedal RH arpeggios starting in m36
-    rh = pedal(rhp20 + ' \
+    rh = pedal(rhp_20 + ' \
         |108 10/2 \
         |118 \
     ', 1/2)
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
     ns.insert_pedal(PedalUse(t0+92/2, 4/2))
 
-    lh = pedal(lhp20 + ' \
+    lh = pedal(lhp_20 + ' \
         |108 10/2 \
         |118 \
     ', 1/2)
@@ -613,7 +634,7 @@ def v212_299(ns, t0):
         |108 [ \
     ', 1/2)
     lha = accents(' \
-        |20 f 2/2 f 1/2 f 1/2 f 1/2 f 3/2 \
+        |20 f 2/2 f 1/2 f 1/4 mp 1/4 f 1/2 f 3/2 \
         |28 8/2 \
         ' + lha_36 + ' \
         |108 \
@@ -626,19 +647,18 @@ def v212_299(ns, t0):
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
 
 def t212_299(ns, t0):
-    t = tempo(t20 + ' \
+    t = tempo(t_20 + ' \
         |108 \
     ', 1/2)
     ns.tempo_adjust_pft(t, t0)
 
 def p212_299(ns, t0):
-    rh = pedal(rhp20 + ' \
+    rh = pedal(rhp_20 + ' \
         |108 \
     ', 1/2)
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
-    ns.insert_pedal(PedalUse(t0+92/2, 4/2))
 
-    lh = pedal(lhp20 + ' \
+    lh = pedal(lhp_20 + ' \
         |108 \
     ', 1/2)
     ns.vsustain_pft(lh, t0+30/2, lambda n: 'lh' in n.tags)
@@ -729,13 +749,13 @@ def p300_end(ns, t0):
     ns.pedal_pft(p, t0)
 
 def main():
-    do_20 = True
-    do_118 = True
+    do_20 = False
+    do_118 = False
     do_212 = True
-    do_300_1 = False
-    do_118_rep = False
-    do_212_rep = False
-    do_300_2 = False
+    do_300_1 = True
+    do_118_rep = True
+    do_212_rep = True
+    do_300_2 = True
     
     ns = Score()
     # must make copies first; append_score() changes note times
@@ -764,7 +784,6 @@ def main():
     if do_300_2:
         t_300_2 = ns.cur_time
         ns.append_score([rh_300_end, lh_300_end])
-        #ns.append_score([lh_300_end])
 
     ns.set_tempo(144)
 
