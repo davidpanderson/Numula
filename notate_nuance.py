@@ -229,6 +229,15 @@ def tempo(s, mdur=0):
             dur = num/denom
         elif t[0] == '|':
             comment(t, dt, mdur)
+        elif t == 'linear':
+            segtype = SEGTYPE_LINEAR
+        elif t[0:3] == 'exp':
+            segtype = SEGTYPE_EXP
+            try:
+                curvature = float(t[3:])
+            except:
+                show_context(items, i)
+                raise Exception('bad curvature')
         elif t[0] == 'p':
             try:
                 val = float(t[1:])
@@ -243,16 +252,22 @@ def tempo(s, mdur=0):
                 show_context(items, i)
                 raise Exception('bad pause value')
             pft.append(Delta(val, after=False))
-        elif t == 'linear':
-            segtype = SEGTYPE_LINEAR
-        elif t[0:3] == 'exp':
-            segtype = SEGTYPE_EXP
+        elif 'p' in t:
+            pos = t.index('p')
             try:
-                curvature = float(t[3:])
+                val = float(t[0:pos])
             except:
                 show_context(items, i)
-                raise Exception('bad curvature')
+                raise Exception('bad pause value')
+            pft.append(Delta(val, after=False))
+            try:
+                val = float(t[pos+1:])
+            except:
+                show_context(items, i)
+                raise Exception('bad pause value')
+            pft.append(Delta(val, after=True))
         else:
+            # parse a tempo
             try:
                 val = float(t)
             except:

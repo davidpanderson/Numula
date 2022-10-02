@@ -56,10 +56,10 @@ def test3():
         Delta(.2, True),
         Linear(60, 60, 2/4)
     ]
-    #x = tempo('60 2/4 60 .1p p.2 60 2/4 60')
-    x = tempo('60 2/4 60')
+    x = tempo('60 2/4 60 .1p.2 60 2/4 60')
+    #x = tempo('60 2/4 60')
     print(*x, sep='\n')
-    ns.tempo_adjust_pft(x, 3/8, debug=True)
+    ns.tempo_adjust_pft(x)
     print(ns)
 test3()
 
