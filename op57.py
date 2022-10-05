@@ -370,7 +370,7 @@ rha_36 = ' \
     |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
     |44 *3 mm 1/4 _f 1/4 * mm 1/2 *4 _f 1/4 * \
     |50 *2 1/2 mf 1/2 f 1/2 mp 1/2 * \
-    |58 1/2 mf 1/2 f 3/2 f 1/2 f \
+    |58 1/2 mf 1/2 mf_ 3/2 mf_ 1/2 f \
     |64 32/2 \
     |96 *2 2/2 3/8 mf 5/8 * \
     |104 *2 3/8 mf 5/8 * \
@@ -378,7 +378,8 @@ rha_36 = ' \
 lhv_36 = ' \
     |36 [ mf_ 14/2 mf_ \
     |50 *2 [ p 2/2 mp 2/2 p * p 2/2 mp 4/2 p \
-    |64 [ p 12/2 p [ mp 20/2 mp \
+    |64 [ p 10/2 p 2/2 f \
+    |76 [ mp 20/2 mp \
     |96 *12 [ mf 1/4 mm 1/4 mf * \
 '
 lha_36 = ' \
@@ -405,7 +406,7 @@ def v20_117(ns, t0):
 
     # swells at 1 measure level
     rhv = vol(' \
-        |20 exp-3 *8 mp 1/2 mf 1/2 mp * \
+        |20 exp-2 *8 mp 1/2 f 1/2 mp * \
         ' + rhv_36 + ' \
         |108 10/2 mm \
         |118 [ \
@@ -451,40 +452,50 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 
-t_20 = f' \
+ta_20 = f' \
     |20 *2 \
-        *3 60 2/2 60 {dt0}p * 1/2 60 1/2 50 {dt0}p \
+        *3 60 2/2 60 * 1/2 60 1/2 50 \
         * \
-    |36 p{dt0} *2 \
-        *2 55 4/2 60 {dt0}p * \
-        6/2 60 {dt0}p \
-        * \
-    |64 p{dt2} *8 60 2/2 60 {dt0}p * \
-    |80 4/2 60 {dt0}p *6 2/2 60 {dt0}p * \
-    |96 {dt2}p{dt2} 4/2 60 \
-    |100 {dt0}p{dt2} 4/2 60 \
-    |104 60 4/2 57 \
-'
-t0_20 = f' \
-    |20 *2 60 7/2 60 1/2 50 * \
     |36 *2 \
         *2 55 4/2 60 * \
         6/2 60 \
         * \
-    |64 40/2 60 \
-    |104 \
+    |64 60 16/2 60 \
+    |80 16/2 60 \
+    |96 4/2 60 \
+    |100 4/2 60 \
+    |104 60 4/2 57 \
+    |108 \
 '
-t1_20 = f' \
+tb_20 = f' \
     |20 *2 \
+        *3 60 2/2 60 {dt0}p * 1/2 60 1/2 60 {dt0}p \
+        * \
+    |36 p{dt0} *2 \
+        *2 60 3/2 60 {dt0}p 1/2 60 {dt0}p * \
+        6/2 60 {dt0}p \
+        * \
+    |64 p{dt2} *8 60 2/2 60 {dt0}p * \
+    |80 4/2 60 {dt1}p *6 2/2 60 {dt0}p * \
+    |96 {dt1}p{dt2} 4/2 60 \
+    |100 {dt0}p{dt2} 8/2 60 \
+    |108 \
 '
 
 def t20_117(ns, t0):
-    t = tempo(t_20 + f' \
-        |108 57 2/2 55 2/2 50 {dt4}p{dt0} \
-        |112 4/2 60 2/2 50 {dt0}p \
+    ta = tempo(ta_20 + f' \
+        |108 57 2/2 55 2/2 50 \
+        |112 4/2 60 2/2 50 \
         |118 \
     ', 1/2)
-    ns.tempo_adjust_pft(t, t0)
+    ns.tempo_adjust_pft(ta, t0)
+    tb = tempo(tb_20 + f' \
+        |108 60 4/2 60 {dt4}p{dt0} \
+        |112 6/2 60 {dt0}p \
+        |118 \
+    ', 1/2)
+    ns.tempo_adjust_pft(tb, t0)
+
 
 rhp_20 = ' \
     |20 - 16/2 \
@@ -493,13 +504,16 @@ rhp_20 = ' \
     |50 - 46/2 \
     |96 + 1/4 - 7/4 + 1/4 - 1/4 \
     |101 7/2 \
+    |108 \
 '
 lhp_20 = ' \
     |50 *2 + 1/4 1/4 1/4 1/4 1/4 - 3/4 * \
     |58 + 1/4 1/4 1/4 1/4 - 2/2 + 1/4 - 1/4 + 1/2 \
     |64 + 2/2 2/2 *2 + 1/2 1/4 1/4 * \
     |72 *2 + 2/2 * \
-    |76 - 32/2 \
+    |76 - 20/2 \
+    |96 + 1/2 - 3/2 + 1/2 - 7/2 \
+    |108 \
 '
 def p20_117(ns, t0):
     # virtual pedal RH arpeggios starting in m36
@@ -667,10 +681,14 @@ def v212_299(ns, t0):
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
 
 def t212_299(ns, t0):
-    t = tempo(t_20 + ' \
+    ta = tempo(ta_20 + ' \
         |108 \
     ', 1/2)
-    ns.tempo_adjust_pft(t, t0)
+    ns.tempo_adjust_pft(ta, t0)
+    tb = tempo(tb_20 + ' \
+        |108 \
+    ', 1/2)
+    ns.tempo_adjust_pft(tb, t0)
 
 def p212_299(ns, t0):
     rh = pedal(rhp_20 + ' \
@@ -783,12 +801,12 @@ def p300_end(ns, t0):
 
 def main():
     do_20 = True
-    do_118 = True
-    do_212 = True
-    do_300_1 = True
-    do_118_rep = True
-    do_212_rep = True
-    do_300_2 = True
+    do_118 = False
+    do_212 = False
+    do_300_1 = False
+    do_118_rep = False
+    do_212_rep = False
+    do_300_2 = False
     
     ns = Score()
     # must make copies first; append_score() changes note times
@@ -820,50 +838,55 @@ def main():
 
     ns.set_tempo(144)
 
+    nuance = True
+    
     # pedal control; do this before done()
-    if do_20:
-        p20_117(ns, t_20)
-    if do_118:
-        p118_211(ns, t_118)
-    if do_212:
-        p212_299(ns, t_212)
-    if do_300_1:
-        p300_1(ns, t_300_1)
-    if do_118_rep:
-        p118_211(ns, t_118_rep)
-    if do_212_rep:
-        p212_299(ns, t_212_rep)
-    if do_300_2:
-        p300_end(ns, t_300_2)
+    if nuance:
+        if do_20:
+            p20_117(ns, t_20)
+        if do_118:
+            p118_211(ns, t_118)
+        if do_212:
+            p212_299(ns, t_212)
+        if do_300_1:
+            p300_1(ns, t_300_1)
+        if do_118_rep:
+            p118_211(ns, t_118_rep)
+        if do_212_rep:
+            p212_299(ns, t_212_rep)
+        if do_300_2:
+            p300_end(ns, t_300_2)
     
     ns.done()
 
     # other nuance
-    if do_20:
-        v20_117(ns, t_20)
-        t20_117(ns, t_20)
-    if do_118:
-        v118_211(ns, t_118)
-        t118_211(ns, t_118)
-    if do_212:
-        v212_299(ns, t_212)
-        t212_299(ns, t_212)
-    if do_300_1:
-        v300_1(ns, t_300_1)
-        t300_1(ns, t_300_1)
-    if do_118_rep:
-        v118_211(ns, t_118_rep)
-        t118_211(ns, t_118_rep)
-    if do_212_rep:
-        v212_299(ns, t_212_rep)
-        t212_299(ns, t_212_rep)
-    if do_300_2:
-        v300_end(ns, t_300_2)
-        t300_end(ns, t_300_2)
+    if nuance:
+        if do_20:
+            v20_117(ns, t_20)
+            t20_117(ns, t_20)
+        if do_118:
+            v118_211(ns, t_118)
+            t118_211(ns, t_118)
+        if do_212:
+            v212_299(ns, t_212)
+            t212_299(ns, t_212)
+        if do_300_1:
+            v300_1(ns, t_300_1)
+            t300_1(ns, t_300_1)
+        if do_118_rep:
+            v118_211(ns, t_118_rep)
+            t118_211(ns, t_118_rep)
+        if do_212_rep:
+            v212_299(ns, t_212_rep)
+            t212_299(ns, t_212_rep)
+        if do_300_2:
+            v300_end(ns, t_300_2)
+            t300_end(ns, t_300_2)
 
-    ns.perf_dur_rel(.3, lambda n: 'stac' in n.tags)
+        ns.perf_dur_rel(.3, lambda n: 'stac' in n.tags)
+        
     #ns.t_random_normal(.007, 2)
-    print(ns)
+    #print(ns)
     ns.write_midi('data/op57.midi')
     pianoteq.play('data/op57.midi')
 
