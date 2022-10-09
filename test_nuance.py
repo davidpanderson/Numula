@@ -24,7 +24,6 @@ import pianoteq
 # various timing-related functions
 def test1():
     ns = n('c d e [f a c] g a b c')
-    ns.done()
     #ns.tempo_adjust_pft([Linear(60, 120, 8/4)])
     ns.pause_before(3/4, .7, False)
     #ns.roll(3/4, [-.2, -.1, 0], True, True)
@@ -37,7 +36,6 @@ def test2():
     ns.insert_score(n('c d e (foo [f a c] g foo) a b c'))
     ns.insert_measure(Measure(0, 4/4, '4/4'))
     ns.insert_measure(Measure(1, 4/4, '4/4'))
-    ns.done()
     ns.t_adjust_list([.1, .2], lambda x: 'foo' in x.tags)
     ns.t_random_uniform(-.1, .1)
     ns.t_random_normal(.1, 3)
@@ -48,7 +46,6 @@ def test2():
 def test3():
     ns = Score([n('a b c d e f g c')])
     ns.set_tempo(120)
-    ns.done()
     x = [
         Delta(.05, False),
         Linear(60, 60, 2/4),
@@ -65,7 +62,6 @@ test3()
 
 def test4():
     ns = Score([n('c d e f g')])
-    ns.done()
     ns.vol_adjust_pft([
         Linear(pp, ff, 1/8),
         Linear(ff, p, 2/4)
@@ -77,7 +73,6 @@ def test_dur_pft():
     ns = Score()
     for i in range(8):
         ns.append_score([n('1/8 c d e f g a b c')])
-    ns.done()
     ns.perf_dur_pft(
         [
             Linear(.1, 1.5, 8/4),
@@ -109,7 +104,6 @@ def test_vol():
     ns = Score()
     for i in range(2):
         ns.append_score([n('1/8 c d e f g a b c')])
-    ns.done()
     ns.vol_adjust_pft(
         [
             Unity(2/4),
@@ -129,7 +123,6 @@ def test_ped():
     #ns.insert_pedal(PedalUse(1/4, 3/4))
     #ns.pedal_pft([PedalSeg(3/16, 0), PedalSeg(2/4, 1)])
     ns.pedal_pft(pedal('- 1/4 + 1/8 + 1/4 - 4/4'))
-    ns.done()
     print(ns)
 
 #test_ped()

@@ -240,6 +240,8 @@ class PftValue:
 
 # adjust volume of selected notes by PFT starting at t0
 def vol_adjust_pft(self, pft, t0=0, pred=None):
+    self.time_sort()
+    self.tags_init()
     pft_check_closure(pft)
     seg_ind = 0
     seg = pft[0]
@@ -277,11 +279,13 @@ def vol_adjust_pft(self, pft, t0=0, pred=None):
         n.vol *= v
         
 def vol_adjust(self, atten, pred):
+    self.tags_init()
     for note in self.notes:
         if pred(note):
             note.vol *= atten
             
 def vol_adjust_func(self, func, pred):
+    self.tags_init()
     for note in self.notes:
         if pred(note):
             note.vol *= func(note)
@@ -289,11 +293,13 @@ def vol_adjust_func(self, func, pred):
 # randomly perturb volume
 #
 def v_random_uniform(self, min, max, pred=None):
+    self.tags_init()
     for note in self.notes:
         if pred and not pred(note): continue
         note.vol *= random.uniform(min, max)
 
 def v_random_normal(self, stddev, max_sigma=2, pred=None):
+    self.tags_init()
     for note in self.notes:
         if pred and not pred(note): continue
         while True:
@@ -329,6 +335,7 @@ def v_random_normal(self, stddev, max_sigma=2, pred=None):
 def tempo_adjust_pft(
     self, _pft, t0=0, pred=None, normalize=False, bpm=True, debug=False
 ):
+    self.init_all()
     if bpm:
         pft = copy.deepcopy(_pft)
         pft_bpm(pft)    # invert tempo function
@@ -501,6 +508,8 @@ def tempo_adjust_pft(
 # change dur of notes starting between t0 and t1 so they end at t1
 # (like a local sustain pedal)
 def sustain(self, t0, t1, pred=None):
+    self.time_sort()
+    self.init_tags()
     for n in self.notes:
         if n.time<t0-epsilon:
             continue
@@ -515,6 +524,7 @@ def sustain(self, t0, t1, pred=None):
 # insert a pause of dt before time t.
 # If connect is True, extend earlier notes ending at t to preserve legato
 def pause_before(self, t, dt, connect=True):
+    self.init_all()
     for note in self.notes:
         if note.time + note.dur < t-epsilon:
             # note ends before t
@@ -537,6 +547,7 @@ def pause_before(self, t, dt, connect=True):
 
 # pause after notes at t.
 def pause_after(self, t, dt):
+    self.init_all()
     for note in self.notes:
         if note.time < t-epsilon:
             # note starts before t
@@ -582,6 +593,7 @@ def roll_aux(chord, offsets, is_up, is_delay):
     return dt
 
 def roll(self, t, offsets, is_up=True, is_delay=False, pred=None, verbose=False):
+    self.init_all()
     chord = []   # the notes at time t
     rolled = False
     for note in self.notes:
@@ -605,6 +617,7 @@ def roll(self, t, offsets, is_up=True, is_delay=False, pred=None, verbose=False)
         roll_aux(chord, offsets, is_up, is_delay)
 
 def t_adjust_list(self, offsets, pred):
+    self.init_all()
     ind = 0
     for note in self.notes:
         if ind == len(offsets): break
@@ -613,11 +626,13 @@ def t_adjust_list(self, offsets, pred):
             ind += 1
 
 def t_adjust_notes(self, offset, pred):
+    self.init_all()
     for note in self.notes:
         if pred(note):
             note.perf_time += offset
 
 def t_adjust_func(self, func, pred):
+    self.init_all()
     for note in self.notes:
         if pred(note):
             note.perf_time += func(note)
@@ -626,6 +641,7 @@ def t_adjust_func(self, func, pred):
 # Possible TODO: adjust durations of earlier notes that end at this time
 #
 def t_random_uniform(self, min, max, pred=None):
+    self.init_all()
     for note in self.notes:
         if pred and not pred(note): continue
         x = random.uniform(min, max)
@@ -633,6 +649,7 @@ def t_random_uniform(self, min, max, pred=None):
         note.perf_dur -= x
 
 def t_random_normal(self, stddev, max_sigma=2, pred=None):
+    self.init_all()
     for note in self.notes:
         if pred and not pred(note): continue
         while True:
@@ -645,37 +662,44 @@ def t_random_normal(self, stddev, max_sigma=2, pred=None):
 # --------------- Articulation ----------------------
 
 def score_dur_abs(self, dur, pred=None):
+    self.tags_init()
     for note in self.notes:
         if pred and not pred(note): continue
         note.dur = dur
 
 def score_dur_rel(self, factor, pred=None):
+    self.tags_init()
     for note in self.notes:
         if pred and not pred(note): continue
         note.dur *= factor
 
 def score_dur_func(self, func, pred=None):
+    self.tags_init()
     for note in self.notes:
         if pred and not pred(note): continue
         note.dur = func(note)
             
 def perf_dur_abs(self, dur, pred=None):
+    self.init_all()
     for note in self.notes:
         if pred and not pred(note): continue
         note.perf_dur = dur
 
 def perf_dur_rel(self, factor, pred=None):
+    self.init_all()
     for note in self.notes:
         if pred and not pred(note): continue
         note.perf_dur *= factor
 
 def perf_dur_func(self, func, pred=None):
+    self.init_all()
     for note in self.notes:
         if pred and not pred(note): continue
         note.perf_dur = func(note)
 
 # adjust articulation with a PFT
 def perf_dur_pft(self, pft, t0, pred=None, rel=True):
+    self.init_all()
     pft_check_closure(pft)
     seg_ind = 0
     seg = pft[0]
@@ -719,6 +743,9 @@ def perf_dur_pft(self, pft, t0, pred=None, rel=True):
 
 # apply a virtual sustain PFT
 def vsustain_pft(self, pft, t0=0, pred=None, verbose=False):
+    self.time_sort()
+    self.perf_init_clear()
+
     seg_ind = 0
     seg = pft[0]
     seg_start = t0
@@ -813,4 +840,3 @@ def get_pos_array(self, pos_pft, framerate):
             pos = pft_val.value(t)
         pos_array[i] = pos
     return pos_array
-

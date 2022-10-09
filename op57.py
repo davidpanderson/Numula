@@ -820,7 +820,7 @@ def main():
     do_212_rep = False
     do_300_2 = True
     
-    ns = Score()
+    ns = Score(tempo=144)
     # must make copies first; append_score() changes note times
     lh_118_211_copy = copy.deepcopy(lh_118_211)
     rh_118_211_copy = copy.deepcopy(rh_118_211)
@@ -848,13 +848,9 @@ def main():
         t_300_2 = ns.cur_time
         ns.append_score([rh_300_end, lh_300_end])
 
-    ns.set_tempo(144)
-
     nuance = True
 
-    ns.time_sort()
-    
-    # pedal control; do this before done()
+    # pedal control
     if nuance:
         if do_20:
             p20_117(ns, t_20)
@@ -871,8 +867,6 @@ def main():
         if do_300_2:
             p300_end(ns, t_300_2)
     
-    ns.done()
-
     # other nuance
     if nuance:
         if do_20:

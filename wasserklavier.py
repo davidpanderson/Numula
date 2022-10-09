@@ -108,7 +108,6 @@ def make_score():
         ns.append_measure(9/8, '9/8')
     for i in range(10):
         ns.append_measure(3/4, '3/4')
-    ns.done()
     return ns
 
 #  volume

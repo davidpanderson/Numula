@@ -536,6 +536,7 @@ As time adjustments are made, they affect the end marker too.
 Also: eliminate the need for "done".
 
 What done() does:
+0) check whether score has duplicate notes
 1) sort notes by score time
 2) set nchord and chord_pos for Notes
 3) initialize perf_time and perf_dur for Notes, based on tempo
@@ -546,18 +547,39 @@ What done() does:
 Can eliminate 3,4): initialize these when add to score;
 make tempo a constructor arg
 
-Instead maintain:
-Score.sorted
-    - set this to False each time we add anything to the score
-    - in any function that assumes notes are sorted,
-        or that can use selectors:
-        check flag; if false, sort/flag and set to true
+proposal:
+- do the above steps automatically, as needed
+- issue error if user does something out of order
 
-constraints
-using virtual sustain pedals must precede tempo adjustment
-    (need to know when notes end)
+Score.time_sorted, time_sort(), time_sort_clear()
+    time_sort():
+        call from functions that assume notes/pedals are sorted,
+    time_sort_clear():
+        call from functions that could unsort (add note or pedal)
+
+Score.perf_inited, perf_init(), perf_init_check()
+    initialize perf_time and perf_dur; also check for dup notes
+    perf_init():
+        call from things that reference perf_time,
+        e.g. timing adjustments and write_midi()
+    perf_init_clear():
+        call from things that can change score time or duration
+            add notes
+            virtual sustain pedal
+
+Score.tags_inited, tags_init(), tags_check()
+    things that affect tags
+        top/bottom, measure offset, chord position
+        lambda functions can refer to these
+    tags_init():
+        call from things that use selectors
+    tags_init_clear():
+        call from things that could change tags
+
+Score.clear_all():
+    do time_sort_clear(), perf_init_clear(), tags_init_clear()
 ==============
-volume control in op57: how to structure?
+nuance in op57: how to structure?
 v0
     applies to both hands
     overall volume
@@ -567,11 +589,24 @@ v1
     applies to both hands
     volume adjustment
     1-4 measure time scale
-LH, RH vol
-    volume adjustment
+rhv, lhv
+    volume adjustment per hand
     1-4 measure time scale
-LH, RH accents
+rha, lha
+    accents per hand
     volume adjustment
+t0
+    overall tempo
+    time scale: 2+ measures
+t1
+    phrase endings
+        pauses
+        ritardandi
+        time scale 2- measures
+p
+    MIDI sustain pedal (both hands)
+lhp, rhp
+    per-hand virtual sustain pedal
 
 Notes:
 1) it may not always be clear where to put structure, e.g. in v0 or v1
@@ -611,3 +646,52 @@ event:
 
 Note: we assume before-Deltas precede after-Deltas at a given time.
 We should reorder if needed to make this so.
+===============
+Phrase endings
+params
+    ritardando
+        length
+        depth
+        curvature
+    pauses
+        before
+        after
+
+How to notate?
+
+op57:
+28 36 50 64 76 86 96 112
+118 126 134 142 158 176 206
+212 220 228 242 256 268 278 288
+302
+308 324 326 333 341 353
+
+vol PFTs:
+Closure is checked within a PFT, but not across PFTs.
+Let's used segs closed at both ends.
+This means that when you use several PFTs in a score,
+you have to pay attention to their closure at the start and end.
+
+op57:
+measures 36..107 are analogous to 228..209
+(but 20..35 and 212..227 are different)
+
+----------------
+timing gaps
+these don't fit well into the tempo PFT model
+you can do them with pause_before(connect=False),
+but each one requires a score scan.
+
+proposal:
+"gap PFT": alternating sequence of Delta and Unity segs,
+defining a sequence of pause_befores with gaps
+-----------------
+Timing jitter
+
+We currently do this by adding a random (uniform or normal)
+offset to note start, and adjusting duration to keep end time the same.
+
+Is this ideal?
+
+Brownian noise?
+

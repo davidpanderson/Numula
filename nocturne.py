@@ -36,8 +36,6 @@ def main():
     for i in range(5):
         ns.sustain(i*3/4, (i+1)*3/4, lambda n: 'lh' in n.tags)
         
-    ns.done()
-    
     for i in range(5):
         ns.vol_adjust_pft(
             [Linear(.3, .8, 2/4), Linear(.8, .3, 1/4)],

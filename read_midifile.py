@@ -76,7 +76,6 @@ def read_midifile(file, ticks_per_beat=960, use_velocity=True):
                 if debug:
                     print('inserting note, regular case')
                     n.print()
-    ns.done()
     return ns
     
 def print_midifile(file):

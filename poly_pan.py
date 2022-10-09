@@ -34,7 +34,6 @@ def main():
     ns.insert_score(v0, tag='v0')
     ns.insert_score(v1, tag='v1')
     ns.insert_score(v2, tag='v2')
-    ns.done()
     
     if True:
         def vol_pft():

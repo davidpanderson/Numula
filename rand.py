@@ -26,7 +26,5 @@ for i in range(200):
     dur = random.uniform(.1, 1)
     vol = random.uniform(.1, .8)
     ns.insert_note(Note(time, dur, pitch, vol))
-ns.done()
-ns.remove_overlap()
 print(ns)
 ns.write_midi("data/random.midi")
