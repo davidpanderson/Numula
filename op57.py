@@ -8,10 +8,10 @@ from vol_name import *
 import pianoteq
 
 rh_20_117 = n(' \
-    |20 1/16 . *2 \
+    |20 1/16 . (theme_a *2 \
     *2 -c f a- c d- c b- | a- b- a- g f g a- f . * \
     d- g- b- d- e- d- c | b- c b- a- g- a- g- f \
-    e f g e f g a- f | g a- b- g e f g e f * \
+    e f g e f g a- f | g a- b- g e f g e f * theme_a) \
     |36 *2 c5 f a- c -c f a- . * \
     -b d +a- b -b d +a- b -b e g c -c e g \
     *3 . -c e g c -c e g * c -c e g c -c f a- \
@@ -342,14 +342,14 @@ lh_300_end = n(' \
 # so define pieces we can reuse for the latter part.
 
 v0_20 = ' \
-    |20 ppp_ 44/2 _mf \
+    |20 pp 44/2 _mf \
     |64 ] pp 32/2 mf \
     |96 mf 8/2 mf_ 4/2 _f \
 '
 v1_20 = ' \
-    |20 *2 mm 6/2 _mf 2/2 mm * \
+    |20 *2 [ mm 2/2 mm ] mf 2/2 mf ] f 2/2 f 2/2 mf * \
     |36 *2 \
-        *2 mm 2/2 mf 2/2 mm * mm 2/2 mf_ 4/2 mm \
+        *2 [ mm 2/2 mf 2/2 mm * mm 2/2 mf_ 4/2 mm \
         * \
     |64 *5 [ mp 1/2 f 1/2 mm * \
     |74 mm 2/2 mf *2 mf 1/2 mp 1/2 mf * \
@@ -406,7 +406,7 @@ def v20_117(ns, t0):
 
     # swells at 1 measure level
     rhv = vol(' \
-        |20 exp-2 *8 mp 1/2 f 1/2 mp * \
+        |20 exp-2 *8 mp 1/2 _f 1/2 mp * \
         ' + rhv_36 + ' \
         |108 10/2 mm \
         |118 [ \
@@ -454,7 +454,7 @@ dt4 = .14
 
 ta_20 = f' \
     |20 *2 \
-        *3 60 2/2 60 * 1/2 60 1/2 50 \
+        60 2/2 60 62 2/2 62 64 2/2 64 60 2/2 55 \
         * \
     |36 *2 \
         *2 55 4/2 60 * \
@@ -495,7 +495,7 @@ def t20_117(ns, t0):
         |118 \
     ', 1/2)
     ns.tempo_adjust_pft(tb, t0)
-
+    ns.perf_dur_rel(1.5, lambda n: 'theme_a' in n.tags)
 
 rhp_20 = ' \
     |20 - 16/2 \
@@ -734,9 +734,9 @@ def v300_end(ns, t0):
         |324 ff 1/2 fff 1/2 fff [ mp 7/2 mf [ f 1/2 ff \
         |334 ff 1/2 fff 1/2 fff [ p 7/2 f \
         |343 [ _f 8/2 f [ f_ 8/2 _ff \
-        |359 ] mf 8/2 ff_ \
-        |367 [ _ff 4/2 ff \
-        |371 6/2 ff_ [ fff 3/2 fff_ \
+        |359 ] mf 8/2 ff \
+        |367 [ ff 4/2 _ff \
+        |371 6/2 ff [ fff 3/2 fff_ \
         |380 \
     ', 1/2)
     ns.vol_adjust_pft(v, t0)
@@ -747,7 +747,8 @@ def v300_end(ns, t0):
         |324 2/2 *8 {a8} 1/2 * 2/2 *7 {a8} 1/2 * \
         |343 *16 1/4 mf 1/4 * \
         |359 *4 1/2 f 1/2 * \
-        |367 *10 mf_ 1/4 mf_ 1/4 * 3/2 \
+        |367 *4 mf_ 1/4 mf_ 1/4 * \
+        |371 *6 _f 1/4 _f 1/4 * 3/2 \
         |380 \
     ', 1/2)
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
@@ -767,17 +768,28 @@ def v300_end(ns, t0):
     )
     
 def t300_end(ns, t0):
-    t = tempo(f' \
-        |300 *3 60 2/2 {dt0}p p{dt0} * 60 2/2 70 \
-        |308 *2 p{dt2} 65 2/2 65 p{dt0} 70 6/2 70 * \
-        |324 p{dt1} 70 10/2 70 \
-        |334 p{dt1} 70 9/2 70 \
-        |343 70 8/2 70 {dt1}p 8/2 70 \
-        |359 {dt1}p 70 18/2 75 \
-        |377 {dt1}p 50 2/2 45 p.3 1/2 45\
+    ta = tempo(f' \
+        |300 60 6/2 60 2/2 70 \
+        |308 *2 65 2/2 65 70 6/2 70 * \
+        |324 70 10/2 70 \
+        |334 70 9/2 70 \
+        |343 70 16/2 70 \
+        |359 70 18/2 75 \
+        |377 50 2/2 45 1/2 45\
         |380 \
     ', 1/2)
-    ns.tempo_adjust_pft(t, t0)
+    ns.tempo_adjust_pft(ta, t0)
+    tb = tempo(f' \
+        |300 *3 60 2/2 {dt0}p{dt0} * 60 2/2 60 \
+        |308 *2 p{dt2} 60 2/2 60 p{dt0} 60 6/2 60 * \
+        |324 p{dt1} 60 10/2 60 \
+        |334 p{dt1} 60 9/2 60 \
+        |343 60 8/2 60 {dt1}p 8/2 60 \
+        |359 {dt1}p 60 18/2 60 \
+        |377 {dt3}p 60 2/2 60 p.3 1/2 60\
+        |380 \
+    ', 1/2)
+    ns.tempo_adjust_pft(tb, t0)
     # needed to create gaps
     ns.pause_before(t0+8/2, dt2, False)
     ns.pause_before(t0+10/2, .3, False)
@@ -791,22 +803,22 @@ def t300_end(ns, t0):
     
 def p300_end(ns, t0):
     p = pedal(' \
-        |300 - 8/2 *2 - 3/4 - 1/4 6/2 * \
-        |324 - 3/4 - 1/4 8/2 - 3/4 - 1/4 7/2 \
-        |343 - 28/2 \
+        |300 - 59/2 \
+        |359 *4 + 3/4 - 1/4 * \
+        |367 *3 + 3/8 - 1/8 * + 1/8 1/8 1/8 1/8 \
         |371 + 6/2 - 3/2 \
         |380 \
     ', 1/2)
-    ns.pedal_pft(p, t0)
+    ns.vsustain_pft(p, t0)
 
 def main():
-    do_20 = True
+    do_20 = False
     do_118 = False
     do_212 = False
     do_300_1 = False
     do_118_rep = False
     do_212_rep = False
-    do_300_2 = False
+    do_300_2 = True
     
     ns = Score()
     # must make copies first; append_score() changes note times
@@ -839,6 +851,8 @@ def main():
     ns.set_tempo(144)
 
     nuance = True
+
+    ns.time_sort()
     
     # pedal control; do this before done()
     if nuance:
@@ -885,9 +899,9 @@ def main():
 
         ns.perf_dur_rel(.3, lambda n: 'stac' in n.tags)
         
-    #ns.t_random_normal(.007, 2)
+    ns.t_random_normal(.007, 2)
     #print(ns)
-    ns.write_midi('data/op57.midi')
+    ns.write_midi('data/op57.midi', verbose=False)
     pianoteq.play('data/op57.midi')
 
 main()

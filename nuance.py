@@ -718,13 +718,16 @@ def perf_dur_pft(self, pft, t0, pred=None, rel=True):
 # ----------- pedals -------------
 
 # apply a virtual sustain PFT
-def vsustain_pft(self, pft, t0=0, pred=None):
+def vsustain_pft(self, pft, t0=0, pred=None, verbose=False):
     seg_ind = 0
     seg = pft[0]
     seg_start = t0
     seg_end = t0 + seg.dt
     t_end = t0 + pft_dur(pft)
+    vstr = ''
     for n in self.notes:
+        if verbose:
+            vstr += 'vsus: %s\n'%n.__str__()
         if n.time > t_end + epsilon:
             break
         if n.time < t0 - epsilon:
@@ -735,6 +738,8 @@ def vsustain_pft(self, pft, t0=0, pred=None):
             if n.time < seg_end:
                 if seg_end > n.time + n.dur:
                     if seg.level > 0:
+                        if verbose:
+                            vstr += 'vsus: elongating note\n'
                         n.dur = seg_end - n.time
                 break
             seg_ind += 1
@@ -743,6 +748,8 @@ def vsustain_pft(self, pft, t0=0, pred=None):
             seg_start += seg.dt
             seg = pft[seg_ind]
             seg_end = seg_start + seg.dt
+    if verbose:
+        print(vstr)
 
 # apply a pedal PFT (sustain, sostenuto, or soft)
 def pedal_pft(self, pft, t0=0):

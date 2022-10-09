@@ -167,18 +167,21 @@ class Score:
             note.tags.append(tag)
         return self
         
-    # convert score time to real time, assuming quarter=60
+    # convert score time to real time, given tempo
     def score_to_perf(self, t):
         return t*4*60/self.tempo
-    
+
+    def time_sort(self):
+        self.notes.sort(key=lambda x: x.time)
+        self.pedals.sort(key=lambda x: x.time)
+        
     def done(self):
         if len(self.notes) != len(set(self.notes)):
             raise Exception('self.notes has dups!!')
         if not self.notes:
             raise Exception('no notes')
         self.done_called = True
-        self.notes.sort(key=lambda x: x.time)
-        self.pedals.sort(key=lambda x: x.time)
+        self.time_sort()
         # set perf time and dur in such a way that playback will be at the
         # tempo given by self.tempo.
         # These will be modified if you use nuance functions.
@@ -256,14 +259,15 @@ class Score:
         return x
 
     # write selected notes to MIDI file
-    def write_midi(self, filename, pred=None):
+    def write_midi(self, filename, pred=None, verbose=False):
         if not self.done_called:
             raise Exception('Call done() before write_midi()')
         self.make_perf_nonnegative()
+        vstr = ''
 
         # MIDIutils doesn't handle overlapping notes correctly, so remove them
         #
-        self.remove_overlap()
+        self.remove_overlap(verbose)
 
         f = MIDIFile(deinterleave=False)
         f.addTempo(0, 0, 60)
@@ -277,17 +281,27 @@ class Score:
             v = int(note.vol * 128)
             if v < 2: v = 2
             if v > 127: v = 127
-            #print('pitch', note.pitch, 'time', note.perf_time, 'dur', note.perf_dur, 'v', v)
+            if verbose:
+                vstr += 'MIDI note: pitch %d start %f end %f vol %f\n'%(
+                    note.pitch, note.perf_time,
+                    note.perf_time + note.perf_dur, v
+                )
             f.addNote(0, 0, note.pitch, note.perf_time, note.perf_dur, v)
         if self.pedals:
             self.adjust_pedal_times()
             for pedal in self.pedals:
                 c = pedal.pedal_type
                 level = int(64+pedal.level*63)
+                if verbose:
+                    vstr += 'MIDI pedal: start %f end %f level %f\n'%(
+                        pedal.perf_time, pedal.perf_time+pedal.perf_dur, level
+                    )
                 f.addControllerEvent(0, 0, pedal.perf_time, c, level)
                 f.addControllerEvent(0, 0, pedal.perf_time + pedal.perf_dur, c, 0)
         with open(filename, "wb") as file:
             f.writeFile(file)
+        if verbose:
+            print(vstr)
 
     def set_tempo(self, tempo):
         if  self.done_called:
@@ -301,11 +315,12 @@ class Score:
     # MIDIUtil doesn't handle this case correctly -
     # you end up with stuck notes.
     #
-    def remove_overlap(self):
+    def remove_overlap(self, verbose=False):
         end_time = [-1]*128
         cur_note = [None]*128
         out = []
-        midi_eps = .1
+        vstr = ''
+        midi_eps = .05
             # make sure MIDI events on a given pitch are separated by this
             # Originally this was .001.
             # But it turns out that with Pianoteq, if a note is playing loud,
@@ -316,9 +331,9 @@ class Score:
                 # note start while a note of this pitch is already sounding
                 n2 = cur_note[note.pitch]
                 if note.perf_time - n2.perf_time < epsilon:
-                    print("simultaneous start overlap on %s at time %f"%(
+                    vstr += "simultaneous start overlap on %s at time %f\n"%(
                         pitch_name(note.pitch), note.perf_time
-                    ))
+                    )
                     # simultaneous start - combine notes
                     # by modifying first note (already in out) in place
                     #
@@ -327,11 +342,11 @@ class Score:
                     n2.perf_dur = md
                     end_time[note.pitch] = note.perf_time+md
                 else:
-                    if False and note.perf_time < end_time[note.pitch] + midi_eps:
+                    if verbose and note.perf_time < end_time[note.pitch] + midi_eps:
                         # show warning if overlap is nontrivial
-                        print("overlap on %s:"%(pitch_name(note.pitch)))
-                        print(n2)
-                        print(note)
+                        vstr += "overlap on %s:\n"%(pitch_name(note.pitch))
+                        vstr += str(n2)+'\n'
+                        vstr += str(note)+'\n'
                    # end earlier note early
                     n2.perf_dur = (note.perf_time - n2.perf_time) - midi_eps
                     out.append(note)
@@ -342,6 +357,8 @@ class Score:
                 end_time[note.pitch] = note.perf_time+note.perf_dur
                 cur_note[note.pitch] = note
         self.notes = out
+        if verbose:
+            print(vstr)
 
      # make a sorted list of start/end events
     #
