@@ -8,14 +8,14 @@ import pianoteq
 def scale():
     ns = Score([
         #n('c d e', ['rh'])
-        n('c d e f g a b c d', ['rh']),
-        n('-c d e f g a b c d', ['lh'])
+        n('c d e f g a b c d').tag('rh'),
+        n('-c d e f g a b c d').tag('lh')
     ])
 
     ns.vol_adjust_pft(
         [
             Linear(pp, ff, 4/4),
-            Linear(f, p, 4/4, closed_start=False)
+            Linear(f, p, 4/4, closed_start=True)
         ], pred=lambda n: 'rh' in n.tags
     )
 
@@ -33,6 +33,7 @@ def scale():
     print(ns)
     ns.write_midi('data/scale.midi')
     pianoteq.play('data/scale.midi')
+#scale()
 
 # make some notes with different pitches and same vol
 # (test input for panning)
@@ -55,5 +56,5 @@ def pan_test():
 def preset_test():
     pianoteq.play('data/scale.midi', preset='C. Grimaldi Harpsichord A')
     #pianoteq.midi_to_wav('data/scale.midi', 'data/scale.wav', preset='Celesta Tremo')
-preset_test()
+#preset_test()
     

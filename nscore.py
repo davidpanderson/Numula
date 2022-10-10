@@ -83,10 +83,11 @@ event_kind_note = 0
 event_kind_pedal = 1
 
 class Score:
-    def __init__(self, scores=[], tempo=60):
+    def __init__(self, scores=[], tempo=60, verbose=False):
         self.notes = []
         self.cur_time = 0
         self.tempo = tempo    # beats per minute
+        self.verbose = verbose
         self.measures = []
         self.pedals = []
         self.done_called = False
@@ -183,6 +184,8 @@ class Score:
     def time_sort(self):
         if self.time_sorted:
             return
+        if self.verbose:
+            print('sorting notes, pedals and measures')
         self.time_sorted = True
         self.notes.sort(key=lambda x: x.time)
         self.pedals.sort(key=lambda x: x.time)
@@ -196,6 +199,8 @@ class Score:
     def perf_init(self):
         if self.perf_inited:
             return
+        if self.verbose:
+            print('initializing performance times')
         self.perf_inited = True
         if not self.notes:
             raise Exception('no notes')
@@ -210,10 +215,15 @@ class Score:
         for pedal in self.pedals:
             pedal.perf_time = self.score_to_perf(pedal.time)
             pedal.perf_dur = self.score_to_perf(pedal.dur)
+
+    def perf_init_clear(self):
+        self.perf_inited = False
         
     def tags_init(self):
         if self.tags_inited:
             return True
+        if self.verbose:
+            print('initializing note tags')
         self.tags_inited = True
         chord = []
         def do_chord(chord):

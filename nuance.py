@@ -509,7 +509,7 @@ def tempo_adjust_pft(
 # (like a local sustain pedal)
 def sustain(self, t0, t1, pred=None):
     self.time_sort()
-    self.init_tags()
+    self.tags_init()
     for n in self.notes:
         if n.time<t0-epsilon:
             continue
