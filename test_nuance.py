@@ -44,8 +44,7 @@ def test2():
 #test2()
 
 def test3():
-    ns = Score([n('a b c d e f g c')])
-    ns.set_tempo(120)
+    ns = Score([n('a b c d e f g c')], tempo=120)
     x = [
         Delta(.05, False),
         Linear(60, 60, 2/4),
@@ -58,7 +57,7 @@ def test3():
     print(*x, sep='\n')
     ns.tempo_adjust_pft(x)
     print(ns)
-test3()
+#test3()
 
 def test4():
     ns = Score([n('c d e f g')])
@@ -124,7 +123,10 @@ def test_ped():
     #ns.pedal_pft([PedalSeg(3/16, 0), PedalSeg(2/4, 1)])
     ns.pedal_pft(pedal('- 1/4 + 1/8 + 1/4 - 4/4'))
     print(ns)
-
 #test_ped()
 
-
+def test_pbl():
+    ns = Score([n('c d e f g a b c')])
+    ns.pause_before_list([3/4, 5/4, 13/8], [.1, .2, .3])
+    print(ns)
+test_pbl()

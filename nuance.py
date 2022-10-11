@@ -523,54 +523,78 @@ def sustain(self, t0, t1, pred=None):
 
 # insert a pause of dt before time t.
 # If connect is True, extend earlier notes ending at t to preserve legato
-def pause_before(self, t, dt, connect=True):
-    self.init_all()
-    for note in self.notes:
-        if note.time + note.dur < t-epsilon:
+
+def pb_aux(items, t, dt, connect):
+    for item in items:
+        if item.time + item.dur < t-epsilon:
             # note ends before t
             continue
-        if note.time < t-epsilon:
+        if item.time < t-epsilon:
             # note starts before t and ends t or later
             if connect:
-                note.perf_dur += dt
+                item.perf_dur += dt
         else:
             # note starts t or later
-            note.perf_time += dt
-    for pedal in self.pedals:
-        if pedal.time + pedal.dur < t-epsilon:
-            continue
-        if pedal.time < t-epsilon:
-            if connect:
-                pedal.perf_dur += dt
-        else:
-            pedal.perf_time += dt
+            item.perf_time += dt
+
+def pause_before(self, t, dt, connect=True):
+    self.init_all()
+    pb_aux(self.notes, t, dt, connect)
+    pb_aux(self.pedals, t, dt, connect)
 
 # pause after notes at t.
-def pause_after(self, t, dt):
-    self.init_all()
-    for note in self.notes:
-        if note.time < t-epsilon:
+def pa_aux(items, t, dt):
+    for item in items:
+        if item.time < t-epsilon:
             # note starts before t
-            if note.time + note.dur > t + epsilon:
+            if item.time + item.dur > t + epsilon:
                 # not ends after t - elongate it
-                note.perf_dur += dt
+                item.perf_dur += dt
             continue
-        if note.time > t+epsilon:
+        if item.time > t+epsilon:
             # note starts after t
-            note.perf_time += dt
+            item.perf_time += dt
         else:
             # note starts at t
-            note.perf_dur += dt
-    for pedal in self.pedals:
-        if pedal.time < t-epsilon:
-            if pedal.time + pedal.dur > t + epsilon:
-                pedal.perf_dur += dt
-            continue
-        if pedal.time > t+epsilon:
-            pedal.perf_time += dt
-        else:
-            pedal.perf_dur += dt
+            item.perf_dur += dt
+
+def pause_after(self, t, dt):
+    self.init_all()
+    pa_aux(self.notes, t, dt)
+    pa_aux(self.pedals, t, dt)
                 
+# insert a list of pauses with gaps.
+# like a bunch of calls to pause_before(..., connect=False)
+# but more efficient because we do one pass through the score.
+# Note: tempo_adjust_pft() can insert pauses, but not gaps
+
+def pbl_aux(items, ts, dts):
+    ind = 0
+    cur_t = ts[0]
+    dt_sum = 0
+    for item in items:
+        if item.time < cur_t - epsilon:
+            item.perf_time += dt_sum
+        elif item.time < cur_t + epsilon:
+            item.perf_time += dt_sum + dts[ind]
+        else:
+            dt_sum += dts[ind]
+            ind += 1
+            if ind == len(ts):
+                cur_t = 1e9
+            else:
+                cur_t = ts[ind]
+            item.perf_time += dt_sum
+
+def pause_before_list(self, ts, dts):
+    self.init_all()
+    if len(ts) == 0:
+        raise Exception('empty time list')
+    if len(ts) != len(dts):
+        raise Exception('lists are different sizes')
+    pbl_aux(self.notes, ts, dts)
+    pbl_aux(self.pedals, ts, dts)
+
 def roll_aux(chord, offsets, is_up, is_delay):
     if is_up:
         chord.sort(key=lambda x: x.pitch)

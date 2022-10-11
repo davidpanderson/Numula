@@ -517,6 +517,7 @@ class Score:
                         
     from nuance import vol_adjust_pft, vol_adjust, vol_adjust_func
     from nuance import tempo_adjust_pft, sustain, pause_before, pause_after
+    from nuance import pause_before_list
     from nuance import roll, t_adjust_list, t_adjust_notes, t_adjust_func
     from nuance import t_random_uniform, t_random_normal
     from nuance import score_dur_abs, score_dur_rel, score_dur_func

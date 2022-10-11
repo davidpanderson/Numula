@@ -557,7 +557,7 @@ Score.time_sorted, time_sort(), time_sort_clear()
     time_sort_clear():
         call from functions that could unsort (add note or pedal)
 
-Score.perf_inited, perf_init(), perf_init_check()
+Score.perf_inited, perf_init(), perf_init_clear()
     initialize perf_time and perf_dur; also check for dup notes
     perf_init():
         call from things that reference perf_time,
@@ -567,7 +567,7 @@ Score.perf_inited, perf_init(), perf_init_check()
             add notes
             virtual sustain pedal
 
-Score.tags_inited, tags_init(), tags_check()
+Score.tags_inited, tags_init(), tags_init_clear()
     things that affect tags
         top/bottom, measure offset, chord position
         lambda functions can refer to these
@@ -576,8 +576,9 @@ Score.tags_inited, tags_init(), tags_check()
     tags_init_clear():
         call from things that could change tags
 
-Score.clear_all():
+Score.clear_flags():
     do time_sort_clear(), perf_init_clear(), tags_init_clear()
+    call from anything that adds to score
 ==============
 nuance in op57: how to structure?
 v0

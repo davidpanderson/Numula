@@ -29,10 +29,10 @@ elif s == 'Linux':
     prog = './Pianoteq 7/amd64/Pianoteq 7'
 else:
     raise Exception("OS not supported")
-if not os.path.isfile(prog):
-    raise Exception('Pianoteq missing: %s'%prog)
     
 def play(file, preset=None):
+    if not os.path.isfile(prog):
+        raise Exception('Pianoteq missing: %s'%prog)
     p = ' --preset "%s"'%preset if preset else ''
     cmd = '"%s" --play --midi %s%s'%(prog, file, p)
     subprocess.call(cmd, shell=True)
@@ -43,6 +43,8 @@ def play_score(ns):
     play('data/temp.midi')
 
 def midi_to_wav(ifile, ofile, mono=False, preset=None):
+    if not os.path.isfile(prog):
+        raise Exception('Pianoteq missing: %s'%prog)
     m = ' --mono' if mono else ''
     p = ' --preset "%s"'%preset if preset else ''
     cmd = '"%s"%s --wav %s --headless --midi %s%s'%(prog, m, ofile, ifile, p)
