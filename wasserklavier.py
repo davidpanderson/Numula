@@ -223,7 +223,9 @@ def main():
         time_adjust(ns)
         print(ns)
         ns.write_midi('data/wasserklavier.midi')
-        pianoteq.play('data/wasserklavier.midi')
+        pianoteq.play('data/wasserklavier.midi',
+            preset='My Presets/NY Steinway D Classical (for wasser)'
+        )
     else:
         ns.write_midi('data/wasserklavier_plain.midi')
 

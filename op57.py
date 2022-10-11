@@ -820,7 +820,7 @@ def main():
     do_212_rep = False
     do_300_2 = True
     
-    ns = Score(tempo=144)
+    ns = Score(tempo=144, verbose=True)
     # must make copies first; append_score() changes note times
     lh_118_211_copy = copy.deepcopy(lh_118_211)
     rh_118_211_copy = copy.deepcopy(rh_118_211)
@@ -896,6 +896,8 @@ def main():
     ns.t_random_normal(.007, 2)
     #print(ns)
     ns.write_midi('data/op57.midi', verbose=False)
-    pianoteq.play('data/op57.midi')
+    pianoteq.play('data/op57.midi',
+         preset='My Presets/NY Steinway D Classical (for Appassionata)'
+    )
 
 main()

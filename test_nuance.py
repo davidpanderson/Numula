@@ -40,7 +40,7 @@ def test2():
     ns.t_random_uniform(-.1, .1)
     ns.t_random_normal(.1, 3)
     print(ns)
-    ns.write_midi('data/test2.midi')
+    pianoteq.play_score(ns)
 #test2()
 
 def test3():
@@ -57,6 +57,10 @@ def test3():
     print(*x, sep='\n')
     ns.tempo_adjust_pft(x)
     print(ns)
+<<<<<<< HEAD
+=======
+    pianoteq.play_score(ns)
+>>>>>>> b2d845ac252ea5d42f8aaaf8da059910cbbe6597
 #test3()
 
 def test4():
@@ -86,6 +90,8 @@ def test_dur_pft():
     )
     print(ns)
     ns.write_midi('data/test_dur_pft.midi')
+    pianoteq.play_score(ns)
+#test_dur_pft()
 
 def test_pft_value():
     p = [
@@ -112,7 +118,7 @@ def test_vol():
         ], 0
     )
     print(ns)
-
+    pianoteq.play_score(ns)
 #test_vol()
 
 def test_ped():
@@ -123,6 +129,7 @@ def test_ped():
     #ns.pedal_pft([PedalSeg(3/16, 0), PedalSeg(2/4, 1)])
     ns.pedal_pft(pedal('- 1/4 + 1/8 + 1/4 - 4/4'))
     print(ns)
+    pianoteq.play_score(ns)
 #test_ped()
 
 def test_pbl():
