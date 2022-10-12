@@ -736,13 +736,13 @@ def v300_end(ns, t0):
         |343 [ _f 8/2 f [ f_ 8/2 _ff \
         |359 ] mf 8/2 ff \
         |367 [ ff 4/2 _ff \
-        |371 6/2 ff [ fff 3/2 fff_ \
+        |371 6/2 ff [ fff_ 3/2 fff_ \
         |380 \
     ', 1/2)
     ns.vol_adjust_pft(v, t0)
     a8 = 'mf'    # accents on 8th-note chords in 310 onward
     lha = accents(f' \
-        |300 *3 3/8 mf 5/8 mf * mf 1/2 mf 1/2 \
+        |300 *3 1/2 mf 1/2 * mf 1/2 mf 1/2 \
         |308 *2 2/2 *5 {a8} 1/2 * f 1/2 * \
         |324 2/2 *8 {a8} 1/2 * 2/2 *7 {a8} 1/2 * \
         |343 *16 1/4 mf 1/4 * \
@@ -769,44 +769,43 @@ def v300_end(ns, t0):
     
 def t300_end(ns, t0):
     ta = tempo(f' \
-        |300 60 6/2 60 2/2 70 \
+        |300 exp-2 60 6/2 70 2/2 50 \
         |308 *2 65 2/2 65 70 6/2 70 * \
         |324 70 10/2 70 \
         |334 70 9/2 70 \
         |343 70 16/2 70 \
-        |359 70 18/2 75 \
+        |359 70 14/2 75 3/2 65 1/2 60 \
         |377 50 2/2 45 1/2 45\
         |380 \
     ', 1/2)
     ns.tempo_adjust_pft(ta, t0)
     tb = tempo(f' \
         |300 *3 60 2/2 {dt0}p{dt0} * 60 2/2 60 \
-        |308 *2 p{dt2} 60 2/2 60 p{dt0} 60 6/2 60 * \
-        |324 p{dt1} 60 10/2 60 \
+        |308 *2 p{dt2} 60 2/2 60 p{dt0} 60 5/2 60 {dt1}p 1/2 60 * \
+        |324 p{dt1} 60 9/2 60 {dt1}p 1/2 60 \
         |334 p{dt1} 60 9/2 60 \
-        |343 60 8/2 60 {dt1}p 8/2 60 \
+        |343 {dt1}p 60 8/2 60 {dt1}p 8/2 60 \
         |359 {dt1}p 60 18/2 60 \
-        |377 {dt3}p 60 2/2 60 p.3 1/2 60\
+        |377 {dt2}p 60 2/2 60 p.3 1/2 60\
         |380 \
     ', 1/2)
     ns.tempo_adjust_pft(tb, t0)
     # needed to create gaps
-    ns.pause_before(t0+8/2, dt2, False)
-    ns.pause_before(t0+10/2, .3, False)
-    ns.pause_before(t0+16/2, dt2, False)
-    ns.pause_before(t0+18/2, .2, False)
-    ns.pause_before(t0+24/2, dt2, False)
-    ns.pause_before(t0+26/2, .2, False)
-    ns.pause_before(t0+34/2, dt2, False)
-    ns.pause_before(t0+36/2, .2, False)
-    
+    ns.pause_before_list(
+        [t0+8/2, t0+9/2, t0+10/2, t0+16/2, t0+17/2, t0+18/2,
+             t0+24/2, t0+25/2, t0+26/2, t0+34/2, t0+33/2, t0+36/2
+        ],
+        [dt2,    dt4,    .3,      dt2,     dt4,     .2,
+             dt2,     dt4,     .3,      dt2,     dt4,     .2
+        ]
+    ) 
     
 def p300_end(ns, t0):
     p = pedal(' \
         |300 - 59/2 \
         |359 *4 + 3/4 - 1/4 * \
         |367 *3 + 3/8 - 1/8 * + 1/8 1/8 1/8 1/8 \
-        |371 + 6/2 - 3/2 \
+        |371 + 4/2 - 5/2 \
         |380 \
     ', 1/2)
     ns.vsustain_pft(p, t0)
@@ -847,7 +846,6 @@ def main():
     if do_300_2:
         t_300_2 = ns.cur_time
         ns.append_score([rh_300_end, lh_300_end])
-
     nuance = True
 
     # pedal control
@@ -891,10 +889,10 @@ def main():
             v300_end(ns, t_300_2)
             t300_end(ns, t_300_2)
 
-        ns.perf_dur_rel(.3, lambda n: 'stac' in n.tags)
+        ns.perf_dur_rel(.2, lambda n: 'stac' in n.tags)
         
-    ns.t_random_normal(.007, 2)
-    #print(ns)
+    #ns.t_random_normal(.007, 2)
+    print(ns)
     ns.write_midi('data/op57.midi', verbose=False)
     pianoteq.play('data/op57.midi',
          preset='My Presets/NY Steinway D Classical (for Appassionata)'

@@ -509,7 +509,8 @@ def tempo_adjust_pft(
 # (like a local sustain pedal)
 def sustain(self, t0, t1, pred=None):
     self.time_sort()
-    self.tags_init()
+    if pred:
+        self.tags_init()
     for n in self.notes:
         if n.time<t0-epsilon:
             continue
@@ -564,6 +565,8 @@ def pause_after(self, t, dt):
     pa_aux(self.pedals, t, dt)
                 
 # insert a list of pauses with gaps.
+# ts = times when gaps occur
+# dts = lengths of gaps
 # like a bunch of calls to pause_before(..., connect=False)
 # but more efficient because we do one pass through the score.
 # Note: tempo_adjust_pft() can insert pauses, but not gaps
@@ -574,17 +577,31 @@ def pbl_aux(items, ts, dts):
     dt_sum = 0
     for item in items:
         if item.time < cur_t - epsilon:
+            # note is before current gap
             item.perf_time += dt_sum
         elif item.time < cur_t + epsilon:
+            # note is at current gap
             item.perf_time += dt_sum + dts[ind]
         else:
+            # note is after current gap
+            # scan gaps before note
             dt_sum += dts[ind]
-            ind += 1
-            if ind == len(ts):
-                cur_t = 1e9
-            else:
+            while True:
+                ind += 1
+                if ind == len(ts):
+                    cur_t = 1e9
+                    item.perf_time += dt_sum
+                    break
                 cur_t = ts[ind]
-            item.perf_time += dt_sum
+                if cur_t < item.time-epsilon:
+                    dt_sum += dts[ind]
+                    continue
+                elif cur_t < item.time+epsilon:
+                    item.perf_time += dt_sum + dts[ind]
+                    break
+                else:
+                    item.perf_time += dt_sum
+                    break
 
 def pause_before_list(self, ts, dts):
     self.init_all()

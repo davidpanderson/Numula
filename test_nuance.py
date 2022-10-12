@@ -57,10 +57,7 @@ def test3():
     print(*x, sep='\n')
     ns.tempo_adjust_pft(x)
     print(ns)
-<<<<<<< HEAD
-=======
     pianoteq.play_score(ns)
->>>>>>> b2d845ac252ea5d42f8aaaf8da059910cbbe6597
 #test3()
 
 def test4():
@@ -133,7 +130,16 @@ def test_ped():
 #test_ped()
 
 def test_pbl():
-    ns = Score([n('c d e f g a b c')])
+    ns = Score([n('c d e [f a c] g a b c')], verbose=True)
     ns.pause_before_list([3/4, 5/4, 13/8], [.1, .2, .3])
     print(ns)
 test_pbl()
+
+def test_tag():
+    ns = Score([
+        n(' |300 1/16 [c f a- c] g a- b- c d e f'),
+        n(' |300 1/4 f3 1/8 . [c f a- c] *4 [-c e g b- c] * ')
+    ], verbose=True)
+    print(ns)
+#test_tag()
+        
