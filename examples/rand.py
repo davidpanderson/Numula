@@ -16,7 +16,7 @@
 
 # test program: play random notes
 
-from nscore import *
+from numula.nscore import *
 import random
 
 ns = Score()

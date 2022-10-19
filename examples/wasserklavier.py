@@ -19,12 +19,12 @@
 # see https://github.com/davidpanderson/Numula/wiki/Example:-wasserklavier
 
 import numpy as np
-from nscore import *
-from notate_score import *
-from nuance import *
-from notate_nuance import *
-from vol_name import *
-import pianoteq
+from numula.nscore import *
+from numula.notate_score import *
+from numula.nuance import *
+from numula.notate_nuance import *
+from numula.vol_name import *
+import numula.pianoteq
 
 # create the score (notes and measures)
 #
@@ -223,7 +223,7 @@ def main():
         time_adjust(ns)
         print(ns)
         ns.write_midi('data/wasserklavier.midi')
-        pianoteq.play('data/wasserklavier.midi',
+        numula.pianoteq.play('data/wasserklavier.midi',
             preset='My Presets/NY Steinway D Classical (for wasser)'
         )
     else:

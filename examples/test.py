@@ -1,3 +1,5 @@
+import sys
+sys.path.insert(0, '../numula')
 import random
 from nscore import *
 from notate_score import *
@@ -32,8 +34,8 @@ def scale():
 
     print(ns)
     ns.write_midi('data/scale.midi')
-    pianoteq.play('data/scale.midi')
-#scale()
+    #pianoteq.play('data/scale.midi')
+scale()
 
 # make some notes with different pitches and same vol
 # (test input for panning)

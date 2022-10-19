@@ -18,8 +18,8 @@
 # E.g. n('1/8 a b c') returns a list of Note objects for 8th note A, B, C
 # see https://github.com/davidpanderson/Numula/wiki/notate.py
 
-import nscore
-from notate import *
+import numula.nscore as nscore
+from numula.notate import *
 
 note_names = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
 pitch_offset = [0, 2, 4, 5, 7, 9, 11]

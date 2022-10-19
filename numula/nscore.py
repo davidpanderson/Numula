@@ -17,7 +17,7 @@
 # classes for notes and scores
 # see https://github.com/davidpanderson/Numula/wiki/nscore.py
 
-from MidiFile import MIDIFile
+import numula.MidiFile
 
 class Note:
     def __init__(self, time, dur, pitch, vol, tags=[]):
@@ -314,7 +314,7 @@ class Score:
         #
         self.remove_overlap(verbose)
 
-        f = MIDIFile(deinterleave=False)
+        f = numula.MidiFile.MIDIFile(deinterleave=False)
         f.addTempo(0, 0, 60)
         for note in self.notes:
             if pred and not pred(note):
@@ -525,15 +525,15 @@ class Score:
             # don't want pedal down during attack of notes right at end
             pedal.perf_dur -= .01
                         
-    from nuance import vol_adjust_pft, vol_adjust, vol_adjust_func
-    from nuance import tempo_adjust_pft, sustain, pause_before, pause_after
-    from nuance import pause_before_list
-    from nuance import roll, t_adjust_list, t_adjust_notes, t_adjust_func
-    from nuance import t_random_uniform, t_random_normal
-    from nuance import score_dur_abs, score_dur_rel, score_dur_func
-    from nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
-    from nuance import get_pos_array
-    from nuance import vsustain_pft, pedal_pft
+    from numula.nuance import vol_adjust_pft, vol_adjust, vol_adjust_func
+    from numula.nuance import tempo_adjust_pft, sustain, pause_before, pause_after
+    from numula.nuance import pause_before_list
+    from numula.nuance import roll, t_adjust_list, t_adjust_notes, t_adjust_func
+    from numula.nuance import t_random_uniform, t_random_normal
+    from numula.nuance import score_dur_abs, score_dur_rel, score_dur_func
+    from numula.nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
+    from numula.nuance import get_pos_array
+    from numula.nuance import vsustain_pft, pedal_pft
     
 # represents the start or end of a note or pedal application
 #

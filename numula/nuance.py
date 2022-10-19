@@ -19,7 +19,7 @@
 # see https://github.com/davidpanderson/Numula/wiki/nuance.py
 
 import numpy, random, copy, math
-from nscore import *
+from numula.nscore import *
 
 # -------- PFT primitives ----------
 

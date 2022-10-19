@@ -14,14 +14,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-from nscore import *
-from notate_score import *
+from numula.nscore import *
+from numula.notate_score import *
 
 def test1():
-    ns = Score()
-    ns.add_list(0, n('c d e f g a b c'))
-    ns.add_pedal(PedalUse(4/4, 3/4, True))
-    ns.done()
+    ns = Score(n('c d e f g a b c'))
+    ns.insert_pedal(PedalUse(4/4, 3/4, True))
     ns.write_midi('data/test1.midi')
 
 test1()

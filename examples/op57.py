@@ -1,11 +1,11 @@
 # Beethoven sonata op 57, 3rd mvt
 
-from nscore import *
-from notate_score import *
-from nuance import *
-from notate_nuance import *
-from vol_name import *
-import pianoteq
+from numula.nscore import *
+from numula.notate_score import *
+from numula.nuance import *
+from numula.notate_nuance import *
+from numula.vol_name import *
+import numula.pianoteq
 
 rh_20_117 = n(' \
     |20 1/16 . (theme_a *2 \
@@ -896,7 +896,7 @@ def main():
     #ns.t_random_normal(.007, 2)
     print(ns)
     ns.write_midi('data/op57.midi', verbose=False)
-    pianoteq.play('data/op57.midi',
+    numula.pianoteq.play('data/op57.midi',
          preset='My Presets/NY Steinway D Classical (for Appassionata)'
     )
 

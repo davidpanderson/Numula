@@ -14,12 +14,12 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-from nscore import *
-from notate_score import *
-from nuance import *
-from notate_nuance import *
-from vol_name import *
-import pianoteq
+from numula.nscore import *
+from numula.notate_score import *
+from numula.nuance import *
+from numula.notate_nuance import *
+from numula.vol_name import *
+import numula.pianoteq as pianoteq
 
 # various timing-related functions
 def test1():

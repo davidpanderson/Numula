@@ -17,7 +17,7 @@
 # basic test program: generate notes with everything normally distributed
 
 import random, numpy, math
-import nscore
+import numula.nscore as nscore
 
 def normal_time():
     ns = nscore.Score()

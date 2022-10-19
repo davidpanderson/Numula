@@ -1,6 +1,6 @@
 # combine signals with panning
 
-from spatialize import *
+from numula.spatialize import *
 
 def pos_func(t):
     m = t % 16

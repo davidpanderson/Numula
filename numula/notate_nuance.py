@@ -18,10 +18,10 @@
 # Textual notation of nuance.
 # see https://github.com/davidpanderson/Numula/wiki/nuance_notate.py
 
-import nscore
-from nuance import *
-from notate import *
-from vol_name import *
+import numula.nscore
+from numula.nuance import *
+from numula.notate import *
+from numula.vol_name import *
 
 # continuous volume change
 # e.g.: 'Linear *2 f 1/4 pp ] mp 2/4 p *'

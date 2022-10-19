@@ -3,10 +3,10 @@
 # then combined with independent panning
 
 import math
-from nscore import *
-from notate_score import *
-from nuance import *
-import spatialize, pianoteq
+from numula.nscore import *
+from numula.notate_score import *
+from numula.nuance import *
+import numula.spatialize, numula.pianoteq
 
 def main():
     v0 = n('1/8 (theme +g+ a+ b a+ d+ -d+ | g+ b a+ b a+ g+ | a+ b c+ b e -g+ | a+ c+ b c+ b a+ | 1/4 b theme) 1/8 b+ 6/8 c+ \

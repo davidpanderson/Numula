@@ -14,14 +14,14 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-from midiutil import MIDIFile
+from numula import MidiFile
 import random, math
 
 # test program for midiutil.
 # play notes from randomly-changing chords
 
 def main():
-    f = MIDIFile(1)
+    f = MidiFile.MIDIFile(1)
     f.addTempo(0, 0, 240)
 
     c=[0]*4

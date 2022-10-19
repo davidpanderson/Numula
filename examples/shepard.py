@@ -20,7 +20,7 @@
 # N: # of notes
 # M: # of repetitions before
 
-from MidiFile import MIDIFile
+from numula.MidiFile import MIDIFile
 
 t = 0
 i = 0
