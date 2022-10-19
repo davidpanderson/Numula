@@ -1,0 +1,22 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "numula"
+version = "0.0.2"
+authors = [
+  { name="David P. Anderson", email="davea@berkeley.edu" },
+]
+description = "A Python library for creating nuanced music with MIDI."
+readme = "README.md"
+requires-python = ">=3.0"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/davidpanderson/Numula"
+"Bug Tracker" = "https://github.com/davidpanderson/Numula/issues"

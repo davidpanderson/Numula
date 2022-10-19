@@ -1,3 +1,3 @@
-Numula: Python tools for generating nuanced computer music.
+Numula: a Python library for creating nuanced music with MIDI.
 
-See [the Wiki](https://github.com/davidpanderson/music/wiki)
+See [the Wiki](https://github.com/davidpanderson/Numula/wiki)
