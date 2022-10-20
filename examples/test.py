@@ -1,15 +1,13 @@
-import sys
-sys.path.insert(0, '../numula')
 import random
-from nscore import *
-from notate_score import *
-from nuance import *
-from vol_name import *
-import pianoteq
+
+from numula.nscore import *
+from numula.notate_score import *
+from numula.nuance import *
+from numula.vol_name import *
+import numula.pianoteq as pianoteq
 
 def scale():
     ns = Score([
-        #n('c d e', ['rh'])
         n('c d e f g a b c d').tag('rh'),
         n('-c d e f g a b c d').tag('lh')
     ])
@@ -25,7 +23,6 @@ def scale():
     print('---')
     ns.tempo_adjust_pft(
         [
-            #Linear(1, 2, 2/4)
             Linear(60, 120, 4/4),
             Linear(120, 60, 4/4)
         ], normalize=True,
@@ -34,7 +31,7 @@ def scale():
 
     print(ns)
     ns.write_midi('data/scale.midi')
-    #pianoteq.play('data/scale.midi')
+    pianoteq.play('data/scale.midi')
 scale()
 
 # make some notes with different pitches and same vol

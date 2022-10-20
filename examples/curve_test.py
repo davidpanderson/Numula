@@ -1,4 +1,6 @@
-import nscore, nuance, pianoteq
+import numula.nscore as nscore
+import numula.nuance as nuance
+import numula.pianoteq as pianoteq
 import matplotlib.pyplot as plot
 
 # plot an exponential curve and its integral
