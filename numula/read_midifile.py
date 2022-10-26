@@ -19,7 +19,7 @@
 # see https://github.com/davidpanderson/Numula/wiki/read_midifile.py
 
 import mido, copy
-import numula.nscore
+import numula.nscore as nscore
 
 def print_midi_event(e):
     if e.type == 'note_on':
