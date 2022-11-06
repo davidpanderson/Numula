@@ -305,8 +305,7 @@ def v_random_normal(self, stddev, max_sigma=2, pred=None):
         while True:
             x = numpy.random.normal()
             if abs(x) < max_sigma: break
-        y = stddev*(1+y)
-        note.vol *= y
+        note.vol *= 1+stddev*x
 
 # ------------------- Timing ------------------------
 

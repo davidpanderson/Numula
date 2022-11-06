@@ -39,6 +39,8 @@ def test2():
     ns.t_adjust_list([.1, .2], lambda x: 'foo' in x.tags)
     ns.t_random_uniform(-.1, .1)
     ns.t_random_normal(.1, 3)
+    ns.v_random_normal(.1)
+    ns.v_random_uniform(.9, 1.1)
     print(ns)
     pianoteq.play_score(ns)
 #test2()
