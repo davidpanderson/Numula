@@ -21,7 +21,9 @@ jobs:
           pip install mido pytest
       - name: Run tests with pytest
         run: |
+          cd ..
+          echo "uffa"
+          ls -l .
+          echo "boring"
           ls -l ..
-          ls -l ../..
-          ls -l examples/
           pytest 
