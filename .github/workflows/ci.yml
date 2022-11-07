@@ -19,7 +19,7 @@ jobs:
       - name: Install dependencies
         run: |
           python3 -m pip install --upgrade pip
-          pip install mido pytest
+          pip install mido pytest numpy
       - name: Run tests with pytest
         run: |
           pytest 
