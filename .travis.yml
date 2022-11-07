@@ -1,0 +1,17 @@
+language: python
+python:
+  - 3.8
+  - 3.9
+  - 3.10
+before_install:
+  - python --version
+  - pip install -U pip
+  - pip install -U pytest
+  - pip install -U mido
+  - pip install codecov
+install:
+  - pip install ".[test]" . # install package + test dependencies
+script: pytest # run tests
+after_success:
+  - codecov # submit coverage
+
