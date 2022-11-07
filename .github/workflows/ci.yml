@@ -12,6 +12,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout
       - name: Install Python 3
         run: |
           sudo apt-get install python3
