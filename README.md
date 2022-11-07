@@ -1,4 +1,5 @@
-![Tests](https://github.com/davidedelvento/Numula/.github/workflows/ci.yml/badge.svg)
+
+[![Run Python Tests](https://github.com/davidedelvento/Numula/actions/workflows/ci.yml/badge.svg)](https://github.com/davidedelvento/Numula/actions/workflows/ci.yml)
 
 
 Numula: a Python library for creating nuanced music with MIDI.
