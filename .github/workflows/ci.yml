@@ -20,4 +20,7 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install mido pytest
       - name: Run tests with pytest
-        run: pytest 
+        run: |
+          ls
+          ls ..
+          pytest 
