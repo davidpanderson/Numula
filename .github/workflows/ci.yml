@@ -21,6 +21,5 @@ jobs:
           pip install mido pytest
       - name: Run tests with pytest
         run: |
-          ls
-          ls ..
+          ls -l examples/
           pytest 
