@@ -20,7 +20,7 @@ from numula.notate_score import *
 def test1():
     ns = Score(n('c d e f g a b c'))
     ns.insert_pedal(PedalUse(4/4, 3/4, True))
-    ns.write_midi('data/test1.midi')
+    ns.write_midi('./examples/data/test1.midi')
 
 test1()
         

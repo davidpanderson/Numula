@@ -22,6 +22,6 @@ def test1():
     ns = Score()
     ns.append_score([n(s)])
     print(ns)
-    ns.write_midi('data/test1.midi')
+    ns.write_midi('./examples/data/test1.midi')
 
 test1()

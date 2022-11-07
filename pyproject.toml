@@ -20,3 +20,8 @@ classifiers = [
 [project.urls]
 "Homepage" = "https://github.com/davidpanderson/Numula"
 "Bug Tracker" = "https://github.com/davidpanderson/Numula/issues"
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
