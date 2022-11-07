@@ -22,4 +22,5 @@ jobs:
       - name: Run tests with pytest
         run: |
           ls -l examples/
+          ls -l .
           pytest 
