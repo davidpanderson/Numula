@@ -530,6 +530,7 @@ class Score:
     from numula.nuance import pause_before_list
     from numula.nuance import roll, t_adjust_list, t_adjust_notes, t_adjust_func
     from numula.nuance import t_random_uniform, t_random_normal
+    from numula.nuance import v_random_uniform, v_random_normal
     from numula.nuance import score_dur_abs, score_dur_rel, score_dur_func
     from numula.nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
     from numula.nuance import get_pos_array
