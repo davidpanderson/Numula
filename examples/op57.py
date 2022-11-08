@@ -171,8 +171,8 @@ rh_212_299 = n(' \
     [-f a] +f [-f b-] +f [-f +c] f [-f +d-] f \
     . --c f a- c -c f a- c -c +g b- c -c e g \
     1/4 [c5 f a- c] 3/16 . 1/16 [f a-] 1/4 [f a-] 3/16 . 1/16 [f a-] \
-    |244 1/2 [f a-] 1/8 [g e] 5/8 . 3/16 . 1/16 [g b-] 1/4 [g b-] \
-    3/16 . 1/16 [g b-] 1/2 [g b-] 1/8 [a- f] 5/8 . 3/16 . 1/16 [+c e-] \
+    |244 1/2 [f a-] 2/8 [g e] 4/8 . 3/16 . 1/16 [g b-] 1/4 [g b-] \
+    3/16 . 1/16 [g b-] 1/2 [g b-] 2/8 [a- f] 4/8 . 3/16 . 1/16 [+c e-] \
     1/4 [c e-] 3/16 . 1/16 [c e-] 5/8 [c e-] \
     1/8 [d- b-] [c a-] [b- g] 1/4 [f a-] \
     3/16 . 1/16 [f a- +f] 1/4 [g -b- g] 3/16 . 1/16 [e g +e] [f -a- f] \
@@ -290,10 +290,10 @@ rh_300_end = n(' \
     |339 e f g a- b- a- g f e f g a- b- c d e \
     |341 *4 f -a- c f 5/16 a- 1/16 -c f a- c a- g e * \
     |349 *3 f c f a- c a- g e * *2 +c a- g e * \
-    +c a- f c +a- f c a- +f c a- f +c a- f c \
-    +a- f c a- +f c a- f +c a- f c +a- f c a- \
-    +f c a- f +c a- f c +a- f c a- +f c a- c \
-    1/8 [a- c f] . . . [+f a- c f] . . . [-f c a- f] . . . \
+    |353 +c a- f c +a- f c a- +f c a- f +c a- f c \
+    |355 +a- f c a- +f c a- f +c a- f c +a- f c a- \
+    |377 +f c a- f +c a- f c +a- f c a- +f c a- c \
+    |359 1/8 [a- c f] . . . [+f a- c f] . . . [-f c a- f] . . . \
     |362 \
 ').tag('rh')
 lh_300_end = n(' \
@@ -351,7 +351,7 @@ v0_20 = ' \
 v1_20 = ' \
     |20 *2 [ mm 2/2 mm ] mf 2/2 mf ] f 2/2 f 2/2 mf * \
     |36 *2 \
-        *2 [ mm 2/2 mf 2/2 mm * mm 2/2 mf_ 4/2 mm \
+        *2 [ mm 2/2 mf 2/2 mm * mm 2/2 mf_ 1/2 _mf 3/2 mm \
         * \
     |64 *5 [ mp 1/2 f_ 1/2 mm * \
     |74 mm 2/2 mf mf 1/2 mp 1/2 mf [ mf_ 1/2 mp_ 1/2 mf_ \
@@ -368,6 +368,7 @@ rhv_36 = ' \
     |90 mm 2/2 mp 2/2 mm 2/2 p \
     |96 *2 *3 [ mp 1/4 _mf 1/4 mp * 1/2 mm * \
     |104 4/2 mm \
+    |108 \
 '
 rha_36 = ' \
     |36 *2 *3 mm 1/4 f 1/4 * f 1/4 f 1/4 * \
@@ -376,7 +377,8 @@ rha_36 = ' \
     |58 1/2 mf 1/2 mf_ 3/2 mf_ 1/2 f \
     |64 32/2 \
     |96 mp *2 2/2 3/8 mf 5/8 * \
-    |104 *2 3/8 mf 5/8 * \
+    |104 *2 _mf 3/8 mf 5/8 * \
+    |108 \
 '
 lhv_36 = ' \
     |36 [ mf_ 14/2 mf_ \
@@ -384,6 +386,7 @@ lhv_36 = ' \
     |64 [ p 10/2 p 2/2 f \
     |76 [ mp 20/2 mp \
     |96 *12 [ mf 1/4 mm 1/4 mf * \
+    |108 \
 '
 lha_36 = ' \
     |36 *3 2/2 mf_ 1/2 mp 1/2 * mp 1/2 _mf 1/2 \
@@ -391,6 +394,7 @@ lha_36 = ' \
     |64 1.8 2/2 *5 2.6 2/2 * *2 f 2/2 * \
     |80 f 6/2 *3 mf 2/2 * 4/2 \
     |96 mp 12/2 \
+    |108 \
 '
 def v20_117(ns, t0):
     # overall shape of exposition
@@ -479,10 +483,11 @@ tb_20 = f' \
         6/2 60 {dt0}p \
         * \
     |64 {dt0}p{dt2} *6 60 2/2 60 {dt0}p * \
-    |76 {dt1}p *2 60 2/2 60 {dt0}p * \
+    |76 {dt1}p *2 60 2/2 60 {dt1}p * \
     |80 4/2 60 {dt1}p *6 2/2 60 {dt0}p * \
     |96 {dt1}p{dt2} 4/2 60 \
-    |100 {dt0}p{dt2} 8/2 60 \
+    |100 {dt0}p{dt1} 4/2 60 \
+    |104 *2 {dt0}p{dt1} 2/2 60 * \
     |108 \
 '
 
@@ -494,7 +499,7 @@ def t20_117(ns, t0):
     ', 1/2)
     ns.tempo_adjust_pft(ta, t0)
     tb = tempo(tb_20 + f' \
-        |108 60 4/2 60 {dt4}p{dt0} \
+        |108 *2 {dt0}p{dt1} 60 2/2 60 * {dt4}p{dt0} \
         |112 6/2 60 {dt0}p \
         |118 \
     ', 1/2)
@@ -612,8 +617,8 @@ def t118_211(ns, t0):
         |142 *4 {dt0}p{dt1} 4/2 60 * \
         |158 {dt1}p{dt0} 6/2 60 \
         |164 {dt1}p 3/2 60 \
-        |167 3/8 60 {dt1}p{dt1} 1/8 60 p{dt3} 60 8/2 60 \
-        |176 {dt3}p 8/2 60 \
+        |167 3/8 60 {dt2}p{dt2} 1/8 60 p{dt3} 60 8/2 60 \
+        |176 {dt4}p 8/2 60 \
         |184 .5p 16/2 60 \
         |200 {dt2}p 60 12/2 60 \
         |212 \
@@ -740,10 +745,14 @@ def v300_end(ns, t0):
         |343 [ _f 8/2 f [ f_ 8/2 _ff \
         |359 ] mf 8/2 ff \
         |367 [ ff 4/2 _ff \
-        |371 6/2 ff [ fff_ 3/2 fff_ \
+        |371 6/2 ff [ ffff 3/2 ffff \
         |380 \
     ', 1/2)
-    ns.vol_adjust_pft(v, t0)
+    lhv = vol(' \
+        |300 mm 43/2 mm \
+        |343 ] mp 37/2 mp \
+        |380 \
+    ', 1/2)
     a8 = 'mf'    # accents on 8th-note chords in 310 onward
     lha = accents(f' \
         |300 *3 1/2 mf 1/2 mf * mf 1/2 mf 1/2 \
@@ -755,16 +764,18 @@ def v300_end(ns, t0):
         |371 *6 _f 1/4 _f 1/4 * 3/2 \
         |380 \
     ', 1/2)
-    ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
     rha = accents(f' \
         |300 8/2 \
         |308 *2 2/2 *6 {a8} 1/2 * * \
         |324 2/2 *8 {a8} 1/2 * 2/2 *7 {a8} 1/2 * \
         |343 *8 mf 2/2 * \
-        |359 *4 1/4 f 3/4 * \
+        |359 *4 1/4 mf 3/4 * \
         |367 2/2 1/4 mf 1/4 *7 mf_ 1/4 mf_ 1/4 * 3/2 \
         |380 \
     ', 1/2)
+    ns.vol_adjust_pft(v, t0)
+    ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
+    ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
     ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
     ns.vol_adjust(
         .9,
@@ -778,7 +789,7 @@ def t300_end(ns, t0):
         |324 70 10/2 70 \
         |334 70 9/2 70 \
         |343 70 15/2 70 1/2 65 \
-        |359 70 14/2 75 3/2 65 1/2 60 \
+        |359 70 14/2 75 3/2 70 1/2 68 \
         |377 50 2/2 45 1/2 45\
         |380 \
     ', 1/2)
@@ -789,7 +800,8 @@ def t300_end(ns, t0):
         |324 p{dt1} 60 9/2 60 {dt1}p 1/2 60 \
         |334 p{dt1} 60 9/2 60 \
         |343 {dt1}p 60 8/2 60 {dt1}p 8/2 60 \
-        |359 {dt1}p 60 18/2 60 \
+        |359 *4 {dt0}p 60 2/2 60 * \
+        |367 *4 {dt0}p 1/2 60 * 6/2 60 \
         |377 {dt2}p 60 2/2 60 p.3 1/2 60\
         |380 \
     ', 1/2)
@@ -797,12 +809,10 @@ def t300_end(ns, t0):
     # needed to create gaps
     ns.pause_before_list(
         [t0+8/2, t0+9/2, t0+10/2, t0+16/2, t0+17/2, t0+18/2,
-             t0+24/2, t0+25/2, t0+26/2, t0+34/2, t0+33/2, t0+36/2,
-             t0+77/2
+             t0+24/2, t0+25/2, t0+26/2, t0+34/2, t0+33/2, t0+36/2
         ],
         [dt2,    dt4,    .3,      dt2,     dt4,     .2,
-             dt2,     dt4,     .3,      dt2,     dt4,     .2,
-             dt2
+             dt2,     dt4,     .3,      dt2,     dt4,     .2
         ]
     ) 
     
@@ -811,7 +821,7 @@ def p300_end(ns, t0):
         |300 - 59/2 \
         |359 *4 + 3/4 - 1/4 * \
         |367 *3 + 3/8 - 1/8 * + 1/8 1/8 1/8 1/8 \
-        |371 + 4/2 +2/2 - 3/2 \
+        |371 + 4/2 + 2/2 - 3/2 \
         |380 \
     ', 1/2)
     ns.vsustain_pft(p, t0)
@@ -819,11 +829,11 @@ def p300_end(ns, t0):
 def main():
     do_20 = True
     do_118 = True
-    do_212 = False
-    do_300_1 = False
-    do_118_rep = False
-    do_212_rep = False
-    do_300_2 = False
+    do_212 = True
+    do_300_1 = True
+    do_118_rep = True
+    do_212_rep = True
+    do_300_2 = True
     
     ns = Score(tempo=144, verbose=True)
     # must make copies first; append_score() changes note times
@@ -898,7 +908,7 @@ def main():
         ns.perf_dur_rel(0.6, lambda n: 'theme_a' in n.tags)
         ns.perf_dur_rel(0.2, lambda n: 'stac' in n.tags)
         
-    #ns.t_random_normal(.007, 2)
+    ns.t_random_normal(.005, 2)
     print(ns)
     ns.write_midi('data/op57.midi', verbose=False)
     numula.pianoteq.play('data/op57.midi',
