@@ -20,21 +20,26 @@
 
 import platform, subprocess, os
 
-s = platform.system()
-if s == 'Windows':
-    prog = "c:/program files/modartt/pianoteq 7/pianoteq 7.exe"
-elif s == 'Darwin':
-    prog = "/Applications/Pianoteq 7/Pianoteq 7.app/Contents/MacOS/Pianoteq 7"
-elif s == 'Linux':
-    prog = './Pianoteq 7/amd64/Pianoteq 7'
-else:
-    raise Exception("OS not supported")
+# return path of latest PianoTeq executable
+#
+def pianoteq_path():
+    s = platform.system()
+    for v in (8, 7):
+        if s == 'Windows':
+            p = 'c:/program files/modartt/pianoteq %d/pianoteq %d.exe'%(v,v)
+        elif s == 'Darwin':
+            p = '/Applications/Pianoteq %d/Pianoteq %d.app/Contents/MacOS/Pianoteq %d'%(v,v,v)
+        elif s == 'Linux':
+            p = './Pianoteq %d/amd64/Pianoteq %d'%(v,v)
+        else:
+            raise Exception("OS not supported")
+        if os.path.isfile(p):
+            return p
+    raise Exception('Pianoteq not found')
     
 def play(file, preset=None):
-    if not os.path.isfile(prog):
-        raise Exception('Pianoteq missing: %s'%prog)
     p = ' --preset "%s"'%preset if preset else ''
-    cmd = '"%s" --play --midi %s%s'%(prog, file, p)
+    cmd = '"%s" --play --midi %s%s'%(pianoteq_path(), file, p)
     subprocess.call(cmd, shell=True)
 
 def play_score(ns):
@@ -43,10 +48,8 @@ def play_score(ns):
     play('data/temp.midi')
 
 def midi_to_wav(ifile, ofile, mono=False, preset=None):
-    if not os.path.isfile(prog):
-        raise Exception('Pianoteq missing: %s'%prog)
     m = ' --mono' if mono else ''
     p = ' --preset "%s"'%preset if preset else ''
-    cmd = '"%s"%s --wav %s --headless --midi %s%s'%(prog, m, ofile, ifile, p)
+    cmd = '"%s"%s --wav %s --headless --midi %s%s'%(pianoteq_path(), m, ofile, ifile, p)
     print(cmd)
     subprocess.call(cmd, shell=True)
