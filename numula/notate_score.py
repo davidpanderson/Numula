@@ -40,17 +40,17 @@ def parse_pitch(items, i, cur_pitch):
             pitch_class = pitch_offset[note_names.index(c)]
             got_pitch = True
         elif c == '+':
-            i = 1 if got_pitch else 0
-            if off[i] < 0:
+            j = 1 if got_pitch else 0
+            if off[j] < 0:
                 show_context(items, i)
                 raise Exception('bad offset')
-            off[i] += 1
+            off[j] += 1
         elif c == '-':
-            i = 1 if got_pitch else 0
-            if off[i] > 1:
+            j = 1 if got_pitch else 0
+            if off[j] > 1:
                 show_context(items, i)
                 raise Exception('bad offset')
-            off[i] -= 1
+            off[j] -= 1
         elif c.isnumeric():
             if off[0] or absolute:
                 show_context(items, i)
