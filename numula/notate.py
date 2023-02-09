@@ -82,7 +82,7 @@ meas_first = True
 def measure_init():
     global meas_first, meas_dur
     meas_first = True
-    meas_dur = 4/4
+    meas_dur = 0
 
 def comment(item, t):
     global meas_dur, meas_prev_t, meas_prev_m, meas_first
@@ -111,10 +111,13 @@ def set_measure_dur(s, t):
         raise Exception("Can't set measure length in the middle of a measure")
     t = s[1:]
     a = t.split('/')
+    print(s, t)
+    print(a[0], a[1])
     try:
         num = int(a[0])
         denom = int(a[1])
     except:
+        print(t)
         return False
     meas_dur = num/denom
     return True

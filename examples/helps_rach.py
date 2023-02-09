@@ -123,6 +123,8 @@ bass.append_score(n(' \
 ', 4/4))
 bass.tag('bass')
 
+# overall volume, 4-16 m scale
+
 def main():
     ns = Score(tempo=80)
     ns.append_score([sop, alto, tenor, bass])

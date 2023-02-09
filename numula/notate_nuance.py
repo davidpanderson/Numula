@@ -312,7 +312,13 @@ def pedal(s, pedal_type=pedal_sustain):
     dt = 0
     for i in range(len(items)):
         t = items[i]
-        if '/' in t:
+        if t[0] == '|':
+            comment(t, dt)
+        elif t[0] == 'm':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
+        elif '/' in t:
             a = t.split('/')
             try:
                 num = int(a[0])
@@ -326,12 +332,6 @@ def pedal(s, pedal_type=pedal_sustain):
             else:
                 pft.append(PedalSeg(dur, 0, pedal_type))
             dt += dur
-        elif t[0] == '|':
-            comment(t, dt)
-        elif t[0] == 'm':
-            if not set_measure_dur(t, dt):
-                show_context(items, i)
-                raise Exception("bad measure length")
         elif t == '-':
             on = False
         elif t == '+':
