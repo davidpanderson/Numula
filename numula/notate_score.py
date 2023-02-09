@@ -174,7 +174,7 @@ def n(s):
             tags.remove('ch')
         elif t[0] == '|':
             comment(t, dt)
-        elif t[0] == 'm':
+        elif t[0:4] == 'meas':
             if not set_measure_dur(t, dt):
                 show_context(items, i)
                 raise Exception("bad measure length")

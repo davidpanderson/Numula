@@ -4,20 +4,14 @@ from numula.nscore import *
 from numula.notate_score import *
 import numula.pianoteq
 
-sop = n(' \
+sop = n('meas4/4 \
     |1 par-12 1/2 c+7 1/4 b d 1/2 c+ 1/4 b d+ \
     |3 c+ f+ e d c+ b a g \
     |5 1/2 f+ 1/4 e g 1/2 f+ 1/4 e g+ \
     |7 f+ b a +d c f e a \
     |9 *2 1/2 g+ 1/4 f+ a * \
-    par \
-', 4/4)
-sop.append_score(n(' \
-    |11 par-12 g+7 1/8 a g+ g+ f+ e d+ f+ e d c+ \
-    |12 par \
-', 6/4))
-sop.append_score(n(' \
-    |12 par-12 1/8 e7 d 11/16 c 1/16 a- \
+    |11 meas6/4 g+7 1/8 a g+ g+ f+ e d+ f+ e d c+ \
+    |12 meas4/4 1/8 e7 d 11/16 c 1/16 a- \
     |13 1/2 f 1/4 e- g- 1/2 f 1/4 e- g 1/2 f f f f \
     |17 1/2 +c+ 1/4 d b 1/2 c+ 1/4 d+ b c+ +f+ f e- \
     |20 1/2 d 1/4 c e 1/2 d 1/4 e- c \
@@ -26,23 +20,17 @@ sop.append_score(n(' \
     |26 1/4 c+ b a g 1/2 f 1/4 f 1/8 f+ g+ \
     |28 1/2 *7 f+ * 6/4 f+ \
     |33 par \
-', 4/4))
+')
 sop.tag('sop')
 
-alto = n(' \
+alto = n('meas4/4 \
     |1 1/32 *36 f+6 g+ * *7 a b * a g+ *4 f+ g+ * \
     |4 *3 f+ g+ * f+ e *7 d e * d c+ *36 b c+ * \
     |7 *4 b c+ * *8 d e * *3 f g- * f g \
     |8 *4 f g * *7 a b- * a b *3 c+ d * c+ d+ \
     |9 *15 c+ d+ * c+ d *15 c+ d * c+ d+ \
-    |11 \
-', 4/4)
-alto.append_score(n(' \
-    |11 1/32 c+7 d+ *6 c+ d * *4 c+ d+ * *4 c+ d * c+ b *8 a b * \
-    |12 \
-', 6/4))
-alto.append_score(n(' \
-    |12 1/32 *3 a6 b * a g *10 g a * g f e- d- *16 c d- * \
+    |11 meas6/4 1/32 c+7 d+ *6 c+ d * *4 c+ d+ * *4 c+ d * c+ b *8 a b * \
+    |12 meas4/4 1/32 *3 a6 b * a g *10 g a * g f e- d- *16 c d- * \
     |14 *32 c d * *15 c d * e f \
     |17 *32 f+ g+ * \
     |19 *4 f+ g+ * *4 a+ b * *3 b- c- * b- a *3 g a * g 2/32 a 1/32 a *15 g a * \
@@ -57,10 +45,10 @@ alto.append_score(n(' \
          1/32 c+ *6 d+ c+ * d 2/32 c+ 1/32 c+ *6 d+ c+ * d+ 2/32 c+ \
          1/32 c+ *14 d c+ * d 33/32 c+ \
     |33 \
-', 4/4))
+')
 alto.tag('alto')
 
-tenor = n(' \
+tenor = n('meas4/4 \
     |1 1/8 f+3 +c+ +b 1/4 c+ 1/8 -f+ +e +b \
     |2 f+3 +c+ +c+ 1/4 e+ 1/8 d+ +a g+ \
     |3 b -e -a b 1/4 c+ 1/8 -f+ g+ 1/4 a+ 1/8 c+ d 1/4 e 1/8 -a b \
@@ -69,14 +57,8 @@ tenor = n(' \
     |8 a -d a b 1/4 c+ 1/8 +c+ d+ \
     |9 c+2 ++g+ +f+ 1/4 +c+ 1/8 +c+ +a d \
     |10 b c+3 +g+ 1/4 +f+ 1/8 c+ ++d d+ \
-    |11 \
-', 4/4)
-tenor.append_score(n(' \
-    |11 1/4 e+ 1/8 d+ e+ 1/4 f+ 1/8 -a b 1/4 e 1/8 -g b- \
-    |12 \
-', 6/4))
-tenor.append_score(n(' \
-    |12 1/8 a4 f2 +f +c +a- c +g a- \
+    |11 meas6/4 1/4 e+ 1/8 d+ e+ 1/4 f+ 1/8 -a b 1/4 e 1/8 -g b- \
+    |12 meas4/4 1/8 a4 f2 +f +c +a- c +g a- \
     |13 b-3 +f +e- 1/4 d- 1/8 b- +f e- \
     |14 b-3 +f +d c c b- f c \
     |15 b-3 +f +e- c --b- +f +d c \
@@ -97,21 +79,16 @@ tenor.append_score(n(' \
         1/8 -f+ +c+ 1/4 +b 1/8 f+ +e d \
     |32 --f+ +c+ +b +b 1/2 ++c+ \
     |33 \
-', 4/4))
+')
 tenor.tag('tenor')
 
-bass = n(' \
+bass = n('meas4/4 \
     |1 4/4 . . 5/8 . 3/8 b3 1/8 c+ ++d+ 3/8 . 1/4 -e 1/8 . \
     |5 1/8 . b2 +f+ 5/8 . 4/4 . \
     |7 3/4 . 1/8 b-4 . 5/8 . 1/8 b3 1/4 -f+ \
     |9 7/4 . 1/4 a4 \
-    |11 \
-', 4/4)
-bass.append_score(n(' \
-    |11 1/8 b4 -c+ 1/4 +c+ 1/8 b --b . . f+4 --e . . \
-', 6/4))
-bass.append_score(n(' \
-    |12 6/4 . 1/2 g-4 . g 16/4 . \
+    |11 meas6/4 1/8 b4 -c+ 1/4 +c+ 1/8 b --b . . f+4 --e . . \
+    |12 meas4/4 6/4 . 1/2 g-4 . g 16/4 . \
     |19 1/4 . 1/8 a+4 c 1/4 d 1/8 _ 3/8 g3 1/4 _ -c \
     |20 3/4 . 1/4 c5 1/8 . g3 1/4 . a4 c \
     |22 1/8 . d5 1/4 e 1/8 . 1/4 c+4 1/8 d+ \
@@ -120,7 +97,7 @@ bass.append_score(n(' \
     |25 1/2 . f+4 1/8 _ b \
     |26 1/2 b3 g 24/4 . \
     |33 \
-', 4/4))
+')
 bass.tag('bass')
 
 # overall volume, 4-16 m scale

@@ -90,7 +90,7 @@ def vol(s):
         t = items[i]
         if t[0] == '|':
             comment(t, dt)
-        elif t[0] == 'm':
+        elif t[0:4] == 'meas':
             if not set_measure_dur(t, dt):
                 show_context(items, i)
                 raise Exception("bad measure length")
@@ -181,7 +181,13 @@ def accents(s):
     pft = []
     for i in range(len(items)):
         t = items[i]
-        if '/' in t:
+        if t[0] == '|':
+            comment(t, dt)
+        elif t[0:4] == 'meas':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
+        elif '/' in t:
             a = t.split('/')
             try:
                 num = int(a[0])
@@ -192,12 +198,6 @@ def accents(s):
             dur = num/denom
             pft.append(Unity(dur))
             dt += dur
-        elif t[0] == '|':
-            comment(t, dt)
-        elif t[0] == 'm':
-            if not set_measure_dur(t, dt):
-                show_context(items, i)
-                raise Exception("bad measure length")
         else:
             if t in vol_keys:
                 v = vol_name[t]
@@ -226,7 +226,13 @@ def tempo(s):
     segtype = SEGTYPE_LINEAR
     for i in range(len(items)):
         t = items[i]
-        if '/' in t:
+        if t[0] == '|':
+            comment(t, dt)
+        elif t[0:4] == 'meas':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
+        elif '/' in t:
             if t0 == None:
                 show_context(items, i)
                 raise Exception('missing tempo')
@@ -238,12 +244,6 @@ def tempo(s):
                 show_context(items, i)
                 raise Exception('bad values in %s'%t)
             dur = num/denom
-        elif t[0] == '|':
-            comment(t, dt)
-        elif t[0] == 'm':
-            if not set_measure_dur(t, dt):
-                show_context(items, i)
-                raise Exception("bad measure length")
         elif t == 'linear':
             segtype = SEGTYPE_LINEAR
         elif t[0:3] == 'exp':

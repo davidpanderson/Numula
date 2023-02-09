@@ -103,16 +103,14 @@ def comment(item, t):
     meas_prev_t = t
     meas_prev_m = m
 
-# s is of the form m4/4
+# s is of the form meas4/4
 #
 def set_measure_dur(s, t):
     global meas_first, meas_prev_t, meas_dur
     if not meas_first and t > meas_prev_t:
         raise Exception("Can't set measure length in the middle of a measure")
-    t = s[1:]
+    t = s[4:]
     a = t.split('/')
-    print(s, t)
-    print(a[0], a[1])
     try:
         num = int(a[0])
         denom = int(a[1])
@@ -121,6 +119,10 @@ def set_measure_dur(s, t):
         return False
     meas_dur = num/denom
     return True
-    
+
+def measure_duration(t):
+    global meas_dur
+    meas_dur = t
+
 def expand_all(items):
     return expand_iter(items)
