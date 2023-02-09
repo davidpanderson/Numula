@@ -56,4 +56,13 @@ def preset_test():
     pianoteq.play('data/scale.midi', preset='C. Grimaldi Harpsichord A')
     #pianoteq.midi_to_wav('data/scale.midi', 'data/scale.wav', preset='Celesta Tremo')
 #preset_test()
-    
+
+def meas_test():
+    n(' \
+        1/4 . \
+        |10 m3/4 . . . \
+        |11 m4/4 \
+        . . . . \
+        |12 \
+    ')
+#meas_test()

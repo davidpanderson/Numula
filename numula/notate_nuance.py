@@ -75,9 +75,10 @@ GOT_V1 = 3
 GOT_LB = 4
 GOT_RB = 5
 
-def vol(s, mdur=0):
+def vol(s):
     items = s.split()
     items = expand_all(items)
+    measure_init()
     state = INIT
     pft = []
     last_seg = None
@@ -88,7 +89,11 @@ def vol(s, mdur=0):
     for i in range(len(items)):
         t = items[i]
         if t[0] == '|':
-            comment(t, dt, mdur)
+            comment(t, dt)
+        elif t[0] == 'm':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
         elif '/' in t:
             if state != GOT_V0:
                 show_context(items, i)
@@ -168,9 +173,10 @@ def vol(s, mdur=0):
 
 # e.g. '1/8 1.2 1/4 1.2 1/4 1.2 1/8'
 
-def accents(s, mdur=0):
+def accents(s):
     items = s.split()
     items = expand_all(items)
+    measure_init()
     dt = 0
     pft = []
     for i in range(len(items)):
@@ -187,7 +193,11 @@ def accents(s, mdur=0):
             pft.append(Unity(dur))
             dt += dur
         elif t[0] == '|':
-            comment(t, dt, mdur)
+            comment(t, dt)
+        elif t[0] == 'm':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
         else:
             if t in vol_keys:
                 v = vol_name[t]
@@ -205,9 +215,10 @@ def accents(s, mdur=0):
 
 # e.g.: 'linear 60 8/4 80 p0.1 60 3/4 120 0.2p'
 
-def tempo(s, mdur=0):
+def tempo(s):
     items = s.split()
     items = expand_all(items)
+    measure_init()
     pft = []
     t0 = None
     dur = None
@@ -228,7 +239,11 @@ def tempo(s, mdur=0):
                 raise Exception('bad values in %s'%t)
             dur = num/denom
         elif t[0] == '|':
-            comment(t, dt, mdur)
+            comment(t, dt)
+        elif t[0] == 'm':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
         elif t == 'linear':
             segtype = SEGTYPE_LINEAR
         elif t[0:3] == 'exp':
@@ -288,9 +303,10 @@ def tempo(s, mdur=0):
 #print(*x, sep='\n')
 
 # e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
-def pedal(s, mdur=1, pedal_type=pedal_sustain):
+def pedal(s, pedal_type=pedal_sustain):
     items = s.split()
     items = expand_all(items)
+    measure_init()
     pft = []
     on = False
     dt = 0
@@ -311,7 +327,11 @@ def pedal(s, mdur=1, pedal_type=pedal_sustain):
                 pft.append(PedalSeg(dur, 0, pedal_type))
             dt += dur
         elif t[0] == '|':
-            comment(t, dt, mdur)
+            comment(t, dt)
+        elif t[0] == 'm':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
         elif t == '-':
             on = False
         elif t == '+':

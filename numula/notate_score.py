@@ -139,7 +139,7 @@ def check_pitch(items, i, pitch, time):
         raise Exception('illegal pitch %d at time %f'%(pitch, time))
     
 # textual note specification
-def n(s, mdur=0):
+def n(s):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
     ns = nscore.Score()
@@ -153,6 +153,7 @@ def n(s, mdur=0):
     ped_start = -1
     ped_start_index = -1
     dt = 0
+    measure_init()
     items = expand_all(items)
     for i in range(len(items)):
         t = items[i]
@@ -172,7 +173,11 @@ def n(s, mdur=0):
             dt += dur
             tags.remove('ch')
         elif t[0] == '|':
-            comment(t, dt, mdur)
+            comment(t, dt)
+        elif t[0] == 'm':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
         elif t == '_':
             ns.advance_time(-dur)
             dt -= dur

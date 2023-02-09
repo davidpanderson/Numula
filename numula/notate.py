@@ -74,18 +74,50 @@ def expand_iter(items):
 
 # if item is of the form |M (measure number)
 # verify that dt corresponds to that measure
-mstart = 0
-def comment(item, dt, mdur):
-    global mstart
+meas_dur = 0
+meas_prev_t = 0
+meas_prev_m = 0
+meas_first = True
+
+def measure_init():
+    global meas_first, meas_dur
+    meas_first = True
+    meas_dur = 4/4
+
+def comment(item, t):
+    global meas_dur, meas_prev_t, meas_prev_m, meas_first
+
     if not item[1:].isnumeric(): return
-    if mdur == 0: return
-    m1 = float(item[1:])
-    if dt == 0:
-        mstart = m1
+    if meas_dur == 0: return
+    m = float(item[1:])
+    if meas_first:
+        meas_prev_t = t
+        meas_prev_m = m
+        meas_first = False
         return
-    m2 = mstart + dt/mdur
-    if abs(m1-m2) > 1e-5:
-        raise Exception('Inconsistent measure number: %f != %f'%(m1, m2))
+    dt = t - meas_prev_t
+    dm = m - meas_prev_m
+    if abs(dm*meas_dur - dt) > 1e-5:
+        raise Exception('Inconsistent measure number: %f != %f'%(
+            m, meas_prev_m + dt/meas_dur))
+    meas_prev_t = t
+    meas_prev_m = m
+
+# s is of the form m4/4
+#
+def set_measure_dur(s, t):
+    global meas_first, meas_prev_t, meas_dur
+    if not meas_first and t > meas_prev_t:
+        raise Exception("Can't set measure length in the middle of a measure")
+    t = s[1:]
+    a = t.split('/')
+    try:
+        num = int(a[0])
+        denom = int(a[1])
+    except:
+        return False
+    meas_dur = num/denom
+    return True
     
 def expand_all(items):
     return expand_iter(items)
