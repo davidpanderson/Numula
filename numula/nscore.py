@@ -197,7 +197,9 @@ class Score:
     # initialize perf times if not already done
     #
     def perf_init(self):
+        if self.verbose: print('perf_init()')
         if self.perf_inited:
+            if self.verbose: print('already inited')
             return
         if self.verbose:
             print('initializing performance times')
@@ -217,6 +219,7 @@ class Score:
             pedal.perf_dur = self.score_to_perf(pedal.dur)
 
     def perf_init_clear(self):
+        if self.verbose: print('perf_init_clear()')
         self.perf_inited = False
         
     def tags_init(self):
@@ -273,6 +276,7 @@ class Score:
         self.tags_inited = False
 
     def init_all(self):
+        if self.verbose: print('init_all()')
         self.time_sort()
         self.perf_init()
         self.tags_init()

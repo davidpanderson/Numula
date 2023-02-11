@@ -2,9 +2,10 @@
 
 from numula.nscore import *
 from numula.notate_score import *
+from numula.notate_nuance import *
 import numula.pianoteq
 
-sop = n('meas4/4 \
+soprano = n('meas4/4 \
     |1 par-12 1/2 c+7 1/4 b d 1/2 c+ 1/4 b d+ \
     |3 c+ f+ e d c+ b a g \
     |5 1/2 f+ 1/4 e g 1/2 f+ 1/4 e g+ \
@@ -21,7 +22,7 @@ sop = n('meas4/4 \
     |28 1/2 *7 f+ * 6/4 f+ \
     |33 par \
 ')
-sop.tag('sop')
+soprano.tag('sop')
 
 alto = n('meas4/4 \
     |1 1/32 *36 f+6 g+ * *7 a b * a g+ *4 f+ g+ * \
@@ -54,7 +55,7 @@ tenor = n('meas4/4 \
     |3 b -e -a b 1/4 c+ 1/8 -f+ g+ 1/4 a+ 1/8 c+ d 1/4 e 1/8 -a b \
     |5 3/8 c+ 1/4 d+ 1/8 c+ d+ -e \
     |6 +e d -f+ 1/4 +e+ 1/8 e f+ 1/4 e+ 1/8 e b c+ +f+ 1/4 f 1/8 g \
-    |8 a -d a b 1/4 c+ 1/8 +c+ d+ \
+    |8 a -d a b 1/4 c+ 1/8 -c+ d+ \
     |9 c+2 ++g+ +f+ 1/4 +c+ 1/8 +c+ +a d \
     |10 b c+3 +g+ 1/4 +f+ 1/8 c+ ++d d+ \
     |11 meas6/4 1/4 e+ 1/8 d+ e+ 1/4 f+ 1/8 -a b 1/4 e 1/8 -g b- \
@@ -100,11 +101,126 @@ bass = n('meas4/4 \
 ')
 bass.tag('bass')
 
+# 130 beats, 65 half-notes
+# each half note (16 32nd notes) has the following accent pattern:
+#####
+#
+##
+#
+###
+#
+##
+#
+####
+#
+##
+#
+###
+#
+##
+#
+
+a5 = 1.2
+a4 = 1.1
+a3 = 1.05
+a2 = 1.0
+a1 = .9
+
+alto_v0 = accents(f' \
+    *65 {a5} 1/32 {a1} 1/32 {a2} 1/32 {a1} 1/32 \
+      {a3} 1/32 {a1} 1/32 {a2} 1/32 {a1} 1/32 \
+      {a4} 1/32 {a1} 1/32 {a2} 1/32 {a1} 1/32 \
+      {a3} 1/32 {a1} 1/32 {a2} 1/32 {a1} 1/32 \
+    * \
+')
+
+alto_v1 = vol('meas4/4 \
+    |1 *2 *2 pp 2/4 p 2/4 pp * pp 4/4 p 4/4 pp * \
+    |9 *2 pp 2/4 p 2/4 pp * \
+    |11 meas6/4 pp 6/4 pp \
+    |12 meas4/4 pp 84/4 pp \
+    |33 \
+')
+
+tenor_v0 = vol('meas4/4 \
+    p 44/4 p \
+    |11 meas6/4 p 6/4 p \
+    |12 meas4/4 p 84/4 p \
+    |33 \
+')
+bass_v0 = vol('meas4/4 \
+    p 44/4 p \
+    |11 meas6/4 p 6/4 p \
+    |12 meas4/4 p 84/4 p \
+    |33 \
+')
 # overall volume, 4-16 m scale
+v0 = vol('meas4/4 \
+    |1 p 6/4 p 2/4 pp 8/4 p 16/4 mf 8/4 f \
+    |11 meas6/4 f 6/4 f \
+    |12 meas4/4 f 1/4 ff 3/4 mp 4/4 mp \
+    |14 [ p 12/4 pp \
+    |17 pp 4/4 p 8/4 f \
+    |20 f 16/4 f 4/4 mf \
+    |25 mf 2/4 p 10/4 pp \
+    |28 pp 16/4 ppp 4/4 ppp \
+    |33 \
+')
+
+# large-scale tempo
+t0 = tempo('meas4/4 \
+    |1 *2 60 1/2 50 1/2 60 * 8/4 50 \
+    |5 60 4/1 70 2/1 65 \
+    |11 meas6/4 6/4 63 \
+    |12 meas4/4 4/4 60 \
+    |13 \
+')
+
+# pause durations
+dt0 = .03
+dt1 = .05
+dt2 = .08
+dt3 = .11
+dt4 = .14
+
+# pauses and short-scale tempo
+t1 = tempo(f'meas4/4 \
+    *10 {dt1}p 60 1/4 65 1/4 60 {dt0}p 60 1/4 65 1/4 60 * \
+    |11 \
+')
+
+# pedal over measures
+mped = pedal('meas4/4 \
+    |1 *10 + 4/4 * \
+    |11 meas6/4 + 6/4 \
+    |12 meas4/4 *21 + 4/4 * \
+    |33 \
+')
+
+nuance = True
 
 def main():
-    ns = Score(tempo=80)
-    ns.append_score([sop, alto, tenor, bass])
+    ns = Score(tempo=80, verbose=False)
+    if nuance:
+        soprano.vol_adjust(.8, lambda n: 'bottom' in n.tags)
+        alto.vol_adjust_pft(alto_v0)
+        alto.vol_adjust_pft(alto_v1)
+        tenor.vol_adjust_pft(tenor_v0)
+        bass.vol_adjust_pft(bass_v0)
+    ns.append_score([
+        soprano,
+        alto,
+        tenor,
+        bass
+    ])
+    if nuance:
+        ns.vsustain_pft(mped, 0, lambda n: 'alto' in n.tags)
+        ns.vsustain_pft(mped, 0, lambda n: 'tenor' in n.tags)
+        ns.vsustain_pft(mped, 0, lambda n: 'bass' in n.tags)
+        ns.vol_adjust_pft(v0)
+        ns.tempo_adjust_pft(t0)
+        #ns.tempo_adjust_pft(t1)
+    #print(ns)
     ns.write_midi('data/helps_rach.midi')
     numula.pianoteq.play('data/helps_rach.midi')
 

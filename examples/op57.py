@@ -840,7 +840,7 @@ def main():
     do_212_rep = True
     do_300_2 = True
     
-    ns = Score(tempo=144, verbose=True)
+    ns = Score(tempo=144, verbose=False)
     # must make copies first; append_score() changes note times
     lh_118_211_copy = copy.deepcopy(lh_118_211)
     rh_118_211_copy = copy.deepcopy(rh_118_211)

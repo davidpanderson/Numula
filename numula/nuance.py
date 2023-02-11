@@ -784,7 +784,11 @@ def perf_dur_pft(self, pft, t0, pred=None, rel=True):
 # apply a virtual sustain PFT
 def vsustain_pft(self, pft, t0=0, pred=None, verbose=False):
     self.time_sort()
-    self.perf_init_clear()
+    # this affects score time.
+    # If we've already transferred score time to perf time,
+    # those changes will be lost.
+    if self.perf_inited:
+        raise Exception('vsustain_pft() must precede tempo adjustment')
 
     seg_ind = 0
     seg = pft[0]
