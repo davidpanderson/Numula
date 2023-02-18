@@ -1,5 +1,5 @@
 # This file is part of Numula
-# Copyright (C) 2022 David P. Anderson
+# Copyright (C) 2023 David P. Anderson
 #
 # Numula is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License
@@ -14,14 +14,13 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-
 # functions for expressing nuance
 # see https://github.com/davidpanderson/Numula/wiki/nuance.py
 
 import numpy, random, copy, math
 from numula.nscore import *
 
-# -------- PFT primitives ----------
+# -------- PFT (piecewise function of time primitives ----------
 
 class Linear:
     def __init__(self, y0, y1, dt, closed_start=True, closed_end=False):
@@ -781,10 +780,11 @@ def perf_dur_pft(self, pft, t0, pred=None, rel=True):
 
 # ----------- pedals -------------
 
-# apply a virtual sustain PFT
+# apply a virtual sustain PFT:
+# extend the (score) duration of affected notes
 def vsustain_pft(self, pft, t0=0, pred=None, verbose=False):
     self.time_sort()
-    # this affects score time.
+    # this changes score time.
     # If we've already transferred score time to perf time,
     # those changes will be lost.
     if self.perf_inited:

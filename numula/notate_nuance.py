@@ -23,12 +23,6 @@ from numula.nuance import *
 from numula.notate import *
 from numula.vol_name import *
 
-# continuous volume change
-# e.g.: 'Linear *2 f 1/4 pp ] mp 2/4 p *'
-# means: go from f to pp over 1/4 (closed at end)
-# then go from mp to p over 2/4
-# repeat this twice
-
 vol_name = {
     'pppp': pppp,
     'pppp_': pppp_,
@@ -74,6 +68,12 @@ GOT_DUR = 2
 GOT_V1 = 3
 GOT_LB = 4
 GOT_RB = 5
+
+# continuous volume change
+# e.g.: 'linear *2 f 1/4 pp ] mp 2/4 p *'
+# means: go from f to pp over 1/4 (closed at end)
+# then go from mp to p over 2/4.
+# Do this twice.
 
 def vol(s):
     items = s.split()
@@ -233,9 +233,6 @@ def tempo(s):
                 show_context(items, i)
                 raise Exception("bad measure length")
         elif '/' in t:
-            if t0 == None:
-                show_context(items, i)
-                raise Exception('missing tempo')
             a = t.split('/')
             try:
                 num = int(a[0])
@@ -281,14 +278,21 @@ def tempo(s):
                 show_context(items, i)
                 raise Exception('bad pause value')
             pft.append(Delta(val, after=True))
+        elif t == '.':
+            pft.append(Linear(60, 60, dur))
+            t0 = 60
+            dt += dur
         else:
             # parse a tempo
             try:
                 val = float(t)
             except:
                 show_context(items, i)
-                raise Exception('bad value')
+                raise Exception('bad tempo')
             if dur != None:
+                if t0 == None:
+                    show_context(items, i)
+                    raise Exception('missing start tempo')
                 if segtype == SEGTYPE_LINEAR:
                     seg = Linear(t0, val, dur)
                 else:
@@ -298,9 +302,6 @@ def tempo(s):
                 dur = None
             t0 = val
     return pft
-
-#x = tempo('*2 60 8/4 80 p.01 60 3/4 120 0.2p *')
-#print(*x, sep='\n')
 
 # e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
 def pedal(s, pedal_type=pedal_sustain):

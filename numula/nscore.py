@@ -1,5 +1,5 @@
 # This file is part of Numula
-# Copyright (C) 2022 David P. Anderson
+# Copyright (C) 2023 David P. Anderson
 #
 # Numula is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License
@@ -197,12 +197,10 @@ class Score:
     # initialize perf times if not already done
     #
     def perf_init(self):
-        if self.verbose: print('perf_init()')
+        if self.verbose: print('initializing performance times')
         if self.perf_inited:
             if self.verbose: print('already inited')
             return
-        if self.verbose:
-            print('initializing performance times')
         self.perf_inited = True
         if not self.notes:
             raise Exception('no notes')

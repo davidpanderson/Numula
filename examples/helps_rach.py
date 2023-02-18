@@ -56,7 +56,7 @@ tenor = n('meas4/4 \
     |5 3/8 c+ 1/4 d+ 1/8 c+ d+ -e \
     |6 +e d -f+ 1/4 +e+ 1/8 e f+ 1/4 e+ 1/8 e b c+ +f+ 1/4 f 1/8 g \
     |8 a -d a b 1/4 c+ 1/8 -c+ d+ \
-    |9 c+2 ++g+ +f+ 1/4 +c+ 1/8 +c+ +a d \
+    |9 c+2 g+3 +f+ 1/4 +c+ 1/8 -c+ +a d \
     |10 b c+3 +g+ 1/4 +f+ 1/8 c+ ++d d+ \
     |11 meas6/4 1/4 e+ 1/8 d+ e+ 1/4 f+ 1/8 -a b 1/4 e 1/8 -g b- \
     |12 meas4/4 1/8 a4 f2 +f +c +a- c +g a- \
@@ -101,6 +101,13 @@ bass = n('meas4/4 \
 ')
 bass.tag('bass')
 
+soprano_v0 = accents('meas4/4 \
+    |1 *10 1.2 1/4 1.1 1/4 1.1 1/4 1 1/4 * \
+    |11 meas6/4 *3 1.2 1/4 1.1 1/4 * \
+    |12 meas4/4 *21 1.2 1/4 1.1 1/4 1.1 1/4 1 1/4 * \
+    |33 \
+')
+
 # 130 beats, 65 half-notes
 # each half note (16 32nd notes) has the following accent pattern:
 #####
@@ -143,15 +150,16 @@ alto_v1 = vol('meas4/4 \
 ')
 
 tenor_v0 = vol('meas4/4 \
-    p 44/4 p \
-    |11 meas6/4 p 6/4 p \
-    |12 meas4/4 p 84/4 p \
+    mp 44/4 mp \
+    |11 meas6/4 mp 6/4 mp \
+    |12 meas4/4 mp 84/4 mp \
     |33 \
 ')
 bass_v0 = vol('meas4/4 \
     p 44/4 p \
     |11 meas6/4 p 6/4 p \
-    |12 meas4/4 p 84/4 p \
+    |12 meas4/4 p 12/1 p \
+    |24 [ f 4/4 f [ p 8/1 p \
     |33 \
 ')
 # overall volume, 4-16 m scale
@@ -161,19 +169,23 @@ v0 = vol('meas4/4 \
     |12 meas4/4 f 1/4 ff 3/4 mp 4/4 mp \
     |14 [ p 12/4 pp \
     |17 pp 4/4 p 8/4 f \
-    |20 f 16/4 f 4/4 mf \
+    |20 f 16/4 _f 4/4 mf \
     |25 mf 2/4 p 10/4 pp \
     |28 pp 16/4 ppp 4/4 ppp \
     |33 \
 ')
 
-# large-scale tempo
+# tempo
 t0 = tempo('meas4/4 \
-    |1 *2 60 1/2 50 1/2 60 * 8/4 50 \
-    |5 60 4/1 70 2/1 65 \
-    |11 meas6/4 6/4 63 \
-    |12 meas4/4 4/4 60 \
-    |13 \
+    |1 *2 55 2/4 65 2/4 60 60 2/4 65 2/4 60 65 8/4 55 * \
+    |9 60 2/4 65 2/4 60 60 2/4 65 2/4 60 \
+    |11 meas6/4 65 6/4 60 \
+    |12 meas4/4 60 4/4 45 \
+    |13 60 4/4 60 55 4/4 55 60 8/4 50 \
+    |17 *2 *2 60 2/4 65 2/4 60 * 60 4/4 55 * \
+    |23 55 4/4 50 \
+    |24 60 4/4 65 65 12/4 55 \
+    |28 60 8/4 55 8/4 50 4/4 15 \
 ')
 
 # pause durations
@@ -183,10 +195,21 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 
-# pauses and short-scale tempo
+# pauses
 t1 = tempo(f'meas4/4 \
-    *10 {dt1}p 60 1/4 65 1/4 60 {dt0}p 60 1/4 65 1/4 60 * \
-    |11 \
+    |1 *2 {dt2}p 4/4 . {dt1}p 4/4 . \
+        {dt1}p 8/4 . \
+        * \
+    |9 {dt2}p 4/4 . {dt1}p 4/4 . \
+    |11 meas6/4 {dt2}p 6/4 . \
+    |12 meas4/4 {dt1}p 1/4 . {dt2}p 3/4 . \
+    |13 *2 {dt2}p 4/4 . * 8/4 . \
+    |17 {dt3}p 4/4 . {dt1}p 8/4 . \
+    |20 {dt2}p 4/4 . {dt1}p 12/4 . \
+    |24 {dt2}p 4/4 . {dt1}p 4/4 . \
+    |26 {dt0}p 4/4 . {dt1}p 4/4 . \
+    |28 *4 {dt1}p 4/4 . * {dt4}p{dt4} 4/4 . \
+    |33 \
 ')
 
 # pedal over measures
@@ -202,7 +225,8 @@ nuance = True
 def main():
     ns = Score(tempo=80, verbose=False)
     if nuance:
-        soprano.vol_adjust(.8, lambda n: 'bottom' in n.tags)
+        soprano.vol_adjust(.7, lambda n: 'bottom' in n.tags)
+        soprano.vol_adjust_pft(soprano_v0)
         alto.vol_adjust_pft(alto_v0)
         alto.vol_adjust_pft(alto_v1)
         tenor.vol_adjust_pft(tenor_v0)
@@ -219,7 +243,7 @@ def main():
         ns.vsustain_pft(mped, 0, lambda n: 'bass' in n.tags)
         ns.vol_adjust_pft(v0)
         ns.tempo_adjust_pft(t0)
-        #ns.tempo_adjust_pft(t1)
+        ns.tempo_adjust_pft(t1)
     #print(ns)
     ns.write_midi('data/helps_rach.midi')
     numula.pianoteq.play('data/helps_rach.midi')
