@@ -69,7 +69,11 @@ def meas_test():
 #meas_test()
 
 def tempo_test():
-    x = tempo('60 4/4 4/4 60')
-    print(*x)
+    x = tempo('*2 60 8/4 80 p.01 60 3/4 120 0.2p *')
+    print(*x, sep='\n')
+#tempo_test()
 
-tempo_test()
+def pause_test():
+    x = tempo('.2p 4/4 . . .1p .')
+    print(*x, sep='\n')
+#pause_test()
