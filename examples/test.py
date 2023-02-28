@@ -3,6 +3,7 @@ import random
 from numula.nscore import *
 from numula.notate_score import *
 from numula.nuance import *
+from numula.notate_nuance import *
 from numula.vol_name import *
 import numula.pianoteq as pianoteq
 
@@ -32,7 +33,7 @@ def scale():
     print(ns)
     ns.write_midi('data/scale.midi')
     pianoteq.play('data/scale.midi')
-scale()
+#scale()
 
 # make some notes with different pitches and same vol
 # (test input for panning)
@@ -66,3 +67,9 @@ def meas_test():
         |12 \
     ')
 #meas_test()
+
+def tempo_test():
+    x = tempo('60 4/4 4/4 60')
+    print(*x)
+
+tempo_test()
