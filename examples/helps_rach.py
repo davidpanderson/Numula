@@ -142,8 +142,8 @@ alto_v0 = accents(f' \
 ')
 
 alto_v1 = vol('meas4/4 \
-    |1 *2 *2 pp 2/4 p 2/4 pp * pp 4/4 p 4/4 pp * \
-    |9 *2 pp 2/4 p 2/4 pp * \
+    |1 *2 *2 pp 2/4 mp 2/4 pp * pp 4/4 mp 4/4 pp * \
+    |9 *2 pp 2/4 mp 2/4 pp * \
     |11 meas6/4 pp 6/4 pp \
     |12 meas4/4 pp 84/4 pp \
     |33 \
