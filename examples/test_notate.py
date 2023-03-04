@@ -24,4 +24,23 @@ def test1():
     print(ns)
     ns.write_midi('data/test1.midi')
 
-test1()
+#test1()
+
+def test2():
+    s = n('<1/2 1/4> a b c d e f')
+    print(s)
+
+#test2()
+
+def test3():
+    foo = iter([1,2,3])
+    s = n('<x> a b c <1/4 1/2> d e f g', x=foo)
+    print(s)
+
+#test3()
+
+def test4():
+    s = n('<1/4 1/2> [c 1/1 d] e')
+    print(s)
+
+test4()

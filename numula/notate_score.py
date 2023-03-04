@@ -18,6 +18,7 @@
 # E.g. n('1/8 a b c') returns a list of Note objects for 8th note A, B, C
 # see https://github.com/davidpanderson/Numula/wiki/notate.py
 
+import copy
 import numula.nscore as nscore
 from numula.notate import *
 
@@ -137,16 +138,45 @@ def check_pitch(items, i, pitch, time):
     if pitch<0 or pitch>127:
         show_context(items, i)
         raise Exception('illegal pitch %d at time %f'%(pitch, time))
-    
+
+# dur is a float or an iterator that returns float
+#
+def dur_val(dur):
+    if isinstance(dur, float):
+        return dur
+    return next(dur)
+
+# iterator that repeats a list indefinitely
+#
+class RepeatList:
+    def __init__(self, array):
+        self.a = array
+        self.n = len(array)
+    def __iter__(self):
+        self.i = 0
+        return self
+    def __next__(self):
+        x = self.a[self.i]
+        self.i += 1
+        if self.i == self.n:
+            self.i = 0
+        return x
+
 # textual note specification
-def n(s):
+def n(s, **kwargs):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
+    s = s.replace('<', ' < ')
+    s = s.replace('>', ' > ')
     ns = nscore.Score()
     cur_pitch = 60
     in_chord = False
+        # we're in a [ ... ] construct
+    in_dur = False
+        # we're in a < ... > construct
     vol = .5
     dur = 1/4
+        # a float, iterator, or None
     tags = []
     par = []
     items = s.split()
@@ -162,16 +192,45 @@ def n(s):
                 show_context(items, i)
                 raise Exception("Can't nest [")
             in_chord = True
-            chord_dur = dur
+            chord_dur = dur_val(dur)
+                # duration of the chord as a whole
+            chord_note_dur = chord_dur
+                # duration of notes in chord (may be different)
             tags.append('ch')
         elif t == ']':
             if not in_chord:
                 show_context(items, i)
                 raise Exception("] not in chord")
             in_chord = False
-            ns.advance_time(dur)
-            dt += dur
+            ns.advance_time(chord_dur)
+            dt += chord_dur
             tags.remove('ch')
+        elif t == '<':
+            if in_dur:
+                show_context(items, i)
+                raise Exception("Can't nest <")
+            in_dur = True
+            dur = None
+            dur_list = []
+        elif t == '>':
+            if not in_dur:
+                show_context(items, i)
+                raise Exception("unmatched >")
+            in_dur = False
+            if dur_list:
+                dur = iter(RepeatList(dur_list))
+        elif in_dur:
+            if t[0].isnumeric():
+                a = t.split('/')
+                try:
+                    num = int(a[0])
+                    denom = int(a[1])
+                except:
+                    show_context(items, i)
+                    raise Exception('bad values in %s'%t)
+                dur_list.append(num/denom)
+            else:
+                dur = copy.copy(kwargs[t])
         elif t[0] == '|':
             comment(t, dt)
         elif t[0:4] == 'meas':
@@ -192,15 +251,16 @@ def n(s):
                 raise Exception('bad values in %s'%t)
             d = num/denom
             if in_chord:
-                chord_dur = d
+                chord_note_dur = d
             else:
                 dur = d
         elif t == '.':
             if in_chord:
                 show_context(items, i)
                 raise Exception('no rests in chords')
-            ns.advance_time(dur)
-            dt += dur
+            d = dur_val(dur)
+            ns.advance_time(d)
+            dt += d
         elif t[0] == '(':
             tag = t[1:]
             if tag in tags:
@@ -237,18 +297,20 @@ def n(s):
         else:
             # note
             pitch = parse_pitch(items, i, cur_pitch)
-            d = chord_dur if in_chord else dur
+            d = chord_note_dur if in_chord else dur_val(dur)
             check_pitch(items, i, pitch, ns.cur_time)
             ns.append_note(nscore.Note(0, d, pitch, vol, tags))
             for p in par:
                 check_pitch(items, i, pitch+p, ns.cur_time)
                 ns.append_note(nscore.Note(0, d, pitch+p, vol, tags))
             if not in_chord:
-                ns.advance_time(dur)
-                dt += dur
+                ns.advance_time(d)
+                dt += d
             cur_pitch = pitch
     if in_chord:
         raise Exception('unmatched [')
+    if in_dur:
+        raise Exception('unmatched <')
     if par:
         raise Exception('unmatched opening par')
     if ped_start >= 0:
