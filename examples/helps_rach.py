@@ -149,8 +149,11 @@ alto_v1 = vol('meas4/4 \
     |33 \
 ')
 
-tenor_v0 = vol('meas4/4 \
-    mp 44/4 mp \
+x = 3.
+tenor_v0 = vol(f'meas4/4 \
+    |1 mp 8/4 mp \
+    |3 mp 1/4 mp [ mf 2/4 {x}  [ mp 2/4 {x} [ mp 2/4 {x}  [ mp 1/4 {x} \
+    |5 ] mp 6/1 mp \
     |11 meas6/4 mp 6/4 mp \
     |12 meas4/4 mp 84/4 mp \
     |33 \

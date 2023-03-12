@@ -4,8 +4,8 @@
 # from foo import * (which I think is a bad idea)
 # That's why these are in a separate module.
 #
-pppp    = .01
-pppp_   = .08
+pppp    = .05
+pppp_   = .10
 _ppp    = .16
 ppp     = .23
 ppp_    = .30
