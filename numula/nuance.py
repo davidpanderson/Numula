@@ -237,8 +237,8 @@ class PftValue:
             
 # ------------------- Dynamics ------------------------
 
-# adjust volume of selected notes by PFT starting at t0
-def vol_adjust_pft(self, pft, t0=0, pred=None):
+# adjust or set volume of selected notes by PFT starting at t0
+def vol_adjust_pft(self, pft, t0=0, pred=None, set_vol=False):
     if not pft: return
     self.time_sort()
     self.tags_init()
@@ -276,21 +276,37 @@ def vol_adjust_pft(self, pft, t0=0, pred=None):
             seg = pft[seg_ind]
             seg_end = seg_start + seg.dt
         # v is the adjustment factor
-        n.vol *= v
+        if v < 0:
+            continue
+        if set_vol:
+            n.vol = v/2
+        else:
+            n.vol *= v
         
-def vol_adjust(self, atten, pred=None):
+def vol_adjust(self, v, pred=None, set_vol=False):
     self.tags_init()
     for note in self.notes:
         if pred and not pred(note):
             continue
-        note.vol *= atten
+        if v < 0:
+            continue
+        if set_vol:
+            note.vol = v/2
+        else:
+            note.vol *= v
             
-def vol_adjust_func(self, func, pred=None):
+def vol_adjust_func(self, func, pred=None, set_vol=False):
     self.tags_init()
     for note in self.notes:
         if pred and not pred(note):
             continue
-        note.vol *= func(note)
+        v = func(note)
+        if v < 0:
+            continue
+        if set_vol:
+            note.vol = v/2
+        else:
+            note.vol *= v
 
 # randomly perturb volume
 #

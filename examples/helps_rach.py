@@ -149,15 +149,20 @@ alto_v1 = vol('meas4/4 \
     |33 \
 ')
 
-x = 3.
-tenor_v0 = vol(f'meas4/4 \
-    |1 mp 8/4 mp \
-    |3 mp 1/4 mp [ mf 2/4 {x}  [ mp 2/4 {x} [ mp 2/4 {x}  [ mp 1/4 {x} \
-    |5 ] mp 6/1 mp \
+tenor_v0 = vol('meas4/4 \
+    |1 mp 10/1 mp \
     |11 meas6/4 mp 6/4 mp \
     |12 meas4/4 mp 84/4 mp \
     |33 \
 ')
+
+tenor_v1 = vol('meas4/4 \
+    |1 -1 9/4 -1 \
+        *4 [ p 1/4 mp [ mp_ 1/4 mp_ * \
+        ] -1 3/4 -1 \
+    |6 \
+')
+
 bass_v0 = vol('meas4/4 \
     p 44/4 p \
     |11 meas6/4 p 6/4 p \
@@ -245,6 +250,7 @@ def main():
         ns.vsustain_pft(mped, 0, lambda n: 'tenor' in n.tags)
         ns.vsustain_pft(mped, 0, lambda n: 'bass' in n.tags)
         ns.vol_adjust_pft(v0)
+        tenor.vol_adjust_pft(tenor_v1, pred=lambda n: 'tenor' in n.tags, set_vol=True)
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(t1)
     #print(ns)

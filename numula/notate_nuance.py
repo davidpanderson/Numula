@@ -23,7 +23,7 @@ from numula.nuance import *
 from numula.notate import *
 from numula.vol_name import *
 
-vol_name = {
+vol_names = {
     'pppp': pppp,
     'pppp_': pppp_,
     '_ppp': _ppp,
@@ -56,7 +56,7 @@ vol_name = {
 
 }
 
-vol_keys = vol_name.keys()
+vol_keys = vol_names.keys()
 
 SEGTYPE_LINEAR = 0
 SEGTYPE_EXP = 1
@@ -129,7 +129,7 @@ def vol(s):
                 raise Exception('bad curvature')
         else:
             if t in vol_keys:
-                v = vol_name[t]
+                v = vol_names[t]
             else:
                 try:
                     v = float(t)
@@ -200,7 +200,7 @@ def accents(s):
             dt += dur
         else:
             if t in vol_keys:
-                v = vol_name[t]
+                v = vol_names[t]
             else:
                 try:
                     v = float(t)

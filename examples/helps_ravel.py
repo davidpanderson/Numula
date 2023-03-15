@@ -4,6 +4,7 @@ from numula.nscore import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 import numula.pianoteq
+import numula.read_midifile
 
 soprano = n('meas3/4 \
     |1 <*3 1/2 1/4 * 3/4> f6 e f c f e d- \
@@ -162,9 +163,9 @@ soprano_v0 = vol('meas3/4 \
 
 alto_v0 = vol('meas3/4 \
     |1 ppp 48/4 ppp \
-    |17 [ ppp_ 12/4 ppp_ [ ppp 12/4 ppp [ p 12/4 p [ _pp 12/4 _pp \
+    |17 [ ppp 12/4 ppp [ _ppp 12/4 _ppp [ p 12/4 p [ _pp 12/4 _pp \
     |33 [ pppp_ 48/4 pppp_ \
-    |49 [ pp 24/4 pp \
+    |49 [ ppp 24/4 ppp \
     |57 [ f 12/4 f \
     |61 [ pp 12/4 pp 3/4 pp [ p 3/4 pp \
     |67 [ ppp 36/4 ppp \
@@ -172,15 +173,15 @@ alto_v0 = vol('meas3/4 \
     |86 \
 ')
 
-a5 = 1.3
-a4 = 1.2
+a5 = 1.4
+a4 = 1.3
 a3 = 1.1
 a2 = 1.0
 a1 = .9
 
 alto_v1 = accents(f' \
     |1 *48 1. 1/4 {a4} 1/4 {a4} 1/4 * \
-    |49 *12 *3 {a5} 1/12 {a4} 1/12 {a4} * * \
+    |49 *12 *3 {a5} 1/12 {a4} 1/12 {a4} 1/12 * * \
     |61 \
 ')
 
@@ -247,5 +248,5 @@ def main():
     #print(ns)
     ns.write_midi('data/helps_ravel.midi', verbose=False)
     numula.pianoteq.play('data/helps_ravel.midi')
-
+    #numula.read_midifile.print_midifile('data/helps_ravel.midi')
 main()
