@@ -72,18 +72,30 @@ def expand_iter(items):
         raise Exception('unclosed *n')
     return out
 
-# if item is of the form |M (measure number)
-# verify that dt corresponds to that measure
+# expand macros in shorthand
+# for now the only macro type is iteration (*n)
+#
+def expand_all(items):
+    return expand_iter(items)
+
+#############   stuff related to measures in shorthands   ##################
+
 meas_dur = 0
-meas_prev_t = 0
-meas_prev_m = 0
+meas_prev_t = 0     # time at last |n
+meas_prev_m = 0     # measure no. at last |n
 meas_first = True
 
+# call this at start of processing shorthand string
+#
 def measure_init():
     global meas_first, meas_dur
     meas_first = True
     meas_dur = 0
 
+# process a shorthand item starting with |
+# if item is of the form |M (measure number)
+# verify that t (current time) corresponds to that measure
+#
 def comment(item, t):
     global meas_dur, meas_prev_t, meas_prev_m, meas_first
 
@@ -95,6 +107,9 @@ def comment(item, t):
         meas_prev_m = m
         meas_first = False
         return
+
+    # compare time since last |n with expected time
+    #
     dt = t - meas_prev_t
     dm = m - meas_prev_m
     if abs(dm*meas_dur - dt) > 1e-5:
@@ -103,12 +118,12 @@ def comment(item, t):
     meas_prev_t = t
     meas_prev_m = m
 
-# s is of the form meas4/4
+# process an item s of the form meas4/4
 #
 def set_measure_dur(s, t):
     global meas_first, meas_prev_t, meas_dur
     if not meas_first and t > meas_prev_t:
-        raise Exception("Can't set measure length in the middle of a measure")
+        raise Exception("|n required before setting new measure length")
     t = s[4:]
     a = t.split('/')
     try:
@@ -120,9 +135,9 @@ def set_measure_dur(s, t):
     meas_dur = num/denom
     return True
 
+# set the measure duration globally
+# (so you don't need meas4/4 in shorthands)
+#
 def measure_duration(t):
     global meas_dur
     meas_dur = t
-
-def expand_all(items):
-    return expand_iter(items)
