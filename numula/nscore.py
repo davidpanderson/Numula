@@ -378,6 +378,7 @@ class Score:
                     )
                     # simultaneous start - combine notes
                     # by modifying first note (already in out) in place
+                    # Set vol and duration to the max of the two.
                     #
                     n2.vol = max(n2.vol, note.vol)
                     md = max(n2.perf_dur, note.perf_dur)
