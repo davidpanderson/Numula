@@ -537,7 +537,7 @@ class Score:
     from numula.nuance import score_dur_abs, score_dur_rel, score_dur_func
     from numula.nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
     from numula.nuance import get_pos_array
-    from numula.nuance import vsustain_pft, pedal_pft
+    from numula.nuance import vsustain_pft, pedal_pft, time_shift_pft
     
 # represents the start or end of a note or pedal application
 #

@@ -339,5 +339,39 @@ def pedal(s, pedal_type=pedal_sustain):
             on = True
     return pft
 
-#x = pedal('- 1/4 + 1/8 + 1/4 - 4/4')
-#print(*x, sep='\n')
+# define time shifts at discrete times
+# e.g. .1 1/4 .3 3/4
+#
+def shift(s):
+    items = s.split()
+    items = expand_all(items)
+    measure_init()
+    pft = []
+    on = False
+    dt = 0
+    for i in range(len(items)):
+        t = items[i]
+        if t[0] == '|':
+            comment(t, dt)
+        elif t[0] == 'm':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
+        elif '/' in t:
+            a = t.split('/')
+            try:
+                num = int(a[0])
+                denom = int(a[1])
+            except:
+                show_context(items, i)
+                raise Exception('bad values in %s'%t)
+            dur = num/denom
+            pft.append(ZeroSeg(dur))
+            dt += dur
+        else:
+            try:
+                val = float(t)
+            except:
+                show_context(items, i)
+            pft.append(Accent(val))
+    return pft

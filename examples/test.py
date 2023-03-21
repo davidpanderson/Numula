@@ -77,3 +77,8 @@ def pause_test():
     x = tempo('.2p 4/4 . . .1p .')
     print(*x, sep='\n')
 #pause_test()
+
+def pedal_test()
+    x = pedal('- 1/4 + 1/8 + 1/4 - 4/4')
+    print(*x, sep='\n')
+

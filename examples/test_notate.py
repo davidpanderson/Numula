@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
+# tests of score notation (n())
+
 from numula.nscore import *
 from numula.notate_score import *
 
@@ -43,4 +45,13 @@ def test4():
     s = n('<1/4 1/2> [c 1/1 d] e')
     print(s)
 
-test4()
+#test4()
+
+def test_tag():
+    ns = Score([
+        n(' |300 1/16 [c f a- c] g a- b- c d e f'),
+        n(' |300 1/4 f3 1/8 . [c f a- c] *4 [-c e g b- c] * ')
+    ], verbose=True)
+    print(ns)
+#test_tag()
+        

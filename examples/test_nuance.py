@@ -14,6 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
+# tests of nuance functions (not shorthands)
+
 from numula.nscore import *
 from numula.notate_score import *
 from numula.nuance import *
@@ -44,23 +46,6 @@ def test2():
     print(ns)
     pianoteq.play_score(ns)
 #test2()
-
-def test3():
-    ns = Score([n('a b c d e f g c')], tempo=120)
-    x = [
-        Delta(.05, False),
-        Linear(60, 60, 2/4),
-        Delta(.1, False),
-        Delta(.2, True),
-        Linear(60, 60, 2/4)
-    ]
-    x = tempo('60 2/4 60 .1p.2 60 2/4 60')
-    #x = tempo('60 2/4 60')
-    print(*x, sep='\n')
-    ns.tempo_adjust_pft(x)
-    print(ns)
-    pianoteq.play_score(ns)
-#test3()
 
 def test4():
     ns = Score([n('c d e f g')])
@@ -120,28 +105,8 @@ def test_vol():
     pianoteq.play_score(ns)
 #test_vol()
 
-def test_ped():
-    ns = Score()
-    for i in range(2):
-        ns.append_score([n('1/8 c d e f g a b c')])
-    #ns.insert_pedal(PedalUse(1/4, 3/4))
-    #ns.pedal_pft([PedalSeg(3/16, 0), PedalSeg(2/4, 1)])
-    ns.pedal_pft(pedal('- 1/4 + 1/8 + 1/4 - 4/4'))
-    print(ns)
-    pianoteq.play_score(ns)
-#test_ped()
-
 def test_pbl():
     ns = Score([n('c d e [f a c] g a b c')], verbose=True)
     ns.pause_before_list([3/4, 5/4, 13/8], [.1, .2, .3])
     print(ns)
-test_pbl()
-
-def test_tag():
-    ns = Score([
-        n(' |300 1/16 [c f a- c] g a- b- c d e f'),
-        n(' |300 1/4 f3 1/8 . [c f a- c] *4 [-c e g b- c] * ')
-    ], verbose=True)
-    print(ns)
-#test_tag()
-        
+#test_pbl()

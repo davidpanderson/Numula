@@ -53,6 +53,9 @@ class Linear:
 def Unity(dt):
     return Linear(1, 1, dt)
 
+def ZeroSeg(dt):
+    return Linear(0, 0, dt)
+
 # for volume PFTs: a momentary value
 class Accent:
     def __init__(self, y):
@@ -521,6 +524,51 @@ def tempo_adjust_pft(
             print('  Done with event: perf time ', event.perf_time)
     # end loop over events
     self.transfer_start_end_events()
+
+# Note shifting (e.g. for agogic accents)
+# shift start time of selected notes by the PFT value
+#
+def time_shift_pft(self, pft, t0=0, pred=None):
+    if not pft: return
+    self.init_all()
+    pft_check_closure(pft)
+    seg_ind = 0
+    seg = pft[0]
+        # which segment we're on
+    seg_start = t0
+        # start time of that segment
+    seg_end = t0 + seg.dt
+    t_end = t0 + pft_dur(pft)
+        # end time of function
+    for n in self.notes:
+        if n.time > t_end + epsilon:
+            break
+        if n.time < t0 - epsilon:
+            continue
+        if pred and not pred(n):
+            continue
+        print('got note')
+        while True:
+            # skip segments as needed
+            if n.time < seg_end - epsilon:
+                v = seg.val(n.time - seg_start)
+                break
+            if n.time < seg_end + epsilon:
+                # note is at end of this seg
+                if seg.closed_end:
+                    v = seg.y1
+                    break
+                if seg_ind == len(pft)-1:
+                    return
+            # move to next seg
+            seg_start += seg.dt
+            seg_ind += 1
+            seg = pft[seg_ind]
+            seg_end = seg_start + seg.dt
+        # v is the shift factor
+        if v == 0: continue
+        n.perf_time += v
+        n.perf_dur -= v
 
 # change dur of notes starting between t0 and t1 so they end at t1
 # (like a local sustain pedal)
