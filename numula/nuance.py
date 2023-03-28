@@ -547,7 +547,6 @@ def time_shift_pft(self, pft, t0=0, pred=None):
             continue
         if pred and not pred(n):
             continue
-        print('got note')
         while True:
             # skip segments as needed
             if n.time < seg_end - epsilon:

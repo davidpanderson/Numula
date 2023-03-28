@@ -31,7 +31,7 @@ soprano = n(f'meas4/4 \
     |59 {r1} b- a b- c- b- b- a- g- a- b- \
     |63 g- f g- b- a- g- f c d 4/4 e- \
     |67 \
-')
+').tag('sop')
 
 alto = n('meas4/4 \
     |1 1/4 . [a-5 d-] . [d- e-] . [c- d-] . d- \
@@ -149,39 +149,67 @@ bass = n('meas4/4 \
 ')
 
 soprano_v0 = vol('meas4/4 \
-    |1 *3 *2 p 1/1 mf 1/1 p 1/1 mf 1/1 p * * \
-    |25 [ mm 7/1 mm \
-    |32 meas2/4 mm 2/4 mm \
-    |33 meas4/4 mm 7/1 mm \
-    |40 meas2/4 mm 2/4 mm \
-    |41 meas4/4 mm 9/1 mm \
-    |50 meas2/4 mm 2/4 mm \
-    |51 meas4/4 mm 16/1 mm \
+    |1 *7 p 1/1 mf 1/1 p 1/1 mp 1/1 p * \
+    |29 p 2/1 mf 1/1 p \
+    |32 meas2/4 p 2/4 pp \
+    |33 meas4/4 [ p 1/1 mf 1/1 p 1/1 mp 1/1 p \
+    |37 p 2/1 mf 1/1 mp \
+    |40 meas2/4 mp 2/4 f \
+    |41 meas4/4 f 1/1 mf 1/1 f 2/1 p \
+    |45 p 5/1 pp \
+    |50 meas2/4 pp 2/4 p \
+    |51 meas4/4 p 1/1 mf 1/1 p 1/1 mp 1/1 pp \
+    |55 [ p 1/1 mf 1/1 p 1/1 mp 1/1 mf \
+    |59 mf 4/1 ppp \
+    |63 [ p 4/1 ppp \
     |67 \
 ')
 alto_v0 = vol('meas4/4 \
-    |1 pp 31/1 pp \
-    |32 meas2/4 [ mm 2/4 mm \
-    |33 meas4/4 mm 7/1 mm \
-    |40 meas2/4 mm 2/4 mm \
-    |41 meas4/4 mm 9/1 mm \
-    |50 meas2/4 mm 2/4 mm \
-    |51 meas4/4 mm 16/1 mm \
-    |67 \
+    |1 ppp 31/1 ppp \
+    |32 meas2/4 [ ppp 2/4 ppp \
+    |33 meas4/4 *7 ppp 2/4 pp 2/4 ppp * \
+    |40 meas2/4 ppp 2/4 p \
+    |41 meas4/4 p 1/1 pp 1/1 mp 2/1 ppp \
+    |45 ppp 4/1 ppp \
+    |49 ppp 2/4 p 2/4 ppp \
+    |50 meas2/4 ppp 2/4 ppp \
+    |51 meas4/4 \
 ')
 bass_v0 = vol('meas4/4 \
-    |1 pp 31/1 pp \
-    |32 meas2/4 [ mm 2/4 mm \
-    |33 meas4/4 mm 7/1 mm \
-    |40 meas2/4 mm 2/4 mm \
-    |41 meas4/4 mm 9/1 mm \
-    |50 meas2/4 mm 2/4 mm \
-    |51 meas4/4 mm 16/1 mm \
+    |1 *31 pp 2/4 p 2/4 pp * \
+    |32 meas2/4 [ pp 2/4 pp \
+    |33 meas4/4 *7 pp 2/4 p 2/4 pp * \
+    |40 meas2/4 pp 2/4 pp \
+    |41 meas4/4 *9 pp 2/4 p 2/4 pp * \
+    |50 meas2/4 pp 2/4 pp \
+    |51 meas4/4 [ ppp 4/1 ppp \
+    |55 ppp 2/1 ppp 2/1 mf \
+    |59 mf 4/1 ppp \
+    |63 [ p 4/1 ppp \
     |67 \
 ')
 
+bass_v1 = accents('meas4/4 \
+    |1 *62 mm 1/8 p 1/8 mp 1/8 p 1/8 * \
+')
+
+# tempo
 t0 = tempo('meas4/4 \
-    |1 *2 50 1/1 70 1/1 50 * \
+    |1 *3 \
+        55 1/1 65 1/1 55 60 1/1 60 1/1 50 \
+        * \
+    |13 55 1/1 65 1/1 55 60 1/1 60 1/1 40 \
+    |17 *3 \
+        55 1/1 65 1/1 55 60 1/1 60 1/1 50 \
+        * \
+    |29 55 1/1 65 1/1 55 60 1/1 50 \
+    |32 meas2/4 2/4 40 \
+    |33 meas4/4 7/1 \
+    |40 meas2/4 2/4 \
+    |41 meas4/4 9/1 \
+    |50 meas2/4 2/4 \
+    |51 meas4/4 16/1 \
+    |67 \
 ')
 
 dt0 = .03
@@ -190,12 +218,44 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 
-t1 = tempo(f'meas4/4 \
-    |1 *4 p{dt3} 1/1 * \
+pauses = tempo(f'meas4/4 \
+    |1 *7 \
+        p{dt2} 1/1 . {dt1}p{dt2} 2/1 . {dt0}p 1/1 . \
+        * \
+    |29 p{dt2} 1/1 . {dt1}p{dt2} 2/1 . \
+    |32 meas2/4 {dt0}p 2/4 . \
+    |33 meas4/4 7/1 \
+    |40 meas2/4 2/4 \
+    |41 meas4/4 9/1 \
+    |50 meas2/4 2/4 \
+    |51 meas4/4 16/1 \
+    |67 \
 ')
 
-ped = pedal('meas4/4 \
+# agogic accents in melody
+
+sop_shift = shift(f'meas4/4 \
+    |1 *4 \
+        {dt2} 1/1 {dt1} 1/1 1/1 {dt2} 1/1 \
+        * \
+    |17 \
+    |32 meas2/4 {dt0}p 2/4 . \
+    |33 meas4/4 7/1 \
+    |40 meas2/4 2/4 \
+    |41 meas4/4 9/1 \
+    |50 meas2/4 2/4 \
+    |51 meas4/4 16/1 \
+    |67 \
+')
+
+bass_ped = pedal('meas4/4 \
     |1 *31 + 4/4 * \
+    |33 meas4/4 7/1 \
+    |40 meas2/4 2/4 \
+    |41 meas4/4 9/1 \
+    |50 meas2/4 2/4 \
+    |51 meas4/4 16/1 \
+    |67 \
 ')
 
 nuance = True
@@ -206,7 +266,8 @@ def main():
         soprano.vol_adjust_pft(soprano_v0)
         alto.vol_adjust_pft(alto_v0)
         bass.vol_adjust_pft(bass_v0)
-        bass.vsustain_pft(ped)
+        bass.vol_adjust_pft(bass_v1)
+        bass.vsustain_pft(bass_ped)
     ns.append_score([
         soprano,
         alto,
@@ -214,7 +275,8 @@ def main():
     ])
     if nuance:
         ns.tempo_adjust_pft(t0)
-        ns.tempo_adjust_pft(t1)
+        ns.tempo_adjust_pft(pauses)
+        ns.time_shift_pft(sop_shift, pred=lambda n: 'sop' in n.tags)
     #print(ns)
     fname = 'data/helps_faure.midi'
     ns.write_midi(fname, verbose=False)
