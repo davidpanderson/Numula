@@ -373,5 +373,6 @@ def shift(s):
                 val = float(t)
             except:
                 show_context(items, i)
+                raise Exception('bad value in %s'%t)
             pft.append(Accent(val))
     return pft
