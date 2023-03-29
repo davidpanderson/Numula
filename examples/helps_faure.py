@@ -46,33 +46,33 @@ alto = n('meas4/4 \
     |18 . c-5 d- g- c- d- +c- g- d- . -d- c- \
     |19 . c-5 d- . +d- +d- . c-5 d- . +d- +d- \
     |20 . b-5 d- +a- b- d- +b- a- e- b- a- -d- \
-    |21 . g-5 b- +g- +f -b- f -b- +b- g- +e- --d- \
-    |22 +b- -c- d- g- ++b- -d- a- -c- d- g- +g- -b- \
-    |23 g- -a- b- +f b- +b- --e- -a- ++b- f c +c \
-    |24 -g- d- +d- c b- a- f e- d- c b- f \
-    |25 ++b- -b- d- +a- b- +b- --a- -b- d- +b- b- +b- \
-    |26 -c- -c- d- g- c- d- +c- b- -d- b- -d- c- \
-    |27 +b- -c- d- +a- d- +d- --g- -c- d- +a- d- +d- \
-    |28 --b- -b- d- +a- b- d- +b- a- g- e- -a- -d- \
-    |29 g- -g- b- +f g- +f -f b- -b- +g- d- ++e- \
-    |30 b- -c- d- g- +d- +d- --a- -c- d- g- ++b- -d- \
-    |31 -g- -a- b- +f +c -c c -f b- d +c -c \
-    |32 meas2/4 e- -f b- d +c -c \
-    |33 meas4/4 1/16 +b- a- e- -a- b- d- e- a- ++b- a- -d- a- b- a- -e -g \
-    |34 +d- c- b- c- d- e- g- +d- +c- b- -e- b- b- a- -d -f+ \
-    |35 +d c- b- c- d- +c- [e- +c] --b- -d- c- a- b- d g- [+d- +c-] -c- \
+    |21 . g-5 b- +g- +f -b- . -b- +b- . +e- --d- \
+    |22 . c-5 d- g- ++b- -d- . --c- d- . ++g- -b- \
+    |23 . a-5 b- . +b- +b- . a-5 ++b- . -c +c \
+    |24 . d-6 +d- c b- a- f e- d- c b- f \
+    |25 . b-5 d- +a- b- +b- . b-5 d- . +b- +b- \
+    |26 . c-5 d- g- c- d- +c- b- -d- . d-6 c- \
+    |27 . c-5 d- . +d- +d- . c-5 d- . +d- +d- \
+    |28 . b-5 d- +a- b- d- +b- a- g- e- -a- -d- \
+    |29 . g-5 b- +f g- +f . b-6 -b- . d-6 ++e- \
+    |30 . c-5 d- g- +d- +d- . c-5 d- . b-7 -d- \
+    |31 . a-5 b- . c7 -c . f5 b- . c7 -c \
+    |32 meas2/4 . f5 b- d +c -c \
+    |33 meas4/4 1/16 . a-6 e- -a- b- d- e- a- ++b- a- -d- a- . a- -e -g \
+    |34 +d- c- b- c- d- e- g- +d- +c- b- -e- b- . a- -d -f+ \
+    |35 +d c- b- c- d- +c- [e- +c-] --b- -d- c- a- b- d g- [+d- +c-] -c- \
     |36 -d- c -f a- b- d- e- a- ++b- a- [c- -e-] d- [f- -a-] g- [+c- -e-] d- \
     |37 [e- +b-] -d- b- c- [d- g-] a- [b- e-] f \
         [e- +b-] -d- [g- -b-] a- [a- +f] -g- [f +d-] -e- \
     |38 +b- a- e- -a- b- d- e- a- ++b- a- -d- b- d- a- -d- b- \
-    |39 +g- -a- g- a- +f b- +b- -b- -e- -a- g- a- +f b- +b- -b- \
+    |39 . a-5 g- a- . b-6 +b- -b- . a-5 g- a- . b-6 +b- -b- \
     |40 meas2/4 -b- a- g- a- b- +b- [+f b-] -b- \
-    |41 meas4/4 -e- d- a- d- e f+ b c+ +b b- -f- -a- b- g- e -g \
+    |41 meas4/4 -e- d- a- d- e f+ b c+ +b b- -f- -a- . g- e -g \
     |42 +f- e- c- d- g- a- b- d- +b- a- [c- -e-] d- f -a- +f+ --f \
     |43 e d b c+ e +b [c+ +b] -b -d- c- a- b- d- +c- [d- +c-] -c- \
     |44 -d- c- a- c- d- e- a- a- ++c- b- g- d- e -a -d -g \
     |45 b- a- f g- c- d- f g- [+e- +c] -d- g- -b- -b- a- +d- -g- \
-    |46 ++b- a- e- -a- d- e- g- +d- +d- b- -e- d- b- a- -d- a- \
+    |46 . a-6 e- -a- d- e- g- +d- +d- b- -e- d- b- a- -d- a- \
     |47 ++b- a- g- -b- +g- f -c- -f ++b- a- -d- -g- +f -c- a f \
     |48 ++b- a- -d- -g- +g- f -c- -f ++b- a- f- -b- +f -c- a f \
     |49 +f e- -a f b- e- f ++g- d- -a -d- -a +a -e- -a -d- \
@@ -112,19 +112,19 @@ bass = n('meas4/4 \
     |30 e- -a- ++c- -g- +g- -c- d- -e- \
     |31 b- +a- +d c +b- -c d -f \
     |32 meas2/4 1/12 --e- +b- +f g- b- +f \
-    |33 meas4/4 1/8 a- -d- -e- +b- ++a- -d- -g -d- \
+    |33 meas4/4 1/8 a- -d- -e- +b- . d-6 -g -d- \
     |34 g- -a- g- -a- e-6 -g- c- -d \
     |35 g-5 -c- c- -d- ++g- d- g- -c- \
     |36 +f -b- -e- +d- +a- d- a- -d- \
-    |37 g- -c- -e- -a- ++f -a- +g- -c- \
-    |38 +b- --f +c- e- ++a- e- -g- -c- \
+    |37 . c-4 -e- -a- . a-4 . c- \
+    |38 . f4 +c- e- . e-6 . c-4 \
     |39 e- -a- f -b- ++d -a- f -b- \
     |40 meas2/4 [+a- +e-] --b- [+a- +e-] -b- \
-    |41 meas4/4 ++c- --e- [+b- d-] +d- 1/16 +a- g- e- d- -g f- e- d- \
+    |41 meas4/4 ++c- --e- [+b- d-] +d- 1/16 . g-6 e- d- -g f- e- d- \
     |42 +g- -a- c- g- +d- -e- g- -a- +e- g- c- e- +b- -d f -b \
     |43 1/12 +f -b d +b- -b d f -b d +b- -b d \
     |44 1/8 f d- -e- ++d- +d- -d- 1/4 g+ 1/8 _ -d \
-    |45 1/16 d- -e- g- -a- ++c- d- +c- g- +f -c- b- a- f -c- b- a- \
+    |45 1/16 d- -e- g- -a- ++c- d- +c- g- . c-5 b- a- f -c- b- a- \
     |46 1/8 +e- -f +c- +a- d- -e- g- -c- \
     |47 *2 g-5 -a- +d --b- ++e- -a- +d --b- * \
     |49 e- +b- 3/4 . \
