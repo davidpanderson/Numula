@@ -4,7 +4,6 @@ from numula.nscore import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 import numula.pianoteq
-import numula.read_midifile
 
 soprano = n('meas3/4 \
     |1 <*3 1/2 1/4 * 3/4> f6 e f c f e d- \
@@ -58,13 +57,13 @@ alto = n('meas3/4 \
         * \
     |45 1/12 . c6 d- 1/8 d- -f . [b ++c] 1/12 . -e c d- -f ++b 1/8 . -c \
     |47 1/12 . e b e c+ +c 1/8 . [-f -f] 1/12 . +e d- e -f +c +b -d- f \
-    |49 1/12 . 1/36 g+7 -b +g+ -c+ f+ c+ d+ -f+ +d+ b -c +b \
+    |49 1/12 . 1/36 g7+ -b +g+ -c+ f+ c+ d+ -f+ +d+ b -c +b \
         1/12 f . 1/36 +d -g +d c f c \
-    |50 1/12 . 1/36 g+6 +f+ -g+ b- +f -b- -e +d -e +c -f+ +c -d g d \
+    |50 1/12 . 1/36 g6+ +f+ -g+ b- +f -b- -e +d -e +c -f+ +c -d g d \
         1/12 . 1/36 f b- f +c g c \
-    |51 1/12 . 1/36 g+7 -b +g+ f+ c+ f+ d+ -f+ +d+ -g +c+ -g a -d +a \
+    |51 1/12 . 1/36 g7+ -b +g+ f+ c+ f+ d+ -f+ +d+ -g +c+ -g a -d +a \
         1/12 . 1/36 f+ b f+ g+ +d+ -g+ \
-    |52 1/12 . 1/36 f+7 -g+ +f+ f -b- +f -b -e+ +b f+ g+ f+ \
+    |52 1/12 . 1/36 f7+ -g+ +f+ f -b- +f -b -e+ +b f+ g+ f+ \
         +c+ -f+ +c+ g+ +e -g+ +f -f +f d -g +d \
     |53 1/12 . 1/36 b6 +g+ -b +f+ c+ f+ -f+ +d+ -f+ -c +b -c \
         1/12 f . 1/36 g +d -g +f c f \
@@ -74,7 +73,7 @@ alto = n('meas3/4 \
         1/12 . 1/36 +b f+ b d+ -g+ +d+ \
     |56 1/12 . 1/36 -g+ +f+ -g+ b- +f -b- -e+ +b -e+ g+ f+ g+ \
         f+ +c+ -f+ +e -g+ +e -f +f -f g +d -g \
-    |57 1/12 . 1/48 b-7 -b +b- -b +a g+ a g+ g+ +f+ -g+ +f+ -b- +f -b- f+ \
+    |57 1/12 . 1/48 b7- -b +b- -b +a g+ a g+ g+ +f+ -g+ +f+ -b- +f -b- f+ \
         -f +b -f +b 1/12 . 1/48 b -f +b -f +b +g -b +g \
     |58 1/12 . 1/48 b6 +b- -b +b- g+ ++a --g+ ++a f+ -g+ +f+ -g+ +f -b- +f -b- \
         b f b f 1/12 . 1/48 c+ f+ c+ f+ g +f -g +f \
@@ -82,9 +81,9 @@ alto = n('meas3/4 \
         a -d +a -d 1/12 . 1/48 g +f+ -g +f+ c+ b+ c+ b+ \
     |60 1/12 . 1/48 c6 +g -c +g g ++a --g ++a --g+ +f+ -f +f+ c+ b+ c+ b+ \
         +f -g +f -g g -c+ +g -c+ +a --g+ ++a --g+ +f+ b f+ b \
-    |61 1/12 . 1/24 b-7 -b +a g+ f+ -g+ +f -b- b -f 1/12 . 1/24 ++b -f g -b \
+    |61 1/12 . 1/24 b7- -b +a g+ f+ -g+ +f -b- b -f 1/12 . 1/24 ++b -f g -b \
     |62 1/12 . 1/24 +b- -b +a g+ f+ -g+ +f -b- b -f 1/12 . 1/24 ++f+ c+ +f -g \
-    |63 1/12 . 1/24 g+7 -a +g -b e -f +d -g a -d 1/12 . 1/24 ++f+ -g +c+ c \
+    |63 1/12 . 1/24 g7+ -a +g -b e -f +d -g a -d 1/12 . 1/24 ++f+ -g +c+ c \
     |64 1/12 . 1/24 +g -c +a --g +f+ -g+ c+ c f -g +g -c +a --g+ +f+ -b \
     |65 1/12 . 1/24 g7 -c +a --g +f+ -g+ c+ c f -g +g -c +a --g+ +f+ -b \
     |66 1/12 . [c +g] [a --g] [g+ +f+] 1/6 [c+ b+] 1/8 [c +g] [a --g+] \
@@ -101,7 +100,7 @@ alto = n('meas3/4 \
         . [c +g] [a --g] [g+ +f+] [c+ b+] [g +f] [g -c+] [g+ ++a] [f+ -b] \
         * \
     |83 . [c +g] [a --g] [g+ +f+] [c+ b+] . . [c +g] [a --g] \
-    |84 . . . . [c +g] . . . . 3/4 [c+8 --c] \
+    |84 . . . . [c +g] . . . . 3/4 [c8+ --c] \
     |86 \
 ')
 
