@@ -53,7 +53,7 @@ def parse_pitch(items, i, cur_pitch):
                 raise Exception('bad offset')
             off[j] -= 1
         elif c.isnumeric():
-            if off[0] or absolute:
+            if off[0] or off[1] or absolute:
                 show_context(items, i)
                 raise Exception('bad octave notation %s'%s)
             octave = int(c)

@@ -78,7 +78,6 @@ def pause_test():
     print(*x, sep='\n')
 #pause_test()
 
-def pedal_test()
+def pedal_test():
     x = pedal('- 1/4 + 1/8 + 1/4 - 4/4')
     print(*x, sep='\n')
-
