@@ -42,11 +42,11 @@ alto = n('meas4/4 \
     |11 . [c- d-] . c- . [d- a-] . [b- +f] \
     |13 . [-a- g-] . a- . [a- d-] . d- \
     |15 . c . c 4/4 . \
-    |17 1/12 b-6 -b- d- +b- b- +b- --a- -b- d- +b- b- +b- \
-    |18 -c- -c- d- g- c- d- +c- g- d- b- -d- c- \
-    |19 +b- -c- d- +a- d- +d- --g- -c- d- +a- d- +d- \
-    |20 --b- -b- d- +a- b- d- +b- a- e- b- a- -d- \
-    |21 g- -g- b- +g- +f -b- f -b- +b- g- +e- --d- \
+    |17 1/12 . b-5 d- +b- b- +b- . b-5 d- . +b- +b- \
+    |18 . c-5 d- g- c- d- +c- g- d- . -d- c- \
+    |19 . c-5 d- . +d- +d- . c-5 d- . +d- +d- \
+    |20 . b-5 d- +a- b- d- +b- a- e- b- a- -d- \
+    |21 . g-5 b- +g- +f -b- f -b- +b- g- +e- --d- \
     |22 +b- -c- d- g- ++b- -d- a- -c- d- g- +g- -b- \
     |23 g- -a- b- +f b- +b- --e- -a- ++b- f c +c \
     |24 -g- d- +d- c b- a- f e- d- c b- f \
