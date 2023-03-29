@@ -288,8 +288,8 @@ def main():
         bass.vol_adjust_pft(bass_v1)
         bass.vsustain_pft(bass_ped)
     ns.append_score([
-        soprano,
-        alto,
+        #soprano,
+        #alto,
         bass
     ])
     if nuance:
