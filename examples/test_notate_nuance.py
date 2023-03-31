@@ -59,4 +59,13 @@ def test_shift():
     print(*s, sep='\n')
     ns.time_shift_pft(s, pred = lambda n: 'n2' in n.tags)
     print(ns)
-test_shift()
+#test_shift()
+
+def test4():
+    ns = Score([n('a b c d e f g c')])
+    v = tempo('.1p.08 1/4 .')
+    print(*v, sep='\n')
+    ns.tempo_adjust_pft(v, debug=True)
+    print(ns)
+
+test4()

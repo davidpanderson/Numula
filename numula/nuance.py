@@ -386,10 +386,11 @@ def tempo_adjust_pft(
 
     # keep track of params of previous event
     #
-    prev_time = -999    # its score time
+    prev_time = 0       # its score time
     prev_perf = 0       # its perf time
     prev_perf_adj = 0   # its adjusted perf time
     prev_integral = 0   # integral of pft at that point
+    prev_first = True
 
     # perf time is score time * 240/tempo
     # so the integral of the PFT is scaled by this.
@@ -466,7 +467,7 @@ def tempo_adjust_pft(
             #if debug: print('  before start of PFT, skipping')
             continue
         if debug:
-            print('event time %f perf time %f prev_time %f'%(
+            print('event: time %f perf time %f prev_time %f'%(
                 event.time, event.perf_time, prev_time)
             )
         if pred:
@@ -474,19 +475,22 @@ def tempo_adjust_pft(
                 if not pred(event.obj):
                     if debug: print('  not selected')
                     continue
-        if event.time - prev_time < epsilon:
+        if not prev_first and event.time - prev_time < epsilon:
             if debug:
                 print('  same score time as prev; set perf time to %f'%prev_perf_adj)
             event.perf_time = prev_perf_adj
             continue
+        prev_first = False
+
         # handle case where PFT starts with before-Delta and event occurs then
+        #
         if seg_ind==0 and seg.dt==0 and not seg.after and event.time < seg_start+epsilon:
-            if debug: print('  before-Delta at start')
+            if debug: print('  before-Delta at start of PFT', seg.value)
             prev_time = event.time
             prev_perf = event.perf_time
             event.perf_time += seg.value
             prev_perf_adj = event.perf_time
-            prev_integral = seg.value * self.tempo/240
+            #prev_integral = dt_to_integral(seg.value)
             advance_seg() 
             continue
 
