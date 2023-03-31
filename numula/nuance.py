@@ -403,7 +403,10 @@ def tempo_adjust_pft(
         nonlocal seg_start, seg_integral, seg_ind, seg, seg_end
         seg_start += seg.dt
         if seg.dt == 0:
-            si = dt_to_integral(seg.value)
+            if seg_ind==0:
+                si=0
+            else:
+                si = dt_to_integral(seg.value)
         else:
             si = seg.integral_total()
         seg_integral += si
@@ -416,6 +419,7 @@ def tempo_adjust_pft(
 
     def use_seg():
         nonlocal prev_integral, prev_time, prev_perf, prev_perf_adj
+        if debug: print('    use_seg(): dt', seg.dt)
         if seg.dt == 0:
             si = dt_to_integral(seg.value)
         else:
@@ -485,12 +489,14 @@ def tempo_adjust_pft(
         # handle case where PFT starts with before-Delta and event occurs then
         #
         if seg_ind==0 and seg.dt==0 and not seg.after and event.time < seg_start+epsilon:
-            if debug: print('  before-Delta at start of PFT', seg.value)
             prev_time = event.time
             prev_perf = event.perf_time
             event.perf_time += seg.value
             prev_perf_adj = event.perf_time
-            #prev_integral = dt_to_integral(seg.value)
+            prev_integral = 0
+            if debug:
+                print('   before-Delta at start of PFT: delay', seg.value)
+                print('   new event time', event.perf_time)
             advance_seg() 
             continue
 

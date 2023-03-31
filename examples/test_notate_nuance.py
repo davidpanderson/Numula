@@ -63,7 +63,7 @@ def test_shift():
 
 def test4():
     ns = Score([n('a b c d e f g c')])
-    v = tempo('.1p.08 1/4 .')
+    v = tempo('.11p.07 1/4 .')
     print(*v, sep='\n')
     ns.tempo_adjust_pft(v, debug=True)
     print(ns)
