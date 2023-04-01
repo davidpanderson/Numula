@@ -339,8 +339,14 @@ def pedal(s, pedal_type=pedal_sustain):
             on = True
     return pft
 
-# define time shifts at discrete times
-# e.g. .1 1/4 .3 3/4
+# Define time shifts at discrete times.
+# e.g. '.1 1/4 .3 3/4' specifies a 4/4 measure in which
+# - the downbeat is delayed by .1 sec
+# - the 2nd beat is delayed by .3 sec
+# This is typically used to add agogic accents to selected notes.
+# Note: it's different from pauses because later notes are not affected
+#
+# Apply this to a Score using time_shift_pft()
 #
 def shift(s):
     items = s.split()

@@ -50,13 +50,18 @@ class Linear:
         self.y1 = 60/self.y1
         self.dy = self.y1 - self.y0
 
+# for volume PFTs: a period of unity gain
+#
 def Unity(dt):
     return Linear(1, 1, dt)
 
+# for time-shift PFTs: a period of no shift
+#
 def ZeroSeg(dt):
     return Linear(0, 0, dt)
 
-# for volume PFTs: a momentary value
+# for volume and time-shift PFTs: a momentary value
+#
 class Accent:
     def __init__(self, y):
         self.y0 = y
