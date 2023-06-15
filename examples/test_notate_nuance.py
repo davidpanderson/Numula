@@ -46,10 +46,12 @@ def test_ped():
         ns.append_score([n('1/8 c d e f g a b c')])
     #ns.insert_pedal(PedalUse(1/4, 3/4))
     #ns.pedal_pft([PedalSeg(3/16, 0), PedalSeg(2/4, 1)])
-    ns.pedal_pft(pedal('- 1/4 + 1/8 + 1/4 - 4/4'))
-    print(ns)
+    p = pedal('- 1/4 + 1/8  1/4 - 4/4')
+    print(*p, sep='\n')
+    ns.pedal_pft(p)
+    #print(ns)
     pianoteq.play_score(ns)
-#test_ped()
+test_ped()
 
 def test_shift():
     n1 = n('a b c d e f g c')
@@ -67,5 +69,4 @@ def test4():
     print(*v, sep='\n')
     ns.tempo_adjust_pft(v, debug=True)
     print(ns)
-
-test4()
+#test4()

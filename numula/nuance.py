@@ -417,7 +417,8 @@ def tempo_adjust_pft(
         else:
             si = seg.integral_total()
         seg_integral += si
-        if debug: print('    moving to next seg')
+        if debug:
+            print('    moving to next seg')
         seg_ind += 1
         seg = pft[seg_ind]
         if debug:
@@ -429,7 +430,8 @@ def tempo_adjust_pft(
     #
     def use_seg():
         nonlocal prev_integral, prev_time, prev_perf, prev_perf_adj
-        if debug: print('    use_seg(): dt', seg.dt)
+        if debug:
+            print('    use_seg(): dt', seg.dt)
         if seg.dt == 0:
             si = dt_to_integral(seg.value)
         else:
@@ -489,7 +491,8 @@ def tempo_adjust_pft(
         if pred:
             if event.kind == event_kind_note:
                 if not pred(event.obj):
-                    if debug: print('  not selected')
+                    if debug:
+                        print('  not selected')
                     continue
 
         # same score time as prev event, use same perf time
@@ -503,13 +506,15 @@ def tempo_adjust_pft(
         # if event is at the start of the PFT, handle specially.
         #
         if event.time < t0+epsilon:
-            if debug: print('   Handling event at start of PFT');
+            if debug:
+                print('   Handling event at start of PFT');
             prev_time = event.time
             prev_perf = event.perf_time
             # is first segment a pause-before?
             #
             if seg.dt==0 and not seg.after:
-                if debug: print('   Handling pause-before at start of PFT');
+                if debug:
+                    print('   Handling pause-before at start of PFT');
                 event.perf_time += seg.value
                 prev_integral = dt_to_integral(seg.value)
                 advance_seg() 
@@ -559,7 +564,8 @@ def tempo_adjust_pft(
 # shift start time of selected notes by the PFT value
 #
 def time_shift_pft(self, pft, t0=0, pred=None):
-    if not pft: return
+    if not pft:
+        return
     self.init_all()
     pft_check_closure(pft)
     seg_ind = 0
@@ -595,7 +601,8 @@ def time_shift_pft(self, pft, t0=0, pred=None):
             seg = pft[seg_ind]
             seg_end = seg_start + seg.dt
         # v is the shift factor
-        if v == 0: continue
+        if v == 0:
+            continue
         n.perf_time += v
         n.perf_dur -= v
 
@@ -606,7 +613,7 @@ def sustain(self, t0, t1, pred=None):
     if pred:
         self.tags_init()
     for n in self.notes:
-        if n.time<t0-epsilon:
+        if n.time<t0 - epsilon:
             continue
         if n.time > t1:
             break
@@ -732,7 +739,8 @@ def roll(self, t, offsets, is_up=True, is_delay=False, pred=None, verbose=False)
     chord = []   # the notes at time t
     rolled = False
     for note in self.notes:
-        if note.time < t-epsilon: continue
+        if note.time < t-epsilon:
+            continue
         if note.time > t+epsilon:
             if not chord:
                 break
@@ -755,7 +763,8 @@ def t_adjust_list(self, offsets, pred):
     self.init_all()
     ind = 0
     for note in self.notes:
-        if ind == len(offsets): break
+        if ind == len(offsets):
+            break
         if pred(note):
             note.perf_time += offsets[ind]
             ind += 1
@@ -778,7 +787,8 @@ def t_adjust_func(self, func, pred):
 def t_random_uniform(self, min, max, pred=None):
     self.init_all()
     for note in self.notes:
-        if pred and not pred(note): continue
+        if pred and not pred(note):
+            continue
         x = random.uniform(min, max)
         note.perf_time += x
         note.perf_dur -= x
@@ -786,10 +796,12 @@ def t_random_uniform(self, min, max, pred=None):
 def t_random_normal(self, stddev, max_sigma=2, pred=None):
     self.init_all()
     for note in self.notes:
-        if pred and not pred(note): continue
+        if pred and not pred(note):
+            continue
         while True:
             x = numpy.random.normal()
-            if abs(x) < max_sigma: break
+            if abs(x) < max_sigma:
+                break
         y = stddev*x
         note.perf_time += y
         note.perf_dur -= y
@@ -799,37 +811,43 @@ def t_random_normal(self, stddev, max_sigma=2, pred=None):
 def score_dur_abs(self, dur, pred=None):
     self.tags_init()
     for note in self.notes:
-        if pred and not pred(note): continue
+        if pred and not pred(note):
+            continue
         note.dur = dur
 
 def score_dur_rel(self, factor, pred=None):
     self.tags_init()
     for note in self.notes:
-        if pred and not pred(note): continue
+        if pred and not pred(note):
+            continue
         note.dur *= factor
 
 def score_dur_func(self, func, pred=None):
     self.tags_init()
     for note in self.notes:
-        if pred and not pred(note): continue
+        if pred and not pred(note):
+            continue
         note.dur = func(note)
             
 def perf_dur_abs(self, dur, pred=None):
     self.init_all()
     for note in self.notes:
-        if pred and not pred(note): continue
+        if pred and not pred(note):
+            continue
         note.perf_dur = dur
 
 def perf_dur_rel(self, factor, pred=None):
     self.init_all()
     for note in self.notes:
-        if pred and not pred(note): continue
+        if pred and not pred(note):
+            continue
         note.perf_dur *= factor
 
 def perf_dur_func(self, func, pred=None):
     self.init_all()
     for note in self.notes:
-        if pred and not pred(note): continue
+        if pred and not pred(note):
+            continue
         note.perf_dur = func(note)
 
 # adjust articulation with a PFT
@@ -902,7 +920,7 @@ def vsustain_pft(self, pft, t0=0, pred=None, verbose=False):
         if pred and not pred(n):
             continue
         while True:
-            if n.time < seg_end:
+            if n.time < seg_end - epsilon:
                 if seg_end > n.time + n.dur:
                     if seg.level > 0:
                         if verbose:

@@ -1,5 +1,5 @@
 # This file is part of Numula
-# Copyright (C) 2022 David P. Anderson
+# Copyright (C) 2023 David P. Anderson
 #
 # Numula is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License
@@ -14,9 +14,8 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-
-# Textual notation of nuance.
-# see https://github.com/davidpanderson/Numula/wiki/nuance_notate.py
+# Textual notation of various types of nuance
+# See https://github.com/davidpanderson/Numula/wiki/nuance_notate.py
 
 import numula.nscore
 from numula.nuance import *
