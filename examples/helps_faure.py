@@ -1,4 +1,7 @@
 # Robert Helps: Hommage a Faure
+#
+# Numula rendition by David P. Anderson
+# Public domain
 
 from numula.nscore import *
 from numula.notate_score import *
@@ -164,6 +167,7 @@ soprano_v0 = vol('meas4/4 \
     |63 [ p 4/1 ppp \
     |67 \
 ')
+
 alto_v0 = vol('meas4/4 \
     |1 ppp 31/1 ppp \
     |32 meas2/4 [ ppp 2/4 pppp \
@@ -175,6 +179,7 @@ alto_v0 = vol('meas4/4 \
     |50 meas2/4 ppp 2/4 ppp \
     |51 meas4/4 \
 ')
+
 bass_v0 = vol('meas4/4 \
     |1 *31 _pp 2/4 pp_ 2/4 _pp * \
     |32 meas2/4 [ pp 2/4 pp \
@@ -190,6 +195,7 @@ bass_v0 = vol('meas4/4 \
 ')
 
 # mostly slight accents on quarter notes
+#
 bass_accents = accents('meas4/4 \
     |1 *62 mf 1/4 _mf 1/4 * \
     |32 meas2/4 mf 1/4 _mf 1/4 \
@@ -203,6 +209,7 @@ bass_accents = accents('meas4/4 \
 ')
 
 # tempo
+#
 t0 = tempo('meas4/4 \
     |1 55 1/1 65 1/1 45 60 1/1 60 1/1 55 \
     |5 55 1/1 65 1/1 45 60 1/1 60 1/1 48 \
@@ -263,8 +270,9 @@ pauses = tempo(f'meas4/4 \
     |67 2p \
 ')
 
-# agogic accents in melody
+# agogic accents (delays) in the melody
 # these aren't used when the alto voice is active
+#
 sop_shift = shift(f'meas4/4 \
     |1 *4 \
         {dt2} 1/1 {dt1} 1/1 1/1 {dt1} 1/1 \
@@ -332,6 +340,5 @@ def main():
     fname = 'data/helps_faure.midi'
     ns.write_midi(fname, verbose=False)
     numula.pianoteq.play(fname, preset='My Presets/NY Steinway B Improv')
-
 
 main()
