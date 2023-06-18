@@ -152,32 +152,119 @@ bass = n('meas4/4 \
 ')
 bass.tag('bass')
 
-# pause durations
-dt0 = .03
-dt1 = .05
-dt2 = .08
-dt3 = .11
-dt4 = .14
+# volume control has 3 layers:
+# accent patterns (separate for LH, RH)
+# vmeas: continuous change within measures
+# vphrase: continuous change at 1-8 measure level
 
 rh_accents = accents('meas4/4 \
-    |1 *12 \
-        *4 mf 1/32 mf_ 1/32 p 1/32 p 1/32 mp 1/32 p 1/32 mf_ 1/32 mm 1/32 * \
+    |1 *32 \
+        *4 mf 1/32 mf_ 1/32 p 1/32 _p 1/32 p 1/32 _p 1/32 mf_ 1/32 mm 1/32 * \
         * \
-    |13 \
+    |33 \
 ')
 
 lh_accents = accents('meas4/4 \
-    |1 *12 \
-        *4 mm 1/24 pp 1/24 pp 1/24 p 1/8 * \
+    |1 *32 \
+        *4 mm 1/24 p 1/24 p 1/24 mp 1/8 * \
         * \
-    |13 \
+    |33 \
 ')
 
-v0 = vol('meas4/4 \
-    |1 *2 pp 3/4 mm 1/4 pp * \
-    |3 *2 pp 1/4 mp 1/4 pp * \
-    |4 pp 2/4 mp 2/4 pp \
-    |5 \
+vmeas = vol('meas4/4 \
+    |1 *2 mm 3/4 mf 1/4 mm * \
+    |3 *2 mm 1/4 mf 1/4 mm * \
+    |4 mm 2/4 mf 2/4 mm \
+    |5 *28 mm 1/1 mm * \
+    |33 *2 mm 1/1 mm * \
+')
+
+vphrase = vol('meas4/4 \
+    |1 pp 8/1 pp \
+    |9 pp 4/1 f 2/1 ff 2/1 ff \
+    |17 [ p 3/1 p \
+    |20 p 2/1 ff 1/1 ff \
+    |23 ff 4/1 p 2/1 p \
+    |29 [ pp 6/1 pp \
+    |35 \
+')
+
+# timing control has 3 layers:
+# pauses
+# tmeas: tempo at beat level
+# tphrase: tempo at phrase level
+# currently this is common between LH and RH;
+# it might be interesting to decouple at some level
+
+# pause durations
+dt0 = .02
+dt1 = .04
+dt2 = .06
+dt3 = .08
+dt4 = .10
+dt5 = .12
+
+# 'compound pauses' for pairs of melody notes
+# (octaves in the 1st and 4th 16th of a beat)
+p0 = f'{dt0}p 1/32 . p{dt0} 1/32 .'
+p1 = f'{dt1}p 1/32 . p{dt1} 1/32 .'
+p2 = f'{dt2}p 1/32 . p{dt2} 1/32 .'
+p3 = f'{dt3}p 1/32 . p{dt3} 1/32 .'
+
+# a measure like measure 1
+pm1 = f'{p3} 1/8 . {p0} {p1} 1/8 . {p0} {p1} 1/8 . {p0} {p2} 1/8 . {p0}'
+
+# measure 3: 2+2 beats
+pm3 = f'*2 {p2} 1/8 . {p0} {p1} 1/8 . {p0} *'
+
+# measure 8: moving forward, part of longer phrase
+pm8 = f'{p2} 1/8 . {p0} *3 {p1} 1/8 . {p0} *'
+
+pauses = tempo(f'meas4/4 \
+    |1 {pm1} {pm1} {pm3} {pm8} \
+    |5 {pm1} {pm1} {pm3} {pm8} \
+    |9 *4 {pm8} * \
+    |13 {dt2}p *4 {pm8} * \
+    |17 {dt3}p *2 {pm8} * \
+    |19 {pm1} {pm1} {pm3} {pm8} \
+    |23 {dt3}p {pm8} {dt1}p {pm8} \
+    |25 {dt1}p *2 {pm8} * \
+    |27 {dt2}p *2 {pm8} * \
+    |29 {dt2}p *2 {pm8} * \
+    |31 {pm8} {dt2}p {pm8} \
+    |33 \
+')
+
+# slight accel within each beat
+tmeas = tempo('meas4/4 \
+    |1 *32 *4 55 1/4 65 * * \
+')
+
+# slight accel mid-measure
+t1 = '60 2/4 70 2/4 55'
+
+# same, but less rit at end
+t7 = '60 2/4 70 2/4 60'
+
+# rit over 1 measure (phrase end)
+trit = '60 1/1 45'
+
+# bigger rit
+trit2 = '60 1/1 40'
+
+# faster version of t1
+t19 = '65 2/4 75 2/4 60'
+
+tphrase = tempo(f'meas4/4 \
+    |1 *3 {t1} * {trit} \
+    |5 {t1} {t1} *11 {t7} * {trit} \
+    |19 *3 {t19} * 65 1/1 50 \
+    |23 60 2/1 50 \
+    |25 60 2/1 50 \
+    |27 {t1} {trit} {t1} {trit2} \
+    |31 60 1/1 70 1/1 50 \
+    |33 50 2/1 40 \
+    |35 \
 ')
 
 # RH articulation: sustain melody notes
@@ -188,10 +275,10 @@ def rh_art(ns):
     
 # LH articulation: pedal each beat
 lh_ped = pedal('meas4/4 \
-    |1 *12 \
+    |1 *32 \
         + 1/4 1/4 1/4 1/4 \
         * \
-    |13 \
+    |33 \
 ')
 
 nuance = True
@@ -199,7 +286,7 @@ nuance = True
 def main():
     ns = Score(tempo=90, verbose=False)
     if nuance:
-        soprano.vol_adjust_pft(rh_accents)
+        #soprano.vol_adjust_pft(rh_accents)
         bass.vol_adjust_pft(lh_accents)
         rh_art(soprano)
         bass.vsustain_pft(lh_ped)
@@ -209,7 +296,11 @@ def main():
         bass
     ])
     if nuance:
-        ns.vol_adjust_pft(v0)
+        ns.vol_adjust_pft(vmeas)
+        ns.vol_adjust_pft(vphrase)
+        ns.tempo_adjust_pft(tmeas)
+        ns.tempo_adjust_pft(tphrase)
+        ns.tempo_adjust_pft(pauses)
     #print(ns)
     ns.write_midi('data/chopin_prelude_8.midi')
     numula.pianoteq.play('data/chopin_prelude_8.midi')
