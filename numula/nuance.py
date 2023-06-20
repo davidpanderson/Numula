@@ -20,7 +20,7 @@
 import numpy, random, copy, math
 from numula.nscore import *
 
-# -------- PFT (piecewise function of time primitives ----------
+# -------- PFT (piecewise function of time) primitives ----------
 
 class Linear:
     def __init__(self, y0, y1, dt, closed_start=True, closed_end=False):
@@ -89,7 +89,7 @@ class ExpCurve:
         else:
             self.linear = False
             self.c = math.exp(curvature)
-            self.logc = math.log(self.c)
+            self.logc = curvature
         self.y0 = y0
         self.y1 = y1
         self.dy = y1 - y0
@@ -107,26 +107,26 @@ class ExpCurve:
     def val(self, t):
         if self.linear:
             return self.y0 + self.dy*(t/self.dt)
-        tn = t/self.dt
-        y = (1 - math.pow(self.c, tn))/(1-self.c)
-        return self.y0 + y*self.dy
+        tnorm = t/self.dt
+        ynorm = (1 - math.pow(self.c, tnorm))/(1-self.c)
+        return self.y0 + ynorm*self.dy
     def integral(self, t):
         if self.linear:
             return t*(self.y0+self.val(t))/2
         if t == 0:
             return 0
-        # I assume you know that the integral of c^x is c^x/ln(c) + C
+        # I assume you know that the integral of a^x is a^x/ln(a) + C
         # (OK, so I had to look it up)
         #
-        # compute in 0..1 normalized space
-        tn = t/self.dt
-        # a is the integral of c^x from 0 to tn
-        a = (math.pow(self.c, tn) - 1)/self.logc
-        # b is the integral of y from 0 to tn
-        b = (tn-a)/(1-self.c)
+        tnorm = t/self.dt
+
+        a = (math.pow(self.c, tnorm) - 1)/self.logc
+
+        int_norm = (tnorm-a)/(1-self.c)
+
         # convert from normalized coords
-        int = t*self.y0 + b*self.dy
-        #print(t, a, b, int)
+        int = t*(self.y0 + int_norm*self.dy)
+        #print('integral: ', t, int_norm, self.dy, int)
         return int
     def integral_total(self):
         if self.linear:
@@ -243,6 +243,29 @@ class PftValue:
                 self.final_value = seg.y1
                 return self.final_value
             
+# show PFT values with given spacing (for debugging)
+def show_pft_vals(pft, dt):
+    pft_val = PftValue(pft)
+    t = 0
+    last = 0
+    while not pft_val.ended:
+        v = pft_val.value(t)
+        print(t, v, v-last)
+        last = v
+        t += dt
+
+def show_pft_ints(pft, dt):
+    for seg in pft:
+        print(seg)
+        print('total integral ', seg.integral_total())
+        t = 0
+        last = 0
+        while t<=seg.dt:
+            i = seg.integral(t)
+            print(t, i, i-last)
+            last = i
+            t += dt
+
 # ------------------- Dynamics ------------------------
 
 # adjust or set volume of selected notes by PFT starting at t0
@@ -371,6 +394,10 @@ def tempo_adjust_pft(
     if debug:
         print('after BPM:')
         print(*pft, sep='\n')
+        #print('PFT values:')
+        #show_pft_vals(pft, 1/16)
+        #print('PFT integrals:')
+        #show_pft_ints(pft, 1/16)
 
     scale_factor = 1
     if normalize:

@@ -73,9 +73,14 @@ def test4():
 
 def test5():
     ns = Score([n('1/16 a4 b c d e f g a ')])
-    v = tempo('exp0.01 50 2/4 85')
-    print(*v, sep='\n')
+    v = tempo('exp1.0 80 2/4 40')
+    #pft_bpm(v)
+    #show_pft_vals(v, 1/16)
+    #seg = v[0]
+    #print(seg)
+    #print(seg.integral_total())
+    #print(*v, sep='\n')
     ns.tempo_adjust_pft(v, debug=True)
     print(ns)
-    pianoteq.play_score(ns)
+    #pianoteq.play_score(ns)
 test5()
