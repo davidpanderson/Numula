@@ -51,7 +51,7 @@ def test_ped():
     ns.pedal_pft(p)
     #print(ns)
     pianoteq.play_score(ns)
-test_ped()
+#test_ped()
 
 def test_shift():
     n1 = n('a b c d e f g c')
@@ -70,3 +70,12 @@ def test4():
     ns.tempo_adjust_pft(v, debug=True)
     print(ns)
 #test4()
+
+def test5():
+    ns = Score([n('1/16 a4 b c d e f g a ')])
+    v = tempo('exp0.01 50 2/4 85')
+    print(*v, sep='\n')
+    ns.tempo_adjust_pft(v, debug=True)
+    print(ns)
+    pianoteq.play_score(ns)
+test5()

@@ -159,7 +159,7 @@ bass.tag('bass')
 
 rh_accents = accents('meas4/4 \
     |1 *32 \
-        *4 mf 1/32 mf_ 1/32 p 1/32 _p 1/32 p 1/32 _p 1/32 mf_ 1/32 mm 1/32 * \
+        *4 f_ 1/32 mf 1/32 _p 1/32 pp 1/32 p 1/32 pp 1/32 mf_ 1/32 mm 1/32 * \
         * \
     |33 \
 ')
@@ -211,8 +211,9 @@ p1 = f'{dt1}p 1/32 . p{dt1} 1/32 .'
 p2 = f'{dt2}p 1/32 . p{dt2} 1/32 .'
 p3 = f'{dt3}p 1/32 . p{dt3} 1/32 .'
 
+p4 = f'{dt4}p 1/32 . {dt5}p{dt2} 1/32 .'
 # a measure like measure 1
-pm1 = f'{p3} 1/8 . {p0} {p1} 1/8 . {p0} {p1} 1/8 . {p0} {p2} 1/8 . {p0}'
+pm1 = f'{p4} 1/8 . {p0} {p1} 1/8 . {p0} {p1} 1/8 . {p0} {p2} 1/8 . {p0}'
 
 # measure 3: 2+2 beats
 pm3 = f'*2 {p2} 1/8 . {p0} {p1} 1/8 . {p0} *'
@@ -241,7 +242,7 @@ tmeas = tempo('meas4/4 \
 ')
 
 # slight accel mid-measure
-t1 = '60 2/4 70 2/4 55'
+t1 = 'exp0.01 50 2/4 85 2/4 45'
 
 # same, but less rit at end
 t7 = '60 2/4 70 2/4 60'
@@ -266,14 +267,9 @@ tphrase = tempo(f'meas4/4 \
     |33 50 2/1 40 \
     |35 \
 ')
-
-# RH articulation: sustain melody notes
-def rh_art(ns):
-    ns.score_dur_abs(3/16, lambda n: n.time % (1/4) == 0)
-    ns.score_dur_abs(5/32, lambda n: n.time % (1/4) == 1/32)
-    ns.score_dur_abs(1/16, lambda n: n.time % (1/4) == 3/16)
     
 # LH articulation: pedal each beat
+# use this for RH too
 lh_ped = pedal('meas4/4 \
     |1 *32 \
         + 1/4 1/4 1/4 1/4 \
@@ -286,22 +282,23 @@ nuance = True
 def main():
     ns = Score(tempo=90, verbose=False)
     if nuance:
-        #soprano.vol_adjust_pft(rh_accents)
+        soprano.vol_adjust_pft(rh_accents)
         bass.vol_adjust_pft(lh_accents)
-        rh_art(soprano)
+        soprano.vsustain_pft(lh_ped)
         bass.vsustain_pft(lh_ped)
         
     ns.append_score([
-        soprano,
-        bass
+        soprano
+        #bass
     ])
     if nuance:
         ns.vol_adjust_pft(vmeas)
         ns.vol_adjust_pft(vphrase)
-        ns.tempo_adjust_pft(tmeas)
+        #ns.tempo_adjust_pft(tmeas)
         ns.tempo_adjust_pft(tphrase)
-        ns.tempo_adjust_pft(pauses)
-    #print(ns)
+        #ns.tempo_adjust_pft(pauses)
+    ns.trim(0, 4/1)
+    print(ns)
     ns.write_midi('data/chopin_prelude_8.midi')
     numula.pianoteq.play('data/chopin_prelude_8.midi')
 

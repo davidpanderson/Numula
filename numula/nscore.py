@@ -527,7 +527,26 @@ class Score:
         for pedal in self.pedals:
             # don't want pedal down during attack of notes right at end
             pedal.perf_dur -= .01
-                        
+
+    # trim to times t0..t1
+    #
+    def trim(self, t0, t1):
+        new_notes = []
+        for note in self.notes:
+            if note.time < t0-epsilon:
+                continue
+            if note.time > t1-epsilon:
+                continue
+            new_notes.append(note)
+        self.notes = new_notes
+        new_pedals = []
+        for ped in self.pedals:
+            if ped.time < t0-epsilon:
+                continue
+            if ped.time > t1-epsilon:
+                continue
+        self.pedals = new_pedals
+        
     from numula.nuance import vol_adjust_pft, vol_adjust, vol_adjust_func
     from numula.nuance import tempo_adjust_pft, sustain, pause_before, pause_after
     from numula.nuance import pause_before_list
@@ -538,7 +557,9 @@ class Score:
     from numula.nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
     from numula.nuance import get_pos_array
     from numula.nuance import vsustain_pft, pedal_pft, time_shift_pft
-    
+
+# end of Score
+
 # represents the start or end of a note or pedal application
 #
 class Event:
