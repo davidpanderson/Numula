@@ -268,8 +268,12 @@ def show_pft_ints(pft, dt):
 
 # ------------------- Dynamics ------------------------
 
+VOL_MULT = 0
+VOL_ADD = 1
+VOL_SET = 2
+
 # adjust or set volume of selected notes by PFT starting at t0
-def vol_adjust_pft(self, pft, t0=0, pred=None, set_vol=False):
+def vol_adjust_pft(self, pft, t0=0, pred=None, mode=VOL_MULT):
     if not pft: return
     self.time_sort()
     self.tags_init()
@@ -307,37 +311,41 @@ def vol_adjust_pft(self, pft, t0=0, pred=None, set_vol=False):
             seg = pft[seg_ind]
             seg_end = seg_start + seg.dt
         # v is the adjustment factor
-        if v < 0:
-            continue
-        if set_vol:
-            n.vol = v/2
-        else:
+        if mode == VOL_MULT:
+            if v < 0:
+                continue
             n.vol *= v
+        elif mode == VOL_ADD:
+            n.vol += v
+        elif mode == VOL_SET:
+            if v < 0:
+                continue
+            n.vol = v/2
         
-def vol_adjust(self, v, pred=None, set_vol=False):
+def vol_adjust(self, v, pred=None, mode=VOL_MULT):
     self.tags_init()
     for note in self.notes:
         if pred and not pred(note):
             continue
-        if v < 0:
-            continue
-        if set_vol:
-            note.vol = v/2
-        else:
-            note.vol *= v
+        if mode == VOL_MULT:
+            n.vol *= v
+        elif mode == VOL_ADD:
+            n.vol += v
+        elif mode == VOL_SET:
+            n.vol = v/2
             
-def vol_adjust_func(self, func, pred=None, set_vol=False):
+def vol_adjust_func(self, func, pred=None, mode=VOL_MULT):
     self.tags_init()
     for note in self.notes:
         if pred and not pred(note):
             continue
         v = func(note)
-        if v < 0:
-            continue
-        if set_vol:
-            note.vol = v/2
-        else:
-            note.vol *= v
+        if mode == VOL_MULT:
+            n.vol *= v
+        elif mode == VOL_ADD:
+            n.vol += v
+        elif mode == VOL_SET:
+            n.vol = v/2
 
 # randomly perturb volume
 #
