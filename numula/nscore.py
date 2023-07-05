@@ -141,6 +141,7 @@ class Score:
             measure.time += t
             self.insert_measure(measure)
         self.clear_flags()
+        return self
 
     # append a score to this one.
     # You can also give a list of scores, in which case
@@ -157,20 +158,24 @@ class Score:
             self.insert_score(scores, self.cur_time, tag)
             self.cur_time += scores.cur_time
         self.clear_flags()
+        return self
             
     def insert_measure(self, m):
         self.measures.append(m)
         self.clear_flags()
+        return self
         
     def append_measure(self, dur, type):
         m = Measure(self.m_cur_time, dur, type)
         self.measures.append(m)
         self.m_cur_time += dur
         self.clear_flags()
+        return self
 
     def insert_pedal(self, pedal):
         self.pedals.append(pedal)
         self.clear_flags()
+        return self
 
     def tag(self, tag):
         for note in self.notes:
@@ -279,23 +284,25 @@ class Score:
         self.perf_init()
         self.tags_init()
 
-    # shift perf times if needed to avoid negative times;
-    # MIDI files don't like them
+    # shift perf times to start at time t >= 0
+    # in particular, avoid negative times; MIDI files don't like them
     #
-    def make_perf_nonnegative(self):
+    def shift_start(self, t):
         self.notes.sort(key=lambda x: x.perf_time)
         t0 = self.notes[0].perf_time
-        if t0 < 0:
-            for note in self.notes:
-                note.perf_time -= t0
-            for pedal in self.pedals:
-                pedal.perf_time -= t0
+        dt = t - t0
+        if dt == 0:
+            return
+        for note in self.notes:
+            note.perf_time += dt
+        for pedal in self.pedals:
+            pedal.perf_time += dt
 
     # get the max performance end time
     # Note: the .wav file produced by pianoteq
     # will be a second or two longer than this
-    def perf_dur(self):
-        self.make_perf_nonnegative()
+    def perf_end_time(self):
+        self.make_perf_shift_start(1)
         x = 0
         for n in self.notes:
             t = n.perf_time + n.perf_dur
@@ -308,7 +315,7 @@ class Score:
     # write selected notes to MIDI file
     def write_midi(self, filename, pred=None, verbose=False):
         self.init_all()
-        self.make_perf_nonnegative()
+        self.shift_start(1)
         vstr = ''
 
         # MIDIutils doesn't handle overlapping notes correctly,

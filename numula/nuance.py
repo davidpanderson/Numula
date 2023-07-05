@@ -324,8 +324,8 @@ def vol_adjust_pft(self, pft, t0=0, pred=None, mode=VOL_MULT):
         
 def vol_adjust(self, v, pred=None, mode=VOL_MULT):
     self.tags_init()
-    for note in self.notes:
-        if pred and not pred(note):
+    for n in self.notes:
+        if pred and not pred(n):
             continue
         if mode == VOL_MULT:
             n.vol *= v
@@ -336,10 +336,10 @@ def vol_adjust(self, v, pred=None, mode=VOL_MULT):
             
 def vol_adjust_func(self, func, pred=None, mode=VOL_MULT):
     self.tags_init()
-    for note in self.notes:
-        if pred and not pred(note):
+    for n in self.notes:
+        if pred and not pred(n):
             continue
-        v = func(note)
+        v = func(n)
         if mode == VOL_MULT:
             n.vol *= v
         elif mode == VOL_ADD:
@@ -558,10 +558,12 @@ def tempo_adjust_pft(
             prev_perf_adj = event.perf_time
             continue
 
-        # if there's no event at the start of the PFT, that's an error
+        # if there's no event at the start of the PFT, pretend there's one
         #
         if prev_time < 0:
-            raise Exception('tempo PFT must begin at a note start or end')
+            prev_time = 0
+            if debug:
+                print('tempo PFT does not start at note')
 
         # loop over PFT segments until last one that affects the event, i.e. either
         # E lies strictly within S, or
@@ -748,51 +750,35 @@ def pause_before_list(self, ts, dts):
     pbl_aux(self.notes, ts, dts)
     pbl_aux(self.pedals, ts, dts)
 
-def roll_aux(chord, offsets, is_up, is_delay):
+def roll_aux(chord, offsets, is_up):
     if is_up:
         chord.sort(key=lambda x: x.pitch)
     else:
         chord.sort(key=lambda x: -x.pitch)
-    # see which offsets are going to be used
-    #
-    mn = min(offsets[0:len(chord)])
-    mx = max(offsets[0:len(chord)])
-    dt = mx - mn
     ind = 0
     while ind < len(chord) and ind < len(offsets):
         note = chord[ind]
-        off = offsets[ind] - mx
+        off = offsets[ind]
         note.perf_time += off
         note.perf_dur -= off
-        if is_delay:
-            note.perf_time += dt
+        if note.perf_dur < epsilon:
+            raise Exception('roll amount exceeds not duration')
         ind += 1
-    return dt
 
-def roll(self, t, offsets, is_up=True, is_delay=False, pred=None, verbose=False):
+def roll(self, t, offsets, is_up=True, pred=None, verbose=False):
     self.init_all()
     chord = []   # the notes at time t
-    rolled = False
     for note in self.notes:
         if note.time < t-epsilon:
             continue
         if note.time > t+epsilon:
-            if not chord:
-                break
-            if not rolled:
-                if verbose: print('roll ', offsets, list(map(lambda n: n.pitch, chord)))
-                dt = roll_aux(chord, offsets, is_up, is_delay)
-                rolled = True
-            if not is_delay:
-                break
-            note.perf_time += dt
-        else:
-            if pred and not pred(note): continue
-            chord.append(note)
-    # chord might be at end of score
-    #
-    if chord and not rolled:
-        roll_aux(chord, offsets, is_up, is_delay)
+            break
+        if pred and not pred(note): continue
+        chord.append(note)
+    if chord:
+        if verbose:
+            print('roll ', offsets, list(map(lambda n: n.pitch, chord)))
+        roll_aux(chord, offsets, is_up)
 
 def t_adjust_list(self, offsets, pred):
     self.init_all()

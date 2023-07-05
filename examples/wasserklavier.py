@@ -202,10 +202,11 @@ def time_adjust(ns):
 def main():
     ns = make_score()
     if True:
+        print(ns)
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)
-        print(ns)
+        #print(ns)
         ns.write_midi('data/wasserklavier.midi')
         numula.pianoteq.play('data/wasserklavier.midi',
             preset='My Presets/NY Steinway D Classical (for wasser)'
