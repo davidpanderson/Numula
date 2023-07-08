@@ -82,7 +82,7 @@ def test_pft_value():
             Linear(0, 1, 1, closed_end=False),
             Linear(3, 4, 1)
         ]
-    v = PftValue(p)
+    v = PFTValue(p)
     for i in range(25):
         x = i/10
         print(x, v.value(x))
@@ -110,3 +110,15 @@ def test_pbl():
     ns.pause_before_list([3/4, 5/4, 13/8], [.1, .2, .3])
     print(ns)
 #test_pbl()
+
+def test_obj():
+    p = [
+        PFTObject(1, [1,2]),
+        PFTObject(3, [4,5])
+    ]
+    pv = PFTValue(p)
+    t = 0
+    while not pv.ended:
+        print(t, pv.value(t))
+        t += .25
+test_obj()

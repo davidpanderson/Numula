@@ -167,6 +167,18 @@ class PedalSeg:
             self.dt, self.pedal_type, self.level
         )
 
+# a PFT segment whose value is an arbitrary object (e.g. a PitchSet)
+#
+class PFTObject:
+    def __init__(self, dt, value, closed_start=True, closed_end=False):
+        self.dt = dt
+        self.y0 = value
+        self.y1 = value
+        self.closed_start = closed_start
+        self.closed_end = closed_end
+    def val(self, t):
+        return self.y0
+
 # ------------ end of PFT primitives
 
 #from pprint import pprint
@@ -220,7 +232,7 @@ def pft_bpm(pft):
         seg.bpm()
 
 # class for getting the values of a PFT at increasing times
-class PftValue:
+class PFTValue:
     def __init__(self, pft):
         self.pft = pft
         self.ind = 0            # index of current seg
@@ -245,7 +257,7 @@ class PftValue:
             
 # show PFT values with given spacing (for debugging)
 def show_pft_vals(pft, dt):
-    pft_val = PftValue(pft)
+    pft_val = PFTValue(pft)
     t = 0
     last = 0
     while not pft_val.ended:
@@ -996,7 +1008,7 @@ def get_pos_array(self, pos_pft, framerate):
         last_perf_time = event.perf_time
 
     # make an object for evaluating pos_pft at increasing times
-    pft_val = PftValue(pos_pft)
+    pft_val = PFTValue(pos_pft)
     event_ind = 0
     ev0 = events[0]
     ev1 = events[1]
