@@ -1,4 +1,5 @@
 from numula.pitch import *
+from numula.time_list import *
 from curtain import *
 from numula.nscore import *
 from numula.nuance import *
@@ -16,18 +17,20 @@ def test_curtain():
     maj = PitchOffs([0, 4, 7])
     minor = PitchOffs([0, 3, 7])
     cmaj = PitchSet(maj, 60)
-    cmin = PitchSet(minor, 60)
-    pitch_set = [
-        PFTObject(4, cmaj),
-        PFTObject(4, cmin)
-    ]
+    #cmin = PitchSet(minor, 60)
+    pitch_set = []
+    for i in range(12):
+        po = PitchSet(random.choice([maj, minor]), random.randrange(0,12))
+        pitch_set.append(PFTObject(1, po))
     pitch_center = [
-        Linear(60, 80, 6),
-        Linear(80, 60, 2)
+        Linear(85,65, 6),
+        Linear(65,85, 6)
     ]
     pitch_width = [
-        Linear(20, 30, 8)
+        Linear(10,15, 12)
     ]
-    ns = curtain(8, 300, pitch_set, pitch_center, pitch_width, False)
+    times = time_list_periodic(300, 12)
+    #times = time_list_random(300, 12)
+    ns = curtain(times, pitch_set, pitch_center, pitch_width, True, True)
     pianoteq.play_score(ns)
 test_curtain()

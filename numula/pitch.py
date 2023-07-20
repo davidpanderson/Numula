@@ -1,4 +1,5 @@
 import random
+from scipy.stats import norm
 
 # a set of pitch offsets (0..11)
 # and an optional set of weights for each one.
@@ -26,7 +27,6 @@ class PitchSet:
             else:
                 self.probs[i] = 0
             
-
     # return a random (uniform but weighted) pitch in lo..hi
     #
     def rnd_uniform(self, lo, hi):
@@ -41,8 +41,28 @@ class PitchSet:
                 if y > x:
                     return i
         return -1
-            
 
+    # return a random pitch from normal distribution
+    #
+    def rnd_normal(self, mean, stddev, maxsigma):
+        lo = int(mean - stddev*maxsigma)
+        hi = int(mean + stddev*maxsigma)
+        nprobs = [0]*128
+        sum = 0
+        for i in range(lo, hi+1):
+            if i<0: continue
+            if i>127: continue
+            nprobs[i] = self.probs[i]*norm.pdf(i, mean, stddev)
+            sum += nprobs[i]
+        x = random.uniform(0, sum)
+        y = 0
+        for i in range(lo, hi+1):
+            if nprobs[i]:
+                y += nprobs[i]
+                if y > x:
+                    return i
+        return -1
+    
     # return the pitch in the set above the given pitch
     #
     def next_above(self, p):
@@ -60,3 +80,4 @@ class PitchSet:
                 return -1
             if self.probs[j]:
                 return j
+
