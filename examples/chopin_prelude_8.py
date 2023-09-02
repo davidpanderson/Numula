@@ -112,7 +112,7 @@ soprano = n('meas4/4 \
     |31 *4 c5+ +c+ g+ b a+ f+ c+ +c+ * \
     |32 *4 c5+ +c+ g+ b a f+ c+ +c+ * \
     |33 1/2 [c5+ e +c+] 1/4 [b g d] [e+ c+ b] \
-    |34 1/1 [c5+ (grace e+ grace) f+ ]\
+    |34 1/4 e5+ 2/1 [f3+ +c+ +a c+ f+ ]\
 ').tag('sop')
 
 # timing in last measure:
@@ -151,7 +151,7 @@ bass = n('meas4/4 \
     |31 *4 a4+ -c+ f+ -f+ * \
     |32 *4 a4 -c+ f+ -f+ * \
     |33 1/2 [a3 +e a] 1/4 [g -b] [c+ +g+] \
-    |34 1/1 [f3+ +c+ +a] \
+    |34 1/1 . \
     |35 \
 ').tag('bass')
 
@@ -163,7 +163,7 @@ bass = n('meas4/4 \
 # vphrase: continuous change at 1-8 measure level
 
 # RH accents when soft
-rha_p = '*4 f_ 1/32 mf 1/32 _p 1/32 pp 1/32 p 1/32 pp 1/32 mf_ 1/32 mm 1/32 *'
+rha_p = '*4 f 1/32 mf 1/32 _p 1/32 pp 1/32 p 1/32 pp 1/32 mf_ 1/32 mm 1/32 *'
 # when loud
 rha_f = '*4 _f 1/32 _mf 1/32 _p 1/32 pp 1/32 p 1/32 pp 1/32 mf 1/32 mp 1/32 *'
 
@@ -208,10 +208,10 @@ vphrase = vol('meas4/4 \
 #
 # timing control has 3 layers:
 # pauses
-# tmeas: tempo at beat level
+# tbeat: accelerando within each beat
 # tphrase: tempo at phrase level
 # currently this is common between LH and RH;
-# it might be interesting to decouple at some level
+# it might be interesting to decouple at the tmeas level
 
 # pause durations
 dt0 = .02
@@ -222,25 +222,27 @@ dt4 = .10
 dt5 = .12
 dt6 = .15
 
-# 'compound pauses' for pairs of melody notes
+# 'Compound pauses' for pairs of melody notes
 # (octaves in the 1st and 4th 16th of a beat)
-p0 = f'{dt0}p 1/32 . p{dt0} 1/32 .'
-p1 = f'{dt1}p 1/32 . p{dt1} 1/32 .'
-p2 = f'{dt2}p 1/32 . p{dt2} 1/32 .'
-p3 = f'{dt3}p 1/32 . p{dt3} 1/32 .'
-p4 = f'{dt4}p 1/32 . {dt5}p{dt3} 1/32 .'
+# Each one takes up 1/16
+cp0 = f'{dt0}p 1/32 . p{dt0} 1/32 .'
+cp1 = f'{dt1}p 1/32 . p{dt1} 1/32 .'
+cp2 = f'{dt2}p 1/32 . p{dt2} 1/32 .'
+cp3 = f'{dt3}p 1/32 . p{dt3} 1/32 .'
+cp4 = f'{dt4}p 1/32 . p{dt3} 1/32 .'
+cp4_ = f'{dt4}p{dt5} 1/32 . p{dt3} 1/32 .'
 
 # measure 1 has a big pause after 1st note
-pm1 = f'{p4} 1/8 . {p0} {p1} 1/8 . {p0} {p1} 1/8 . {p0} {p2} 1/8 . {p0}'
+pm1 = f'{cp4_} 1/8 . {cp0} {cp1} 1/8 . {cp0} {cp1} 1/8 . {cp0} {cp2} 1/8 . {cp0}'
 
 # measure 2 has a lesser pause
-pm2 = f'{p3} 1/8 . {p0} {p1} 1/8 . {p0} {p1} 1/8 . {p0} {p2} 1/8 . {p0}'
+pm2 = f'{cp3} 1/8 . {cp0} {cp1} 1/8 . {cp0} {cp1} 1/8 . {cp0} {cp4} 1/8 . {cp0}'
 
 # measure 3: 2+2 beats
-pm3 = f'*2 {p2} 1/8 . {p0} {p3} 1/8 . {p0} *'
+pm3 = f'*2 {cp2} 1/8 . {cp0} {cp3} 1/8 . {cp0} *'
 
 # measure 8: moving forward, part of longer phrase
-pm8 = f'{p2} 1/8 . {p0} *3 {p1} 1/8 . {p0} *'
+pm8 = f'{cp2} 1/8 . {cp0} *3 {cp1} 1/8 . {cp0} *'
 
 pauses = tempo(f'meas4/4 \
     |1 {pm1} {pm2} {pm3} {pm8} \
@@ -257,13 +259,16 @@ pauses = tempo(f'meas4/4 \
     |33 \
 ')
 
-# slight accel within each beat
-tmeas = tempo('meas4/4 \
+# accel within each beat
+tbeat = tempo('meas4/4 \
     |1 *32 *4 55 1/4 65 * * \
 ')
 
 # accel mid-measure, rit at end
-t1 = ' 45 2/4 75 2/4 40'
+t1 = ' 45 2/4 65 2/4 40'
+
+# more angst
+t2 = ' 60 3/4 70 1/4 50'
 
 # two 2-beat surges
 t3 = '50 1/4 75 1/4 50 1/4 75 1/4 50'
@@ -281,7 +286,7 @@ trit2 = '60 1/1 40'
 t19 = '50 2/4 80 2/4 50'
 
 tphrase = tempo(f'meas4/4 \
-    |1 {t1} {t1} {t3} {trit} \
+    |1 {t1} {t2} {t3} {trit} \
     |5 {t1} {t1} {t7} {t7} \
     |9 {t7} {t7} {t3} {t1} \
     |13 {t3} {t1} \
@@ -321,10 +326,10 @@ def main():
     if nuance:
         ns.vol_adjust_pft(vmeas)
         ns.vol_adjust_pft(vphrase)
-        ns.tempo_adjust_pft(tmeas)
+        ns.tempo_adjust_pft(tbeat)
         ns.tempo_adjust_pft(tphrase)
         ns.tempo_adjust_pft(pauses)
-        ns.roll(33/1, [0, .33333, .777777, 1.5, .1, 2])
+        ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
     #ns.trim(32/1, 35/1)
     #print(ns)
