@@ -4,6 +4,7 @@ from numula.nscore import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 import numula.pianoteq
+import numula.pianoteq_rpc
 
 soprano = n('meas4/4 \
     |1 1/32 \
@@ -164,7 +165,7 @@ bass = n('meas4/4 \
 
 # RH accents when soft
 rha_p = '*4 f 1/32 mf 1/32 _p 1/32 pp 1/32 p 1/32 pp 1/32 mf_ 1/32 mm 1/32 *'
-# when loud
+# when loud.  Should use additive instead?
 rha_f = '*4 _f 1/32 _mf 1/32 _p 1/32 pp 1/32 p 1/32 pp 1/32 mf 1/32 mp 1/32 *'
 
 rh_accents = accents(f'meas4/4 \
@@ -176,17 +177,18 @@ rh_accents = accents(f'meas4/4 \
     |33 \
 ')
 
+# should use additive?
 lh_accents = accents('meas4/4 \
     |1 *32 \
-        *4 mm 1/24 p 1/24 p 1/24 mp 1/8 * \
+        *4 mm 1/24 pp 1/24 pp 1/24 p 1/8 * \
         * \
     |33 \
 ')
 
-v1 = 'mp 3/4 _mf 1/4 mp'
-v2 = 'mp 3/4 mm 1/4 mp'
-v3 = '*2 mp 1/4 mf 1/4 mp *'
-v4 = 'mp 2/4 mf 2/4 mp'
+v1 = '_mp 3/4 mm 1/4 _mp'
+v2 = '[ mp 3/4 mf 1/4 mp'
+v3 = '*2 mp 1/4 f 1/4 mp *'
+v4 = 'mp 2/4 mf_ 2/4 _mp'
 
 vmeas = vol(f'meas4/4 \
     |1 {v1} {v2} {v3} {v4} \
@@ -209,9 +211,11 @@ vphrase = vol('meas4/4 \
 # timing control has 3 layers:
 # pauses
 # tbeat: accelerando within each beat
+#    not sure if this is important, but the idea is
+#    to create a feeling of always surging forward
 # tphrase: tempo at phrase level
 # currently this is common between LH and RH;
-# it might be interesting to decouple at the tmeas level
+# it might be interesting to decouple at the tphrase level
 
 # pause durations
 dt0 = .02
@@ -222,30 +226,43 @@ dt4 = .10
 dt5 = .12
 dt6 = .15
 
-# 'Compound pauses' for pairs of melody notes
-# (octaves in the 1st and 4th 16th of a beat)
-# Each one takes up 1/16
-cp0 = f'{dt0}p 1/32 . p{dt0} 1/32 .'
-cp1 = f'{dt1}p 1/32 . p{dt1} 1/32 .'
-cp2 = f'{dt2}p 1/32 . p{dt2} 1/32 .'
-cp3 = f'{dt3}p 1/32 . p{dt3} 1/32 .'
-cp4 = f'{dt4}p 1/32 . p{dt3} 1/32 .'
-cp4_ = f'{dt4}p{dt5} 1/32 . p{dt3} 1/32 .'
+# pause patterns for the 8 32ths in one beat
+# 0 melody
+# 1 melody octave
+# 2
+# 3
+# 4
+# 5
+# 6 melody
+# 7 melody octave
+
+# Go lightly with pauses, else they affect tempo
+
+# beat-level pauses
+# default: short pauses after melody notes
+pb0 = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
+# phrase start: longer pause on 1st melody note
+pb_start = f'p{dt4} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
+pb_start_short = f'p{dt2} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
+# phrase end: longer pause after last note
+pb_end = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt3} 1/32 .'
+# phrase end with shorter pause at end
+pb_end_short = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt2} 1/32 .'
 
 # measure 1 has a big pause after 1st note
-pm1 = f'{cp4_} 1/8 . {cp0} {cp1} 1/8 . {cp0} {cp1} 1/8 . {cp0} {cp2} 1/8 . {cp0}'
+pm1 = f'{pb_start} {pb0} {pb0} {pb_end}'
 
 # measure 2 has a lesser pause
-pm2 = f'{cp3} 1/8 . {cp0} {cp1} 1/8 . {cp0} {cp1} 1/8 . {cp0} {cp4} 1/8 . {cp0}'
+pm2 = f'{pb0} {pb0} {pb0} {pb_end}'
 
 # measure 3: 2+2 beats
-pm3 = f'*2 {cp2} 1/8 . {cp0} {cp3} 1/8 . {cp0} *'
+pm3 = f'{pb0} {pb_end} {pb0} {pb_end}'
 
 # measure 8: moving forward, part of longer phrase
-pm8 = f'{cp2} 1/8 . {cp0} *3 {cp1} 1/8 . {cp0} *'
+pm8 = f'{pb_start_short} {pb0} {pb0} {pb_end_short}'
 
 pauses = tempo(f'meas4/4 \
-    |1 {pm1} {pm2} {pm3} {pm8} \
+    |1 {pm1} {pm2} {pm3} {pm2} \
     |5 {pm1} {pm2} {pm3} {pm8} \
     |9 *4 {pm8} * \
     |13 {dt2}p *4 {pm8} * \
@@ -268,13 +285,13 @@ tbeat = tempo('meas4/4 \
 t1 = ' 45 2/4 65 2/4 40'
 
 # more angst
-t2 = ' 60 3/4 70 1/4 50'
+t2 = ' 55 3/4 70 50 1/4 40'
 
 # two 2-beat surges
-t3 = '50 1/4 75 1/4 50 1/4 75 1/4 50'
+t3 = '50 1/4 60 1/4 45 1/4 60 1/4 45'
 
 # rit over 1 measure (phrase end)
-trit = 'exp1.0 60 1/1 45 linear'
+trit = 'exp0.5 60 1/1 32 linear'
 
 # accel mid-measure
 t7 = '60 2/4 70 2/4 60'
@@ -300,11 +317,17 @@ tphrase = tempo(f'meas4/4 \
     |35 \
 ')
     
-# LH articulation: pedal each beat
-# use this for RH too
+# RH: pedal dotted 8th and 16th separately
+rh_ped = pedal('meas4/4 \
+    |1 *32 \
+        + *4 3/16 1/16 * \
+        * \
+    |33 \
+')
+# LH: pedal the whole beat
 lh_ped = pedal('meas4/4 \
     |1 *32 \
-        + 1/4 1/4 1/4 1/4 \
+        + *4 1/4 * \
         * \
     |33 \
 ')
@@ -316,7 +339,7 @@ def main():
     if nuance:
         soprano.vol_adjust_pft(rh_accents)
         bass.vol_adjust_pft(lh_accents)
-        soprano.vsustain_pft(lh_ped)
+        soprano.vsustain_pft(rh_ped)
         bass.vsustain_pft(lh_ped)
         
     ns.append_score([
@@ -331,9 +354,13 @@ def main():
         ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
-    #ns.trim(32/1, 35/1)
+    #ns.trim(0, 4/1)
     #print(ns)
-    ns.write_midi('data/chopin_prelude_8.midi')
-    numula.pianoteq.play('data/chopin_prelude_8.midi')
+    fname = 'data/chopin_prelude_8.midi'
+    preset = 'NY Steinway D Classical'
+    ns.write_midi(fname)
+    numula.pianoteq_rpc.loadMidiFile(fname)
+    numula.pianoteq_rpc.midiPlay()
+    #numula.pianoteq.play(fname, preset)
 
 main()

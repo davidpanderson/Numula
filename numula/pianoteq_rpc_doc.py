@@ -1,3 +1,5 @@
+http://localhost:8081/jsonrpc
+----------------
 Pianoteq v8.0.0/20221117 JSON-RPC API Reference
 
 getInfo()

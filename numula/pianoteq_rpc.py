@@ -1,14 +1,15 @@
-# stuff related to remote control follows
+# API for remote control of Pianoteq
 
-import sys, os
+import sys, os, subprocess
 import requests
 import json
+import numula.pianoteq as pianoteq
 
 remote_server = 'localhost:8081'
 
 # run pianoteq as an RPC server
 def run_server():
-    cmd = '"%s" --serve 8081'%(pianoteq_path())
+    cmd = '"%s" --serve 8081'%(pianoteq.pianoteq_path())
     subprocess.Popen(cmd, shell=True)
 
 # perform a jsonrpc call and return its result,
@@ -82,3 +83,9 @@ def midiSeek(t):
 
 def midiStop():
     return rpc('midiStop')
+
+def midiPause():
+    return rpc('midiPause')
+
+def loadPreset(name):
+    return rpc('loadPreset', [name])

@@ -1,11 +1,25 @@
-The piece expresses a turbulent anxiety,
-with a widely varying level of intensity.
+The piece expresses a turbulent anxiety, with a widely varying level of intensity.
 
-The main theme is in theme/repeat/move cadence form
+The Numula rendition should use lots of nuance,
+perhaps erring on the side of over-interpretation,
+to sound as non-mechanical as possible.
+The nuance should change; e.g. m1 and m2 should be noticeably different.
+
+Idea: work on 1 layer at a time; disable other layers.
+order:
+tphrase (phrase timing) and set overall tempo
+pauses
+tbeat
+---
+accents
+vmeas
+vphrase
+---
+articulation?
 
 measure angst   notes
-1       0       lush, languid
-2       1       a bit faster
+1       0       lush, languid, relaxed
+2       1       a bit of anxiety; faster
 3-4     1-0     pretty big rit
 5       1
 6       2       opening up
@@ -26,9 +40,12 @@ measure angst   notes
 
 Less angst: 
     pause on downbeat
+    slower
     gradual rits
 
 More angst:
     rushes forward
     rits concentrated at end (exponential?)
-    stronger swells
+    louder, stronger swells
+
+Note: The main theme is in theme/repeat/move/cadence form
