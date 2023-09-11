@@ -114,7 +114,7 @@ soprano = n('meas4/4 \
     |32 *4 c5+ +c+ g+ b a f+ c+ +c+ * \
     |33 1/2 [c5+ e +c+] 1/4 [b g d] [e+ c+ b] \
     |34 1/4 e5+ 2/1 [f3+ +c+ +a c+ f+ ]\
-').tag('sop')
+').tag('soprano')
 
 # timing in last measure:
 # play all notes as rolled chord
@@ -163,46 +163,54 @@ bass = n('meas4/4 \
 # vmeas: continuous change within measures
 # vphrase: continuous change at 1-8 measure level
 
-# RH accents when soft
-rha_p = '*4 f 1/32 mf 1/32 _p 1/32 pp 1/32 p 1/32 pp 1/32 mf_ 1/32 mm 1/32 *'
-# when loud.  Should use additive instead?
-rha_f = '*4 _f 1/32 _mf 1/32 _p 1/32 pp 1/32 p 1/32 pp 1/32 mf 1/32 mp 1/32 *'
+# RH accents
+rha = '*4 .14 1/32 .1 1/32 .05 1/32 0 1/32 .05 1/32 0 1/32 .1 1/32 .07 1/32 *'
 
 rh_accents = accents(f'meas4/4 \
-    |1 *10 {rha_p} * \
-    |11 *6 {rha_f} * \
-    |17 *4 {rha_p} * \
-    |21 *6 {rha_f} * \
-    |27 *6 {rha_p} * \
+    |1 *32 {rha} * \
     |33 \
 ')
 
-# should use additive?
 lh_accents = accents('meas4/4 \
     |1 *32 \
-        *4 mm 1/24 pp 1/24 pp 1/24 p 1/8 * \
+        *4 .12 1/24 0 1/24 0 1/24 .12 1/8 * \
         * \
     |33 \
 ')
 
-v1 = '_mp 3/4 mm 1/4 _mp'
-v2 = '[ mp 3/4 mf 1/4 mp'
-v3 = '*2 mp 1/4 f 1/4 mp *'
-v4 = 'mp 2/4 mf_ 2/4 _mp'
+# swell to 4th beat
+vm_4_sm = '[ 0 3/4 .07 1/4 0'
+# bigger swell
+vm_4_med = '[ 0 3/4 0.10 1/4 0'
+# even bigger
+vm_4_lg = '[ 0 3/4 0.13 1/4 0'
+# swells to 2nd and 4th beat
+vm_24 = '[ *2 0 1/4 .08 1/4 0 *'
+# swell to 3rd beat
+vm_3 = '[ 0 2/4 .1 2/4 0'
 
 vmeas = vol(f'meas4/4 \
-    |1 {v1} {v2} {v3} {v4} \
-    |5 *28 [ mm 1/1 mm * \
-    |33 *2 mm 1/1 mm * \
+    |1 {vm_4_sm} {vm_4_med} {vm_24} {vm_3} \
+    |5 {vm_4_med} {vm_4_lg} {vm_24} {vm_3} \
+    |9 {vm_3} {vm_3} {vm_24} {vm_3} \
+    |13 {vm_24} {vm_4_med} \
+    |15 *4 {vm_4_med} * \
+    |19 {vm_4_med} {vm_4_lg} {vm_24} {vm_24} \
+    |23 *4 {vm_3} * \
+    |27 *2 {vm_3} {vm_4_med} * \
+    |31 *2 {vm_24} * \
+    |33 *2 [ 0 1/1 0 * \
 ')
 
 vphrase = vol('meas4/4 \
-    |1 pp 8/1 pp \
-    |9 pp 4/1 f 2/1 _ff 2/1 _ff \
+    |1 ppp 8/1 ppp \
+    |9 ppp 4/1 f 2/1 _ff 2/1 _ff \
     |17 [ p 3/1 p \
     |20 p 2/1 ff 1/1 ff \
     |23 ff 4/1 p 2/1 p \
-    |29 [ pp 6/1 pp \
+    |29 [ pp 2/1 pp \
+    |31 exp5.0 pp 1/1 ff exp-5 1/1 pp linear \
+    |33 [ mp 2/1 p \
     |35 \
 ')
 
@@ -242,7 +250,7 @@ dt6 = .15
 # default: short pauses after melody notes
 pb0 = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
 # phrase start: longer pause on 1st melody note
-pb_start = f'p{dt4} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
+pb_start = f'p{dt5} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
 pb_start_short = f'p{dt2} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
 # phrase end: longer pause after last note
 pb_end = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt3} 1/32 .'
@@ -250,10 +258,10 @@ pb_end = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt3} 1/32 .'
 pb_end_short = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt2} 1/32 .'
 
 # measure 1 has a big pause after 1st note
-pm1 = f'{pb_start} {pb0} {pb0} {pb_end}'
+pm1 = f'{pb_start} {pb0} {pb_start_short} {pb_end}'
 
 # measure 2 has a lesser pause
-pm2 = f'{pb0} {pb0} {pb0} {pb_end}'
+pm2 = f'{pb0} {pb0} {pb_start} {pb_end}'
 
 # measure 3: 2+2 beats
 pm3 = f'{pb0} {pb_end} {pb0} {pb_end}'
@@ -272,7 +280,7 @@ pauses = tempo(f'meas4/4 \
     |25 {dt1}p *2 {pm8} * \
     |27 {dt2}p *2 {pm8} * \
     |29 {dt2}p *2 {pm8} * \
-    |31 {pm8} {dt2}p {pm8} \
+    |31 {pm8} {dt4}p {pm8} {dt6}p \
     |33 \
 ')
 
@@ -282,19 +290,19 @@ tbeat = tempo('meas4/4 \
 ')
 
 # accel mid-measure, rit at end
-t1 = ' 45 2/4 65 2/4 40'
+t1 = ' 40 2/4 60 2/4 40'
 
 # more angst
-t2 = ' 55 3/4 70 50 1/4 40'
+t2 = ' 50 3/4 65 50 1/4 40'
 
 # two 2-beat surges
 t3 = '50 1/4 60 1/4 45 1/4 60 1/4 45'
 
 # rit over 1 measure (phrase end)
-trit = 'exp0.5 60 1/1 32 linear'
+trit = 'exp0.5 60 1/1 40 linear'
 
 # accel mid-measure
-t7 = '60 2/4 70 2/4 60'
+t7 = '50 2/4 70 2/4 50'
 
 # bigger rit
 trit2 = '60 1/1 40'
@@ -309,11 +317,11 @@ tphrase = tempo(f'meas4/4 \
     |13 {t3} {t1} \
     |15 {t7} {t1} {t7} {trit2} \
     |19 *3 {t19} * 65 1/1 50 \
-    |23 60 2/1 50 \
-    |25 60 2/1 50 \
+    |23 55 2/1 45 \
+    |25 55 2/1 40 \
     |27 {t1} {trit} {t1} {trit2} \
-    |31 60 1/1 70 1/1 50 \
-    |33 50 2/1 40 \
+    |31 50 1/1 70 60 1/1 45 \
+    |33 40 2/1 30 \
     |35 \
 ')
     
@@ -337,19 +345,18 @@ nuance = True
 def main():
     ns = Score(tempo=90, verbose=False)
     if nuance:
-        soprano.vol_adjust_pft(rh_accents)
-        bass.vol_adjust_pft(lh_accents)
         soprano.vsustain_pft(rh_ped)
         bass.vsustain_pft(lh_ped)
-        
     ns.append_score([
         soprano,
         bass
     ])
     if nuance:
-        ns.vol_adjust_pft(vmeas)
         ns.vol_adjust_pft(vphrase)
-        ns.tempo_adjust_pft(tbeat)
+        ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
+        ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
+        ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
+        #ns.tempo_adjust_pft(tbeat)
         ns.tempo_adjust_pft(tphrase)
         ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])

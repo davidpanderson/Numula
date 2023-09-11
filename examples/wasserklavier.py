@@ -202,7 +202,7 @@ def time_adjust(ns):
 def main():
     ns = make_score()
     if True:
-        print(ns)
+        #print(ns)
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)

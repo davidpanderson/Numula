@@ -3,19 +3,8 @@ The piece expresses a turbulent anxiety, with a widely varying level of intensit
 The Numula rendition should use lots of nuance,
 perhaps erring on the side of over-interpretation,
 to sound as non-mechanical as possible.
-The nuance should change; e.g. m1 and m2 should be noticeably different.
-
-Idea: work on 1 layer at a time; disable other layers.
-order:
-tphrase (phrase timing) and set overall tempo
-pauses
-tbeat
----
-accents
-vmeas
-vphrase
----
-articulation?
+The nuance should constantly change; e.g. measures 1 and 2
+(identical in the score) should be noticeably different.
 
 measure angst   notes
 1       0       lush, languid, relaxed
@@ -47,5 +36,19 @@ More angst:
     rushes forward
     rits concentrated at end (exponential?)
     louder, stronger swells
+
+Idea: work on 1 layer at a time; disable other layers.
+order:
+tphrase (phrase timing) and set overall tempo
+pauses
+tbeat
+---
+accents
+vmeas
+vphrase
+---
+articulation?
+
+Do all this for m1-4 first
 
 Note: The main theme is in theme/repeat/move/cadence form
