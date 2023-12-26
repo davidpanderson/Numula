@@ -139,7 +139,7 @@ bass = n('meas4/4 \
     |18 a4- -c- e- -f ++a- -c- e- -f ++d -f b- -b- ++b -c+ e+ -g+ \
     |19 a4 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ \
     |20 a4 -c+ f+ -f+ ++a -c+ f+ -a ++f -b d -f +e -g+ +d -e \
-    |21 g5 -c+ e -g +f+ -a+ +e -f+ ++a -d+ f+ --a ++b+ -f+ a -b+ \
+    |21 g5 -c+ e -g +f+ -a+ +e -f+ a5 -d+ f+ --a ++b+ -f+ a -b+ \
     |22 *2 f6+ -a b+ -d+ * *2 f6+ -a b+ -d * \
     |23 f6+ -a c+ -c+ ++e -g+ c+ -c+ +c+ -e a -a +a -c+ f+ -f+ \
     |24 e5 -g+ c+ -c+ ++d -f+ a -d +c+ -e a -a ++b -d g -b \
@@ -173,7 +173,7 @@ rh_accents = accents(f'meas4/4 \
 
 lh_accents = accents('meas4/4 \
     |1 *32 \
-        *4 .12 1/24 0 1/24 0 1/24 .12 1/8 * \
+        *4 .14 1/24 0 1/24 0 1/24 .11 1/8 * \
         * \
     |33 \
 ')
@@ -203,13 +203,13 @@ vmeas = vol(f'meas4/4 \
 ')
 
 vphrase = vol('meas4/4 \
-    |1 ppp 8/1 ppp \
-    |9 ppp 4/1 f 2/1 _ff 2/1 _ff \
+    |1 pppp 8/1 pppp \
+    |9 [ pppp 4/1 _f 2/1 f 2/1 f \
     |17 [ p 3/1 p \
-    |20 p 2/1 ff 1/1 ff \
+    |20 p 2/1 f 1/1 ff \
     |23 ff 4/1 p 2/1 p \
     |29 [ pp 2/1 pp \
-    |31 exp5.0 pp 1/1 ff exp-5 1/1 pp linear \
+    |31 exp4.0 pp 1/1 f exp-3.5 1/1 pp linear \
     |33 [ mp 2/1 p \
     |35 \
 ')
@@ -249,6 +249,7 @@ dt6 = .15
 # beat-level pauses
 # default: short pauses after melody notes
 pb0 = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
+#pb0 = '1/4 .'
 # phrase start: longer pause on 1st melody note
 pb_start = f'p{dt5} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
 pb_start_short = f'p{dt2} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
@@ -276,7 +277,7 @@ pauses = tempo(f'meas4/4 \
     |13 {dt2}p *4 {pm8} * \
     |17 {dt3}p *2 {pm8} * \
     |19 {pm1} {pm2} {pm3} {pm8} \
-    |23 {dt3}p {pm8} {dt1}p {pm8} \
+    |23 {dt4}p {pm8} {dt1}p {pm8} \
     |25 {dt1}p *2 {pm8} * \
     |27 {dt2}p *2 {pm8} * \
     |29 {dt2}p *2 {pm8} * \
@@ -296,10 +297,10 @@ t1 = ' 40 2/4 60 2/4 40'
 t2 = ' 50 3/4 65 50 1/4 40'
 
 # two 2-beat surges
-t3 = '50 1/4 60 1/4 45 1/4 60 1/4 45'
+t3 = '50 1/4 55 1/4 45 1/4 55 1/4 45'
 
 # rit over 1 measure (phrase end)
-trit = 'exp0.5 60 1/1 40 linear'
+trit = 'exp0.5 55 1/1 40 linear'
 
 # accel mid-measure
 t7 = '50 2/4 70 2/4 50'
@@ -317,27 +318,12 @@ tphrase = tempo(f'meas4/4 \
     |13 {t3} {t1} \
     |15 {t7} {t1} {t7} {trit2} \
     |19 *3 {t19} * 65 1/1 50 \
-    |23 55 2/1 45 \
+    |23 50 2/1 45 \
     |25 55 2/1 40 \
     |27 {t1} {trit} {t1} {trit2} \
     |31 50 1/1 70 60 1/1 45 \
     |33 40 2/1 30 \
     |35 \
-')
-    
-# RH: pedal dotted 8th and 16th separately
-rh_ped = pedal('meas4/4 \
-    |1 *32 \
-        + *4 3/16 1/16 * \
-        * \
-    |33 \
-')
-# LH: pedal the whole beat
-lh_ped = pedal('meas4/4 \
-    |1 *32 \
-        + *4 1/4 * \
-        * \
-    |33 \
 ')
 
 nuance = True
@@ -345,8 +331,8 @@ nuance = True
 def main():
     ns = Score(tempo=90, verbose=False)
     if nuance:
-        soprano.vsustain_pft(rh_ped)
-        bass.vsustain_pft(lh_ped)
+        soprano.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
+        bass.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
     ns.append_score([
         soprano,
         bass
@@ -356,6 +342,7 @@ def main():
         ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
         ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
         ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
+        ns.vol_scale(.1, .7)
         #ns.tempo_adjust_pft(tbeat)
         ns.tempo_adjust_pft(tphrase)
         ns.tempo_adjust_pft(pauses)

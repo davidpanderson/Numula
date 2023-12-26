@@ -553,7 +553,29 @@ class Score:
             if ped.time > t1-epsilon:
                 continue
         self.pedals = new_pedals
-        
+
+    # change note durations based on pattern
+    #
+    def dur_pattern(self, durs, t0, t1):
+        n = len(durs)
+        i = 0
+        for note in self.notes:
+            if note.time > t1 - epsilon:
+                break
+            if note.time < t0 - epsilon:
+                continue
+            note.dur = durs[i]
+            i += 1
+            if i == n:
+                i = 0
+
+    # scale volumes to given range
+    #
+    def vol_scale(self, v0, v1):
+        d = v1 - v0
+        for note in self.notes:
+            note.vol = v0 + note.vol*d
+            
     from numula.nuance import vol_adjust_pft, vol_adjust, vol_adjust_func
     from numula.nuance import tempo_adjust_pft, sustain, pause_before, pause_after
     from numula.nuance import pause_before_list
