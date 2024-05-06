@@ -13,6 +13,14 @@ class PitchOffs:
         else:
             self.probs = [1]*len(offsets)
 
+major_scale     = [0,2,2,1,2,2,2,1]
+natural_minor   = [0,2,1,2,2,1,2,2]
+harmonic_minor  = [0,2,1,2,2,1,3,1]
+melodic_minor   = [0,2,1,2,2,2,2,1]
+major           = [0,4,7]
+minor           = [0,3,7]
+dim             = [0,3,6,9]
+
 # the combination of a set of pitch offsets and a root pitch
 #
 class PitchSet:
@@ -81,3 +89,10 @@ class PitchSet:
             if self.probs[j]:
                 return j
 
+def pitch_set_distance(ps1, ps2)
+    sum = 0
+    for i in range(12)
+        if ps1.probs[i]==0 continue
+        if ps2.probs[i]==0 continue
+        sum += 1
+    return 12-sum

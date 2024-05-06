@@ -8,10 +8,10 @@ import numula.pianoteq as pianoteq
 def test_pitch():
     maj = PitchOffs([0,4,7])
     cmaj = PitchSet(maj, 60)
-    #print(cmaj.probs)
+    print(cmaj.probs)
     for i in range(10):
         print(cmaj.rnd_uniform(40, 80))
-#test_pitch()
+test_pitch()
 
 def test_curtain():
     maj = PitchOffs([0, 4, 7])
@@ -33,4 +33,4 @@ def test_curtain():
     #times = time_list_random(300, 12)
     ns = curtain(times, pitch_set, pitch_center, pitch_width, True, True)
     pianoteq.play_score(ns)
-test_curtain()
+#test_curtain()
