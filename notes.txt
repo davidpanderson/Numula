@@ -1,0 +1,783 @@
+11/25/21
+
+At this point I have these tools:
+
+1) Music21: Python library;
+    defines a rich data structure for representing scores.
+    These scores can be generated algorithmically,
+    possibly using a compact textual notation,
+    or parsed from files (musicXML or MIDI).
+    They can be manipulated (volume/timing/articulation).
+    They can be aggregated (e.g. chordify).
+    They can be output in various forms (graphic score, test, MIDI)
+
+2) MIDIUtils: Python library for generating MIDI files
+
+3) PianoTeq: play MIDI files with piano sounds, to speakers or .WAV files
+
+--------------
+Some general goals:
+
+1) "Prepared performance" with nuance,
+of an existing piece (e.g. Berio or Bach).
+I think it's best to use Music21 for this.
+Many pieces are available on the web in various formats that Music21 can parse.
+The textual notation makes it easy to enter new pieces.
+
+What I need to write are functions that apply nuance to Stream objects.
+
+Need to find out if Music21 distinguishes between notated time and performed time.
+
+2) Algorithmic composition
+Simple examples can be done directly using MIDIUtils,
+but going forward I think it's better to use Music21.
+- Can produce graphic scores
+- Can use nuance operators as above
+- Can use other Music21 features (pitch sets etc.)
+
+3) Nuance analysis
+If we have a score for a piece (say, MusicXML)
+and the MIDI file for a human performance of the piece,
+we could write a program to correlate the two and extract the nuance
+(e.g. timing variation, horizontal/vertical dynamics, etc.)
+This would be useful for defining nuance primitives, and it would make a good paper.
+
+=====================
+
+text notation
+
+1/4 c4 d e f+ . a- +f+ 1/8 g {c e g}
+
+1/4 or /4: duration of following notes
+
+.: rest
+
+c4: middle C
+
+d: the D closest to previous pitch
+
+f+: F sharp
+
++f: first F above previous pitch
+++f: 2nd F above previous pitch
+
+{c e g}: chord
+
+{c e 1/2 g}: chord, g is half note
+
+1/8 _: back up an eighth
+
+NoteSet
+    maintains current time, last vol, last dur
+    NoteSet ns
+    ns.append(n('a b c'))
+    ns.insert(time, n('a b c'))
+    ns.set_vol(), set_time(), set_dur()
+    ns.get_time()
+
+Nuance:
+    have notion of "current time"
+    time(x): set time
+    dt(x): advane time
+
+timing primitives:
+Notes have
+    "score time" - static
+        use a slop factor for "simultaneous" because of roundoff
+        score duration
+    "performed time": seconds
+        performed duration
+    stages:
+        1) tempo
+            defines a continuous function from score to performed time
+            seg(dt, func, params)
+            func is a function that computes the integral of a tempo function
+            e.g. linear(dt, tempo0, tempo1)(a,b)
+                returns the integral of a line between a and b,
+                where 0 <= a < b <= dt
+            could also have exponential, etc.
+            e.g.:
+                ns.start()
+                tseg(ns, 8/4, linear, [40, 60])
+                tseg(ns, 8/4, linear, [60, 50])
+            segment boundaries may not line up with note times,
+            so some tricky computation is needed
+            one approach:
+                given the NoteSet, make another data structure which
+                    has start and end records, each with a pointer to a Note.
+                    Traverse this, computing performed times.
+                    For start records, fill in Note.perf_time
+                    For end records, fill in Note.perf_duration
+            
+        2) adjustments
+            these change the time of some notes;
+                thay may also add a delay to everything later
+                times are in seconds
+            pause(t, dt, before)
+                pause goes before notes at t
+                    increment start time of notes at t and after
+                    increment duration of notes before t but active at t
+                        (need to scan from start to find these)
+                pause goes after notes at t
+                    lengthen duration of notes starting at t
+                    increments start times of notes after t
+            roll_up(t, offsets, delay)
+                offsets: list of (usually negative) time offsets, low to high
+                dt = range of offsets used
+                if delay:
+                    add dt to all notes t and beyond
+                    add offsets to notes at t
+                else:
+                    add offsets to notes at t
+            roll_down: same, but offsets are high to low
+                agogic accent is a special case (delay top note)
+            adjust_list(offsets, pred)
+                apply list of offsets to note satisfying pred
+                e.g. rubato
+            adjust_notes(offset, pred)
+                add offset to notes satisfying pred
+            random_uniform(min, max, pred)
+                apply random uniform shift
+            random_normal(stddev, max_sigma)
+
+dynamics primitives
+    volume is represented as 1..127
+    adjustments to volume are represented as fractions (0..1), possibly > 1
+    adjusted volumes are pegged at 1 and 127
+        (print when this happens)
+
+    stages:
+        1) set base volume (e.g. crescendos)
+            dyn(dt, v0, v1)
+        2) adjust volume
+            vol_adjust(ns, atten, pred)
+                can use this to voice to top/bottom
+            vol_adjust_func(ns, func, pred)
+                can use this for metric emphases
+
+            v_random_uniform(ns, min, max, pred)
+            v_random_normal(ns, stddev, max_sigma, pred)
+                apply random change
+
+notes on outer:
+    need to sort of simulate the piece to figure out it a note is highest and/or lowest
+    cur_time = 0
+    S = notes active at current time
+    C = notes started at current time
+    C is always a subset of S
+    for each note N
+        if n.time > cur_time+1e-4:
+            is len(C):
+                find min, max of pitches in S
+                for each note in C
+                    if pitch = min, tag as lowest
+                    if pitch = max, tag as highest
+            cur_time = N.time
+            remove notes from S that end <= cur_time
+            C = {N}
+        else:
+            add N to S
+            add N to C
+
+Note selection (for timing/vol adjustment, articulation)
+    Notes have the following attributes:
+        pitch, dur, time, vol
+        tags explicitly assigned
+        highest/lowest
+        number of simultaneous notes
+    note selector: lambda function
+
+articulation
+    dur_abs(dur, pred)
+    dur_rel(factor, pred)
+
+grace notes in text notation
+    1/32 - b 1/4 c
+    parameterize the 1/32?
+        dur(s): look up s and make that current dur
+        note(p): look up p and play note w that pitch
+
+------------
+Measures
+
+for metric emphases, need to know measure offsets
+NoteSet has a member ns.measures: list of measure starts
+NoteSet.add_measure(t)
+NoteSet.add_measures(t, dt, n)
+text notion: 'm' means measure start
+
+Note.measure_offset: time from last measure boundary
+
+metric emphasis:
+    vol_adjust_func() with appropriate func
+metric rubato (e.g. waltz rhythm)
+    as base tempo:
+        allow local tempo adjustments?
+            slow down 2nd beat
+        limited local adjustment
+            specify integral function
+            apply to limited set of notes, starting at given time
+            normalize to that it ends at original time
+            
+    as adjustment:
+        delay notes beyond 2nd beat
+-------------
+Sustain pedal
+
+ns.sustain_pedal(t, dt, level)
+ns.sostenuto_pedal(t, dt, level)
+    apply pedal from t to d+dt at given level (0..1)
+    This is stored in a separate NoteSet.pedal list
+    write_midi adds the appropriate CC commands.
+
+    In the timing logic, add pedal events to the start/end structure.
+    Run the set-tempo logic.
+    This gives the end perf times.
+    start perf time is determined as follows:
+    sustain pedal:
+        start time is the min of the start times
+        of notes with score times in the pedal interal;
+        we need to "catch" all these notes, even if they got moved earlier
+    sostenuto pedal:
+        if a note is active (in score time) at the pedal start,
+        but its perf time is greater than pedal perf start,
+        set pedal perf to that time
+
+Note: in Pianoteq, 0..63 is off.  64..127 is on a little to all the way
+
+Note 2: CC 64 is sustain pedal;
+CC is middle (sostenuto) pedal
+    send this command after all notes of that start time
+
+------------------
+entering large scores
+
+Goal: make it easy to enter and test scores in small pieces
+
+2 approaches:
+
+1) notation: "reset" means return to middle C, 1/4 dur
+    this lets you define separate strings and concatenate them
+
+2) Appending notes:
+    c() returns a NoteSet object
+        cur_time is the duration
+        This leaves the door open for specifying measures and pedal in notation
+
+    NoteSet.append([ns1, ns2,...])
+        append NoteSets starting at cur_time
+        set cur_time to end of longest
+    NoteSet.insert(t, ns)
+        insert NoteSet starting at t
+        doesn't change cur_time
+    NoteSet.insert_note(t, n)
+    NoteSet.append_note(n)
+
+-------------
+Where to announce
+    midi.org: posted 10/13/2022
+    Reddit
+        r/midi posted 11/21 and 10/13/22
+    Facebook
+    Pianoteq message boards
+        https://forum.modartt.com/
+        posted 10/13/22
+    Groupmuse message boards? no
+    Marc, Ron, Monica
+    Gareth
+    David Jaffe?
+    Music 21 email list
+        music21list@googlegroups.com
+        posted 10/13/22
+-----------------
+adjustments in score time
+
+should it be possible to move notes in score time as well as perf time?
+E.g. t_adjust_notes() and t_adjust_pred()
+could have counterparts that change score time and/or duration.
+and roll() too.
+
+With the caution that if you insert score time,
+you need to take that into account everywhere after that.
+
+Need to change measure and pedal times in that case too
+
+Note: we already have duration adjustment in score time.
+
+-----------------
+Kraft:
+
+numula to revolutionize music
+
+pianists don't have conductors
+
+numula as better metronome
+
+graphic expression of nuance
+
+teacher creates "conductor score"
+
+chamber music practice
+
+===============
+4/29/22
+
+new approach to piecewise functions
+
+vol is initially .5
+
+vol_adjust_ptf(
+    ns,
+    selector,
+    start_time,
+    val_linear(pp, p, 30/8),
+    ...
+])
+
+vol_adjust(
+    ns, 
+    selector,
+    factor
+
+vol_adjust_fn(
+    ns.
+    selector,
+    fund
+
+pp, ff etc. are in 0..2
+
+tempo_adjust_ptf(
+    ns,
+    selector= True,
+    start_time = 0,
+    bpm = True,
+    pedal = False,
+    normalize = False
+    [
+        tempo_linear(24/8, [40,50]),
+        tempo_linear(24/8, [50,30]),
+    ]
+)
+
+val_linear and tempo_linear are classes
+
+---------------
+S = score time, P = perf time
+for timing adjustment, the value of a PFT function at score time s
+is dP/dS(s): the rate at which P increases with S.
+Smaller value = faster
+
+------------------
+Numula editor GUI
+X = time
+Y = channels
+top channel shows the score
+    maybe piano roll
+    show note tags
+Each channel is a list of non-overlapping operators
+operator
+    tempo_adjust_pft, pause etc.
+    select operators from list
+    drag and drop to place
+    drag to resize
+    selector function: textual
+PFT operators
+    sequence of segments
+    drag, drop, resize
+    drag to change parameters (y0, y1)
+
+Can copy and paste an operator or a segment
+when paste, can "link" the copy
+(changes to one change all)
+
+Can drag start/end markers
+space bar: play selected interval
+-------------------
+panning
+
+- make a MIDI file with lots of notes
+    of different pitches, same volume
+
+- experiment with panning:
+    mono: sum channels
+    stereo: assume some angle between channels
+
+- use PFTs for angle
+
+making a spatialized multi-voice piece:
+- tag notes with voice names
+- ns.write_midi() takes selector; write voices to separate files
+- pianoteq.midi_to_wav(mono) for each voice
+- use write_pos_file() to write pos file for each voice
+    (with its own PFT)
+- make a zero signal
+- for each voice, use pan_signal() to add panned voice
+===========================
+exponential PFT primitive:
+===========================
+repetition in notation
+
+do it in notate, or using python stuff?
+
+
+maintain a stack of (nleft, start)
+
+maintain a "program counter" i
+
+while i < len(input)
+    token = input[i]
+    if token is *n
+        push (n, i)
+    elif token is *
+        t = top of stack
+        if t.nleft == 0
+            pop stack
+        else
+            t.nleft -= 1
+            i = t.start
+    else
+        output token
+------------
+notate: support
+    _4
+    .4
+    c5+ (or c+5?)
+
+------------------
+textual notation for nuance
+
+vol('*2 *3 f 1/4 pp ] mp 1/4 p [ mp 3/4 pp * *')
+    [, ] indicate closure
+vol('linear *2 *3 pp 1/4 p 3/4 pp * *')
+vol('exp4 *2 *3 pp 1/4 p 3/4 pp * *')
+
+accent('1/8 1.2 1/4 1.2 1/4 1.2 1/8')
+
+tempo('linear 60 8/4 80 p0.1 60 3/4 120 0.2p')
+
+These all return PFTs (lists of primitives)
+which you can catenate etc.
+--------
+PFTs and textual notation for pedal?
+
+you can do virtual sustain in the score notation (+p ... -p)
+but in general it doesn't belong there.
+
+probably should add real pedal to score notation
+
+sustain() does a complete scan of the score,
+    so can't use it a lot
+
+sustain PFT primitives
+    Pedal(dt, value, type)
+        value: 0 = off 1 = on
+        type: sustain, sostenuto, soft
+
+ns.vsustain_pft(pft, pred)
+    traverse score, pft in parallel
+ns.pedal_pft(pft)
+    Don't need to traverse.
+    insert pedal events, re-sort
+    make sure final order is right
+        (do this in write_midi?)
+
+textual notation
+pedal('- 1/4 + 1/8 + 1/4 - 4/4')
+    off for 1/4
+    on for 1/8
+    momentary lift, then on for 1/4
+    off for 4/4
+
+    can use *2, | notation
+----
+textual notation
+'c b d <x> d g'
+means evaluate x
+
+volumes
+pppp    = .01
+pppp_   = .08
+_ppp    = .16
+ppp     = .23
+ppp_    = .30
+_pp     = .38
+pp      = .45
+pp_     = .52
+_p      = .60
+p       = .67
+p_      = .74
+_mp     = .82
+mp      = .89
+mp_     = .96
+mm      = 1
+_mf     = 1.04
+mf      = 1.11
+mf_     = 1.18
+_f      = 1.26
+f       = 1.33
+f_      = 1.40
+_ff     = 1.48
+ff      = 1.55
+ff_     = 1.62
+_fff    = 1.68
+fff     = 1.77
+fff_    = 1.84
+_ffff   = 1.92
+ffff    = 1.99
+
+=====================
+
+It would be good - both for efficiency and generality - to be able to
+create nuanced "sub-scores", and then combine them by either
+overlay or concatenation.
+
+This means that a score must have a notion of end time,
+both score time and perf time:
+where a score starts if we append it to this one.
+In score time this is ns.cur_time, but we need it in perf time too.
+To do this, create an "end marker" class.
+As time adjustments are made, they affect the end marker too.
+
+Also: eliminate the need for "done".
+
+What done() does:
+0) check whether score has duplicate notes
+1) sort notes by score time
+2) set nchord and chord_pos for Notes
+3) initialize perf_time and perf_dur for Notes, based on tempo
+4) same, for pedal
+5) add measure offsets to Notes
+6) set bottom and top tags for Notes
+
+Can eliminate 3,4): initialize these when add to score;
+make tempo a constructor arg
+
+proposal:
+- do the above steps automatically, as needed
+- issue error if user does something out of order
+
+Score.time_sorted, time_sort(), time_sort_clear()
+    time_sort():
+        call from functions that assume notes/pedals are sorted,
+    time_sort_clear():
+        call from functions that could unsort (add note or pedal)
+
+Score.perf_inited, perf_init(), perf_init_clear()
+    initialize perf_time and perf_dur; also check for dup notes
+    perf_init():
+        call from things that reference perf_time,
+        e.g. timing adjustments and write_midi()
+    perf_init_clear():
+        call from things that can change score time or duration
+            add notes
+            virtual sustain pedal
+
+Score.tags_inited, tags_init(), tags_init_clear()
+    things that affect tags
+        top/bottom, measure offset, chord position
+        lambda functions can refer to these
+    tags_init():
+        call from things that use selectors
+    tags_init_clear():
+        call from things that could change tags
+
+Score.clear_flags():
+    do time_sort_clear(), perf_init_clear(), tags_init_clear()
+    call from anything that adds to score
+==============
+nuance in op57: how to structure?
+v0
+    applies to both hands
+    overall volume
+    8-32 measure time scale
+    Schenker middle-ground
+v1
+    applies to both hands
+    volume adjustment
+    1-4 measure time scale
+rhv, lhv
+    volume adjustment per hand
+    1-4 measure time scale
+rha, lha
+    accents per hand
+    volume adjustment
+t0
+    overall tempo
+    time scale: 2+ measures
+t1
+    phrase endings
+        pauses
+        ritardandi
+        time scale 2- measures
+p
+    MIDI sustain pedal (both hands)
+lhp, rhp
+    per-hand virtual sustain pedal
+
+Notes:
+1) it may not always be clear where to put structure, e.g. in v0 or v1
+2) not all are active all the time.
+    Use e.g. "mm 8/2 mm" when not active.
+=================
+tempo_adjust_pft() logic
+
+This works by traversing in parallel
+- the list of events (note and pedal starts/ends)
+- the list of PFT segments
+
+The outer loop is over events E.
+The inner loop scans PFT segments until we find S(E):
+the last segment that affects E, i.e. either:
+- E lies strictly within S
+- E is at the endpoint of S,
+    and the next segment is not a before-Delta
+    (i.e. we skip over before-Deltas)
+
+At that point we compute the integral of the PFT at E.time,
+and the PFT average since the last event,
+and use that to compute E.perf_time
+
+variables:
+PFT:
+    seg_ind         index of current PFT seg
+    seg             that seg
+    seg_start       seg start score time
+    seg_end         seg end time
+    seg_integral    integral of previous segments
+event:
+    prev_time       score time of previous event
+    prev_integral   PFT integral at that time
+    prev_perf       its initial perf time
+    prev_perf_adj   its perf time after this adjustment
+
+Note: we assume before-Deltas precede after-Deltas at a given time.
+We should reorder if needed to make this so.
+===============
+Phrase endings
+params
+    ritardando
+        length
+        depth
+        curvature
+    pauses
+        before
+        after
+
+How to notate?
+
+op57:
+28 36 50 64 76 86 96 112
+118 126 134 142 158 176 206
+212 220 228 242 256 268 278 288
+302
+308 324 326 333 341 353
+
+vol PFTs:
+Closure is checked within a PFT, but not across PFTs.
+Let's used segs closed at both ends.
+This means that when you use several PFTs in a score,
+you have to pay attention to their closure at the start and end.
+
+op57:
+measures 36..107 are analogous to 228..209
+(but 20..35 and 212..227 are different)
+
+----------------
+timing gaps
+these don't fit well into the tempo PFT model
+you can do them with pause_before(connect=False),
+but each one requires a score scan.
+
+proposal:
+"gap PFT": alternating sequence of Delta and Unity segs,
+defining a sequence of pause_before()s with gaps
+-----------------
+Timing jitter
+
+We currently do this by adding a random (uniform or normal)
+offset to note start, and adjusting duration to keep end time the same.
+
+Is this ideal?
+
+Brownian noise?
+-------------
+screen capture
+    Free Cam 8
+    sharex
+video edit:
+    Video Editor (MS)
+    VideoPad
+    movavi video editor (pay)
+-------------
+packaging
+https://packaging.python.org/en/latest/tutorials/packaging-projects/
+
+edit pyproject.toml to increment version
+
+make new dist files:
+rm -rf dist
+python3 -m build
+
+to upload
+python3 -m twine upload --repository testpypi dist/*
+or
+python3 -m twine upload dist/*
+
+user name: __token__
+password: API pwd (long)
+
+(ignore error messages)
+
+to install
+python3 -m pip install --index-url https://test.pypi.org/simple/ --no-deps numula
+or
+python3 -m pip install numula
+
+Windows: packages are in c:/users/davea/appdata/local/programs/python/python39/lib/site_packages
+===================
+variable measure lengths
+
+e.g. helps/rach is 4/4 with a measure of 6/4 in the middle
+currently, you have to have 3 separate shorthand segments.
+
+how about
+    n( '
+    m4/4
+    ... possible fractional measure
+    |1 ...
+    |2 ...
+    |3 m6/4 ...
+    |4 m4/4 ...
+
+impl
+    vars
+        mdur: measure duration
+        prev_t: time at last |m
+        prev_m: measure# at last |m
+        first: true if no |n seen
+        t: current time
+
+    |m:
+        if first
+            prev_t = t
+            prev_m = m
+            first = False
+        else
+            dt = t - prev_t
+            dm = m - prev_m
+            if dm*mdur != dt
+                error
+            prev_t = t
+            prev_m = m
+
+    m*:
+        if not first and t > prev_t
+            error: can't change measure length in middle of measure
+        mdur = *
+=============
+harmonic systems
+=============
+duration patterns
+e.g. RH of chopin prelude
+
+ns.dur_pattern(durs, t0, t1)

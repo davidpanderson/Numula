@@ -1,0 +1,162 @@
+stuff related to algorithmic composition
+
+pitch.py
+    PitchOffs
+        a set of pitch offsets 0..11 and optional weights
+        can represent
+            a scale
+            a chord
+        does order matter?
+
+    Is a 9th chord same as 2nd?
+
+    PitchSet
+        a PitchOffs, plus a root pitch
+        represents the set of all octave offsets
+        of the root pitch plus a pitch offset
+        The probabilities carry over
+        
+        rnd_uniform(lo, hi)
+            random pitch in lo..hi
+                (need not be in the pitch set)
+        rnd_normal(mean, stddev, maxsigma)
+            mean need not be in pitch set
+        next_above(p)
+        next_below(p)
+        contains(p)
+            does PS contain P?
+
+time_list.py
+    lists of times
+
+    time_list_periodic(n,dur)
+        n regularly-spaced times
+    time_list_random(n, dur)
+        random times in 0..dur
+    time_list_random_set(n, lo, hi)
+        n times separated by random(lo..hi)
+    time_list_scale(list, dur)
+        scale list to 0..dur
+    time_list_snap(list, dt)
+        snap to multiples of dt
+
+curtain.py
+    curtain
+        density (notes/sec)
+        pitch set
+        center
+        width
+        (the above are PFTs)
+        pitch: gaussian or uniform
+        whether to allow repeated notes
+
+colorednoise.py
+    1/f noise and brownian noise
+---------------
+ideas
+scales
+    major:          2 2 1 2 2 2 1
+    natural minor:  2 1 2 2 1 2 2
+    harmonic minor: 2 1 2 2 1 3 1
+    melodic minor:  2 1 2 2 2 2 1
+        (ascending)
+harmonic system
+    Given two pitchsets, we can compute their distance
+        (the number of pitches in common).
+    so given a pitchoffs, we can look at the 11 pitchsets
+        and make a graph
+        We can move between pitchsets in a 1/f way:
+        occasional jumps, drifting back to center
+    chord, abstract
+        a subset of a pitchoffs
+        one is designated as root
+    chord, concrete
+    chord voicing
+        inversion
+        spacing
+    chord sequence (abstract, concrete)
+        chord + scale over time
+    voice leading
+
+    motion:
+        circle of fifths
+        thirds
+        stepwise
+
+binary time lists
+    recursive binary subdivision
+    leave as is, or divide into 2
+        or 3?
+    sometimes tie to next note
+
+repetition of patterns
+    in rhythm seq
+    in pitch contour
+    in the combination of the above
+    in harmony
+
+melodies
+    shape: peaks
+    what are parameters?
+
+duets
+    with same or different rhythm
+
+interlocking melodies
+    think of filling in 2-D time/freq space
+
+snippets (like bird songs)
+    trill
+    scale: up, down, up/down, down/up
+    repeated note
+
+streamers
+    a high melody; a stream of notes leads up (cresc) to each melody note
+    or the opposite
+
+waves
+    clouds of low notes surge up and break,
+    producing a short cloud of high notes
+    (like foam retreating)
+
+curtains
+    a 'curtain' of notes
+    timing
+        density (notes/sec): PFT
+        note duration: PFT
+        whether regularly spaced or random (Poisson)
+    pitch
+        distribution
+            center
+            width
+            whether gaussian or uniform
+            pitch selection
+                random
+                    allow repeated notes?
+                cyclic
+        changing pitch sets:
+        chords, scales, (incl. chromatic scale)
+        The transitions can be gradual or abrupt.
+        the transitions can be based on note volume,
+            or note frequency.
+            how to describe?
+        args
+            list of (pitchset, start, PFT)
+        alg
+            foreach note
+                get values of active PFTs
+                if vol based
+                    cycle through PFTs
+                    choose note from that pitchset
+                    vol is PFT value
+                else
+                    choose PFT randomly based on PFT values
+                    use note from that pitchset
+                    vol is fixed
+    examples
+    chord seq could be algorithmic,
+    or taken from a Bach piece
+
+jitter
+    a series of notes, randomly pitch N and N+1.
+    Occasionally, with a rhythm, jumping to a melody
