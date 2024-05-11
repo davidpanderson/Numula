@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-import colorednoise as cn
+import comp.colorednoise as cn
 
 # 1/f noise
 # see https://github.com/felixpatzelt/colorednoise

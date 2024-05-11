@@ -89,10 +89,14 @@ class PitchSet:
             if self.probs[j]:
                 return j
 
-def pitch_set_distance(ps1, ps2)
+# return the number of pitches not common
+#
+def pitch_set_distance(ps1, ps2):
     sum = 0
-    for i in range(12)
-        if ps1.probs[i]==0 continue
-        if ps2.probs[i]==0 continue
+    for i in range(12):
+        if ps1.probs[i]==0:
+            continue
+        if ps2.probs[i]==0:
+            continue
         sum += 1
     return 12-sum
