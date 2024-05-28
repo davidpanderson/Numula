@@ -21,7 +21,7 @@ from numula.notate_score import *
 
 def test1():
     s = 'c (foo d 1/8 _ e foo)'
-    ns = Score()
+    ns = ScoreBasic()
     ns.append_score([n(s)])
     print(ns)
     ns.write_midi('data/test1.midi')
@@ -48,10 +48,9 @@ def test4():
 #test4()
 
 def test_tag():
-    ns = Score([
+    ns = ScoreBasic([
         n(' |300 1/16 [c f a- c] g a- b- c d e f'),
         n(' |300 1/4 f3 1/8 . [c f a- c] *4 [-c e g b- c] * ')
     ], verbose=True)
     print(ns)
-#test_tag()
-        
+test_tag()

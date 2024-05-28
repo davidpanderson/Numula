@@ -1,5 +1,5 @@
 # This file is part of Numula
-# Copyright (C) 2022 David P. Anderson
+# Copyright (C) 2024 David P. Anderson
 #
 # Numula is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License
@@ -19,6 +19,7 @@
 # see https://github.com/davidpanderson/Numula/wiki/notate.py
 
 import copy
+import numula.nuance as nuance
 import numula.nscore as nscore
 from numula.notate import *
 
@@ -168,7 +169,7 @@ def n(s, **kwargs):
     s = s.replace(']', ' ] ')
     s = s.replace('<', ' < ')
     s = s.replace('>', ' > ')
-    ns = nscore.Score()
+    ns = nuance.Score()
     cur_pitch = 60
     in_chord = False
         # we're in a [ ... ] construct

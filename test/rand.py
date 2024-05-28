@@ -19,7 +19,7 @@
 from numula.nscore import *
 import random
 
-ns = Score()
+ns = ScoreBasic()
 for i in range(200):
     pitch = random.randrange(40, 80)
     time = random.uniform(0, 10)

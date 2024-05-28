@@ -1,6 +1,6 @@
 # Robert Helps: Hommage a Ravel
 
-from numula.nscore import *
+from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 import numula.pianoteq

@@ -20,7 +20,7 @@ import random, numpy, math
 import numula.nscore as nscore
 
 def normal_time():
-    ns = nscore.Score()
+    ns = nscore.ScoreBasic()
     z = []
     min = 0
     for i in range(400):

@@ -1,8 +1,7 @@
 # Beethoven sonata op 57, 3rd mvt
 
-from numula.nscore import *
-from numula.notate_score import *
 from numula.nuance import *
+from numula.notate_score import *
 from numula.notate_nuance import *
 from numula.vol_name import *
 import numula.pianoteq

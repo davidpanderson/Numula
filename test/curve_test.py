@@ -25,7 +25,7 @@ def draw_curve(curvature, y0, y1, dt):
 #draw_curve(5, 1, 4, 10)
    
 def exp_tempo(curvature):
-    ns = nscore.Score(tempo=30)
+    ns = nuance.Score(tempo=30)
     for i in range(64):
         p = 60 + (i*7)%12
         ns.insert_note(nscore.Note(i/64, 1/64, p, .5))
@@ -48,7 +48,7 @@ exp_tempo(0)
 #exp_tempo(5)
 
 def exp_vol(curvature):
-    ns = nscore.Score(tempo=30)
+    ns = nuance.Score(tempo=30)
     for i in range(64):
         p = 60 + (i*7)%12
         ns.insert_note(note.Note(i/64, 1/64, p, .5))

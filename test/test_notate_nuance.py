@@ -37,8 +37,8 @@ def test3():
     print(*x, sep='\n')
     ns.tempo_adjust_pft(x)
     print(ns)
-    pianoteq.play_score(ns)
-#test3()
+    #pianoteq.play_score(ns)
+test3()
 
 def test_ped():
     ns = Score()
@@ -83,4 +83,4 @@ def test5():
     ns.tempo_adjust_pft(v, debug=True)
     print(ns)
     #pianoteq.play_score(ns)
-test5()
+#test5()

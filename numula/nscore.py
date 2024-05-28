@@ -82,7 +82,9 @@ epsilon = 1e-5    # slop factor for time round-off
 event_kind_note = 0
 event_kind_pedal = 1
 
-class Score:
+# nuance functions are added in Score (inherited)
+
+class ScoreBasic:
     def __init__(self, scores=[], tempo=60, verbose=False):
         self.notes = []
         self.cur_time = 0
@@ -482,7 +484,7 @@ class Score:
         for note in self.notes:
             if note.time > cur_time + epsilon:
                 if len(starting):
-                    Score.flag_outer_aux(active, starting)
+                    ScoreBasic.flag_outer_aux(active, starting)
                 cur_time = note.time
                 new_active = [note]
                 for n in active:
@@ -493,7 +495,7 @@ class Score:
             else:
                 active.append(note)
                 starting.append(note)
-        Score.flag_outer_aux(active, starting)
+        ScoreBasic.flag_outer_aux(active, starting)
 
     # Adjust performance time of pedal events so that they do the right thing
     # even if note start times have been adjusted.
@@ -576,17 +578,6 @@ class Score:
         for note in self.notes:
             note.vol = v0 + note.vol*d
             
-    from numula.nuance import vol_adjust_pft, vol_adjust, vol_adjust_func
-    from numula.nuance import tempo_adjust_pft, sustain, pause_before, pause_after
-    from numula.nuance import pause_before_list
-    from numula.nuance import roll, t_adjust_list, t_adjust_notes, t_adjust_func
-    from numula.nuance import t_random_uniform, t_random_normal
-    from numula.nuance import v_random_uniform, v_random_normal
-    from numula.nuance import score_dur_abs, score_dur_rel, score_dur_func
-    from numula.nuance import perf_dur_abs, perf_dur_rel, perf_dur_func, perf_dur_pft
-    from numula.nuance import get_pos_array
-    from numula.nuance import vsustain_pft, pedal_pft, time_shift_pft
-
 # end of Score
 
 # represents the start or end of a note or pedal application

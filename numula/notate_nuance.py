@@ -1,5 +1,5 @@
 # This file is part of Numula
-# Copyright (C) 2023 David P. Anderson
+# Copyright (C) 2024 David P. Anderson
 #
 # Numula is free software; you can redistribute it and/or modify it
 # under the terms of the GNU Lesser General Public License
