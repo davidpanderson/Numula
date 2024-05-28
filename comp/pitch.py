@@ -13,18 +13,23 @@ class PitchOffs:
         else:
             self.probs = [1]*len(offsets)
 
-major_scale     = [0,2,2,1,2,2,2,1]
-natural_minor   = [0,2,1,2,2,1,2,2]
-harmonic_minor  = [0,2,1,2,2,1,3,1]
-melodic_minor   = [0,2,1,2,2,2,2,1]
-major           = [0,4,7]
-minor           = [0,3,7]
-dim             = [0,3,6,9]
+major_scale     = [0,2,4,5,7,9,11]
+natural_minor   = [0,2,3,5,7,8,10]
+harmonic_minor  = [0,2,3,5,7,8,11]
+melodic_minor   = [0,2,3,5,7,9,11]
+major_triad     = [0,4,7]
+minor_triad     = [0,3,7]
+dim_chord       = [0,3,6,9]
+chromatic       = [0,1,2,3,4,5,6,7,8,9,10,11]
+
+# weights that emphasize root/3rd/5th of 7-note scales
+triad_weights = [1,.5,.8,5,.85,.5]
 
 # the combination of a set of pitch offsets and a root pitch
 #
 class PitchSet:
-    def __init__(self, poffs, root):
+    def __init__(self, poffs, root, name=''):
+        self.name = name
         # make an array 0..127 of probabilities
         self.probs = [0]*128
         for i in range(128):
@@ -70,24 +75,26 @@ class PitchSet:
                 if y > x:
                     return i
         return -1
-    
-    # return the pitch in the set above the given pitch
-    #
-    def next_above(self, p):
-        for i in range(1,127):
-            j = p+i
-            if j>127:
-                return -1
-            if self.probs[j]:
-                return j
 
-    def next_below(self, p):
-        for i in range(1, 127):
-            j = p-i
-            if j<0:
-                return -1
-            if self.probs[j]:
-                return j
+    # return next pitch above/below a given pitch
+    # doesn't take probabilities into account
+    #
+    def gt(self, p):
+        i = p+1
+        while True:
+            if i > 127: return 0
+            if self.probs[i]: return i
+            i += 1
+    def ge(self, p):
+        return self.gt(p-1)
+    def lt(self, p):
+        i = p-1
+        while True:
+            if i < 1: return 0;
+            if self.probs[i]: return i
+            i -= 1
+    def le(self, p):
+        return self.lt(i+1)
 
 # return the number of pitches not common
 #

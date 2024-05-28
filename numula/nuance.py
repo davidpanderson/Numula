@@ -240,6 +240,8 @@ class PFTValue:
         self.ended = False
 
     def value(self, t):
+        if self.ended:
+            return self.final_value
         dt = t - self.prev_dur
         while True:
             seg = self.pft[self.ind]

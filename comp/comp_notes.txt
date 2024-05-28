@@ -6,9 +6,7 @@ pitch.py
         can represent
             a scale
             a chord
-        does order matter?
-
-    Is a 9th chord same as 2nd?
+        unordered
 
     PitchSet
         a PitchOffs, plus a root pitch
@@ -19,15 +17,38 @@ pitch.py
         rnd_uniform(lo, hi)
             random pitch in lo..hi
                 (need not be in the pitch set)
-        rnd_normal(mean, stddev, maxsigma)
-            mean need not be in pitch set
-        next_above(p)
-        next_below(p)
+                if there are none, next_above(lo)
+        next_gt(p) next pitch > p
+        next_ge(p) next pitch >= p
+        next_lt(p)
+        next_le(p)
         contains(p)
             does PS contain P?
 
 time_list.py
-    lists of times
+    a list of times
+    density:
+        avg notes per second (PFT)
+    mode
+        periodic
+            meaning? say goes from 0 to 1 over 10 sec
+            integrate, says we should have 5 notes
+            Keep it simple:
+            don't allow zero (or small) values
+            first note at 0
+            t = 0
+            loop
+                x = pftval(t)
+                t += 1/x
+        exponential (poisson)
+            meaning?
+            similar:
+            t=0
+            loop
+                x = pftval(t)
+                t += exp(-x)
+
+    should be an iterator?
 
     time_list_periodic(n,dur)
         n regularly-spaced times
@@ -40,15 +61,52 @@ time_list.py
     time_list_snap(list, dt)
         snap to multiples of dt
 
-curtain.py
-    curtain
-        density (notes/sec)
+cloud.py
+    a 'cloud' of notes,
+    with harmony that can change over time
+
+    harmony shape:
         pitch set
+        weight PFT
+        start time
+
+    cloud params:
+        time_list
+        a list of harmony shapes:
+            used to choose a pitch set for a note at time t:
+            choose randomly, given weights of harmony shapes active at t
         center
+            PFT
         width
-        (the above are PFTs)
-        pitch: gaussian or uniform
-        whether to allow repeated notes
+            PFT
+        mode
+            random
+            cyclic(n)
+            up (same as cyclic(1))
+            down (same as cyclic(-1))
+        no_repeat
+    alg:
+        last = center
+        for each time t
+            get lo, hi from PFTs
+            pick a harmony shape S
+        switch mode
+            random:
+                i = S.random(lo, hi)
+                if no_repeat && n == last
+                    i = S.gt(n)
+            up:
+                i = S.gt(last)
+                if i > hi
+                    i = S.gt(lo)
+            down: similar
+            cyclic:
+                i = last + n
+                if i > hi
+                    i -= width
+                if i < lo
+                    i += width
+                i = S.ge(i)
 
 colorednoise.py
     1/f noise and brownian noise

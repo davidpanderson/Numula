@@ -65,14 +65,15 @@ INIT = 0
 GOT_V0 = 1
 GOT_DUR = 2
 GOT_V1 = 3
-GOT_LB = 4
-GOT_RB = 5
 
-# continuous volume change
+# piecewise continuous volume change
 # e.g.: 'linear *2 f 1/4 pp ] mp 2/4 p *'
 # means: go from f to pp over 1/4 (closed at end)
 # then go from mp to p over 2/4.
 # Do this twice.
+#
+# Note: this can be used to define PFT for other purposes.
+# maybe should factor.
 
 def vol(s):
     items = s.split()
@@ -81,8 +82,8 @@ def vol(s):
     state = INIT
     pft = []
     last_seg = None
-    got_rb = False
-    got_lb = False
+    got_rb = False      # got left bracket [
+    got_lb = False      # for right bracket ]
     segtype = SEGTYPE_LINEAR
     dt = 0
     for i in range(len(items)):
