@@ -18,6 +18,7 @@
 # see https://github.com/davidpanderson/Numula/wiki/nscore.py
 
 import numula.MidiFile
+from numula.constants import *
 
 class Note:
     def __init__(self, time, dur, pitch, vol, tags=[]):
@@ -76,9 +77,6 @@ class Measure:
     def __str__(self):
         return 'measure: %.4f-%.4f'%(self.time, self.time+self.dur)
         
-epsilon = 1e-5    # slop factor for time round-off
-    # don't compare times for equality
-    
 event_kind_note = 0
 event_kind_pedal = 1
 
