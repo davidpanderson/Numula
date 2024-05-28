@@ -124,6 +124,14 @@ class Score(ScoreBasic):
 
 # ------------------- Timing ------------------------
 
+    # perf time is score time * 240/tempo
+    # so the integral of the PFT is scaled by this.
+    # If we want to add a pause (in seconds) to the integral
+    # we need to undo this scaling first.
+    #
+    def dt_to_integral(self, dt):
+        return dt*self.tempo/240
+        
     # adjust the timing of selected notes and pedal events.
     # pft is a tempo function, which can contain segments (such as Linear)
     # and Dirac deltas.
@@ -167,8 +175,13 @@ class Score(ScoreBasic):
 
         scale_factor = 1
         if normalize:
-            scale_factor = 1/pft_avg(pft)
-            if debug: print('scale factor: ', scale_factor)
+            # the PFT consists of segments (tempo functions) and Delays.
+            # To compute the scale factor we have to compute
+            # the total effect of both.
+            pftd = pft_dur(pft)
+            delay = pft_delay(pft)
+            y = pftd*pft_avg(pft) + self.dt_to_integral(delay)
+            scale_factor = pftd/y
 
         # append infinite unity segment
         # needed to handle events that lie beyond PFT domain
@@ -191,14 +204,6 @@ class Score(ScoreBasic):
         prev_perf_adj = 0   # its adjusted perf time
         prev_integral = 0   # integral of PFT at that point
 
-        # perf time is score time * 240/tempo
-        # so the integral of the PFT is scaled by this.
-        # If we want to add a pause (in seconds) to the integral
-        # we need to undo this scaling first.
-        #
-        def dt_to_integral(dt):
-            return dt*self.tempo/240
-        
         # add the current PFT segment's integral to seg_integral
         # and advance to the next segment
         # 
@@ -206,7 +211,7 @@ class Score(ScoreBasic):
             nonlocal seg_start, seg_integral, seg_ind, seg, seg_end
             seg_start += seg.dt
             if seg.dt == 0:
-                si = dt_to_integral(seg.value)
+                si = self.dt_to_integral(seg.value)
             else:
                 si = seg.integral_total()
             seg_integral += si
@@ -273,6 +278,12 @@ class Score(ScoreBasic):
             #
             if event.time < t0-epsilon:
                 continue
+
+            # if the time adjustment is normalized,
+            # by definition everything after it is unaffected
+            #
+            if normalize and event.time > t0+pftd-epsilon:
+                break
 
             if debug:
                 print('event: time %f perf time %f prev_time %f'%(

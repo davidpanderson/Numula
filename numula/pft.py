@@ -40,6 +40,8 @@ class Linear:
         return t*(self.y0+self.val(t))/2
     def integral_total(self):
         return self.dt*(self.y0+self.y1)/2
+    def delay(self):
+        return 0
     # convert from tempo function in BPM (60-centered)
     # to 1-centered inverse tempo function
     def bpm(self):
@@ -129,6 +131,8 @@ class ExpCurve:
         if self.linear:
             return self.dt*(self.y0+self.y1)/2
         return self.integral(self.dt)
+    def delay(self):
+        return 0
     def bpm(self):
         self.y0 = 60/self.y0
         self.y1 = 60/self.y1
@@ -149,6 +153,8 @@ class Delta:
     def bpm(self):
         return
     def integral_total(self):
+        return 0
+    def delay(self):
         return self.value
 
 # a pedal PFT is a list of these.
@@ -222,6 +228,13 @@ def pft_avg(pft):
     for seg in pft:
         sum += seg.integral_total()
     return sum/pft_dur(pft)
+
+# total delay in tempo PFT
+def pft_delay(pft):
+    sum = 0
+    for seg in pft:
+        sum += seg.delay()
+    return sum
 
 # convert tempo PFT from BPM units
 def pft_bpm(pft):

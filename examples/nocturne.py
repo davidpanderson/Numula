@@ -17,23 +17,22 @@
 # example of using tempo_adjust_pft() for rubato.
 # a few measures from Chopin's Nocturne no 1
 
-import numula.nscore as nscore
-import numula.notate_score as notate_score
-import numula.pianoteq as pianoteq
+from numula.notate_score import *
 from numula.nuance import *
+import numula.pianoteq as pianoteq
 
-lh = notate_score.n('1/8 --b- +f +d- b- +f -f -b- +f +d- b- +f -f \
+lh = n('1/8 --b- +f +d- b- +f -f -b- +f +d- b- +f -f \
     -b- +f +d- b- +f -f -b- +f +e- -a +f -f \
     -b- +f +d- b- +f -f \
-', ['lh'])
+').tag('lh')
 
-rh = notate_score.n('2/4 ++d- 1/4 b- 3/44 +b- c d- -a b- a g+ a c b- g- \
+rh = n('2/4 ++d- 1/4 b- 3/44 +b- c d- -a b- a g+ a c b- g- \
     f g- e f b- (port a a- g g- f e e- d d- c d- c b port) c f e e- \
     2/4 d- 1/4 b-\
-', ['rh'])
+').tag('rh')
 
 def main():
-    ns = nscore.Score([lh, rh])
+    ns = Score([lh, rh])
 
     for i in range(5):
         ns.sustain(i*3/4, (i+1)*3/4, lambda n: 'lh' in n.tags)
@@ -51,8 +50,9 @@ def main():
             Linear(110, 80, 7/4)
         ]
     )
-
     # timing in RH
+
+    print(ns);
     ns.tempo_adjust_pft(
         [
             Linear(40, 50, 2/4),
@@ -60,14 +60,15 @@ def main():
             Delta(.15),
             Linear(30, 50, 3/4),
             Linear(50, 30, 2/4),
-            Delta(.3, False)
-        ], 3/4, normalize=True, pred=lambda n: 'rh' in n.tags
+            Delta(.1, after=False)
+        ], 3/4, normalize=True, pred=lambda n: 'rh' in n.tags, debug=False
     )
 
-    # portamento in RH
-    ns.perf_dur_rel(.5, lambda n: 'port' in n.tags)
-
     print(ns)
+
+    # portamento in RH
+    #ns.perf_dur_rel(.5, lambda n: 'port' in n.tags)
+
     ns.write_midi('data/nocturne.midi')
     pianoteq.play('data/nocturne.midi')
 

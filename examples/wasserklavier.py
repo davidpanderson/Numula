@@ -3,7 +3,6 @@
 # Copyright (C) 2022 David P. Anderson
 
 import numpy as np
-from numula.nscore import *
 from numula.notate_score import *
 from numula.nuance import *
 from numula.notate_nuance import *
