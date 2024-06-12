@@ -278,6 +278,7 @@ def show_pft_vals(pft, dt):
         last = v
         t += dt
 
+# same, but show integral
 def show_pft_ints(pft, dt):
     for seg in pft:
         print(seg)

@@ -320,7 +320,7 @@ class Score(ScoreBasic):
                     if debug:
                         print('   Handling pause-before at start of PFT');
                     event.perf_time += seg.value
-                    prev_integral = dt_to_integral(seg.value)
+                    prev_integral = self.dt_to_integral(seg.value)
                     advance_seg() 
                 else:
                     prev_integral = 0
