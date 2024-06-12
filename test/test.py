@@ -81,3 +81,13 @@ def pause_test():
 def pedal_test():
     x = pedal('- 1/4 + 1/8 + 1/4 - 4/4')
     print(*x, sep='\n')
+
+# character input test
+from readchar import readkey, readchar, key
+def input_test():
+    while True:
+        x = readkey()
+        print('got ', x)
+
+input_test()
+    

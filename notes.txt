@@ -781,3 +781,28 @@ duration patterns
 e.g. RH of chopin prelude
 
 ns.dur_pattern(durs, t0, t1)
+-----------------
+parameter adjustment with immediate feedback
+
+Goal: change one or more parameters,
+hear the result immediately, no typing
+
+e.g.
+map variables to keys
+define start/end points
+select a variable
+use up/down arraws to change
+press space to play
+-------------------
+versioning
+
+problem: you have something good but not perfect.
+You try to improve it but you make it worse.
+How to revert?
+
+Idea: each piece has a tree of versions.
+Leaf nodes are mutable; others are not.
+Commands to:
+- go to a version
+- make a new version
+- delete subtree

@@ -231,7 +231,7 @@ class Score(ScoreBasic):
             if debug:
                 print('    use_seg(): dt', seg.dt)
             if seg.dt == 0:
-                si = dt_to_integral(seg.value)
+                si = self.dt_to_integral(seg.value)
             else:
                 si = seg.integral(event.time - seg_start)
             i = seg_integral + si
