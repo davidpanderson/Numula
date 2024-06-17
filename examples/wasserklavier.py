@@ -2,6 +2,27 @@
 # see https://github.com/davidpanderson/Numula/wiki/Example:-wasserklavier
 # Copyright (C) 2022 David P. Anderson
 
+# tags
+# lh, rh
+# 'line1'...'line6'
+# 'more' and 'less'
+
+# nuance structure
+# timing
+#   1) a tempo PFT that applies to everything
+#       todo: add measure checks
+#   2) functions ta1...ta6 that do note-level adjustments using
+#       roll() and pause_after()
+#       todo: use PFT for pauses
+#
+# volume
+#   1) a volume PFT that applies to everything
+#       todo: add measure checks
+#   2) vol_adjust()s (multiplicative) for
+#       'more', 'less'
+#       voice to top/bottom
+#       metric accents
+
 import numpy as np
 from numula.notate_score import *
 from numula.nuance import *
@@ -9,7 +30,8 @@ from numula.notate_nuance import *
 from numula.vol_name import *
 import numula.pianoteq
 
-# create the score (notes and measures)
+# create the score
+# todo: use absolute pitches here and there
 #
 def make_score():
     rh1 = n('3/16 .  ++d- 2/8 c 1/8 +c \
@@ -81,6 +103,9 @@ def make_score():
     ns.append_score([rh4, lh4], 'line4')
     ns.append_score([rh5, lh5], 'line5')
     ns.append_score([rh6, lh6], 'line6')
+
+    # add measures (for metric accent)
+    #
     for i in range(5):
         ns.append_measure(6/8, '6/8')
     for i in range(5):
@@ -93,7 +118,7 @@ def make_score():
         ns.append_measure(3/4, '3/4')
     return ns
 
-#  volume
+#  volume nuance
 
 def set_vol(ns):
     ns.vol_adjust_pft(
@@ -122,7 +147,7 @@ def set_vol(ns):
     ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
     ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1, 2])
 
-#  timing
+#  timing nuance
 
 def set_tempo(ns):
     ns.tempo_adjust_pft(
