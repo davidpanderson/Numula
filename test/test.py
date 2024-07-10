@@ -92,5 +92,15 @@ def input_test():
         x = readkey()
         print('got ', x)
 
-input_test()
+#input_test()
+
+def global_test():
+    globals()['foo'] = 'bar'
+
+def gtest():
+    global_test()
+
+gtest()
+print(globals())
+
     
