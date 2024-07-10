@@ -83,6 +83,9 @@ def pedal_test():
     print(*x, sep='\n')
 
 # character input test
+# Note: this doesn't work when run from Idle.
+# You need to run it from cmd or powershell: python.exe test.py
+#
 from readchar import readkey, readchar, key
 def input_test():
     while True:

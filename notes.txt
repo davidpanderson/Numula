@@ -784,6 +784,18 @@ ns.dur_pattern(durs, t0, t1)
 -----------------
 parameter adjustment with immediate feedback
 
+Generally, there are 3 aspects of nuance:
+
+1) the structure: the set of PFTs,
+    their intended time scales,
+    and the voices they apply to
+2) the timing of the PFTs: e.g. in
+    pp 1/2 ff 1/4 f 1/3 pp
+    the 1/2, 1/4, and 1/4
+3) the parameters (pp, ff etc.)
+
+(I'm not sure we can improve 1 and 2 without a GUI.)
+
 Goal: change one or more parameters,
 hear the result immediately, no typing
 
@@ -793,6 +805,45 @@ define start/end points
 select a variable
 use up/down arraws to change
 press space to play
+
+Note: getting keystrokes only works for program run from cmd
+
+py numsh.py prelude.py
+:start 1 [score time]
+:dur 1
+:var x  make x current var
+:vars   show list of vars
+<space> plays from start to end
+up/down arrow: change value of current var
+:q      write values to values file and exit
+
+How would this work?
+    in the piece: use
+        set('x', val, inc) to define vars you might want to adjust
+            if x is not already defined, set to x
+            and set vals['x'] = val
+    numsh:
+        maintain dict of name/val pairs
+        read values file if present
+        read the piece into memory
+        run program with exec()
+            this gets initial vals for vars
+        show values
+        arrows: change value of current var in vals
+            set dirty flag
+        space:
+            if dirty
+                rerun program
+                tell pianoteq to load file
+            tell pianoteq to play
+            sleep for dur
+
+timing
+    when program executes, it creates an array
+        [score time, perf time]
+    when you change start or dur, it scans this for
+    the earlier and latest perf times.
+
 -------------------
 versioning
 

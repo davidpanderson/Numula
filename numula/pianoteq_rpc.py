@@ -5,7 +5,7 @@ import requests
 import json
 import numula.pianoteq as pianoteq
 
-remote_server = 'localhost:8081'
+remote_server = '127.0.0.1:8081'
 
 # run pianoteq as an RPC server
 def run_server():
