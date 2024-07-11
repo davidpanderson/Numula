@@ -49,9 +49,9 @@ def adjust(var, up):
         if val < x['lo']:
             val = x['lo']
     nshl.set(var, val)
-    print(var, ': ',val)
+    print('%s: %f'%(var ,val))
 
-def main():
+def nsh_main():
     if len(sys.argv) != 2:
         raise Exception('usage: nsh prog')
     prog = sys.argv[1]
@@ -95,7 +95,6 @@ def main():
                     print('no adjustable variable '+var)
                     continue
                 cur_var = var
-                print('new var')
             elif c == 's':
                 show(cur_var, start, dur)
             elif c == 't':
@@ -107,18 +106,14 @@ def main():
                 dur = float(x[2])
             elif c == 'w':
                 write_vars(prog_vars)
+            else:
+                print('unrecognized command: %s'%cmd)
         elif x == readchar.key.UP:
             print('up arrow')
-            if cur_var is None:
-                print('no var')
-                continue
             adjust(cur_var, True)
             dirty = True
         elif x == readchar.key.DOWN:
             print('down arrow')
-            if cur_var is None:
-                print('no var')
-                continue
             adjust(cur_var, False)
             dirty = True
         elif x == ' ':
@@ -131,4 +126,4 @@ def main():
             numula.pianoteq_rpc.midiSeek(0)
             numula.pianoteq_rpc.midiPlay()
 
-main()
+nsh_main()
