@@ -53,6 +53,8 @@ def adjust(var, up):
 
 def nsh_main():
     global ns
+    global __name__
+    __name__ = 'foo'
     if len(sys.argv) != 2:
         raise Exception('usage: nsh prog')
     prog = sys.argv[1]
@@ -65,6 +67,7 @@ def nsh_main():
     with open(prog_py) as f:
         prog_source = f.read()
     exec(prog_source, globals())
+    ns = main()
     try:
         nshl.vars
     except:
@@ -72,11 +75,6 @@ def nsh_main():
     for var in nshl.vars:
         cur_var = var
         break
-
-    try:
-        ns
-    except:
-        raise Exception('no score')
 
     start = 0
     dur = 1
@@ -110,11 +108,9 @@ def nsh_main():
             else:
                 print('unrecognized command: %s'%cmd)
         elif x == readchar.key.UP:
-            print('up arrow')
             adjust(cur_var, True)
             dirty = True
         elif x == readchar.key.DOWN:
-            print('down arrow')
             adjust(cur_var, False)
             dirty = True
         elif x == ' ':

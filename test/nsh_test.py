@@ -15,7 +15,7 @@ def main():
     )
     return ns
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     import numula.pianoteq
     ns = main()
     fname = 'data/nsh_test.midi'
