@@ -15,5 +15,9 @@ def main():
     )
     return ns
 
-ns = main()
-print(ns)
+if __name__ == "__main__":
+    import numula.pianoteq
+    ns = main()
+    fname = 'data/nsh_test.midi'
+    ns.write_midi(fname)
+    numula.pianoteq.play(fname)

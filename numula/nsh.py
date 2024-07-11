@@ -52,6 +52,7 @@ def adjust(var, up):
     print('%s: %f'%(var ,val))
 
 def nsh_main():
+    global ns
     if len(sys.argv) != 2:
         raise Exception('usage: nsh prog')
     prog = sys.argv[1]
@@ -119,6 +120,8 @@ def nsh_main():
         elif x == ' ':
             if dirty:
                 exec(prog_source)
+                ns = main()
+                print(ns)
                 ns.trim(start, start+dur)
                 ns.write_midi(prog_midi)
                 numula.pianoteq_rpc.loadMidiFile(prog_midi)
