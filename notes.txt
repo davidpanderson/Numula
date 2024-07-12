@@ -806,37 +806,40 @@ select a variable
 use up/down arraws to change
 press space to play
 
-Note: getting keystrokes only works for program run from cmd
+Note: Win: getting keystrokes doesn't work for program run from IDLE.
+Only from cmd or powershell.
 
-py numsh.py prelude.py
+py nsh.py prelude.py
 :start 1 [score time]
 :dur 1
 :var x  make x current var
 :vars   show list of vars
 <space> plays from start to end
 up/down arrow: change value of current var
-:q      write values to values file and exit
+:w      write values to prelude.vals
 
 How would this work?
     in the piece: use
-        set('x', val, inc) to define vars you might want to adjust
+        nvar('x', val, inc) to define vars you might want to adjust
             if x is not already defined, set to x
             and set vals['x'] = val
-    numsh:
+    nsh:
         maintain dict of name/val pairs
-        read values file if present
-        read the piece into memory
-        run program with exec()
-            this gets initial vals for vars
-        show values
-        arrows: change value of current var in vals
-            set dirty flag
-        space:
-            if dirty
-                rerun program
-                tell pianoteq to load file
-            tell pianoteq to play
-            sleep for dur
+        init:
+            read values file if present
+            read the piece into memory
+            run program with exec()
+                this gets initial vals for vars
+            show var names, values
+        commands:
+            arrows: change value of current var in vals
+                set dirty flag
+            space:
+                if dirty
+                    rerun program
+                    tell pianoteq to load file
+                tell pianoteq to play
+                sleep for dur
 
 timing
     when program executes, it creates an array
