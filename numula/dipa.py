@@ -1,62 +1,88 @@
-# nsh: iteractively edit nuance params in a Numula program
+# dipa: iteractively edit nuance params in a Numula program
 #
 # You can select the param you want to vary,
 # then use the up and down arrows to change its value.
 # When you hit the space bar, it plays a selected part the piece.
 #
-# usage: nsh prog
+# usage: dipa prog
 #
 # The program (prog.py) must:
 # 1) declare adjustable variables with
-#   nvar(name, val, inc, lo=0, hi=1)
-#   It can refer to these as 'nshl.name'
+#   nvar(name, val, step, lo=0, hi=1)
+#   It can refer to these as 'ipa.name'
 #   (ideally it should just be 'name', but I can't figure out how).
 # 2) Create a global var 'ns' containing a ScoreBasic
 #
 # commands:
 # :t start dur      set playback start/dur (default 0, 1)
-# :v name           set current var to name
+# :v i              set current var to the ith one
+# :v i val          assign value to ith var (non-numeric)
 # :s                show vars and start/dur
-# :w                write var values to prog.nvars
-# space             play from start to end
+# :w                write var values to prog.vars
+# space             play from start to start+dur
 # up/down arrow     inc/dec current var
 
 import sys, time, os
 import readchar
 import numula.pianoteq
 import numula.pianoteq_rpc
-import nshl
+import ipa
 
 def show(cur_var, start, dur):
     print('adjustable variables:')
-    for key in nshl.vars:
-        x = nshl.vars[key]
-        print('name: %s value %f inc %f min %f max %f'%(key, nshl.get(key), x['inc'], x['lo'], x['hi']))
-    print('current var: '+cur_var)
-    print('start: %f dur: %f'%(start, dur))
- 
-# inc or dec an adjustable variable
+    n = len(ipa.vars)
+    for i in range(n):
+        x = ipa.vars[i]
+        name = x['name']
+        d = ' desc %s'%(x['desc']) if x['desc'] else ''
+        if x['numeric']:
+            print('%d) name: %s value %f step %f min %f max %f%s'%(
+                i+1, name, ipa.get(name), x['step'], x['lo'], x['hi'], d
+            ))
+        else:
+            print('%d) name: %s value %s%s'%(
+                i+1, name, ipa.get(name), d
+            ))
+    print('current var: %d'%(cur_var+1))
+    print('start time: %f duration: %f'%(start, dur))
+
+# write adjustable variables to a file
 #
-def adjust(var, up):
-    x = nshl.vars[var]
-    val = nshl.get(var)
+def write_vars(fname):
+    with open(fname, 'w') as f:
+        for var in ipa.vars:
+            name = var['name']
+            if var['numeric']:
+                f.write('%s %f\n'%(name, ipa.get(name)))
+            else:
+                f.write('%s %s\n'%(name, ipa.get(name)))
+
+# inc or dec an numeric adjustable variable
+#
+def adjust(ivar, up):
+    x = ipa.vars[ivar]
+    if not x['numeric']:
+        printf('not numeric')
+        return
+    name = x['name']
+    val = ipa.get(name)
     if up:
-        val += x['inc']
+        val += x['step']
         if val > x['hi']:
             val = x['hi']
     else:
-        val -= x['inc']
+        val -= x['step']
         if val < x['lo']:
             val = x['lo']
-    nshl.set(var, val)
-    print('%s: %f'%(var ,val))
+    ipa.set(name, val)
+    print('%s: %f'%(name ,val))
 
-def nsh_main():
+def ipa_main():
     global ns
     global __name__
     __name__ = 'foo'
     if len(sys.argv) != 2:
-        raise Exception('usage: nsh prog')
+        raise Exception('usage: dipa prog')
     prog = sys.argv[1]
     prog_py = prog+'.py'
     prog_vars = prog+'.vars'
@@ -69,12 +95,14 @@ def nsh_main():
     exec(prog_source, globals())
     ns = main()
     try:
-        nshl.vars
+        ipa.vars
     except:
         raise Exception('no adjustable vars')
-    for var in nshl.vars:
-        cur_var = var
-        break
+    cur_var = 0
+
+    if os.path.exists(prog_vars):
+        print('reading vars from ', prog_vars)
+        ipa.read_vars(prog_vars)
 
     start = 0
     dur = 1
@@ -89,11 +117,24 @@ def nsh_main():
                 continue
             c = cmd[0]
             if c == 'v':
-                var = cmd[2:]
-                if var not in nshl.vars:
-                    print('no adjustable variable '+var)
+                x = cmd.split()
+                try:
+                    j = int(x[1])
+                except:
+                    print('invalid variable number')
                     continue
-                cur_var = var
+                j -= 1
+                if j<0 or j >= len(ipa.vars):
+                    print('invalid variable number')
+                    continue
+                v = ipa.vars[j]
+                if v['numeric']:
+                    cur_var = j
+                else:
+                    if len(x) < 3:
+                        print('must supply a value')
+                        continue
+                    ipa.set(v['name'], x[2])
             elif c == 's':
                 show(cur_var, start, dur)
             elif c == 't':
@@ -105,6 +146,8 @@ def nsh_main():
                 dur = float(x[2])
             elif c == 'w':
                 write_vars(prog_vars)
+            elif c == 'q':
+                break
             else:
                 print('unrecognized command: %s'%cmd)
         elif x == readchar.key.UP:
@@ -125,4 +168,4 @@ def nsh_main():
             numula.pianoteq_rpc.midiSeek(0)
             numula.pianoteq_rpc.midiPlay()
 
-nsh_main()
+ipa_main()

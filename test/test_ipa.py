@@ -1,16 +1,16 @@
-import nshl
-
-from numula.nuance import *
+import ipa
 from numula.notate_score import *
 from numula.notate_nuance import *
 
 def main():
-    nshl.var('v1', .2, .05, 0, 2)
-    nshl.var('v2', .6, .05, 0, 2)
-    nshl.var('v3', .2, .05, 0, 2)
+    ipa.vvar('v1', .2)
+    ipa.vvar('v2', .6)
+    ipa.vvar('v3', .2)
+    ipa.ivar('i1', '1/2')
+    ipa.ivar('i2', '1/2')
     ns = n('1/8 c d e f g a b c')
     ns.vol_adjust_pft(
-        vol(f'{nshl.v1} 1/2 {nshl.v2} 1/2 {nshl.v3}'),
+        vol(f'{ipa.v1} {ipa.i1} {ipa.v2} {ipa.i2} {ipa.v3}'),
         mode=VOL_SET
     )
     return ns
