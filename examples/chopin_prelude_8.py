@@ -27,7 +27,23 @@ volume
         vmeas: PFT that uses these
     vphrase: continuous change at 1-8 measure level
         a single PFT
+
+IPA variables
+    if_pauses
+    if_tbeat
+    if_tphrase
+    if_accents
+    if_vmeas
+    if_vphrase
 '''
+
+from ipa import *
+var('if_pauses', BOOL)
+var('if_tbeat', BOOL)
+var('if_tphrase', BOOL)
+var('if_accents', BOOL)
+var('if_vmeas', BOOL)
+var('if_vphrase', BOOL)
 
 from numula.nuance import *
 from numula.notate_score import *
@@ -352,14 +368,20 @@ def main():
         bass
     ])
     if nuance:
-        ns.vol_adjust_pft(vphrase)
-        ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
-        ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
-        ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
+        if ipa.if_vphrase:
+            ns.vol_adjust_pft(vphrase)
+        if ipa.if_vmeas:
+            ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
+        if ipa.if_accents:
+            ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
+            ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
         ns.vol_scale(.1, .7)
-        #ns.tempo_adjust_pft(tbeat)
-        ns.tempo_adjust_pft(tphrase)
-        ns.tempo_adjust_pft(pauses)
+        if ipa.if_tbeat:
+            ns.tempo_adjust_pft(tbeat)
+        if ipa.if_tphrase:
+            ns.tempo_adjust_pft(tphrase)
+        if ipa.if_tphrase:
+            ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
     #ns.trim(0, 4/1)

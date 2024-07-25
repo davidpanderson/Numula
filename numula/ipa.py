@@ -89,19 +89,24 @@ def var_aux(
 def var (
     name,
     type,
-    val,
+    val = None,
     tags = [],
     desc = None
 ):
     if type == VOL:
+        if val is None: val = 1
         var_aux(name, val, .1, 0, 2, tags, type, desc);
     elif type == TEMPO:
+        if val is None: val = 60
         var_aux(name, val, 3, 10, 200, tags, type, desc);
     elif type == PAUSE:
+        if val is None: val = 0
         var_aux(name, val, .02, 0, 1, tags, type, desc);
     elif type == DUR:
+        if val is None: val = '1/1'
         var_aux(name, val, 0, 0, 0, tags, type, desc);
     elif type == BOOL:
+        if val is None: val = True
         var_aux(name, val, 0, 0, 0, tags, type, desc);
 
 def get(name):
