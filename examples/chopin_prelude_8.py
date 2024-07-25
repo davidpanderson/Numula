@@ -1,10 +1,37 @@
-# Chopin prelude #8
+'''
+Chopin prelude #8
+
+nuance structure:
+
+timing
+    pauses
+        1-beat patterns: pb0, pb_start etc.
+        1-measure patterns: pm1, pm2; made up of beat patterns
+        'pauses': PFT with measure patterns and some extra pauses
+    tbeat: accelerando within each beat.
+        Same throughput the piece.
+        Not sure if this is important, but the idea is
+        to create a feeling of always surging forward
+    tphrase: tempo at phrase level
+        1-measure patterns: t1, t2,...
+        tphrase: PFT with measure patterns
+        Currently this is common between LH and RH;
+        might be interesting to decouple at the tphrase level
+
+volume
+    accent patterns
+        lh_accents, rh_accents
+        each is a 1-beat pattern that repeats throughout
+    vmeas: continuous change within measures
+        1-measure patterns: vm_4_sm, vm_3 etc.
+        vmeas: PFT that uses these
+    vphrase: continuous change at 1-8 measure level
+        a single PFT
+'''
 
 from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *
-import numula.pianoteq
-import numula.pianoteq_rpc
 
 soprano = n('meas4/4 \
     |1 1/32 \
@@ -157,13 +184,8 @@ bass = n('meas4/4 \
 ').tag('bass')
 
 ################ VOLUME #################
-#
-# volume control has 3 layers:
-# accent patterns (separate for LH, RH)
-# vmeas: continuous change within measures
-# vphrase: continuous change at 1-8 measure level
 
-# RH accents
+# 1 measure of RH accents
 rha = '*4 .14 1/32 .1 1/32 .05 1/32 0 1/32 .05 1/32 0 1/32 .1 1/32 .07 1/32 *'
 
 rh_accents = accents(f'meas4/4 \
@@ -215,15 +237,6 @@ vphrase = vol('meas4/4 \
 ')
 
 ################ TIMING #################
-#
-# timing control has 3 layers:
-# pauses
-# tbeat: accelerando within each beat
-#    not sure if this is important, but the idea is
-#    to create a feeling of always surging forward
-# tphrase: tempo at phrase level
-# currently this is common between LH and RH;
-# it might be interesting to decouple at the tphrase level
 
 # pause durations
 dt0 = .02
@@ -330,9 +343,10 @@ nuance = True
 
 def main():
     ns = Score(tempo=90, verbose=False)
-    if nuance:
-        soprano.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
-        bass.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
+
+    # virtual pedal within a beat
+    soprano.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
+    bass.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
     ns.append_score([
         soprano,
         bass
@@ -350,6 +364,11 @@ def main():
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
     #ns.trim(0, 4/1)
     #print(ns)
+    return ns
+
+if __name__ == '__main__':
+    import numula.pianoteq
+    import numula.pianoteq_rpc
     fname = 'data/chopin_prelude_8.midi'
     preset = 'NY Steinway D Classical'
     ns.write_midi(fname)

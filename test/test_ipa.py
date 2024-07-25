@@ -1,14 +1,15 @@
-import ipa
+from ipa import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
 def main():
-    ipa.vvar('v1', .2)
-    ipa.vvar('v2', .6)
-    ipa.vvar('v3', .2)
-    ipa.ivar('i1', '1/2')
-    ipa.ivar('i2', '1/2')
-    ns = n('1/8 c d e f g a b c')
+    tag('foobar')
+    var('v1', VOL, .2, ['foobar'])
+    var('v2', VOL, .6)
+    var('v3', VOL, .2)
+    var('i1', DUR, '1/2')
+    var('i2', DUR, '1/2')
+    ns = n('1/8 c5 d e f g a b c 1/2 -c')
     ns.vol_adjust_pft(
         vol(f'{ipa.v1} {ipa.i1} {ipa.v2} {ipa.i2} {ipa.v3}'),
         mode=VOL_SET

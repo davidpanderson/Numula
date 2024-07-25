@@ -1,3 +1,57 @@
+vars = []   # list of adjustable variables
+            # their values are stored in globals()
+tags = []   # list of {name, value} dicts
+tag_names = []
+
+def tag(name, value=True):
+    if name in tag_names:
+        raise Exception('tag already defined: %s'%name)
+    tags.append(
+        {
+            'name': name,
+            'value': value
+        }
+    )
+    tag_names.append(name)
+
+def check_tags_defined(tag_list):
+    for tag in tag_list:
+        if not tag in tag_names:
+            raise Exception('tag %s not defined'%tag)
+
+# are all the tags in the list True?
+#
+def tags_set(tag_list):
+    for x in tags:
+        if not x['value']:
+            if x['name'] in tag_list:
+                return False
+    return True
+
+def get_tag(tag):
+    for x in tags:
+        if x['name'] == tag:
+            return x['value']
+    raise Exception('no tag %s'%tag)
+        
+
+def set_tag(tag, val):
+    for x in tags:
+        if x['name'] == tag:
+            x['value'] = value
+            return
+    raise Exception('no tag %s'%tag)
+
+VOL = 1
+DUR = 2
+TEMPO = 3
+PAUSE = 4
+BOOL = 5
+
+def numeric(type):
+    return type in [VOL, TEMPO, PAUSE]
+
+# declare an adjustable variable
 # val: initial value
 # step: adjustment increment
 # lo, hi: min/max values
@@ -7,51 +61,48 @@
 # So for now the main program has to import ipa
 # and refer to the variable as ipa.x
 
-vars = []   # list of adjustable variables
-
-# declare an adjustable variable
-def var(
+def var_aux(
     name,               # variable name
     val,                # initial value
     step,               # adjustment increment (if numeric)
     lo, hi,             # min/max values (if numeric)
-    adjustable=True,    # if False, don't show or allow change
-    numeric = True,     # if False, can assign but not inc/dev
-    desc=None           # textual description
+    tags,
+    type,
+    desc                # textual description
 ):
     if name in globals():
         return
+    check_tags_defined(tags)
     globals()[name] = val
-    if adjustable:
-        vars.append(
-            {'name': name,
-                'step': step,
-                'lo': lo,
-                'hi': hi,
-                'numeric': numeric,
-                'desc': desc
-            }
-        )
+    vars.append(
+        {
+            'name': name,
+            'step': step,
+            'lo': lo,
+            'hi': hi,
+            'tags': tags,
+            'type': type,
+            'desc': desc
+        }
+    )
 
-# volume variable
-#
-def vvar(name, val, adjustable=True, desc=None):
-    var(name, val, .1, 0, 2, adjustable, True, desc)
-
-# tempo variable
-#
-def tvar(name, val, adjustable=True, desc=None):
-    var(name, val, 3, 10, 200, adjustable, True, desc)
-
-# delay variable
-#
-def dvar(name, val, adjustable=True, desc=None):
-    var(name, val, .02, 0, 1, adjustable, True, desc)
-
-# time interval variable (text, like 2/1)
-#
-def ivar(name, val, adjustable=True, desc=None):
-    var(name, val, 0,0,0, adjustable=adjustable, numeric=False, desc=desc)
+def var (
+    name,
+    type,
+    val,
+    tags = [],
+    desc = None
+):
+    if type == VOL:
+        var_aux(name, val, .1, 0, 2, tags, type, desc);
+    elif type == TEMPO:
+        var_aux(name, val, 3, 10, 200, tags, type, desc);
+    elif type == PAUSE:
+        var_aux(name, val, .02, 0, 1, tags, type, desc);
+    elif type == DUR:
+        var_aux(name, val, 0, 0, 0, tags, type, desc);
+    elif type == BOOL:
+        var_aux(name, val, 0, 0, 0, tags, type, desc);
 
 def get(name):
     return globals()[name]

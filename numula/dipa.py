@@ -1,4 +1,4 @@
-# dipa: iteractively edit nuance params in a Numula program
+# dipa: iteractively edit a Numula program's nuance params
 #
 # You can select the param you want to vary,
 # then use the up and down arrows to change its value.
@@ -14,11 +14,13 @@
 # 2) Create a global var 'ns' containing a ScoreBasic
 #
 # commands:
-# :t start dur      set playback start/dur (default 0, 1)
+# :p start dur      set playback start/dur (default 0, 1)
 # :v i              set current var to the ith one
-# :v i val          assign value to ith var (non-numeric)
-# :s                show vars and start/dur
+# :v i val          assign value to ith var
+# :s                show vars, tags, and start/dur
+# :t i val          set val of tag i (y/n)
 # :w                write var values to prog.vars
+# :?                show commands
 # space             play from start to start+dur
 # up/down arrow     inc/dec current var
 
@@ -28,21 +30,52 @@ import numula.pianoteq
 import numula.pianoteq_rpc
 import ipa
 
+def show_commands():
+    print('''
+commands:
+:p start dur      set playback start/dur (default 0, 1)
+:v i              set current var to the ith one
+:v i val          assign value to ith var
+:s                show vars, tags, and start/dur
+:t i val          set val of tag i (y/n)
+:w                write var values to prog.vars
+:?                show commands
+space             play from start to start+dur
+up/down arrow     inc/dec current var
+    ''')
+
 def show(cur_var, start, dur):
     print('adjustable variables:')
     n = len(ipa.vars)
     for i in range(n):
         x = ipa.vars[i]
         name = x['name']
+        t = ''
+        if x['tags']:
+            if not ipa.tags_set(x['tags']):
+                continue;
+            t = ' tags: (%s)'%(', '.join(x['tags']))
         d = ' desc %s'%(x['desc']) if x['desc'] else ''
-        if x['numeric']:
-            print('%d) name: %s value %f step %f min %f max %f%s'%(
-                i+1, name, ipa.get(name), x['step'], x['lo'], x['hi'], d
+        if ipa.numeric(x['type']):
+            print('%d) name: %s value %f step %f%s%s'%(
+                i+1, name, ipa.get(name), x['step'], t, d
             ))
         else:
             print('%d) name: %s value %s%s'%(
                 i+1, name, ipa.get(name), d
             ))
+
+    n = len(ipa.tags)
+    print(n)
+    if n:
+        print('tags:')
+        for i in range(n):
+            x = ipa.tags[i]
+            name = x['name']
+            print('%d) name: %s value:%s'%(
+                i+1, name, 'on' if x['value'] else 'off'
+            ))
+
     print('current var: %d'%(cur_var+1))
     print('start time: %f duration: %f'%(start, dur))
 
@@ -61,7 +94,7 @@ def write_vars(fname):
 #
 def adjust(ivar, up):
     x = ipa.vars[ivar]
-    if not x['numeric']:
+    if not ipa.numeric(x['type']):
         printf('not numeric')
         return
     name = x['name']
@@ -116,6 +149,8 @@ def ipa_main():
             if not cmd:
                 continue
             c = cmd[0]
+
+            # set current var, or set var value
             if c == 'v':
                 x = cmd.split()
                 try:
@@ -135,19 +170,50 @@ def ipa_main():
                         print('must supply a value')
                         continue
                     ipa.set(v['name'], x[2])
+
+            # set tag value
+            if c == 't':
+                x = cmd.split()
+                if len(x) != 3:
+                    print('syntax: :t i value')
+                    continue
+                try:
+                    j = int(x[1])
+                except:
+                    print('syntax: :t i value')
+                    continue
+                if j<=0 or j > len(ipa.tags):
+                    print('syntax: :t i value')
+                    continue
+                if x[2] == 'y':
+                    val = True
+                elif x[2] == 'n':
+                    val = False
+                ipa.tags[j-1]['value'] = val
+
+            # show commands
             elif c == 's':
                 show(cur_var, start, dur)
-            elif c == 't':
+
+            # set start/end times
+            elif c == 'p':
                 x = cmd.split()
                 if len(x) != 3:
                     print('usage: :t start dur')
                     continue
                 start = float(x[1])
                 dur = float(x[2])
+
+            # write vars to disk
             elif c == 'w':
                 write_vars(prog_vars)
+
             elif c == 'q':
                 break
+
+            elif c == '?':
+                show_commands()
+
             else:
                 print('unrecognized command: %s'%cmd)
         elif x == readchar.key.UP:
