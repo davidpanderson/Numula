@@ -28,7 +28,7 @@ import sys, time, os
 import readchar
 import numula.pianoteq
 import numula.pianoteq_rpc
-import ipa
+import numula.ipa as ipa
 
 def show_commands():
     print('''
@@ -66,7 +66,6 @@ def show(cur_var, start, dur):
             ))
 
     n = len(ipa.tags)
-    print(n)
     if n:
         print('tags:')
         for i in range(n):
@@ -117,13 +116,12 @@ def ipa_main():
     if len(sys.argv) != 2:
         raise Exception('usage: dipa prog')
     prog = sys.argv[1]
-    prog_py = prog+'.py'
     prog_vars = prog+'.vars'
     prog_midi = 'data/%s.mid'%(prog)
 
     # run the program to get its adjustable variables
     #
-    with open(prog_py) as f:
+    with open(prog+'.py') as f:
         prog_source = f.read()
     exec(prog_source, globals())
     ns = main()
@@ -135,7 +133,7 @@ def ipa_main():
 
     if os.path.exists(prog_vars):
         print('reading vars from ', prog_vars)
-        ipa.read_vars(prog_vars)
+        ipa.read_vars(prog)
 
     start = 0
     dur = 1
@@ -209,7 +207,11 @@ def ipa_main():
                 write_vars(prog_vars)
 
             elif c == 'q':
-                break
+                if dirty:
+                    print('There are unsaved changes.')
+                    print(':w to save; ^C to quit without saving.')
+                else:
+                    break
 
             elif c == '?':
                 show_commands()

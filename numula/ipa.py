@@ -4,8 +4,6 @@ tags = []   # list of {name, value} dicts
 tag_names = []
 
 def tag(name, value=True):
-    if name in tag_names:
-        raise Exception('tag already defined: %s'%name)
     tags.append(
         {
             'name': name,
@@ -117,7 +115,11 @@ def set(name, val):
 
 # read variable values from file
 #
-def read_vars(fname):
+def read_vars(name):
+    fname = name+'.vars'
+    import os
+    if not os.path.exists(fname):
+        return
     with open(fname) as f:
         lines = f.readlines()
         for line in lines:
