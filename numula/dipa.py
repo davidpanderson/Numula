@@ -84,7 +84,7 @@ def write_vars(fname):
     with open(fname, 'w') as f:
         for var in ipa.vars:
             name = var['name']
-            if var['numeric']:
+            if ipa.numeric(var['type']):
                 f.write('%s %f\n'%(name, ipa.get(name)))
             else:
                 f.write('%s %s\n'%(name, ipa.get(name)))
@@ -226,7 +226,7 @@ def ipa_main():
             dirty = True
         elif x == ' ':
             if dirty:
-                exec(prog_source)
+                exec(prog_source, globals())
                 ns = main()
                 print(ns)
                 ns.trim(start, start+dur)

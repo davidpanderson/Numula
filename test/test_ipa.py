@@ -8,9 +8,11 @@ var('v2', VOL, .6)
 var('v3', VOL, .2)
 var('i1', DUR, '1/2')
 var('i2', DUR, '1/2')
-read_vars('test_ipa')
-from numula.ipa import *
 
+if __name__ == '__main__':
+    read_vars('test_ipa')
+
+from numula.ipa import *
 def main():
     ns = n('1/8 c5 d e f g a b c 1/2 -c')
     ns.vol_adjust_pft(
