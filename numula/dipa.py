@@ -161,7 +161,7 @@ def ipa_main():
                     print('invalid variable number')
                     continue
                 v = ipa.vars[j]
-                if v['numeric']:
+                if ipa.numeric(v['type']):
                     cur_var = j
                 else:
                     if len(x) < 3:
@@ -170,7 +170,7 @@ def ipa_main():
                     ipa.set(v['name'], x[2])
 
             # set tag value
-            if c == 't':
+            elif c == 't':
                 x = cmd.split()
                 if len(x) != 3:
                     print('syntax: :t i value')
