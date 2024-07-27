@@ -93,7 +93,7 @@ def var (
 ):
     if type == VOL:
         if val is None: val = 1
-        var_aux(name, val, .1, 0, 2, tags, type, desc);
+        var_aux(name, val, .03, 0, 2, tags, type, desc);
     elif type == TEMPO:
         if val is None: val = 60
         var_aux(name, val, 3, 10, 200, tags, type, desc);

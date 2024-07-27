@@ -37,17 +37,25 @@ IPA variables
     if_vphrase
 '''
 
-from ipa import *
+from numula.ipa import *
+from numula.nuance import *
+from numula.notate_score import *
+from numula.notate_nuance import *
+
 var('if_pauses', BOOL)
 var('if_tbeat', BOOL)
 var('if_tphrase', BOOL)
 var('if_accents', BOOL)
 var('if_vmeas', BOOL)
 var('if_vphrase', BOOL)
+var('dv1', VOL, .07)
+var('dv2', VOL, .1)
+var('dv3', VOL, .13)
 
-from numula.nuance import *
-from numula.notate_score import *
-from numula.notate_nuance import *
+if __name__ == '__main__':
+    read_vars('chopin_prelude_8')
+
+from numula.ipa import *
 
 soprano = n('meas4/4 \
     |1 1/32 \
@@ -217,15 +225,15 @@ lh_accents = accents('meas4/4 \
 ')
 
 # swell to 4th beat
-vm_4_sm = '[ 0 3/4 .07 1/4 0'
+vm_4_sm = f'[ 0 3/4 {dv1} 1/4 0'
 # bigger swell
-vm_4_med = '[ 0 3/4 0.10 1/4 0'
+vm_4_med = f'[ 0 3/4 {dv2} 1/4 0'
 # even bigger
-vm_4_lg = '[ 0 3/4 0.13 1/4 0'
+vm_4_lg = f'[ 0 3/4 {dv3} 1/4 0'
 # swells to 2nd and 4th beat
-vm_24 = '[ *2 0 1/4 .08 1/4 0 *'
+vm_24 = f'[ *2 0 1/4 {dv1} 1/4 0 *'
 # swell to 3rd beat
-vm_3 = '[ 0 2/4 .1 2/4 0'
+vm_3 = f'[ 0 2/4 {dv2} 2/4 0'
 
 vmeas = vol(f'meas4/4 \
     |1 {vm_4_sm} {vm_4_med} {vm_24} {vm_3} \
@@ -368,19 +376,19 @@ def main():
         bass
     ])
     if nuance:
-        if ipa.if_vphrase:
+        if if_vphrase:
             ns.vol_adjust_pft(vphrase)
-        if ipa.if_vmeas:
+        if if_vmeas:
             ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
-        if ipa.if_accents:
+        if if_accents:
             ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
             ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
         ns.vol_scale(.1, .7)
-        if ipa.if_tbeat:
+        if if_tbeat:
             ns.tempo_adjust_pft(tbeat)
-        if ipa.if_tphrase:
+        if if_tphrase:
             ns.tempo_adjust_pft(tphrase)
-        if ipa.if_tphrase:
+        if if_tphrase:
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)

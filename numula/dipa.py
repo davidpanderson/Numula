@@ -45,7 +45,7 @@ up/down arrow     inc/dec current var
     ''')
 
 def show(cur_var, start, dur):
-    print('adjustable variables:')
+    print('variables:')
     n = len(ipa.vars)
     for i in range(n):
         x = ipa.vars[i]
@@ -53,15 +53,15 @@ def show(cur_var, start, dur):
         t = ''
         if x['tags']:
             if not ipa.tags_set(x['tags']):
-                continue;
+                continue
             t = ' tags: (%s)'%(', '.join(x['tags']))
         d = ' desc %s'%(x['desc']) if x['desc'] else ''
         if ipa.numeric(x['type']):
-            print('%d) name: %s value %f step %f%s%s'%(
+            print('%d. %s: %f (step %f)%s%s'%(
                 i+1, name, ipa.get(name), x['step'], t, d
             ))
         else:
-            print('%d) name: %s value %s%s'%(
+            print('%d. %s: %s%s'%(
                 i+1, name, ipa.get(name), d
             ))
 
@@ -163,11 +163,29 @@ def ipa_main():
                 v = ipa.vars[j]
                 if ipa.numeric(v['type']):
                     cur_var = j
+                    if len(x) > 2:
+                        try:
+                            val = float(x[2])
+                            ipa.set(v['name'], val)
+                        except:
+                            print('bad value ',x[2])
+                            continue
+                    else:
+                        print('%s: %f'%(v['name'], ipa.get(v['name'])))
                 else:
                     if len(x) < 3:
                         print('must supply a value')
                         continue
-                    ipa.set(v['name'], x[2])
+                    if v['type'] == BOOL:
+                        if x[2] == 't':
+                            ipa.set(v['name'], True)
+                        elif x[2] == 'f':
+                            ipa.set(v['name'], False)
+                        else:
+                            print('bad value: use t/f')
+                            continue
+                    else:
+                        ipa.set(v['name'], x[2])
 
             # set tag value
             elif c == 't':
