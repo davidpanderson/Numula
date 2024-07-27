@@ -148,7 +148,7 @@ def ipa_main():
                 continue
             c = cmd[0]
 
-            # set current var, or set var value
+            # select current var, or set var value
             if c == 'v':
                 x = cmd.split()
                 try:
@@ -170,6 +170,7 @@ def ipa_main():
                         except:
                             print('bad value ',x[2])
                             continue
+                        dirty = True
                     else:
                         print('%s: %f'%(v['name'], ipa.get(v['name'])))
                 else:
@@ -186,6 +187,7 @@ def ipa_main():
                             continue
                     else:
                         ipa.set(v['name'], x[2])
+                    dirty = True
 
             # set tag value
             elif c == 't':
