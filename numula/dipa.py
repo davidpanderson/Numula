@@ -219,6 +219,7 @@ def ipa_main():
                     continue
                 start = float(x[1])
                 dur = float(x[2])
+                dirty = True
 
             # write vars to disk
             elif c == 'w':
@@ -246,7 +247,8 @@ def ipa_main():
             if dirty:
                 exec(prog_source, globals())
                 ns = main()
-                print(ns)
+                #print(ns)
+                #print(start, dur)
                 ns.trim(start, start+dur)
                 ns.write_midi(prog_midi)
                 numula.pianoteq_rpc.loadMidiFile(prog_midi)

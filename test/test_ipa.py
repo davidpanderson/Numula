@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
 from numula.ipa import *
 def main():
-    ns = n('1/8 c5 d e f g a b c 1/2 -c')
+    ns = n('1/32 *4 c5 d e f g a b c * 1/4 -c')
     ns.vol_adjust_pft(
         vol(f'{v1} {i1} {v2} {i2} {v3}'),
         mode=VOL_SET

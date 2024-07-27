@@ -27,14 +27,6 @@ volume
         vmeas: PFT that uses these
     vphrase: continuous change at 1-8 measure level
         a single PFT
-
-IPA variables
-    if_pauses
-    if_tbeat
-    if_tphrase
-    if_accents
-    if_vmeas
-    if_vphrase
 '''
 
 from numula.ipa import *
@@ -48,9 +40,17 @@ var('if_tphrase', BOOL)
 var('if_accents', BOOL)
 var('if_vmeas', BOOL)
 var('if_vphrase', BOOL)
-var('dv1', VOL, .07)
+# volume
+var('dv1', VOL, .07)        # volume swells in vmeas
 var('dv2', VOL, .1)
 var('dv3', VOL, .13)
+# timing
+var('p_start', PAUSE, .04)      # pause on measure start melody note
+var('p_start2', PAUSE, .06)     # pause on phrase start melody note
+var('p_start3', PAUSE, .1)      # pause on major phrase start melody note
+var('p_mel', PAUSE, .02)        # pause on other melody notes (top and bottom)
+var('p_end', PAUSE, .06)        # pause on minor phrase end melody note
+var('p_end2', PAUSE, .08)       # pause on major phrase end melody note
 
 if __name__ == '__main__':
     read_vars('chopin_prelude_8')
@@ -284,16 +284,21 @@ dt6 = .15
 # Go lightly with pauses, else they affect tempo
 
 # beat-level pauses
+
 # default: short pauses after melody notes
-pb0 = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
-#pb0 = '1/4 .'
-# phrase start: longer pause on 1st melody note
-pb_start = f'p{dt5} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
-pb_start_short = f'p{dt2} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt0} 1/32 .'
+pb0 = f'p{p_start} 1/32 . p{p_mel} 5/32 . p{p_mel} 1/32 . p{p_mel} 1/32 .'
+
+# major phrase start: longer pause on 1st melody note
+pb_start = f'p{p_start3} 1/32 . p{p_mel} 5/32 . p{p_mel} 1/32 . p{p_mel} 1/32 .'
+
+# phrase start
+pb_start_short = f'p{p_start2} 1/32 . p{p_mel} 5/32 . p{p_mel} 1/32 . p{p_mel} 1/32 .'
+
 # phrase end: longer pause after last note
-pb_end = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt3} 1/32 .'
+pb_end = f'p{p_start} 1/32 . p{p_mel} 5/32 . p{p_mel} 1/32 . p{p_end2} 1/32 .'
+
 # phrase end with shorter pause at end
-pb_end_short = f'p{dt1} 1/32 . p{dt0} 5/32 . p{dt0} 1/32 . p{dt2} 1/32 .'
+pb_end_short = f'p{p_start} 1/32 . p{p_mel} 5/32 . p{p_mel} 1/32 . p{p_end} 1/32 .'
 
 # measure 1 has a big pause after 1st note
 pm1 = f'{pb_start} {pb0} {pb_start_short} {pb_end}'
@@ -388,7 +393,8 @@ def main():
             ns.tempo_adjust_pft(tbeat)
         if if_tphrase:
             ns.tempo_adjust_pft(tphrase)
-        if if_tphrase:
+        if if_pauses:
+            print('doing pauses')
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
