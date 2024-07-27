@@ -44,6 +44,20 @@ var('if_vphrase', BOOL)
 var('dv1', VOL, .07)        # volume swells in vmeas
 var('dv2', VOL, .1)
 var('dv3', VOL, .13)
+    # RH accents
+var('rha1', VOL, .14)
+var('rha2', VOL, .1)
+var('rha3', VOL, .05)
+var('rha4', VOL, 0)
+var('rha5', VOL, .05)
+var('rha6', VOL, 0)
+var('rha7', VOL, .1)
+var('rha8', VOL, .07)
+    # LH accents
+var('lha1', VOL, .14)
+var('lha2', VOL, 0)
+var('lha3', VOL, 0)
+var('lha4', VOL, .11)
 # timing
 var('p_start', PAUSE, .04)      # pause on measure start melody note
 var('p_start2', PAUSE, .06)     # pause on phrase start melody note
@@ -51,6 +65,17 @@ var('p_start3', PAUSE, .1)      # pause on major phrase start melody note
 var('p_mel', PAUSE, .02)        # pause on other melody notes (top and bottom)
 var('p_end', PAUSE, .06)        # pause on minor phrase end melody note
 var('p_end2', PAUSE, .08)       # pause on major phrase end melody note
+    # tbeat
+var('tbeat1', TEMPO, 55)        # start
+var('tbeat2', TEMPO, 65)        # end
+    # tphrase
+var('tph_1_1', TEMPO, 40)
+var('tph_1_2', TEMPO, 60)
+var('tph_2_1', TEMPO, 50)
+var('tph_2_2', TEMPO, 65)
+var('tph_2_3', TEMPO, 50)
+var('tph_2_4', TEMPO, 40)
+
 
 if __name__ == '__main__':
     read_vars('chopin_prelude_8')
@@ -210,28 +235,32 @@ bass = n('meas4/4 \
 ################ VOLUME #################
 
 # 1 measure of RH accents
-rha = '*4 .14 1/32 .1 1/32 .05 1/32 0 1/32 .05 1/32 0 1/32 .1 1/32 .07 1/32 *'
+rha = f'*4 {rha1} 1/32 {rha2} 1/32 {rha3} 1/32 {rha4} 1/32 {rha5} 1/32 {rha6} 1/32 {rha7} 1/32 {rha8} 1/32 *'
 
 rh_accents = accents(f'meas4/4 \
     |1 *32 {rha} * \
     |33 \
 ')
 
-lh_accents = accents('meas4/4 \
+lh_accents = accents(f'meas4/4 \
     |1 *32 \
-        *4 .14 1/24 0 1/24 0 1/24 .11 1/8 * \
+        *4 {lha1} 1/24 {lha2} 1/24 {lha3} 1/24 {lha4} 1/8 * \
         * \
     |33 \
 ')
 
 # swell to 4th beat
 vm_4_sm = f'[ 0 3/4 {dv1} 1/4 0'
+
 # bigger swell
 vm_4_med = f'[ 0 3/4 {dv2} 1/4 0'
+
 # even bigger
 vm_4_lg = f'[ 0 3/4 {dv3} 1/4 0'
+
 # swells to 2nd and 4th beat
 vm_24 = f'[ *2 0 1/4 {dv1} 1/4 0 *'
+
 # swell to 3rd beat
 vm_3 = f'[ 0 2/4 {dv2} 2/4 0'
 
@@ -328,15 +357,15 @@ pauses = tempo(f'meas4/4 \
 ')
 
 # accel within each beat
-tbeat = tempo('meas4/4 \
-    |1 *32 *4 55 1/4 65 * * \
+tbeat = tempo(f'meas4/4 \
+    |1 *32 *4 {tbeat1} 1/4 {tbeat2} * * \
 ')
 
 # accel mid-measure, rit at end
-t1 = ' 40 2/4 60 2/4 40'
+t1 = f' {tph_1_1} 2/4 {tph_1_2} 2/4 {tph_1_1}'
 
 # more angst
-t2 = ' 50 3/4 65 50 1/4 40'
+t2 = f' {tph_2_1} 3/4 {tph_2_2} {tph_2_3} 1/4 {tph_2_4}'
 
 # two 2-beat surges
 t3 = '50 1/4 55 1/4 45 1/4 55 1/4 45'
@@ -412,5 +441,3 @@ if __name__ == '__main__':
     numula.pianoteq_rpc.loadMidiFile(fname)
     numula.pianoteq_rpc.midiPlay()
     #numula.pianoteq.play(fname, preset)
-
-main()
