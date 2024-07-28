@@ -2,7 +2,7 @@ from numula.ipa import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
-tag('foobar')
+var('foobar', BOOL, True)
 var('v1', VOL, .2, ['foobar'])
 var('v2', VOL, .6)
 var('v3', VOL, .2)

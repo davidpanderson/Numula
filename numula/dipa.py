@@ -17,8 +17,7 @@
 # :p start dur      set playback start/dur (default 0, 1)
 # :v i              set current var to the ith one
 # :v i val          assign value to ith var
-# :s                show vars, tags, and start/dur
-# :t i val          set val of tag i (y/n)
+# :s                show vars and start/dur
 # :w                write var values to prog.vars
 # :?                show commands
 # space             play from start to start+dur
@@ -36,8 +35,7 @@ commands:
 :p start dur      set playback start/dur (default 0, 1)
 :v i              set current var to the ith one
 :v i val          assign value to ith var
-:s                show vars, tags, and start/dur
-:t i val          set val of tag i (y/n)
+:s                show vars and start/dur
 :w                write var values to prog.vars
 :?                show commands
 space             play from start to start+dur
@@ -63,16 +61,6 @@ def show(cur_var, start, dur):
         else:
             print('%d. %s: %s%s'%(
                 i+1, name, ipa.get(name), d
-            ))
-
-    n = len(ipa.tags)
-    if n:
-        print('tags:')
-        for i in range(n):
-            x = ipa.tags[i]
-            name = x['name']
-            print('%d) name: %s value:%s'%(
-                i+1, name, 'on' if x['value'] else 'off'
             ))
 
     print('current var: %d'%(cur_var+1))
@@ -188,26 +176,6 @@ def ipa_main():
                     else:
                         ipa.set(v['name'], x[2])
                     dirty = True
-
-            # set tag value
-            elif c == 't':
-                x = cmd.split()
-                if len(x) != 3:
-                    print('syntax: :t i value')
-                    continue
-                try:
-                    j = int(x[1])
-                except:
-                    print('syntax: :t i value')
-                    continue
-                if j<=0 or j > len(ipa.tags):
-                    print('syntax: :t i value')
-                    continue
-                if x[2] == 'y':
-                    val = True
-                elif x[2] == 'n':
-                    val = False
-                ipa.tags[j-1]['value'] = val
 
             # show commands
             elif c == 's':

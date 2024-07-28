@@ -1,50 +1,33 @@
 vars = []   # list of adjustable variables
             # their values are stored in globals()
-tags = []   # list of {name, value} dicts
-tag_names = []
-
-def tag(name, value=True):
-    tags.append(
-        {
-            'name': name,
-            'value': value
-        }
-    )
-    tag_names.append(name)
-
-def check_tags_defined(tag_list):
-    for tag in tag_list:
-        if not tag in tag_names:
-            raise Exception('tag %s not defined'%tag)
-
-# are all the tags in the list True?
-#
-def tags_set(tag_list):
-    for x in tags:
-        if not x['value']:
-            if x['name'] in tag_list:
-                return False
-    return True
-
-def get_tag(tag):
-    for x in tags:
-        if x['name'] == tag:
-            return x['value']
-    raise Exception('no tag %s'%tag)
-        
-
-def set_tag(tag, val):
-    for x in tags:
-        if x['name'] == tag:
-            x['value'] = value
-            return
-    raise Exception('no tag %s'%tag)
 
 VOL = 1
 DUR = 2
 TEMPO = 3
 PAUSE = 4
 BOOL = 5
+
+def var_lookup(name):
+    for v in vars:
+        if v['name'] == name:
+            return v
+    return None
+
+def check_tags_defined(tag_list):
+    for tag in tag_list:
+        v = var_lookup(tag)
+        if not v:
+            raise Exception('tag %s not defined'%tag)
+        if v['type'] != BOOL:
+            raise Exception('tag %s not bool'%tag)
+
+# are all the tags in the list True?
+#
+def tags_set(tag_list):
+    for x in tag_list:
+        if not globals()[x]:
+            return False
+    return True
 
 def numeric(type):
     return type in [VOL, TEMPO, PAUSE]
