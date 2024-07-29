@@ -82,7 +82,7 @@ def write_vars(fname):
 def adjust(ivar, up):
     x = ipa.vars[ivar]
     if not ipa.numeric(x['type']):
-        printf('not numeric')
+        print(x['name']+' is not numeric')
         return
     name = x['name']
     val = ipa.get(name)
@@ -215,6 +215,7 @@ def ipa_main():
             dirty = True
         elif x == ' ':
             if dirty:
+                print('computing score')
                 exec(prog_source, globals())
                 ns = main()
                 #print(ns)

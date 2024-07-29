@@ -401,7 +401,6 @@ nuance = True
 
 def main():
     ns = Score(tempo=90, verbose=False)
-
     # virtual pedal within a beat
     soprano.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
     bass.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
@@ -423,7 +422,6 @@ def main():
         if if_tphrase:
             ns.tempo_adjust_pft(tphrase)
         if if_pauses:
-            print('doing pauses')
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
