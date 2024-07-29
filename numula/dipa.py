@@ -1,22 +1,37 @@
+# This file is part of Numula
+# Copyright (C) 2024 David P. Anderson
+#
+# Numula is free software; you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License
+# as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# Numula is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with Numula.  If not, see <http://www.gnu.org/licenses/>.
+
 # dipa: iteractively edit a Numula program's nuance params
 #
 # You can select the param you want to vary,
 # then use the up and down arrows to change its value.
-# When you hit the space bar, it plays a selected part the piece.
+# When you hit the space bar, a selected part the piece is played.
 #
-# usage: dipa prog
+# usage: py dipa.py prog
 #
 # The program (prog.py) must:
-# 1) declare adjustable variables with
-#   nvar(name, val, step, lo=0, hi=1)
-#   It can refer to these as 'ipa.name'
-#   (ideally it should just be 'name', but I can't figure out how).
-# 2) Create a global var 'ns' containing a ScoreBasic
+# 1) declare adjustable variables with e.g.
+#   var('v1', VOL, .2)
+#   It can refer to this as 'v1'
+# 2) define a function main() that returns a Score object
 #
 # commands:
 # :p start dur      set playback start/dur (default 0, 1)
-# :v i              set current var to the ith one
-# :v i val          assign value to ith var
+# :i                set current var to the ith one
+# :i val            assign value to ith var
 # :s                show vars and start/dur
 # :w                write var values to prog.vars
 # :?                show commands
@@ -33,8 +48,8 @@ def show_commands():
     print('''
 commands:
 :p start dur      set playback start/dur (default 0, 1)
-:v i              set current var to the ith one
-:v i val          assign value to ith var
+:i                set current var to the ith one
+:i val            assign value to ith var
 :s                show vars and start/dur
 :w                write var values to prog.vars
 :?                show commands
@@ -42,6 +57,8 @@ space             play from start to start+dur
 up/down arrow     inc/dec current var
     ''')
 
+# show unhidden variables and other info
+#
 def show(cur_var, start, dur):
     print('variables:')
     n = len(ipa.vars)
@@ -55,8 +72,8 @@ def show(cur_var, start, dur):
             t = ' tags: (%s)'%(', '.join(x['tags']))
         d = ' desc %s'%(x['desc']) if x['desc'] else ''
         if ipa.numeric(x['type']):
-            print('%d. %s: %f (step %f)%s%s'%(
-                i+1, name, ipa.get(name), x['step'], t, d
+            print('%d. %s: %.2f%s%s'%(
+                i+1, name, ipa.get(name), t, d
             ))
         else:
             print('%d. %s: %s%s'%(
@@ -77,7 +94,7 @@ def write_vars(fname):
             else:
                 f.write('%s %s\n'%(name, ipa.get(name)))
 
-# inc or dec an numeric adjustable variable
+# inc or dec a numeric adjustable variable
 #
 def adjust(ivar, up):
     x = ipa.vars[ivar]
@@ -128,85 +145,81 @@ def ipa_main():
     show(cur_var, start, dur)
 
     dirty = True
+        # true if variables have changed;
+        # we need to regenerate score on next play
     while True:
         x = readchar.readkey()
         if x == ':':
-            cmd = input(':')
-            if not cmd:
+            line = input(':')
+            if not line:
                 continue
-            c = cmd[0]
+            words = line.split()
 
             # select current var, or set var value
-            if c == 'v':
-                x = cmd.split()
-                try:
-                    j = int(x[1])
-                except:
-                    print('invalid variable number')
-                    continue
-                j -= 1
+            if words[0].isnumeric():
+                j = int(words[0]) - 1
                 if j<0 or j >= len(ipa.vars):
                     print('invalid variable number')
                     continue
                 v = ipa.vars[j]
                 if ipa.numeric(v['type']):
                     cur_var = j
-                    if len(x) > 2:
+                    if len(words) > 1:
                         try:
-                            val = float(x[2])
+                            val = float(words[1])
                             ipa.set(v['name'], val)
                         except:
-                            print('bad value ',x[2])
+                            print('bad value ', words[1])
                             continue
                         dirty = True
                     else:
                         print('%s: %f'%(v['name'], ipa.get(v['name'])))
                 else:
-                    if len(x) < 3:
+                    if len(words) < 2:
                         print('must supply a value')
                         continue
                     if v['type'] == BOOL:
-                        if x[2] == 't':
+                        if words[1] == 't':
                             ipa.set(v['name'], True)
-                        elif x[2] == 'f':
+                        elif words[1] == 'f':
                             ipa.set(v['name'], False)
                         else:
                             print('bad value: use t/f')
                             continue
                     else:
-                        ipa.set(v['name'], x[2])
+                        ipa.set(v['name'], words[1])
                     dirty = True
 
             # show commands
-            elif c == 's':
+            elif words[0] == 's':
                 show(cur_var, start, dur)
 
             # set start/end times
-            elif c == 'p':
+            elif words[0] == 'p':
                 x = cmd.split()
-                if len(x) != 3:
+                if len(words) != 3:
                     print('usage: :t start dur')
                     continue
-                start = float(x[1])
-                dur = float(x[2])
+                start = float(words[1])
+                dur = float(words[2])
                 dirty = True
 
             # write vars to disk
-            elif c == 'w':
+            elif words[0] == 'w':
                 write_vars(prog_vars)
 
-            elif c == 'q':
+            elif words[0] == 'q':
                 if dirty:
                     print('There are unsaved changes.')
                     print(':w to save; ^C to quit without saving.')
                 else:
                     break
 
-            elif c == '?':
+            elif words[0] == '?':
                 show_commands()
 
             else:
-                print('unrecognized command: %s'%cmd)
+                print('unrecognized command: %s'%line)
         elif x == readchar.key.UP:
             adjust(cur_var, True)
             dirty = True

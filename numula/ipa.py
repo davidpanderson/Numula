@@ -1,3 +1,25 @@
+# This file is part of Numula
+# Copyright (C) 2024 David P. Anderson
+#
+# Numula is free software; you can redistribute it and/or modify it
+# under the terms of the GNU Lesser General Public License
+# as published by the Free Software Foundation,
+# either version 3 of the License, or (at your option) any later version.
+#
+# Numula is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU Lesser General Public License for more details.
+#
+# You should have received a copy of the GNU Lesser General Public License
+# along with Numula.  If not, see <http://www.gnu.org/licenses/>.
+
+# Interactive Parameter Adjustment (IPA)
+# a system for efficiently adjusting nuance parameters
+# see: https://github.com/davidpanderson/numula/wiki/Interactive-parameter-adjustment
+
+import os
+
 vars = []   # list of adjustable variables
             # their values are stored in globals()
 
@@ -39,8 +61,9 @@ def numeric(type):
 #
 # Note: adding the var to globals() makes it visible only in this module.
 # I can't figure out how to make it visible outside.
-# So for now the main program has to import ipa
-# and refer to the variable as ipa.x
+# So for now the main program has to do
+#       from ipa import *
+# after declaring variables
 
 def var_aux(
     name,               # variable name
@@ -100,7 +123,6 @@ def set(name, val):
 #
 def read_vars(name):
     fname = name+'.vars'
-    import os
     if not os.path.exists(fname):
         return
     with open(fname) as f:
