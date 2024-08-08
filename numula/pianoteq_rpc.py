@@ -30,7 +30,7 @@ def rpc(method, params=None, id=0):
     try:
         result=requests.post(url, json=payload)
     except requests.exceptions.ConnectionError:
-        print('Connection error.  Run pianoteq_server.py to create server.')
+        print('Can\'t connect to Pianoteq.  Run pianoteq_server.py to create server.')
         return None
     #return result
     return result.json()

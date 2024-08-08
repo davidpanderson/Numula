@@ -1,19 +1,3 @@
-# This file is part of Numula
-# Copyright (C) 2024 David P. Anderson
-#
-# Numula is free software; you can redistribute it and/or modify it
-# under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation,
-# either version 3 of the License, or (at your option) any later version.
-#
-# Numula is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public License
-# along with Numula.  If not, see <http://www.gnu.org/licenses/>.
-
 # Interactive Parameter Adjustment (IPA)
 # a system for efficiently adjusting nuance parameters
 # see: https://github.com/davidpanderson/numula/wiki/Interactive-parameter-adjustment
@@ -23,11 +7,19 @@ import os
 vars = []   # list of adjustable variables
             # their values are stored in globals()
 
-VOL = 1
-DUR = 2
-TEMPO = 3
-PAUSE = 4
-BOOL = 5
+# variable types.  Each has default min/mix and step size
+
+IPA_VOL = 1
+    # volume, absolute or increment: 0..1
+IPA_VOL_MULT = 2
+    # volume multiplier: 0..2
+IPA_DT_SCORE = 3
+    # score-time interval, as a string like '1/4'
+IPA_DT_SEC = 4
+    # time interval in seconds, e.g. of a pause
+IPA_TEMPO = 5
+    # beats per minute, or relative to 60
+IPA_BOOL = 6
 
 def var_lookup(name):
     for v in vars:
@@ -40,7 +32,7 @@ def check_tags_defined(tag_list):
         v = var_lookup(tag)
         if not v:
             raise Exception('tag %s not defined'%tag)
-        if v['type'] != BOOL:
+        if v['type'] != IPA_BOOL:
             raise Exception('tag %s not bool'%tag)
 
 # are all the tags in the list True?
@@ -52,7 +44,7 @@ def tags_set(tag_list):
     return True
 
 def numeric(type):
-    return type in [VOL, TEMPO, PAUSE]
+    return type in [IPA_VOL, IPA_VOL_MULT, IPA_TEMPO, IPA_DT_SEC]
 
 # declare an adjustable variable
 # val: initial value
@@ -60,9 +52,11 @@ def numeric(type):
 # lo, hi: min/max values
 #
 # Note: adding the var to globals() makes it visible only in this module.
-# I can't figure out how to make it visible outside.
-# So for now the main program has to do
-#       from ipa import *
+# Someday I'll figure out how to make it visible outside.
+# Until then, the main program has to do
+#
+# from ipa import *
+#
 # after declaring variables
 
 def var_aux(
@@ -97,21 +91,27 @@ def var (
     tags = [],
     desc = None
 ):
-    if type == VOL:
-        if val is None: val = 1
-        var_aux(name, val, .03, 0, 2, tags, type, desc);
-    elif type == TEMPO:
-        if val is None: val = 60
-        var_aux(name, val, 3, 10, 200, tags, type, desc);
-    elif type == PAUSE:
-        if val is None: val = 0
+    # TODO: check validity of 'val'
+    if type == IPA_VOL:
+        if val is None: val = .5
         var_aux(name, val, .02, 0, 1, tags, type, desc);
-    elif type == DUR:
+    elif type == IPA_VOL_MULT:
+        if val is None: val = 1
+        var_aux(name, val, .04, 0, 2, tags, type, desc);
+    elif type == IPA_DT_SCORE:
         if val is None: val = '1/1'
         var_aux(name, val, 0, 0, 0, tags, type, desc);
-    elif type == BOOL:
+    elif type == IPA_DT_SEC:
+        if val is None: val = 0
+        var_aux(name, val, .01, -1, 1, tags, type, desc);
+    elif type == IPA_TEMPO:
+        if val is None: val = 60
+        var_aux(name, val, 2, 10, 200, tags, type, desc);
+    elif type == IPA_BOOL:
         if val is None: val = True
         var_aux(name, val, 0, 0, 0, tags, type, desc);
+    else:
+        raise Exception('bad IPA type %s'%type)
 
 def get(name):
     return globals()[name]
@@ -119,13 +119,16 @@ def get(name):
 def set(name, val):
     globals()[name] = val
 
+def vars_file_path(prog_name):
+    return 'data/%s.vars'%prog_name
+
 # read variable values from file
 #
-def read_vars(name):
-    fname = name+'.vars'
-    if not os.path.exists(fname):
+def read_vars(prog_name):
+    path = vars_file_path(prog_name)
+    if not os.path.exists(path):
         return
-    with open(fname) as f:
+    with open(path) as f:
         lines = f.readlines()
         for line in lines:
             [name, val] = line.split()

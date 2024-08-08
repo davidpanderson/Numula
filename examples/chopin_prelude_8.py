@@ -34,48 +34,47 @@ from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
-var('if_pauses', BOOL)
-var('if_tbeat', BOOL)
-var('if_tphrase', BOOL)
-var('if_accents', BOOL)
-var('if_vmeas', BOOL)
-var('if_vphrase', BOOL)
+var('if_pauses', IPA_BOOL)
+var('if_tbeat', IPA_BOOL)
+var('if_tphrase', IPA_BOOL)
+var('if_accents', IPA_BOOL)
+var('if_vmeas', IPA_BOOL)
+var('if_vphrase', IPA_BOOL)
 # volume
-var('dv1', VOL, .07)        # volume swells in vmeas
-var('dv2', VOL, .1)
-var('dv3', VOL, .13)
+var('dv1', IPA_VOL, .07)        # volume swells in vmeas
+var('dv2', IPA_VOL, .1)
+var('dv3', IPA_VOL, .13)
     # RH accents
-var('rha1', VOL, .14)
-var('rha2', VOL, .1)
-var('rha3', VOL, .05)
-var('rha4', VOL, 0)
-var('rha5', VOL, .05)
-var('rha6', VOL, 0)
-var('rha7', VOL, .1)
-var('rha8', VOL, .07)
+var('rha1', IPA_VOL, .14)
+var('rha2', IPA_VOL, .1)
+var('rha3', IPA_VOL, .05)
+var('rha4', IPA_VOL, 0)
+var('rha5', IPA_VOL, .05)
+var('rha6', IPA_VOL, 0)
+var('rha7', IPA_VOL, .1)
+var('rha8', IPA_VOL, .07)
     # LH accents
-var('lha1', VOL, .14)
-var('lha2', VOL, 0)
-var('lha3', VOL, 0)
-var('lha4', VOL, .11)
+var('lha1', IPA_VOL, .14)
+var('lha2', IPA_VOL, 0)
+var('lha3', IPA_VOL, 0)
+var('lha4', IPA_VOL, .11)
 # timing
-var('p_start', PAUSE, .04)      # pause on measure start melody note
-var('p_start2', PAUSE, .06)     # pause on phrase start melody note
-var('p_start3', PAUSE, .1)      # pause on major phrase start melody note
-var('p_mel', PAUSE, .02)        # pause on other melody notes (top and bottom)
-var('p_end', PAUSE, .06)        # pause on minor phrase end melody note
-var('p_end2', PAUSE, .08)       # pause on major phrase end melody note
+var('p_start', IPA_DT_SEC, .04)      # pause on measure start melody note
+var('p_start2', IPA_DT_SEC, .06)     # pause on phrase start melody note
+var('p_start3', IPA_DT_SEC, .1)      # pause on major phrase start melody note
+var('p_mel', IPA_DT_SEC, .02)        # pause on other melody notes (top and bottom)
+var('p_end', IPA_DT_SEC, .06)        # pause on minor phrase end melody note
+var('p_end2', IPA_DT_SEC, .08)       # pause on major phrase end melody note
     # tbeat
-var('tbeat1', TEMPO, 55)        # start
-var('tbeat2', TEMPO, 65)        # end
+var('tbeat1', IPA_TEMPO, 55)        # start
+var('tbeat2', IPA_TEMPO, 65)        # end
     # tphrase
-var('tph_1_1', TEMPO, 40)
-var('tph_1_2', TEMPO, 60)
-var('tph_2_1', TEMPO, 50)
-var('tph_2_2', TEMPO, 65)
-var('tph_2_3', TEMPO, 50)
-var('tph_2_4', TEMPO, 40)
-
+var('tph_1_1', IPA_TEMPO, 40)
+var('tph_1_2', IPA_TEMPO, 60)
+var('tph_2_1', IPA_TEMPO, 50)
+var('tph_2_2', IPA_TEMPO, 65)
+var('tph_2_3', IPA_TEMPO, 50)
+var('tph_2_4', IPA_TEMPO, 40)
 
 if __name__ == '__main__':
     read_vars('chopin_prelude_8')

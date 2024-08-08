@@ -1,19 +1,3 @@
-# This file is part of Numula
-# Copyright (C) 2024 David P. Anderson
-#
-# Numula is free software; you can redistribute it and/or modify it
-# under the terms of the GNU Lesser General Public License
-# as published by the Free Software Foundation,
-# either version 3 of the License, or (at your option) any later version.
-#
-# Numula is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-# See the GNU Lesser General Public License for more details.
-#
-# You should have received a copy of the GNU Lesser General Public License
-# along with Numula.  If not, see <http://www.gnu.org/licenses/>.
-
 # dipa: iteractively edit a Numula program's nuance params
 #
 # You can select the param you want to vary,
@@ -24,7 +8,7 @@
 #
 # The program (prog.py) must:
 # 1) declare adjustable variables with e.g.
-#   var('v1', VOL, .2)
+#   var('v1', IPA_VOL_MULT, .2)
 #   It can refer to this as 'v1'
 # 2) define a function main() that returns a Score object
 #
@@ -57,7 +41,7 @@ space             play from start to start+dur
 up/down arrow     inc/dec current var
     ''')
 
-# show unhidden variables and other info
+# show non-hidden variables and other info
 #
 def show(cur_var, start, dur):
     print('variables:')
@@ -121,8 +105,8 @@ def ipa_main():
     if len(sys.argv) != 2:
         raise Exception('usage: dipa prog')
     prog = sys.argv[1]
-    prog_vars = prog+'.vars'
-    prog_midi = 'data/%s.mid'%(prog)
+    prog_vars = ipa.vars_file_path(prog)
+    prog_midi = 'data/%s.midi'%(prog)
 
     # run the program to get its adjustable variables
     #
