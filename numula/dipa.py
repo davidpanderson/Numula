@@ -47,34 +47,53 @@ def type_name(type):
     if type == IPA_DT_SCORE: return 'Score time'
     if type == IPA_DT_SEC: return 'Seconds'
     if type == IPA_TEMPO: return 'Tempo'
-    if type == IPA_BOOL: return ''
+    if type == IPA_BOOL: return 'Bool'
     return '???'
+
+# rows: list of lists of n strings
+# print them so that columns line up
+#
+def print_table(rows, n):
+    width = [0]*n
+    for row in rows:
+        for i in range(n):
+            x = len(row[i])
+            if x > width[i]: width[i] = x
+    codes = []
+    for i in range(n):
+        codes.append('{0:%ds}'%width[i])
+    for row in rows:
+        x = []
+        for i in range(n):
+            x.append(codes[i].format(row[i]))
+        print('  '.join(x))
 
 # show non-hidden variables and other info
 #
-def show(cur_var, start, dur):
+def show(cur_var):
     print('variables:')
     n = len(ipa.vars)
+    rows = [['#', 'name', 'value', 'type', 'tags', 'description']]
     for i in range(n):
+        row = ['']*6
+        row[0] = str(i+1)
+        if i == cur_var:
+            row[0]+='*'
         x = ipa.vars[i]
         name = x['name']
-        t = ''
+        row[1] = name
+        if ipa.numeric(x['type']):
+            row[2] = '{0:.2f}'.format(ipa.get(name))
+        else:
+            row[2] = str(ipa.get(name))
+        row[3] = type_name(x['type'])
         if x['tags']:
             if not ipa.tags_set(x['tags']):
                 continue
-            t = ' (tags: %s)'%(', '.join(x['tags']))
-        d = ' desc %s'%(x['desc']) if x['desc'] else ''
-        if ipa.numeric(x['type']):
-            print('%d. %10s: %.2f %s%s%s'%(
-                i+1, name, ipa.get(name), type_name(x['type']), t, d
-            ))
-        else:
-            print('%d. %s: %s %s%s%s'%(
-                i+1, name, ipa.get(name), type_name(x['type']), t, d
-            ))
-
-    print('current var: %d'%(cur_var+1))
-    print('start time: %f duration: %f'%(start, dur))
+            row[4] = ', '.join(x['tags'])
+        row[5] = x['desc']
+        rows.append(row)
+    print_table(rows, 6)
 
 # write adjustable variables to a file
 #
@@ -105,7 +124,7 @@ def adjust(ivar, up):
         if val < x['lo']:
             val = x['lo']
     ipa.set(name, val)
-    print('%s: %f'%(name ,val))
+    print('%s: %.2f'%(name ,val))
 
 def ipa_main():
     global ns
@@ -127,15 +146,21 @@ def ipa_main():
         ipa.vars
     except:
         raise Exception('no adjustable vars')
-    cur_var = 0
+    cur_var = -1
+    n = len(ipa.vars)
+    for i in range(n):
+        x = ipa.vars[i]
+        if numeric(x['type']):
+            cur_var = i
+            break
 
     if os.path.exists(prog_vars):
-        print('reading vars from ', prog_vars)
+        print('reading values from ', prog_vars)
         ipa.read_vars(prog)
 
-    start = 0
-    dur = 1
-    show(cur_var, start, dur)
+    ipa.var('start', IPA_DT_SCORE, '0/1', desc='playback start time')
+    ipa.var('dur', IPA_DT_SCORE, '1/1', desc='playback duration')
+    show(cur_var)
 
     dirty = True
         # true if variables have changed;
@@ -156,36 +181,46 @@ def ipa_main():
                     continue
                 v = ipa.vars[j]
                 if ipa.numeric(v['type']):
-                    cur_var = j
                     if len(words) > 1:
+                        w = words[1]
                         try:
-                            val = float(words[1])
-                            ipa.set(v['name'], val)
+                            x = float(w)
                         except:
-                            print('bad value ', words[1])
+                            print('bad value ', w)
+                            continue
+                        if ipa.valid_value(x, v['type']):
+                            ipa.set(v['name'], x)
+                        else:
+                            print('bad value ', w)
                             continue
                         dirty = True
                     else:
                         print('%s: %f'%(v['name'], ipa.get(v['name'])))
+                    cur_var = j
                 else:
                     if len(words) < 2:
                         print('must supply a value')
                         continue
+                    w = words[1]
                     if v['type'] == IPA_BOOL:
-                        if words[1] == 't':
+                        if w == 't':
                             ipa.set(v['name'], True)
-                        elif words[1] == 'f':
+                        elif w == 'f':
                             ipa.set(v['name'], False)
                         else:
                             print('bad value: use t/f')
                             continue
                     else:
-                        ipa.set(v['name'], words[1])
+                        if ipa.valid_value(w, v['type']):
+                            ipa.set(v['name'], w)
+                        else:
+                            print('bad value ', w)
+                            continue
                     dirty = True
 
             # show commands
             elif words[0] == 's':
-                show(cur_var, start, dur)
+                show(cur_var)
 
             # set start/end times
             elif words[0] == 'p':
@@ -225,8 +260,9 @@ def ipa_main():
                 exec(prog_source, globals())
                 ns = main()
                 #print(ns)
-                #print(start, dur)
-                ns.trim(start, start+dur)
+                s = ipa.fraction_value(ipa.get('start'))
+                d = ipa.fraction_value(ipa.get('dur'))
+                ns.trim(s, s+d)
                 ns.write_midi(prog_midi)
                 numula.pianoteq_rpc.loadMidiFile(prog_midi)
                 dirty = False

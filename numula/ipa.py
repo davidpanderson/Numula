@@ -46,6 +46,34 @@ def tags_set(tag_list):
 def numeric(type):
     return type in [IPA_VOL, IPA_VOL_MULT, IPA_TEMPO, IPA_DT_SEC]
 
+def fraction_value(str):
+    a = str.split('/')
+    try:
+        num = int(a[0])
+        denom = int(a[1])
+    except:
+        return None
+    if denom <= 0: return None
+    if num < 0: return None
+    return num/denom
+
+def valid_value(val, t):
+    if t == IPA_BOOL:
+        return isinstance(val, bool)
+    if numeric(t):
+        if type(val) not in [int, float]: return False
+    if t == IPA_VOL:
+        return 0 <= val <= 1
+    if t == IPA_VOL_MULT:
+        return 0 <= val <= 2
+    if t == IPA_TEMPO:
+        return 1 < val < 1000
+    if t == IPA_DT_SEC:
+        return 0 <= val <= 10
+    if t == IPA_DT_SCORE:
+        if not isinstance(val, str): return False
+        return fraction_value(val) is not None
+
 # declare an adjustable variable
 # val: initial value
 # step: adjustment increment
@@ -87,28 +115,21 @@ def var_aux(
 def var (
     name,
     type,
-    val = None,
+    val,
     tags = [],
-    desc = None
+    desc = ''
 ):
-    # TODO: check validity of 'val'
     if type == IPA_VOL:
-        if val is None: val = .5
         var_aux(name, val, .02, 0, 1, tags, type, desc);
     elif type == IPA_VOL_MULT:
-        if val is None: val = 1
         var_aux(name, val, .04, 0, 2, tags, type, desc);
     elif type == IPA_DT_SCORE:
-        if val is None: val = '1/1'
         var_aux(name, val, 0, 0, 0, tags, type, desc);
     elif type == IPA_DT_SEC:
-        if val is None: val = 0
         var_aux(name, val, .01, -1, 1, tags, type, desc);
     elif type == IPA_TEMPO:
-        if val is None: val = 60
-        var_aux(name, val, 2, 10, 200, tags, type, desc);
+        var_aux(name, val, 2, 1, 1000, tags, type, desc);
     elif type == IPA_BOOL:
-        if val is None: val = True
         var_aux(name, val, 0, 0, 0, tags, type, desc);
     else:
         raise Exception('bad IPA type %s'%type)
