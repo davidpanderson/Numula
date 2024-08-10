@@ -34,12 +34,12 @@ from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
-var('if_pauses', IPA_BOOL)
-var('if_tbeat', IPA_BOOL)
-var('if_tphrase', IPA_BOOL)
-var('if_accents', IPA_BOOL)
-var('if_vmeas', IPA_BOOL)
-var('if_vphrase', IPA_BOOL)
+var('if_pauses', IPA_BOOL, True)
+var('if_tbeat', IPA_BOOL, True)
+var('if_tphrase', IPA_BOOL, True)
+var('if_accents', IPA_BOOL, True)
+var('if_vmeas', IPA_BOOL, True)
+var('if_vphrase', IPA_BOOL, True)
 # volume
 var('dv1', IPA_VOL, .07)        # volume swells in vmeas
 var('dv2', IPA_VOL, .1)
