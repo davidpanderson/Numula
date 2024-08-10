@@ -3,9 +3,9 @@ from numula.notate_score import *
 from numula.notate_nuance import *
 
 var('pvol', IPA_BOOL, True)
-var('v1', IPA_VOL, .2, ['pvol'])
-var('v2', IPA_VOL, .6, ['pvol'])
-var('v3', IPA_VOL, .2)
+var('v1', IPA_VOL, .2, ['pvol'], 'starting volume')
+var('v2', IPA_VOL, .6, ['pvol'], 'peak volume')
+var('v3', IPA_VOL, .2, desc='ending volume')
 var('i1', IPA_DT_SCORE, '1/2')
 var('i2', IPA_DT_SCORE, '1/2')
 

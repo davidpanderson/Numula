@@ -41,6 +41,15 @@ space             play from start to start+dur
 up/down arrow     inc/dec current var
     ''')
 
+def type_name(type):
+    if type == IPA_VOL: return 'Volume'
+    if type == IPA_VOL_MULT: return 'Volume multiplier'
+    if type == IPA_DT_SCORE: return 'Score time'
+    if type == IPA_DT_SEC: return 'Seconds'
+    if type == IPA_TEMPO: return 'Tempo'
+    if type == IPA_BOOL: return ''
+    return '???'
+
 # show non-hidden variables and other info
 #
 def show(cur_var, start, dur):
@@ -53,15 +62,15 @@ def show(cur_var, start, dur):
         if x['tags']:
             if not ipa.tags_set(x['tags']):
                 continue
-            t = ' tags: (%s)'%(', '.join(x['tags']))
+            t = ' (tags: %s)'%(', '.join(x['tags']))
         d = ' desc %s'%(x['desc']) if x['desc'] else ''
         if ipa.numeric(x['type']):
-            print('%d. %s: %.2f%s%s'%(
-                i+1, name, ipa.get(name), t, d
+            print('%d. %10s: %.2f %s%s%s'%(
+                i+1, name, ipa.get(name), type_name(x['type']), t, d
             ))
         else:
-            print('%d. %s: %s%s'%(
-                i+1, name, ipa.get(name), d
+            print('%d. %s: %s %s%s%s'%(
+                i+1, name, ipa.get(name), type_name(x['type']), t, d
             ))
 
     print('current var: %d'%(cur_var+1))
@@ -162,7 +171,7 @@ def ipa_main():
                     if len(words) < 2:
                         print('must supply a value')
                         continue
-                    if v['type'] == BOOL:
+                    if v['type'] == IPA_BOOL:
                         if words[1] == 't':
                             ipa.set(v['name'], True)
                         elif words[1] == 'f':
