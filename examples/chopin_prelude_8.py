@@ -34,47 +34,53 @@ from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
-var('if_pauses', IPA_LAYER, 'on')
-var('if_tbeat', IPA_LAYER, 'on')
-var('if_tphrase', IPA_LAYER, 'on')
-var('if_accents', IPA_LAYER, 'on')
-var('if_vmeas', IPA_LAYER, 'on')
-var('if_vphrase', IPA_LAYER, 'on')
+var('pauses', IPA_LAYER, 'on')
+var('tbeat', IPA_LAYER, 'on')
+var('tphrase', IPA_LAYER, 'on')
+var('accentsx', IPA_LAYER, 'on')
+var('vmeas', IPA_LAYER, 'on')
+var('vphrase', IPA_LAYER, 'on')
 # volume
-var('dv1', IPA_VOL, .07)        # volume swells in vmeas
-var('dv2', IPA_VOL, .1)
-var('dv3', IPA_VOL, .13)
+var('dv1', IPA_VOL, .07, ['vmeas'])        # volume swells in vmeas
+var('dv2', IPA_VOL, .1, ['vmeas'])
+var('dv3', IPA_VOL, .13, ['vmeas'])
     # RH accents
-var('rha1', IPA_VOL, .14)
-var('rha2', IPA_VOL, .1)
-var('rha3', IPA_VOL, .05)
-var('rha4', IPA_VOL, 0)
-var('rha5', IPA_VOL, .05)
-var('rha6', IPA_VOL, 0)
-var('rha7', IPA_VOL, .1)
-var('rha8', IPA_VOL, .07)
+var('rha1', IPA_VOL, .14, ['accentsx'])
+var('rha2', IPA_VOL, .1, ['accentsx'])
+var('rha3', IPA_VOL, .05, ['accentsx'])
+var('rha4', IPA_VOL, 0, ['accentsx'])
+var('rha5', IPA_VOL, .05, ['accentsx'])
+var('rha6', IPA_VOL, 0, ['accentsx'])
+var('rha7', IPA_VOL, .1, ['accentsx'])
+var('rha8', IPA_VOL, .07, ['accentsx'])
     # LH accents
-var('lha1', IPA_VOL, .14)
-var('lha2', IPA_VOL, 0)
-var('lha3', IPA_VOL, 0)
-var('lha4', IPA_VOL, .11)
+var('lha1', IPA_VOL, .14, ['accentsx'])
+var('lha2', IPA_VOL, 0, ['accentsx'])
+var('lha3', IPA_VOL, 0, ['accentsx'])
+var('lha4', IPA_VOL, .11, ['accentsx'])
 # timing
-var('p_start', IPA_DT_SEC, .04)      # pause on measure start melody note
-var('p_start2', IPA_DT_SEC, .06)     # pause on phrase start melody note
-var('p_start3', IPA_DT_SEC, .1)      # pause on major phrase start melody note
-var('p_mel', IPA_DT_SEC, .02)        # pause on other melody notes (top and bottom)
-var('p_end', IPA_DT_SEC, .06)        # pause on minor phrase end melody note
-var('p_end2', IPA_DT_SEC, .08)       # pause on major phrase end melody note
+var('p_start', IPA_DT_SEC, .04, ['pauses'])
+    # pause on measure start melody note
+var('p_start2', IPA_DT_SEC, .06, ['pauses'])
+    # pause on phrase start melody note
+var('p_start3', IPA_DT_SEC, .1, ['pauses'])
+    # pause on major phrase start melody note
+var('p_mel', IPA_DT_SEC, .02, ['pauses'])
+    # pause on other melody notes (top and bottom)
+var('p_end', IPA_DT_SEC, .06, ['pauses'])
+    # pause on minor phrase end melody note
+var('p_end2', IPA_DT_SEC, .08, ['pauses'])
+# pause on major phrase end melody note
     # tbeat
-var('tbeat1', IPA_TEMPO, 55)        # start
-var('tbeat2', IPA_TEMPO, 65)        # end
+var('tbeat1', IPA_TEMPO, 55, ['tbeat'])        # start
+var('tbeat2', IPA_TEMPO, 65, ['tbeat'])        # end
     # tphrase
-var('tph_1_1', IPA_TEMPO, 40)
-var('tph_1_2', IPA_TEMPO, 60)
-var('tph_2_1', IPA_TEMPO, 50)
-var('tph_2_2', IPA_TEMPO, 65)
-var('tph_2_3', IPA_TEMPO, 50)
-var('tph_2_4', IPA_TEMPO, 40)
+var('tph_1_1', IPA_TEMPO, 40, ['tphrase'])
+var('tph_1_2', IPA_TEMPO, 60, ['tphrase'])
+var('tph_2_1', IPA_TEMPO, 50, ['tphrase'])
+var('tph_2_2', IPA_TEMPO, 65, ['tphrase'])
+var('tph_2_3', IPA_TEMPO, 50, ['tphrase'])
+var('tph_2_4', IPA_TEMPO, 40, ['tphrase'])
 
 if __name__ == '__main__':
     read_vars('chopin_prelude_8')
@@ -408,19 +414,19 @@ def main():
         bass
     ])
     if nuance:
-        if if_vphrase != 'off':
+        if vphrase != 'off':
             ns.vol_adjust_pft(vphrase)
-        if if_vmeas != 'off':
+        if vmeas != 'off':
             ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
-        if if_accents != 'off':
+        if accentsx != 'off':
             ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
             ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
         ns.vol_scale(.1, .7)
-        if if_tbeat != 'off':
+        if tbeat != 'off':
             ns.tempo_adjust_pft(tbeat)
-        if if_tphrase != 'off':
+        if tphrase != 'off':
             ns.tempo_adjust_pft(tphrase)
-        if if_pauses != 'off':
+        if pauses != 'off':
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
