@@ -20,6 +20,9 @@ IPA_DT_SEC = 4
 IPA_TEMPO = 5
     # beats per minute, or relative to 60
 IPA_BOOL = 6
+    # typically used for section tags
+IPA_LAYER = 7
+    # tag for a nuance layer: on/hide/off
 
 def var_lookup(name):
     for v in vars:
@@ -32,19 +35,24 @@ def check_tags_defined(tag_list):
         v = var_lookup(tag)
         if not v:
             raise Exception('tag %s not defined'%tag)
-        if v['type'] != IPA_BOOL:
-            raise Exception('tag %s not bool'%tag)
+        if v['type'] not in (IPA_BOOL, IPA_LAYER):
+            raise Exception('tag %s not IPA_BOOL or IPA_LAYER'%tag)
 
-# are all the tags in the list True?
+# is the var hidden given tag values?
 #
-def tags_set(tag_list):
-    for x in tag_list:
-        if not globals()[x]:
-            return False
-    return True
+def should_hide_var(var):
+    for x in var['tags']:
+        v2 = var_lookup(x)
+        if v2['type'] == IPA_BOOL:
+            if not globals()[x]:
+                return True
+        if v2['type'] == IPA_LAYER:
+            if globals()[x] != 'on':
+                return True
+    return False
 
 def numeric(type):
-    return type in [IPA_VOL, IPA_VOL_MULT, IPA_TEMPO, IPA_DT_SEC]
+    return type in (IPA_VOL, IPA_VOL_MULT, IPA_TEMPO, IPA_DT_SEC)
 
 def fraction_value(str):
     a = str.split('/')
@@ -73,6 +81,8 @@ def valid_value(val, t):
     if t == IPA_DT_SCORE:
         if not isinstance(val, str): return False
         return fraction_value(val) is not None
+    if t == IPA_LAYER:
+        return val in ('on', 'hide', 'off')
 
 # declare an adjustable variable
 # val: initial value
@@ -130,6 +140,8 @@ def var (
     elif type == IPA_TEMPO:
         var_aux(name, val, 2, 1, 1000, tags, type, desc);
     elif type == IPA_BOOL:
+        var_aux(name, val, 0, 0, 0, tags, type, desc);
+    elif type == IPA_LAYER:
         var_aux(name, val, 0, 0, 0, tags, type, desc);
     else:
         raise Exception('bad IPA type %s'%type)

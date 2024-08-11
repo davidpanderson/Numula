@@ -34,12 +34,12 @@ from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
-var('if_pauses', IPA_BOOL, True)
-var('if_tbeat', IPA_BOOL, True)
-var('if_tphrase', IPA_BOOL, True)
-var('if_accents', IPA_BOOL, True)
-var('if_vmeas', IPA_BOOL, True)
-var('if_vphrase', IPA_BOOL, True)
+var('if_pauses', IPA_LAYER, 'on')
+var('if_tbeat', IPA_LAYER, 'on')
+var('if_tphrase', IPA_LAYER, 'on')
+var('if_accents', IPA_LAYER, 'on')
+var('if_vmeas', IPA_LAYER, 'on')
+var('if_vphrase', IPA_LAYER, 'on')
 # volume
 var('dv1', IPA_VOL, .07)        # volume swells in vmeas
 var('dv2', IPA_VOL, .1)
@@ -408,19 +408,19 @@ def main():
         bass
     ])
     if nuance:
-        if if_vphrase:
+        if if_vphrase != 'off':
             ns.vol_adjust_pft(vphrase)
-        if if_vmeas:
+        if if_vmeas != 'off':
             ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
-        if if_accents:
+        if if_accents != 'off':
             ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
             ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
         ns.vol_scale(.1, .7)
-        if if_tbeat:
+        if if_tbeat != 'off':
             ns.tempo_adjust_pft(tbeat)
-        if if_tphrase:
+        if if_tphrase != 'off':
             ns.tempo_adjust_pft(tphrase)
-        if if_pauses:
+        if if_pauses != 'off':
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)

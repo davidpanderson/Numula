@@ -47,7 +47,8 @@ def type_name(type):
     if type == IPA_DT_SCORE: return 'Score time'
     if type == IPA_DT_SEC: return 'Seconds'
     if type == IPA_TEMPO: return 'Tempo'
-    if type == IPA_BOOL: return 'Bool'
+    if type == IPA_BOOL: return 'Boolean'
+    if type == IPA_LAYER: return 'Layer'
     return '???'
 
 # rows: list of lists of n strings
@@ -88,7 +89,7 @@ def show(cur_var):
             row[2] = str(ipa.get(name))
         row[3] = type_name(x['type'])
         if x['tags']:
-            if not ipa.tags_set(x['tags']):
+            if ipa.should_hide_var(x):
                 continue
             row[4] = ', '.join(x['tags'])
         row[5] = x['desc']

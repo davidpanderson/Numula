@@ -860,3 +860,15 @@ Commands to:
 - go to a version
 - make a new version
 - delete subtree
+------------------
+Toggles
+controls a nuance layer.
+values:
+on      active and show variables
+hide    active but don't show variables
+off     not active; don't show variables
+IPA_LAYER
+
+In addition can have bools for sections,
+so that you can hide variables not used
+in the section you're working on.
