@@ -59,7 +59,7 @@ GOT_V1 = 3
 # Note: this can be used to define PFT for other purposes.
 # maybe should factor.
 
-def vol(s):
+def sh_vol(s):
     items = s.split()
     items = expand_all(items)
     measure_init()
@@ -157,7 +157,7 @@ def vol(s):
 
 # e.g. '1/8 1.2 1/4 1.2 1/4 1.2 1/8'
 
-def accents(s):
+def sh_accents(s):
     items = s.split()
     items = expand_all(items)
     measure_init()
@@ -194,12 +194,12 @@ def accents(s):
             pft.append(Accent(v))
     return pft
 
-#x = accents('1/8 1.2 1/4 1.3 1/2')
+#x = sh_accents('1/8 1.2 1/4 1.3 1/2')
 #print(*x, sep='\n')
 
 # e.g.: 'linear 60 8/4 80 p0.1 60 3/4 120 0.2p'
 
-def tempo(s):
+def sh_tempo(s):
     items = s.split()
     items = expand_all(items)
     measure_init()
@@ -288,7 +288,7 @@ def tempo(s):
     return pft
 
 # e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
-def pedal(s, pedal_type=pedal_sustain):
+def sh_pedal(s, pedal_type=pedal_sustain):
     items = s.split()
     items = expand_all(items)
     measure_init()
@@ -332,7 +332,7 @@ def pedal(s, pedal_type=pedal_sustain):
 #
 # Apply this to a Score using time_shift_pft()
 #
-def shift(s):
+def sh_shift(s):
     items = s.split()
     items = expand_all(items)
     measure_init()

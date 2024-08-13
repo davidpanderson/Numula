@@ -13,7 +13,7 @@ import numula.pianoteq
 r1 = '<1/2 1/4 1/4 3/4 1/4 1/4 1/4 1/4 1/4 4/4>'
 r2 = '<1/2 1/4 1/4 2/4 1/4 1/4 1/4 1/4 1/4 1/4 4/4>'
 
-soprano = n(f'meas4/4 \
+soprano = sh_score(f'meas4/4 \
     |1 {r1} b6- a- b- c- b- b- a- g- a- b- \
     |5 {r2} g- f g- b- a- g- g- f e- f g- \
     |9 {r1} b6- a- b- c- b- b- a- g- a- b- \
@@ -36,7 +36,7 @@ soprano = n(f'meas4/4 \
     |67 \
 ').tag('sop')
 
-alto = n('meas4/4 \
+alto = sh_score('meas4/4 \
     |1 1/4 . [a5- d-] . [d- e-] . [c- d-] . d- \
     |3 . [c- d-] . [c- d-] . [a- d-] . [e- f] \
     |5 . [-a- g-] . +d- . [d- c-] . d- \
@@ -83,7 +83,7 @@ alto = n('meas4/4 \
     |51 meas4/4 \
 ')
 
-bass = n('meas4/4 \
+bass = sh_score('meas4/4 \
     |1 1/8 f5 -b- d- -e- ++a- 1/4 -d- 1/8 _ e- -e- \
     |2 -a- +g- +d- c- +g- d- e- -g- \
     |3 +g- -c- e- --d- ++g- 1/4 -c- 1/8 _ d- -d- \
@@ -151,7 +151,7 @@ bass = n('meas4/4 \
     |67 \
 ')
 
-soprano_v0 = vol('meas4/4 \
+soprano_v0 = sh_vol('meas4/4 \
     |1 *7 p 1/1 mf 1/1 p 1/1 mp 1/1 p * \
     |29 p 2/1 mf 1/1 p \
     |32 meas2/4 p 2/4 pp \
@@ -168,7 +168,7 @@ soprano_v0 = vol('meas4/4 \
     |67 \
 ')
 
-alto_v0 = vol('meas4/4 \
+alto_v0 = sh_vol('meas4/4 \
     |1 ppp 31/1 ppp \
     |32 meas2/4 [ ppp 2/4 pppp \
     |33 meas4/4 *7 pppp 2/4 _pp 2/4 pppp * \
@@ -180,7 +180,7 @@ alto_v0 = vol('meas4/4 \
     |51 meas4/4 \
 ')
 
-bass_v0 = vol('meas4/4 \
+bass_v0 = sh_vol('meas4/4 \
     |1 *31 _pp 2/4 pp_ 2/4 _pp * \
     |32 meas2/4 [ pp 2/4 pp \
     |33 meas4/4 *7 [ ppp 2/4 pp 2/4 ppp * \
@@ -196,7 +196,7 @@ bass_v0 = vol('meas4/4 \
 
 # mostly slight accents on quarter notes
 #
-bass_accents = accents('meas4/4 \
+bass_accents = sh_accents('meas4/4 \
     |1 *62 mf 1/4 _mf 1/4 * \
     |32 meas2/4 mf 1/4 _mf 1/4 \
     |33 meas4/4 *14 mf 1/4 _mf 1/4 * \
@@ -210,7 +210,7 @@ bass_accents = accents('meas4/4 \
 
 # tempo
 #
-t0 = tempo('meas4/4 \
+t0 = sh_tempo('meas4/4 \
     |1 55 1/1 65 1/1 45 60 1/1 60 1/1 55 \
     |5 55 1/1 65 1/1 45 60 1/1 60 1/1 48 \
     |9 55 1/1 65 1/1 45 60 1/1 60 1/1 50 \
@@ -242,7 +242,7 @@ dt3 = .11
 dt4 = .14
 dt5 = .18
 
-pauses = tempo(f'meas4/4 \
+pauses = sh_tempo(f'meas4/4 \
     |1 \
         {dt5}p{dt4} 1/1 . {dt2}p{dt2} 2/1 . {dt2}p 1/1 . \
         {dt5}p{dt5} 1/1 . {dt2}p{dt2} 2/1 . {dt1}p 1/1 . \
@@ -273,7 +273,7 @@ pauses = tempo(f'meas4/4 \
 # agogic accents (delays) in the melody
 # these aren't used when the alto voice is active
 #
-sop_shift = shift(f'meas4/4 \
+sop_shift = sh_shift(f'meas4/4 \
     |1 *4 \
         {dt2} 1/1 {dt1} 1/1 1/1 {dt1} 1/1 \
         * \
@@ -292,7 +292,7 @@ sop_shift = shift(f'meas4/4 \
     |67 \
 ')
 
-alto_ped = pedal('meas4/4 \
+alto_ped = sh_pedal('meas4/4 \
     |1 *16 - 4/4 * \
     |17 *30 + 2/4 * \
     |32 meas2/4 2/4 \
@@ -305,7 +305,7 @@ alto_ped = pedal('meas4/4 \
     |67 \
 ')
 
-bass_ped = pedal('meas4/4 \
+bass_ped = sh_pedal('meas4/4 \
     |1 *31 + 4/4 * \
     |32 meas2/4 2/4 \
     |33 meas4/4 *7 1/1 * \

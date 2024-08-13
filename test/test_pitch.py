@@ -47,19 +47,19 @@ def test_cloud():
     ps3 = PitchSet(PitchOffs(major_triad), 6, 'F# maj')
 
     hs1 = HarmonyShape(ps1, 0,
-        vol('20 4/1 20')
+        sh_vol('20 4/1 20')
     )
     hs2 = HarmonyShape(ps2, 1/2,
-        vol('0 1/2 100 1/1 100 1/2 0')
+        sh_vol('0 1/2 100 1/1 100 1/2 0')
     )
     hs3 = HarmonyShape(ps3, 3/2,
-        vol('0 1/2 100 1/1 100 1/2 0')
+        sh_vol('0 1/2 100 1/1 100 1/2 0')
     )
     ns = cloud(
-        time_list_pft(vol('40 4/1 40'), False),
+        time_list_pft(sh_vol('40 4/1 40'), False),
         HarmonyShapeSet([hs1, hs2, hs3]),
-        vol('60 4/1 60'),
-        vol('36 4/1 24'),
+        sh_vol('60 4/1 60'),
+        sh_vol('36 4/1 24'),
         0,
         True
     );

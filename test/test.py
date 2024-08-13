@@ -9,8 +9,8 @@ import numula.pianoteq as pianoteq
 
 def scale():
     ns = Score([
-        n('c d e f g a b c d').tag('rh'),
-        n('-c d e f g a b c d').tag('lh')
+        sh_score('c d e f g a b c d').tag('rh'),
+        sh_score('-c d e f g a b c d').tag('lh')
     ])
 
     ns.vol_adjust_pft(
@@ -59,7 +59,7 @@ def preset_test():
 #preset_test()
 
 def meas_test():
-    n(' \
+    sh_score(' \
         1/4 . \
         |10 m3/4 . . . \
         |11 m4/4 \
@@ -69,12 +69,12 @@ def meas_test():
 #meas_test()
 
 def tempo_test():
-    x = tempo('*2 60 8/4 80 p.01 60 3/4 120 0.2p *')
+    x = sh_tempo('*2 60 8/4 80 p.01 60 3/4 120 0.2p *')
     print(*x, sep='\n')
 #tempo_test()
 
 def pause_test():
-    x = tempo('.2p 4/4 . . .1p .')
+    x = sh_tempo('.2p 4/4 . . .1p .')
     print(*x, sep='\n')
 #pause_test()
 

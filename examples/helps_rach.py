@@ -5,7 +5,7 @@ from numula.notate_score import *
 from numula.notate_nuance import *
 import numula.pianoteq
 
-soprano = n('meas4/4 \
+soprano = sh_score('meas4/4 \
     |1 par-12 1/2 c7+ 1/4 b d 1/2 c+ 1/4 b d+ \
     |3 c+ f+ e d c+ b a g \
     |5 1/2 f+ 1/4 e g 1/2 f+ 1/4 e g+ \
@@ -24,7 +24,7 @@ soprano = n('meas4/4 \
 ')
 soprano.tag('sop')
 
-alto = n('meas4/4 \
+alto = sh_score('meas4/4 \
     |1 1/32 *36 f6+ g+ * *7 a b * a g+ *4 f+ g+ * \
     |4 *3 f+ g+ * f+ e *7 d e * d c+ *36 b c+ * \
     |7 *4 b c+ * *8 d e * *3 f g- * f g \
@@ -49,7 +49,7 @@ alto = n('meas4/4 \
 ')
 alto.tag('alto')
 
-tenor = n('meas4/4 \
+tenor = sh_score('meas4/4 \
     |1 1/8 f3+ +c+ +b 1/4 c+ 1/8 -f+ +e +b \
     |2 f3+ +c+ +c+ 1/4 e+ 1/8 d+ +a g+ \
     |3 b -e -a b 1/4 c+ 1/8 -f+ g+ 1/4 a+ 1/8 c+ d 1/4 e 1/8 -a b \
@@ -83,7 +83,7 @@ tenor = n('meas4/4 \
 ')
 tenor.tag('tenor')
 
-bass = n('meas4/4 \
+bass = sh_score('meas4/4 \
     |1 4/4 . . 5/8 . 3/8 b3 1/8 c+ ++d+ 3/8 . 1/4 -e 1/8 . \
     |5 1/8 . b2 +f+ 5/8 . 4/4 . \
     |7 3/4 . 1/8 b4- . 5/8 . 1/8 b3 1/4 -f+ \
@@ -101,7 +101,7 @@ bass = n('meas4/4 \
 ')
 bass.tag('bass')
 
-soprano_v0 = accents('meas4/4 \
+soprano_v0 = sh_accents('meas4/4 \
     |1 *10 1.2 1/4 1.1 1/4 1.1 1/4 1 1/4 * \
     |11 meas6/4 *3 1.2 1/4 1.1 1/4 * \
     |12 meas4/4 *21 1.2 1/4 1.1 1/4 1.1 1/4 1 1/4 * \
@@ -133,7 +133,7 @@ a3 = 1.05
 a2 = 1.0
 a1 = .9
 
-alto_v0 = accents(f' \
+alto_v0 = sh_accents(f' \
     *65 {a5} 1/32 {a1} 1/32 {a2} 1/32 {a1} 1/32 \
       {a3} 1/32 {a1} 1/32 {a2} 1/32 {a1} 1/32 \
       {a4} 1/32 {a1} 1/32 {a2} 1/32 {a1} 1/32 \
@@ -141,7 +141,7 @@ alto_v0 = accents(f' \
     * \
 ')
 
-alto_v1 = vol('meas4/4 \
+alto_v1 = sh_vol('meas4/4 \
     |1 *2 *2 pp 2/4 mp 2/4 pp * pp 4/4 mp 4/4 pp * \
     |9 *2 pp 2/4 mp 2/4 pp * \
     |11 meas6/4 pp 6/4 pp \
@@ -149,21 +149,21 @@ alto_v1 = vol('meas4/4 \
     |33 \
 ')
 
-tenor_v0 = vol('meas4/4 \
+tenor_v0 = sh_vol('meas4/4 \
     |1 mp 10/1 mp \
     |11 meas6/4 mp 6/4 mp \
     |12 meas4/4 mp 84/4 mp \
     |33 \
 ')
 
-tenor_v1 = vol('meas4/4 \
+tenor_v1 = sh_vol('meas4/4 \
     |1 -1 9/4 -1 \
         *4 [ p 1/4 mp [ mp_ 1/4 mp_ * \
         ] -1 3/4 -1 \
     |6 \
 ')
 
-bass_v0 = vol('meas4/4 \
+bass_v0 = sh_vol('meas4/4 \
     p 44/4 p \
     |11 meas6/4 p 6/4 p \
     |12 meas4/4 p 12/1 p \
@@ -171,7 +171,7 @@ bass_v0 = vol('meas4/4 \
     |33 \
 ')
 # overall volume, 4-16 m scale
-v0 = vol('meas4/4 \
+v0 = sh_vol('meas4/4 \
     |1 p 6/4 p 2/4 pp 8/4 p 16/4 mf 8/4 f \
     |11 meas6/4 f 6/4 f \
     |12 meas4/4 f 1/4 ff 3/4 mp 4/4 mp \
@@ -184,7 +184,7 @@ v0 = vol('meas4/4 \
 ')
 
 # tempo
-t0 = tempo('meas4/4 \
+t0 = sh_tempo('meas4/4 \
     |1 *2 55 2/4 65 2/4 60 60 2/4 65 2/4 60 65 8/4 55 * \
     |9 60 2/4 65 2/4 60 60 2/4 65 2/4 60 \
     |11 meas6/4 65 6/4 60 \
@@ -204,7 +204,7 @@ dt3 = .11
 dt4 = .14
 
 # pauses
-t1 = tempo(f'meas4/4 \
+t1 = sh_tempo(f'meas4/4 \
     |1 *2 {dt2}p 4/4 . {dt1}p 4/4 . \
         {dt1}p 8/4 . \
         * \
@@ -221,7 +221,7 @@ t1 = tempo(f'meas4/4 \
 ')
 
 # pedal over measures
-mped = pedal('meas4/4 \
+mped = sh_pedal('meas4/4 \
     |1 *10 + 4/4 * \
     |11 meas6/4 + 6/4 \
     |12 meas4/4 *21 + 4/4 * \

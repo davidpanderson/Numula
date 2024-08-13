@@ -54,8 +54,6 @@ class Score(ScoreBasic):
                 seg_end = seg_start + seg.dt
             # v is the adjustment factor
             if mode == VOL_MULT:
-                if v < 0:
-                    continue
                 n.vol *= v
             elif mode == VOL_ADD:
                 n.vol += v

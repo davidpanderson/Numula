@@ -147,8 +147,9 @@ class RepeatList:
             self.i = 0
         return x
 
-# textual note specification
-def n(s, **kwargs):
+# shorthand score specification
+#
+def sh_score(s, **kwargs):
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
     s = s.replace('<', ' < ')
@@ -215,6 +216,7 @@ def n(s, **kwargs):
                     raise Exception('bad values in %s'%t)
                 dur_list.append(num/denom)
             else:
+                # <arg> where arg=iterator kw arg
                 dur = copy.copy(kwargs[t])
         elif t[0] == '|':
             comment(t, dt)

@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-# tests of score notation (n())
+# tests of score notation (sh_score())
 
 from numula.nscore import *
 from numula.notate_score import *
@@ -22,35 +22,35 @@ from numula.notate_score import *
 def test1():
     s = 'c (foo d 1/8 _ e foo)'
     ns = ScoreBasic()
-    ns.append_score([n(s)])
+    ns.append_score([sh_score(s)])
     print(ns)
     ns.write_midi('data/test1.midi')
 
 #test1()
 
 def test2():
-    s = n('<1/2 1/4> a b c d e f')
+    s = sh_score('<1/2 1/4> a b c d e f')
     print(s)
 
 #test2()
 
 def test3():
     foo = iter([1,2,3])
-    s = n('<x> a b c <1/4 1/2> d e f g', x=foo)
+    s = sh_score('<x> a b c <1/4 1/2> d e f g', x=foo)
     print(s)
 
 #test3()
 
 def test4():
-    s = n('<1/4 1/2> [c 1/1 d] e')
+    s = sh_score('<1/4 1/2> [c 1/1 d] e')
     print(s)
 
 #test4()
 
 def test_tag():
     ns = ScoreBasic([
-        n(' |300 1/16 [c f a- c] g a- b- c d e f'),
-        n(' |300 1/4 f3 1/8 . [c f a- c] *4 [-c e g b- c] * ')
+        sh_score(' |300 1/16 [c f a- c] g a- b- c d e f'),
+        sh_score(' |300 1/4 f3 1/8 . [c f a- c] *4 [-c e g b- c] * ')
     ], verbose=True)
     print(ns)
 test_tag()

@@ -34,64 +34,64 @@ import numula.pianoteq
 # todo: use absolute pitches here and there
 #
 def make_score():
-    rh1 = n('3/16 .  ++d- 2/8 c 1/8 +c \
+    rh1 = sh_score('3/16 .  ++d- 2/8 c 1/8 +c \
         3/8 -f [c (more -c more) ] \
         3/16 [ -g 3/8 (more +e- more) ] +d- 2/8 [c (more -f more) ] 1/8 ++c \
         3/16 [5/8 -f 3/8 (more -g more) ] +d- 2/8  [c (more a- more) ] 1/8 ++c \
         3/16 -f d- [c -e-] ++c \
     ').tag('rh')
-    rh2 = n('3/16 [+c e-] [d- f] d- e- 1/4 c 1/8 c \
+    rh2 = sh_score('3/16 [+c e-] [d- f] d- e- 1/4 c 1/8 c \
         3/16 [-e- +b-] +b- [--f b- +a-] [d- --b-] 1/4 [c 3/8 +g-] 1/8 -c \
         3/16 [--f +c f] +f [b- f -b-] -e- [a- d- f 1/4 a-] --d- 1/8 _ +a- \
         3/16 [c 3/8 d- g-] -b- d- +c [d- -d- 3/8 g-] [e- +e-] \
     ').tag('rh')
-    rh3 = n('3/16 [++e- 3/8 f -b- f] [+d- +d-] [e- -f c a- f] +++f 1/4 [--f b-] 1/8 [e- -e-] \
+    rh3 = sh_score('3/16 [++e- 3/8 f -b- f] [+d- +d-] [e- -f c a- f] +++f 1/4 [--f b-] 1/8 [e- -e-] \
         3/16 [-f b- +g-] [+f +f] 1/8 .  [----c +c  c +c] [-c -c] \
         3/16 . [f +e-] c [+c +c] \
        3/16 [ ---f +f f +f] +f ---c [+g- +g-] \
     ').tag('rh')
-    rh4 = n('3/16 +++f b- [--c a-] [++f +c] \
+    rh4 = sh_score('3/16 +++f b- [--c a-] [++f +c] \
         [--c -g-]  3/16 [b- +b-  b- +b-] [-e- b- -b-] -e- g- g- \
         [f d-] +d- 1/4 ++d- 1/8 c 3/8 b- \
         1/8 [ ---c e 1/4 a-] [f -a-] 1/4 +g 1/8 [d- +a-] [-e- +d-] \
     ').tag('rh')
-    rh5 = n('1/32 _ 1/64 e- +d- 1/6 [e- +d-] 1/12 c 1/4 [b- -d-] +a- \
+    rh5 = sh_score('1/32 _ 1/64 e- +d- 1/6 [e- +d-] 1/12 c 1/4 [b- -d-] +a- \
         [b- +g] 1/6 --d- 1/12 c 1/8 [+g +e- +b-] -d- \
         1/6 [d- +a- d-] 1/12 c 1/4 [b- g -c -e-] [d- +b- +f a-] \
         1/8 [g e- -a- -c] ++d- [--b- +g +d- f +d-] c [b- -e- c -f -a-] ++d- \
     ').tag('rh')
-    rh6 = n('1/8 [(more +++d- more) e- +a- d-] c 1/4 [b- g -c a-] [g b- +f a-] \
+    rh6 = sh_score('1/8 [(more +++d- more) e- +a- d-] c 1/4 [b- g -c a-] [g b- +f a-] \
         [g e- -a- f] [e- g +d- f] [e- c -f -d-] \
         [c e- +b- d-] 1/6 [-d- b-] [+a- c] [-d- b-] \
         1/4 [ (less -f less) c] 3/8 [+b- d- f a-] 1/8 [3/8 --f] \
         1/4 [3/4 a- c] -e- d- \
     ').tag('rh')
-    lh1 = n('6/8 . 2/8 [--f +c (more +a- more) ] 1/8 [-d- (more +b- more) ] 2/8 [--f +e-] 1/8 [f (more +d- more) ] \
+    lh1 = sh_score('6/8 . 2/8 [--f +c (more +a- more) ] 1/8 [-d- (more +b- more) ] 2/8 [--f +e-] 1/8 [f (more +d- more) ] \
         3/8 --f [f ++a-] \
         [--f ++b-] [--f ++c] \
         [--f ++b-] 3/16 --f [++f +d-] \
     ')
-    lh2 = n('3/8 [+g- --f] [+f b- ---f] [+f +e-] \
+    lh2 = sh_score('3/8 [+g- --f] [+f b- ---f] [+f +e-] \
         --g- f e- \
         d- c b- \
         1/4 e- 1/8 f 1/4 [g- ++b-] 1/8 --a- 3/8 [a ++c] \
     ')
-    lh3 = n(' 3/8 [b- -b-] 3/16 [c +a-] [d- -d-] 1/4 [c +g-] 1/8 [-c +c] \
+    lh3 = sh_score(' 3/8 [b- -b-] 3/16 [c +a-] [d- -d-] 1/4 [c +g-] 1/8 [-c +c] \
         3/8 [b- f -b-] [a- +a-] \
         3/16 [g- -g-] ++b- 1/4 c 1/8 [c +c] \
         3/16 [---f +f] ++d- 3/8 [--e- -e-] \
     ')
-    lh4 = n(' 3/16 [-d- -d-] [+++f +d-] ---d +++a- \
+    lh4 = sh_score(' 3/16 [-d- -d-] [+++f +d-] ---d +++a- \
         [--e- -e-] [+++e- d-] 3/8 --d- --c \
         3/16 +c b- 1/4 a- 1/8 [++d- f] 3/16 --g [c ++e] \
         1/4 --f 1/8 [1/4 f 1/8 +d- +b-]  [c -e-] [-f +f] g \
     ')
-    lh5 = n(' 1/8 [-f a- +f] [-b- +g] [a- -c -f] [+d- +b-] [c -e- -f] [+f  +d-] \
+    lh5 = sh_score(' 1/8 [-f a- +f] [-b- +g] [a- -c -f] [+d- +b-] [c -e- -f] [+f  +d-] \
         [1/4 ---f +f 1/8 ++g +e-] [f -a-] 1/4 [a- --f -f] (less [f +f] \
         [-f +f] [-f +f] [-f +f] \
         [-f +f] [-f +f] [-f +f] less) \
     ')
-    lh6 = n(' 1/4 [-f ++g b-] [d- -f -f] [f +e- +c] \
+    lh6 = sh_score(' 1/4 [-f ++g b-] [d- -f -f] [f +e- +c] \
         [b- -d- -f] [f +c +a-] [g -b- f] \
         [f a- +g] 1/2 [e -g f] \
         3/4 [ (more g more) 6/4 -c -f] +f \
@@ -122,7 +122,7 @@ def make_score():
 
 def set_vol(ns):
     ns.vol_adjust_pft(
-        vol('ppp 30/8 pp \
+        sh_vol('ppp 30/8 pp \
             pp 9/8 ppp 18/8 pp 9/8 p \
             p 27/8 mp \
             [ p 17/8 ppp 15/8 pp \
@@ -151,7 +151,7 @@ def set_vol(ns):
 
 def set_tempo(ns):
     ns.tempo_adjust_pft(
-        tempo('65 30/8 60 \
+        sh_tempo('65 30/8 60 \
             65 9/8 55 60 9/8 70 18/8 80 \
             65 27/8 55 \
             55 24/8 50 |time_change 30 6/8 40 \

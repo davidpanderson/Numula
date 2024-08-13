@@ -5,7 +5,7 @@ from numula.notate_score import *
 from numula.notate_nuance import *
 import numula.pianoteq
 
-soprano = n('meas3/4 \
+soprano = sh_score('meas3/4 \
     |1 <*3 1/2 1/4 * 3/4> f6 e f c f e d- \
     |5 f e f d- f e c \
     |9 f g a g+ e g d \
@@ -32,7 +32,7 @@ soprano = n('meas3/4 \
     |86 \
 ')
 
-alto = n('meas3/4 \
+alto = sh_score('meas3/4 \
     |1 1/8 . e6 e c . -f . +e e d- . -f . +e -f +e . c  . e e c+ e -f \
     |5 . +e c -f . +d- . e e c . -f . f +c e . f . e d- -f f +e \
     |9 . e c c . -f . +e d- c . -f . +e- c +g . --f . +e c c +g --f \
@@ -105,7 +105,7 @@ alto = n('meas3/4 \
 ')
 
 # various off-beat notes
-tenor = n('meas3/4 \
+tenor = sh_score('meas3/4 \
     |1 3/4 *31 . * \
     |32 1/4 . . c6 \
     |33 3/4 *24 . * \
@@ -124,7 +124,7 @@ tenor = n('meas3/4 \
 ')
 
 # the lower melody notes from m67 onward
-bass = n('meas3/4 \
+bass = sh_score('meas3/4 \
     |1 3/4 *66 . * \
     |67 <*3 1/2 1/4 * 3/4> \
         f6 e f c f e d- \
@@ -135,7 +135,7 @@ bass = n('meas3/4 \
     |86 \
 ')
 
-ped = pedal('meas3/4 \
+ped = sh_pedal('meas3/4 \
     |1 + 48/4 \
     |17 *4 \
         *4 + 2/4 + 1/4 * - \
@@ -148,7 +148,7 @@ ped = pedal('meas3/4 \
     |86 1/4 - \
 ')
 
-soprano_v0 = vol('meas3/4 \
+soprano_v0 = sh_vol('meas3/4 \
     |1 *2 [ mp 12/4 mp [ p 12/4 p * \
     |17 [ _p 12/4 _p [ pp 12/4 pp [ mf 12/4 mf [ p 12/4 p \
     |33 [ mp 48/4 mp \
@@ -160,7 +160,7 @@ soprano_v0 = vol('meas3/4 \
     |86 \
 ')
 
-alto_v0 = vol('meas3/4 \
+alto_v0 = sh_vol('meas3/4 \
     |1 ppp 48/4 ppp \
     |17 [ ppp 12/4 ppp [ _ppp 12/4 _ppp [ p 12/4 p [ _pp 12/4 _pp \
     |33 [ pppp_ 48/4 pppp_ \
@@ -178,13 +178,13 @@ a3 = 1.1
 a2 = 1.0
 a1 = .9
 
-alto_v1 = accents(f' \
+alto_v1 = sh_accents(f' \
     |1 *48 1. 1/4 {a4} 1/4 {a4} 1/4 * \
     |49 *12 *3 {a5} 1/12 {a4} 1/12 {a4} 1/12 * * \
     |61 \
 ')
 
-tenor_v0 = vol('meas3/4 \
+tenor_v0 = sh_vol('meas3/4 \
     |1 *31 mm 3/4 mm * \
     |32 [ p 3/4 p \
     |33 *24 [ mm 3/4 mm * \
@@ -196,14 +196,14 @@ tenor_v0 = vol('meas3/4 \
     |86 \
 ')
 
-bass_v0 = vol('meas3/4 \
+bass_v0 = sh_vol('meas3/4 \
     |1 *66 mm 3/4 mm * \
     |67 [ mp 12/4 mp [ p 12/4 p [ mf 12/4 mf [ mp 12/4 pp \
     |83 pp 9/4 pp \
     |86 \
 ')
 
-t0 = tempo('meas3/4 \
+t0 = sh_tempo('meas3/4 \
     |1 *16 60 6/4 68 6/4 55 * \
     |65 55 6/4 30 \
     |67 *4 60 6/4 68 6/4 55 * \
@@ -217,7 +217,7 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 
-t1 = tempo(f'meas3/4 \
+t1 = sh_tempo(f'meas3/4 \
     |1 *16 {dt3}p{dt2} 6/4 . {dt2}p{dt1} 6/4 . * \
     |65 6/4 . .3p \
     |67 *4 {dt3}p{dt2} 6/4 . {dt2}p{dt1} 6/4 . * \

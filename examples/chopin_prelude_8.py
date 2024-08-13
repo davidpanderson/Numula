@@ -37,7 +37,7 @@ from numula.notate_nuance import *
 var('pauses', IPA_LAYER, 'on')
 var('tbeat', IPA_LAYER, 'on')
 var('tphrase', IPA_LAYER, 'on')
-var('accentsx', IPA_LAYER, 'on')
+var('accents', IPA_LAYER, 'on')
 var('vmeas', IPA_LAYER, 'on')
 var('vphrase', IPA_LAYER, 'on')
 # volume
@@ -45,19 +45,19 @@ var('dv1', IPA_VOL, .07, ['vmeas'])        # volume swells in vmeas
 var('dv2', IPA_VOL, .1, ['vmeas'])
 var('dv3', IPA_VOL, .13, ['vmeas'])
     # RH accents
-var('rha1', IPA_VOL, .14, ['accentsx'])
-var('rha2', IPA_VOL, .1, ['accentsx'])
-var('rha3', IPA_VOL, .05, ['accentsx'])
-var('rha4', IPA_VOL, 0, ['accentsx'])
-var('rha5', IPA_VOL, .05, ['accentsx'])
-var('rha6', IPA_VOL, 0, ['accentsx'])
-var('rha7', IPA_VOL, .1, ['accentsx'])
-var('rha8', IPA_VOL, .07, ['accentsx'])
+var('rha1', IPA_VOL, .14, ['accents'])
+var('rha2', IPA_VOL, .1, ['accents'])
+var('rha3', IPA_VOL, .05, ['accents'])
+var('rha4', IPA_VOL, 0, ['accents'])
+var('rha5', IPA_VOL, .05, ['accents'])
+var('rha6', IPA_VOL, 0, ['accents'])
+var('rha7', IPA_VOL, .1, ['accents'])
+var('rha8', IPA_VOL, .07, ['accents'])
     # LH accents
-var('lha1', IPA_VOL, .14, ['accentsx'])
-var('lha2', IPA_VOL, 0, ['accentsx'])
-var('lha3', IPA_VOL, 0, ['accentsx'])
-var('lha4', IPA_VOL, .11, ['accentsx'])
+var('lha1', IPA_VOL, .14, ['accents'])
+var('lha2', IPA_VOL, 0, ['accents'])
+var('lha3', IPA_VOL, 0, ['accents'])
+var('lha4', IPA_VOL, .11, ['accents'])
 # timing
 var('p_start', IPA_DT_SEC, .04, ['pauses'])
     # pause on measure start melody note
@@ -87,7 +87,7 @@ if __name__ == '__main__':
 
 from numula.ipa import *
 
-soprano = n('meas4/4 \
+soprano = sh_score('meas4/4 \
     |1 1/32 \
         *2 c5+ +c+ g+ b a f+ d +d \
             --c+ +c+ g+ b a g+ f+ +f+ \
@@ -201,7 +201,7 @@ soprano = n('meas4/4 \
 # play all notes as rolled chord
 # use perf_dur_abs() to make the grace note E# end at the F#
 
-bass = n('meas4/4 \
+bass = sh_score('meas4/4 \
     < 1/24 1/24 1/24 1/8 > \
     |1 *2 a4 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ * \
     |3 a5 -d+ f+ -a +g+ d+ f+ -g+ g5 -c+ e -g +f+ c+ e -f+ \
@@ -242,12 +242,12 @@ bass = n('meas4/4 \
 # 1 measure of RH accents
 rha = f'*4 {rha1} 1/32 {rha2} 1/32 {rha3} 1/32 {rha4} 1/32 {rha5} 1/32 {rha6} 1/32 {rha7} 1/32 {rha8} 1/32 *'
 
-rh_accents = accents(f'meas4/4 \
+rh_accents = sh_accents(f'meas4/4 \
     |1 *32 {rha} * \
     |33 \
 ')
 
-lh_accents = accents(f'meas4/4 \
+lh_accents = sh_accents(f'meas4/4 \
     |1 *32 \
         *4 {lha1} 1/24 {lha2} 1/24 {lha3} 1/24 {lha4} 1/8 * \
         * \
@@ -269,7 +269,7 @@ vm_24 = f'[ *2 0 1/4 {dv1} 1/4 0 *'
 # swell to 3rd beat
 vm_3 = f'[ 0 2/4 {dv2} 2/4 0'
 
-vmeas = vol(f'meas4/4 \
+vmeas = sh_vol(f'meas4/4 \
     |1 {vm_4_sm} {vm_4_med} {vm_24} {vm_3} \
     |5 {vm_4_med} {vm_4_lg} {vm_24} {vm_3} \
     |9 {vm_3} {vm_3} {vm_24} {vm_3} \
@@ -282,7 +282,7 @@ vmeas = vol(f'meas4/4 \
     |33 *2 [ 0 1/1 0 * \
 ')
 
-vphrase = vol('meas4/4 \
+vphrase = sh_vol('meas4/4 \
     |1 pppp 8/1 pppp \
     |9 [ pppp 4/1 _f 2/1 f 2/1 f \
     |17 [ p 3/1 p \
@@ -346,7 +346,7 @@ pm3 = f'{pb0} {pb_end} {pb0} {pb_end}'
 # measure 8: moving forward, part of longer phrase
 pm8 = f'{pb_start_short} {pb0} {pb0} {pb_end_short}'
 
-pauses = tempo(f'meas4/4 \
+pauses = sh_tempo(f'meas4/4 \
     |1 {pm1} {pm2} {pm3} {pm2} \
     |5 {pm1} {pm2} {pm3} {pm8} \
     |9 *4 {pm8} * \
@@ -362,7 +362,7 @@ pauses = tempo(f'meas4/4 \
 ')
 
 # accel within each beat
-tbeat = tempo(f'meas4/4 \
+tbeat = sh_tempo(f'meas4/4 \
     |1 *32 *4 {tbeat1} 1/4 {tbeat2} * * \
 ')
 
@@ -387,7 +387,7 @@ trit2 = '60 1/1 40'
 # faster version of t1
 t19 = '50 2/4 80 2/4 50'
 
-tphrase = tempo(f'meas4/4 \
+tphrase = sh_tempo(f'meas4/4 \
     |1 {t1} {t2} {t3} {trit} \
     |5 {t1} {t1} {t7} {t7} \
     |9 {t7} {t7} {t3} {t1} \
@@ -418,7 +418,7 @@ def main():
             ns.vol_adjust_pft(vphrase)
         if vmeas != 'off':
             ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
-        if accentsx != 'off':
+        if accents != 'off':
             ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
             ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
         ns.vol_scale(.1, .7)
