@@ -40,6 +40,8 @@ var('tphrase', IPA_LAYER, 'on')
 var('accents', IPA_LAYER, 'on')
 var('vmeas', IPA_LAYER, 'on')
 var('vphrase', IPA_LAYER, 'on')
+var('ifsoprano', IPA_BOOL, True)
+var('ifbass', IPA_BOOL, True)
 # volume
 var('dv1', IPA_VOL, .07, ['vmeas'])        # volume swells in vmeas
 var('dv2', IPA_VOL, .1, ['vmeas'])
@@ -409,10 +411,12 @@ def main():
     # virtual pedal within a beat
     soprano.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
     bass.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
-    ns.append_score([
-        soprano,
-        bass
-    ])
+    parts = []
+    if ifsoprano:
+        parts.append(soprano)
+    if ifbass:
+        parts.append(bass)
+    ns.append_score(parts)
     if nuance:
         if vphrase != 'off':
             ns.vol_adjust_pft(vphrase)
@@ -421,7 +425,7 @@ def main():
         if accents != 'off':
             ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
             ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
-        ns.vol_scale(.1, .7)
+        #ns.vol_scale(.1, .7)
         if tbeat != 'off':
             ns.tempo_adjust_pft(tbeat)
         if tphrase != 'off':
