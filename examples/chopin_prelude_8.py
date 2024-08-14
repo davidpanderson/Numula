@@ -34,14 +34,14 @@ from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
-var('pauses', IPA_LAYER, 'on')
-var('tbeat', IPA_LAYER, 'on')
-var('tphrase', IPA_LAYER, 'on')
-var('accents', IPA_LAYER, 'on')
-var('vmeas', IPA_LAYER, 'on')
-var('vphrase', IPA_LAYER, 'on')
-var('ifsoprano', IPA_BOOL, True)
-var('ifbass', IPA_BOOL, True)
+var('if_pauses', IPA_LAYER, 'on')
+var('if_tbeat', IPA_LAYER, 'on')
+var('if_tphrase', IPA_LAYER, 'on')
+var('if_accents', IPA_LAYER, 'on')
+var('if_vmeas', IPA_LAYER, 'on')
+var('if_vphrase', IPA_LAYER, 'on')
+var('if_soprano', IPA_BOOL, True)
+var('if_bass', IPA_BOOL, True)
 # volume
 var('dv1', IPA_VOL, .07, ['vmeas'])        # volume swells in vmeas
 var('dv2', IPA_VOL, .1, ['vmeas'])
@@ -412,25 +412,25 @@ def main():
     soprano.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
     bass.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
     parts = []
-    if ifsoprano:
+    if if_soprano:
         parts.append(soprano)
-    if ifbass:
+    if if_bass:
         parts.append(bass)
     ns.append_score(parts)
     if nuance:
-        if vphrase != 'off':
+        if if_vphrase != 'off':
             ns.vol_adjust_pft(vphrase)
-        if vmeas != 'off':
+        if if_vmeas != 'off':
             ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
-        if accents != 'off':
+        if if_accents != 'off':
             ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
             ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
         #ns.vol_scale(.1, .7)
-        if tbeat != 'off':
+        if if_tbeat != 'off':
             ns.tempo_adjust_pft(tbeat)
-        if tphrase != 'off':
+        if if_tphrase != 'off':
             ns.tempo_adjust_pft(tphrase)
-        if pauses != 'off':
+        if if_pauses != 'off':
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
