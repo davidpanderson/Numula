@@ -245,7 +245,7 @@ def ipa_main():
             adjust(cur_var, False)
             dirty = True
         elif x == ' ':
-            if dirty:
+            if dirty or ipa.get('show'):
                 print('computing score')
                 exec(prog_source, globals())
                 ns = main()
