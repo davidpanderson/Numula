@@ -13,7 +13,6 @@
 # 2) define a function main() that returns a Score object
 #
 # commands:
-# :p start dur      set playback start/dur (default 0, 1)
 # :i                set current var to the ith one
 # :i val            assign value to ith var
 # :s                show vars and start/dur
@@ -31,7 +30,6 @@ import numula.ipa as ipa
 def show_commands():
     print('''
 commands:
-:p start dur      set playback start/dur (default 0, 1)
 :i                set current var to the ith one
 :i val            assign value to ith var
 :s                show vars and start/dur
@@ -69,9 +67,9 @@ def print_table(rows, n):
             x.append(codes[i].format(row[i]))
         print('  '.join(x))
 
-# show non-hidden variables and other info
+# show non-hidden variables
 #
-def show(cur_var):
+def show_vars(cur_var):
     print('variables:')
     n = len(ipa.vars)
     rows = [['#', 'name', 'value', 'type', 'tags', 'description']]
@@ -161,7 +159,8 @@ def ipa_main():
 
     ipa.var('start', IPA_DT_SCORE, '0/1', desc='playback start time')
     ipa.var('dur', IPA_DT_SCORE, '1/1', desc='playback duration')
-    show(cur_var)
+    ipa.var('show', IPA_BOOL, False, desc='show score on playback')
+    show_vars(cur_var)
 
     dirty = True
         # true if variables have changed;
@@ -221,17 +220,7 @@ def ipa_main():
 
             # show commands
             elif words[0] == 's':
-                show(cur_var)
-
-            # set start/end times
-            elif words[0] == 'p':
-                x = cmd.split()
-                if len(words) != 3:
-                    print('usage: :t start dur')
-                    continue
-                start = float(words[1])
-                dur = float(words[2])
-                dirty = True
+                show_vars(cur_var)
 
             # write vars to disk
             elif words[0] == 'w':
@@ -260,10 +249,11 @@ def ipa_main():
                 print('computing score')
                 exec(prog_source, globals())
                 ns = main()
-                #print(ns)
                 s = ipa.fraction_value(ipa.get('start'))
                 d = ipa.fraction_value(ipa.get('dur'))
                 ns.trim(s, s+d)
+                if ipa.get('show'):
+                    print(ns)
                 ns.write_midi(prog_midi)
                 numula.pianoteq_rpc.loadMidiFile(prog_midi)
                 dirty = False

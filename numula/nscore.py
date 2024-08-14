@@ -23,11 +23,11 @@ class Note:
         t = ''
         if self.measure_type:
             t += 'm_off: %.4f %s '%(self.measure_offset, self.measure_type)
-        t += ' '.join(self.tags)
-        return 't: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %s vol: %.4f chord: (%d/%d) %s'%(
+        t += ','.join(self.tags)
+        return 't: %.4f d: %.4f perf_t: %.4f perf_d: %.4f pitch: %s vol: %.4f %s'%(
             self.time, self.dur, self.perf_time, self.perf_dur,
             pitch_name(self.pitch), self.vol,
-            self.chord_pos, self.nchord, t
+            t
         )
 
 pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
