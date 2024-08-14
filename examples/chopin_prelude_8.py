@@ -43,46 +43,46 @@ var('if_vphrase', IPA_LAYER, 'on')
 var('if_soprano', IPA_BOOL, True)
 var('if_bass', IPA_BOOL, True)
 # volume
-var('dv1', IPA_VOL, .07, ['vmeas'])        # volume swells in vmeas
-var('dv2', IPA_VOL, .1, ['vmeas'])
-var('dv3', IPA_VOL, .13, ['vmeas'])
+var('dv1', IPA_VOL, .07, ['if_vmeas'])        # volume swells in vmeas
+var('dv2', IPA_VOL, .1, ['if_vmeas'])
+var('dv3', IPA_VOL, .13, ['if_vmeas'])
     # RH accents
-var('rha1', IPA_VOL, .14, ['accents'])
-var('rha2', IPA_VOL, .1, ['accents'])
-var('rha3', IPA_VOL, .05, ['accents'])
-var('rha4', IPA_VOL, 0, ['accents'])
-var('rha5', IPA_VOL, .05, ['accents'])
-var('rha6', IPA_VOL, 0, ['accents'])
-var('rha7', IPA_VOL, .1, ['accents'])
-var('rha8', IPA_VOL, .07, ['accents'])
+var('rha1', IPA_VOL, .14, ['if_accents'])
+var('rha2', IPA_VOL, .1, ['if_accents'])
+var('rha3', IPA_VOL, .05, ['if_accents'])
+var('rha4', IPA_VOL, 0, ['if_accents'])
+var('rha5', IPA_VOL, .05, ['if_accents'])
+var('rha6', IPA_VOL, 0, ['if_accents'])
+var('rha7', IPA_VOL, .1, ['if_accents'])
+var('rha8', IPA_VOL, .07, ['if_accents'])
     # LH accents
-var('lha1', IPA_VOL, .14, ['accents'])
-var('lha2', IPA_VOL, 0, ['accents'])
-var('lha3', IPA_VOL, 0, ['accents'])
-var('lha4', IPA_VOL, .11, ['accents'])
+var('lha1', IPA_VOL, .14, ['if_accents'])
+var('lha2', IPA_VOL, 0, ['if_accents'])
+var('lha3', IPA_VOL, 0, ['if_accents'])
+var('lha4', IPA_VOL, .11, ['if_accents'])
 # timing
-var('p_start', IPA_DT_SEC, .04, ['pauses'])
+var('p_start', IPA_DT_SEC, .04, ['if_pauses'])
     # pause on measure start melody note
-var('p_start2', IPA_DT_SEC, .06, ['pauses'])
+var('p_start2', IPA_DT_SEC, .06, ['if_pauses'])
     # pause on phrase start melody note
-var('p_start3', IPA_DT_SEC, .1, ['pauses'])
+var('p_start3', IPA_DT_SEC, .1, ['if_pauses'])
     # pause on major phrase start melody note
-var('p_mel', IPA_DT_SEC, .02, ['pauses'])
+var('p_mel', IPA_DT_SEC, .02, ['if_pauses'])
     # pause on other melody notes (top and bottom)
-var('p_end', IPA_DT_SEC, .06, ['pauses'])
+var('p_end', IPA_DT_SEC, .06, ['if_pauses'])
     # pause on minor phrase end melody note
-var('p_end2', IPA_DT_SEC, .08, ['pauses'])
+var('p_end2', IPA_DT_SEC, .08, ['if_pauses'])
 # pause on major phrase end melody note
     # tbeat
-var('tbeat1', IPA_TEMPO, 55, ['tbeat'])        # start
-var('tbeat2', IPA_TEMPO, 65, ['tbeat'])        # end
+var('tbeat1', IPA_TEMPO, 55, ['if_tbeat'])        # start
+var('tbeat2', IPA_TEMPO, 65, ['if_tbeat'])        # end
     # tphrase
-var('tph_1_1', IPA_TEMPO, 40, ['tphrase'])
-var('tph_1_2', IPA_TEMPO, 60, ['tphrase'])
-var('tph_2_1', IPA_TEMPO, 50, ['tphrase'])
-var('tph_2_2', IPA_TEMPO, 65, ['tphrase'])
-var('tph_2_3', IPA_TEMPO, 50, ['tphrase'])
-var('tph_2_4', IPA_TEMPO, 40, ['tphrase'])
+var('tph_1_1', IPA_TEMPO, 40, ['if_tphrase'])
+var('tph_1_2', IPA_TEMPO, 60, ['if_tphrase'])
+var('tph_2_1', IPA_TEMPO, 50, ['if_tphrase'])
+var('tph_2_2', IPA_TEMPO, 65, ['if_tphrase'])
+var('tph_2_3', IPA_TEMPO, 50, ['if_tphrase'])
+var('tph_2_4', IPA_TEMPO, 40, ['if_tphrase'])
 
 if __name__ == '__main__':
     read_vars('chopin_prelude_8')
