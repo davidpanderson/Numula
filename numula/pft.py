@@ -145,7 +145,7 @@ class Delta:
 # level 0 is a period of no pedal
 # pedal types don't have to all be the same
 class PedalSeg:
-    def __init__(self, dt, level, pedal_type=pedal_sustain):
+    def __init__(self, dt, level, pedal_type=PEDAL_SUSTAIN):
         self.dt = dt
         self.level = level
         self.pedal_type = pedal_type

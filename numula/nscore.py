@@ -35,13 +35,9 @@ pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 def pitch_name(n):
     return '%s%d'%(pitch_names[n%12], n//12)
 
-pedal_sustain = 64
-pedal_sostenuto = 66
-pedal_soft = 67
-
 # represents the use of a pedal (both depress and release)
 class PedalUse:
-    def __init__(self, time, dur, level=1, pedal_type=pedal_sustain):
+    def __init__(self, time, dur, level=1, pedal_type=PEDAL_SUSTAIN):
         self.time = time
         self.dur = dur
         self.level = level
@@ -50,7 +46,8 @@ class PedalUse:
         self.perf_dur = 0
     def __str__(self):
         return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d level %f'%(
-            self.time, self.dur, self.perf_time, self.perf_dur, self.pedal_type, self.level
+            self.time, self.dur, self.perf_time, self.perf_dur,
+            self.pedal_type, self.level
         )
     
 class Measure:
@@ -498,7 +495,7 @@ class ScoreBasic:
         for note in self.notes:
             if ped_ind == len(self.pedals):
                 break
-            if cur_ped.pedal_type == pedal_sostenuto:
+            if cur_ped.pedal_type == PEDAL_SOSTENUTO:
                 if note.time + note.dur < cur_ped.time - epsilon:
                     continue
                 if note.time > cur_ped.time + epsilon:
@@ -507,7 +504,7 @@ class ScoreBasic:
                     if note.perf_time > cur_ped.perf_time:
                         cur_ped.perf_time = note.perf_time + epsilon
             else:
-                # sustain
+                # sustain, soft
                 if note.time < cur_ped.time:
                     continue
                 if note.time > cur_ped.time + cur_ped.dur:

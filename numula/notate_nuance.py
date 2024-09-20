@@ -288,7 +288,7 @@ def sh_tempo(s):
     return pft
 
 # e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
-def sh_pedal(s, pedal_type=pedal_sustain):
+def sh_pedal(s, pedal_type=PEDAL_SUSTAIN):
     items = s.split()
     items = expand_all(items)
     measure_init()

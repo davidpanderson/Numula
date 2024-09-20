@@ -18,8 +18,8 @@ from numula.nscore import *
 from numula.notate_score import *
 
 def test1():
-    ns = ScoreBasic(n('c d e f g a b c'))
-    ns.insert_pedal(PedalUse(4/4, 3/4, True))
+    ns = ScoreBasic(sh_score('c d e f g a b c'))
+    ns.insert_pedal(PedalUse(4/4, 3/4))
     ns.write_midi('data/test1.midi')
 
 test1()
