@@ -35,7 +35,7 @@ def exp_tempo(curvature):
         ]
     )
     ns.write_midi('data/exp_tempo_%d.midi'%curvature)
-    pianoteq.play('data/exp_tempo_%d.midi'%curvature)
+    pianoteq.play_midi_file('data/exp_tempo_%d.midi'%curvature)
     pianoteq.midi_to_wav(
         'data/exp_tempo_%d.midi'%curvature,
         'data/exp_tempo_%d.wav'%curvature

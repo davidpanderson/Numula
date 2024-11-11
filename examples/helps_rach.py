@@ -256,7 +256,6 @@ def main():
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(t1)
     #print(ns)
-    ns.write_midi('data/helps_rach.midi')
-    numula.pianoteq.play('data/helps_rach.midi')
+    numula.pianoteq.play_score(ns)
 
 main()

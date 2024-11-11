@@ -12,6 +12,9 @@ At this point I have these tools:
     They can be output in various forms (graphic score, test, MIDI)
 
 2) MIDIUtils: Python library for generating MIDI files
+    original https://github.com/MarkCWirt/MIDIUtil
+    improved but still buggy:
+    https://github.com/FlipperPA/midi-writer/issues/6
 
 3) PianoTeq: play MIDI files with piano sounds, to speakers or .WAV files
 
@@ -872,3 +875,35 @@ IPA_LAYER
 In addition can have bools for sections,
 so that you can hide variables not used
 in the section you're working on.
+--------------
+continous controllers (and continuity in general)
+
+Suppose you want to
+
+- play a chord with the sustain pedal on, the gradually lift it
+- play staccato notes and gradually lower the sustain pedal
+
+a) How to describe the pedal movement over time?
+    a PFT, I guess
+b) How to implement this?
+    go through the PFT and generate pedal events.
+    When there's a continuous change,
+    generate events that differ by one (out of 128).
+    This is easy to do for linear, which is probably sufficient.
+
+current:
+
+PedalUse is a constant-value (possibly fractional) application of a pedal.
+    It has a start time and dur, like a Note.
+    These are in score time, and are affected by timing control.
+adjust_pedal_times() adjusts pedal perf times so that they
+    catch the right notes, even if the notes got moved earlier
+
+new:
+
+CCEvent: continuous controller event
+    has score time and pedal value
+
+insert_pedal() adds down and up events
+insert_pedal_pft() takes a PFT (linear segments only)
+    and generates multiple events in increments of 1

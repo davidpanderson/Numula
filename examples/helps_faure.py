@@ -337,8 +337,6 @@ def main():
         ns.tempo_adjust_pft(pauses)
         ns.time_shift_pft(sop_shift, pred=lambda n: 'sop' in n.tags)
     #print(ns)
-    fname = 'data/helps_faure.midi'
-    ns.write_midi(fname, verbose=False)
-    numula.pianoteq.play(fname, preset='My Presets/NY Steinway B Improv')
+    numula.pianoteq.play_score(ns, 'My Presets/NY Steinway B Improv')
 
 main()

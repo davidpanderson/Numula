@@ -440,11 +440,5 @@ def main():
 
 if __name__ == '__main__':
     import numula.pianoteq
-    import numula.pianoteq_rpc
     ns = main()
-    fname = 'data/chopin_prelude_8.midi'
-    preset = 'NY Steinway D Classical'
-    ns.write_midi(fname)
-    numula.pianoteq_rpc.loadMidiFile(fname)
-    numula.pianoteq_rpc.midiPlay()
-    #numula.pianoteq.play(fname, preset)
+    numula.pianoteq.play_score(ns, 'NY Steinway D Classical')

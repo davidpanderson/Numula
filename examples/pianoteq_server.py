@@ -1,3 +1,3 @@
-import numula.pianoteq_rpc
+import numula.pianoteq
 
-numula.pianoteq_rpc.run_server()
+numula.pianoteq.run_server()

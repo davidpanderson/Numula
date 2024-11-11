@@ -14,7 +14,23 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with Numula.  If not, see <http://www.gnu.org/licenses/>.
 
-from MidiFile import MIDIFile
+# midi_writer is a supposedly improved version of MidiFile.
+# but they both crash in a particular case (see below)
+
+midi_writer = False
+
+if midi_writer:
+    from numula.midi_writer import MIDIFile
+else:
+    from numula.MidiFile import MIDIFile
+
+def one_note():
+    f = MIDIFile(deinterleave=False)
+    f.addNote(0, 0, 0x55, 0, 1, 0x77)
+    with open("data/one_note.midi", "wb") as file:
+        f.writeFile(file)
+
+#one_note()
 
 def chromatic():
     track = 0
@@ -37,6 +53,8 @@ def chromatic():
     with open("data/chromatic.midi", "wb") as file:
         f.writeFile(file)
 
+#chromatic()
+
 def vol_sweep():
     f = MIDIFile(deinterleave=False)
     t = 0
@@ -46,18 +64,25 @@ def vol_sweep():
     with open("data/vol_sweep.midi", "wb") as file:
         f.writeFile(file)
 
-vol_sweep()
+#vol_sweep()
         
-#chromatic()
                          
 # show a bug in MIDIFile: crashes if 2 notes w/ same time and pitch
 #
 def mf_bug():
     f = MIDIFile()
-    f.addTempo(0, 0, 120)
-    f.addNote(0, 0, 60, 0, .5, 64);
-    f.addNote(0, 0, 60, 0, .4, 64);
+    if midi_writer:
+        f.add_tempo(0, 0, 120)
+        f.add_note(0, 0, 60, 0, .5, 64);
+        f.add_note(0, 0, 60, 0, .4, 64);
+    else:
+        f.addTempo(0, 0, 120)
+        f.addNote(0, 0, 60, 0, .5, 64);
+        f.addNote(0, 0, 60, 0, .4, 64);
     with open("data/test.midi", "wb") as file:
-        f.writeFile(file)
+        if midi_writer:
+            f.write_file(file)
+        else:
+            f.writeFile(file)
 
-#mf_bug()
+mf_bug()

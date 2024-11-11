@@ -69,7 +69,6 @@ def main():
     # portamento in RH
     #ns.perf_dur_rel(.5, lambda n: 'port' in n.tags)
 
-    ns.write_midi('data/nocturne.midi')
-    pianoteq.play('data/nocturne.midi')
+    pianoteq.play_score(ns)
 
 main()

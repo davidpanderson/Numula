@@ -28,6 +28,4 @@ if __name__ == '__main__':
     import numula.pianoteq
     ns = main()
     print(ns)
-    fname = 'data/test_ipa.midi'
-    ns.write_midi(fname)
-    numula.pianoteq.play(fname)
+    numula.pianoteq.play_score()

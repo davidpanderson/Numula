@@ -24,7 +24,6 @@
 import sys, time, os
 import readchar
 import numula.pianoteq
-import numula.pianoteq_rpc
 import numula.ipa as ipa
 
 def show_commands():
@@ -255,9 +254,9 @@ def ipa_main():
                 if ipa.get('show'):
                     print(ns)
                 ns.write_midi(prog_midi)
-                numula.pianoteq_rpc.loadMidiFile(prog_midi)
+                numula.pianoteq.loadMidiFile(prog_midi)
                 dirty = False
-            numula.pianoteq_rpc.midiSeek(0)
-            numula.pianoteq_rpc.midiPlay()
+            numula.pianoteq.midiSeek(0)
+            numula.pianoteq.midiPlay()
 
 ipa_main()

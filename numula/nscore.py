@@ -326,6 +326,8 @@ class ScoreBasic:
             self.adjust_pedal_times()
             for pedal in self.pedals:
                 c = pedal.pedal_type
+                # in the MIDI standard, "on" is 4-127
+                # see https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/
                 level = int(64+pedal.level*63)
                 if verbose:
                     vstr += 'MIDI pedal: start %f end %f level %f\n'%(
@@ -513,7 +515,8 @@ class ScoreBasic:
                     if note.perf_time < cur_ped.perf_time:
                         cur_ped.perf_time = note.perf_time
         for pedal in self.pedals:
-            # don't want pedal down during attack of notes right at end
+            # don't want pedal down during attack of notes right at end.
+            # On Pianoteq this can cause stuck notes (possibly a bug)
             pedal.perf_dur -= .01
 
     # trim to times t0..t1

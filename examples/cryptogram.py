@@ -24,8 +24,7 @@ def crypto():
     )
     ns.roll(14/1+8*3/4+1/4, numpy.linspace(0, .5, 9))
     print(ns)
-    ns.write_midi('data/crypto2.mid')
-    numula.pianoteq.play('data/crypto2.mid')
+    numula.pianoteq.play_score(ns)
 
 #read_midifile.print_midifile('data/cryptogram.mid')
 

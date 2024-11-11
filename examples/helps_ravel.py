@@ -245,8 +245,6 @@ def main():
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(t1)
     #print(ns)
-    fname = 'data/helps_ravel.midi'
-    ns.write_midi(fname, verbose=False)
-    numula.pianoteq.play(fname)
+    numula.pianoteq.play_score(ns)
     #numula.read_midifile.print_midifile(fname)
 main()

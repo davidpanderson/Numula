@@ -913,10 +913,9 @@ def main():
         ns.perf_dur_rel(0.2, lambda n: 'stac' in n.tags)
         
     ns.t_random_normal(.005, 2)
-    print(ns)
-    ns.write_midi('data/op57.midi', verbose=False)
-    numula.pianoteq.play('data/op57.midi',
-         preset='My Presets/NY Steinway D Classical (for Appassionata)'
+    #print(ns)
+    numula.pianoteq.play_score(ns,
+         'My Presets/NY Steinway D Classical (for Appassionata)'
     )
 
 main()
