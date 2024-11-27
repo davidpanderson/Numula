@@ -35,7 +35,7 @@ def play_score_aux(ns, preset=None):
 def play_score(ns, preset=None):
     ns.write_midi('data/temp.midi')
     if preset:
-        LoadPreset(preset)
+        loadPreset(preset)
     loadMidiFile('data/temp.midi')
     midiPlay()
 
