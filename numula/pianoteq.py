@@ -29,7 +29,7 @@ def play_midi_file(file, preset=None):
 # play MIDI file via RPC
 def play_midi_file_rpc(file, preset=None):
     if preset:
-        LoadPreset(preset)
+        loadPreset(preset)
     loadMidiFile(file)
     midiPlay()
 
