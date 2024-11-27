@@ -882,6 +882,7 @@ Suppose you want to
 
 - play a chord with the sustain pedal on, the gradually lift it
 - play staccato notes and gradually lower the sustain pedal
+- 'feather' the sustain or soft pedal
 
 a) How to describe the pedal movement over time?
     a PFT, I guess
@@ -896,8 +897,10 @@ current:
 PedalUse is a constant-value (possibly fractional) application of a pedal.
     It has a start time and dur, like a Note.
     These are in score time, and are affected by timing control.
+ns.insert_pedal() inserts a PedalUse into a score
 adjust_pedal_times() adjusts pedal perf times so that they
     catch the right notes, even if the notes got moved earlier
+a shorthand notation, sh_pedal(), lets you specify on/off pedal
 
 new:
 
