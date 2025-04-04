@@ -6,13 +6,29 @@ from numula.nuance import *
 from numula.notate_nuance import *
 import numula.pianoteq as pianoteq
 
-def test_pitch():
-    maj = PitchOffs([0,4,7])
-    cmaj = PitchSet(maj, 60)
-    print(cmaj.probs)
-    for i in range(10):
-        print(cmaj.rnd_uniform(40, 80))
-#test_pitch()
+# play a scale
+def scale(ps, durs, vols, lo, hi):
+    p = ps.ge(lo, 0)
+    ns = ScoreBasic()
+    while True:
+        index = ps.index[p]
+        d = durs[index]
+        v = vols[index]
+        ns.append_note(Note(0, d, p, .7*v))
+        if p > hi and ps.index[p] == 0:
+            break;
+        p = ps.gt(p)
+        ns.advance_time(d)
+    return ns
+
+def test_scale():
+    durs = [1/12]+[1/24]*6
+    vols = [1,.6,.8,.6,.85,.6, .6]
+    ps = PitchSet(melodic_minor, 60)
+    ns = scale(ps, durs, vols, 20, 100);
+    pianoteq.play_score(ns)
+
+test_scale()
 
 def test_curtain():
     maj = PitchOffs([0, 4, 7])
@@ -65,5 +81,5 @@ def test_cloud():
     );
     pianoteq.play_score(ns)
 
-test_cloud()
+#test_cloud()
                       

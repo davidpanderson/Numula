@@ -1,17 +1,7 @@
 import random
 from scipy.stats import norm
 
-# a set of pitch offsets (0..11)
-# and an optional set of weights for each one.
-# This can represent a chord or scale.
-#
-class PitchOffs:
-    def __init__(self, offsets, probs=None):
-        self.offsets = offsets
-        if probs:
-            self.probs = probs
-        else:
-            self.probs = [1]*len(offsets)
+# lists of pitch offsets (0..11) are used to define scales and chords
 
 major_scale     = [0,2,4,5,7,9,11]
 natural_minor   = [0,2,3,5,7,8,10]
@@ -22,21 +12,26 @@ minor_triad     = [0,3,7]
 dim_chord       = [0,3,6,9]
 chromatic       = [0,1,2,3,4,5,6,7,8,9,10,11]
 
-# weights that emphasize root/3rd/5th of 7-note scales
-triad_weights = [1,.5,.8,5,.85,.5]
+# probability weights that emphasize root/3rd/5th of 7-note scales
+triad_weights = [1,.5,.8,.5,.85,.5, .5]
 
 # the combination of a set of pitch offsets and a root pitch
+# Can specify a list of probabilities for random pitch selection
 #
 class PitchSet:
-    def __init__(self, poffs, root, name=''):
+    def __init__(self, poffs, root, probs=None, name=''):
+        probs = probs if probs else [1]*len(poffs)
         self.name = name
         # make an array 0..127 of probabilities
         self.probs = [0]*128
+        self.index = [0]*128     # index in pitch offset list
+        self.poffs_len = len(poffs)
         for i in range(128):
             d = (i-root)%12
-            if d in poffs.offsets:
-                j = poffs.offsets.index(d)
-                self.probs[i] = poffs.probs[j]
+            if d in poffs:
+                j = poffs.index(d)
+                self.probs[i] = probs[j]
+                self.index[i] = j
             else:
                 self.probs[i] = 0
             
@@ -79,24 +74,29 @@ class PitchSet:
     # return next pitch above/below a given pitch
     # doesn't take probabilities into account
     #
-    def gt(self, p):
-        i = p+1
+    def gt(self, p, index=-1):
+        i = p
         while True:
-            if i > 127: return 0
-            if self.probs[i]: return i
             i += 1
-    def ge(self, p):
-        return self.gt(p-1)
-    def lt(self, p):
-        i = p-1
-        while True:
-            if i < 1: return 0;
-            if self.probs[i]: return i
-            i -= 1
-    def le(self, p):
-        return self.lt(i+1)
+            if i > 127: return 0
+            if self.probs[i] == 0: continue
+            if index >= 0 and self.index[i] != index: continue
+            return i
 
-# return the number of pitches not common
+    def ge(self, p, index=-1):
+        return self.gt(p-1, index)
+    def lt(self, p):
+        i = p
+        while True:
+            i -= 1
+            if i < 1: return 0;
+            if self.probs[i] == 0: continue
+            if index >= 0 and self.index[i] != index: continue            
+            return i
+    def le(self, p, index):
+        return self.lt(i+1, index)
+
+# return the number of pitches not common between two PitchSets
 #
 def pitch_set_distance(ps1, ps2):
     sum = 0
