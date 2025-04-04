@@ -19,7 +19,12 @@ triad_weights = [1,.5,.8,.5,.85,.5, .5]
 # Can specify a list of probabilities for random pitch selection
 #
 class PitchSet:
-    def __init__(self, poffs, root, probs=None, name=''):
+    def __init__(self,
+        poffs: list[int],
+        root: int,
+        probs: list[float] = None,
+        name: str = ''
+    ):
         probs = probs if probs else [1]*len(poffs)
         self.name = name
         # make an array 0..127 of probabilities
@@ -37,7 +42,7 @@ class PitchSet:
             
     # return a random (uniform but weighted) pitch in lo..hi
     #
-    def rnd_uniform(self, lo, hi):
+    def rnd_uniform(self, lo: int, hi: int):
         sum = 0
         for i in range(lo, hi+1):
             sum += self.probs[i]
@@ -52,7 +57,7 @@ class PitchSet:
 
     # return a random pitch from normal distribution
     #
-    def rnd_normal(self, mean, stddev, maxsigma):
+    def rnd_normal(self, mean: float, stddev: float, maxsigma: float):
         lo = int(mean - stddev*maxsigma)
         hi = int(mean + stddev*maxsigma)
         nprobs = [0]*128
@@ -74,7 +79,7 @@ class PitchSet:
     # return next pitch above/below a given pitch
     # doesn't take probabilities into account
     #
-    def gt(self, p, index=-1):
+    def gt(self, p: int, index: int = -1):
         i = p
         while True:
             i += 1
@@ -83,9 +88,9 @@ class PitchSet:
             if index >= 0 and self.index[i] != index: continue
             return i
 
-    def ge(self, p, index=-1):
+    def ge(self, p: int, index: int = -1):
         return self.gt(p-1, index)
-    def lt(self, p):
+    def lt(self, p: int, index: int = -1):
         i = p
         while True:
             i -= 1
@@ -93,7 +98,7 @@ class PitchSet:
             if self.probs[i] == 0: continue
             if index >= 0 and self.index[i] != index: continue            
             return i
-    def le(self, p, index):
+    def le(self, p: int, index: int = -1):
         return self.lt(i+1, index)
 
 # return the number of pitches not common between two PitchSets
@@ -101,9 +106,7 @@ class PitchSet:
 def pitch_set_distance(ps1, ps2):
     sum = 0
     for i in range(12):
-        if ps1.probs[i]==0:
-            continue
-        if ps2.probs[i]==0:
-            continue
+        if ps1.probs[i]==0: continue
+        if ps2.probs[i]==0: continue
         sum += 1
     return 12-sum

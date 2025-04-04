@@ -7,7 +7,7 @@ from numula.notate_nuance import *
 import numula.pianoteq as pianoteq
 
 # play a scale
-def scale(ps, durs, vols, lo, hi):
+def scale(ps: PitchSet, durs: list[int], vols: list[float], lo: int, hi: int):
     p = ps.ge(lo, 0)
     ns = ScoreBasic()
     while True:
