@@ -327,7 +327,7 @@ def main():
         bass.vol_adjust_pft(bass_accents)
         alto.vsustain_pft(alto_ped)
         bass.vsustain_pft(bass_ped)
-    ns.append_score([
+    ns.append_scores([
         soprano,
         alto,
         bass

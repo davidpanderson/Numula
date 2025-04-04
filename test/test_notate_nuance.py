@@ -43,7 +43,7 @@ def test3():
 def test_ped():
     ns = Score()
     for i in range(2):
-        ns.append_score([sh_score('1/8 c d e f g a b c')])
+        ns.append_score(sh_score('1/8 c d e f g a b c'))
     #ns.insert_pedal(PedalUse(1/4, 3/4))
     #ns.pedal_pft([PedalSeg(3/16, 0), PedalSeg(2/4, 1)])
     p = pedal('- 1/4 + 1/8  1/4 - 4/4')

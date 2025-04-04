@@ -97,12 +97,12 @@ def make_score():
         3/4 [ (more g more) 6/4 -c -f] +f \
     ')
     ns = Score()
-    ns.append_score([rh1, lh1], 'line1')
-    ns.append_score([rh2, lh2], 'line2')
-    ns.append_score([rh3, lh3], 'line3')
-    ns.append_score([rh4, lh4], 'line4')
-    ns.append_score([rh5, lh5], 'line5')
-    ns.append_score([rh6, lh6], 'line6')
+    ns.append_scores([rh1, lh1], 'line1')
+    ns.append_scores([rh2, lh2], 'line2')
+    ns.append_scores([rh3, lh3], 'line3')
+    ns.append_scores([rh4, lh4], 'line4')
+    ns.append_scores([rh5, lh5], 'line5')
+    ns.append_scores([rh6, lh6], 'line6')
 
     # add measures (for metric accent)
     #

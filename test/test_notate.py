@@ -22,7 +22,7 @@ from numula.notate_score import *
 def test1():
     s = 'c (foo d 1/8 _ e foo)'
     ns = ScoreBasic()
-    ns.append_score([sh_score(s)])
+    ns.append_score(sh_score(s))
     print(ns)
     ns.write_midi('data/test1.midi')
 

@@ -59,7 +59,7 @@ def test4():
 def test_dur_pft():
     ns = Score()
     for i in range(8):
-        ns.append_score([sh_score('1/8 c d e f g a b c')])
+        ns.append_score(sh_score('1/8 c d e f g a b c'))
     ns.perf_dur_pft(
         [
             Linear(.1, 1.5, 8/4),
@@ -92,7 +92,7 @@ def test_pft_value():
 def test_vol():
     ns = Score()
     for i in range(2):
-        ns.append_score([sh_score('1/8 c d e f g a b c')])
+        ns.append_score(sh_score('1/8 c d e f g a b c'))
     ns.vol_adjust_pft(
         [
             Unity(2/4),

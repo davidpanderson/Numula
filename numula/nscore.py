@@ -5,7 +5,13 @@ import numula.MidiFile
 from numula.constants import *
 
 class Note:
-    def __init__(self, time, dur, pitch, vol, tags=[]):
+    def __init__(self,
+        time: float,
+        dur: float,
+        pitch: int,
+        vol: float,
+        tags: list[str] = []
+    ):
         if pitch < 0 or pitch > 127:
             raise Exception('illegal pitch %d at time %f'%(pitch, time))
         self.time = time
@@ -15,8 +21,8 @@ class Note:
         self.tags = tags.copy()
         self.measure_type = None
         self.measure_offset = -1
-        self.perf_time = 0
-        self.perf_dur = 0
+        self.perf_time: float = 0
+        self.perf_dur: float = 0
         self.chord_pos = 0
         self.nchord = 0
     def __str__(self):
@@ -32,12 +38,17 @@ class Note:
 
 pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
-def pitch_name(n):
+def pitch_name(n: int):
     return '%s%d'%(pitch_names[n%12], n//12)
 
 # represents the use of a pedal (both depress and release)
 class PedalUse:
-    def __init__(self, time, dur, level=1, pedal_type=PEDAL_SUSTAIN):
+    def __init__(self,
+        time: float,
+        dur: float,
+        level: float = 1,
+        pedal_type=PEDAL_SUSTAIN
+    ):
         self.time = time
         self.dur = dur
         self.level = level
@@ -51,7 +62,7 @@ class PedalUse:
         )
     
 class Measure:
-    def __init__(self, time, dur, type):
+    def __init__(self, time: float, dur: float, type: str):
         self.time = time
         self.dur = dur
         self.type = type
@@ -64,7 +75,11 @@ event_kind_pedal = 1
 # nuance functions are added in Score (inherited)
 
 class ScoreBasic:
-    def __init__(self, scores=[], tempo=60, verbose=False):
+    def __init__(self,
+        scores: list[ScoreBasic] = [],
+        tempo: float = 60,
+        verbose = False
+    ):
         self.notes = []
         self.cur_time = 0
         self.tempo = tempo    # beats per minute
@@ -74,7 +89,8 @@ class ScoreBasic:
         self.done_called = False
         self.m_cur_time = 0    # for appending measures
         self.clear_flags()
-        self.append_score(scores)
+        self.append_scores(scores)
+
     def __str__(self):
         self.init_all()     # sort, set perf times, set tags
         m_ind = 0
@@ -94,14 +110,16 @@ class ScoreBasic:
             x += str(note) + '\n'
         return x
         
-    def insert_note(self, note):
+    def insert_note(self, note: Note):
         self.notes.append(note)
         self.clear_flags()
-    def append_note(self, note):
+
+    def append_note(self, note: Note):
         note.time = self.cur_time
         self.notes.append(note)
         self.clear_flags()
-    def advance_time(self, dur):
+
+    def advance_time(self, dur: float):
         self.cur_time += dur
 
     # Merge a Score into this one, starting at time t0,
@@ -109,7 +127,7 @@ class ScoreBasic:
     # This doesn't copy anything, and the Notes are modified.
     # to insert a Score more than once, do a deep copy on it
     #
-    def insert_score(self, score, t=0, tag=None):
+    def insert_score(self, score: ScoreBasic, t: float = 0, tag: str = None):
         for note in score.notes:
             note.time += t
             if tag:
@@ -128,25 +146,27 @@ class ScoreBasic:
     # You can also give a list of scores, in which case
     # they're inserted in parallel
     #
-    def append_score(self, scores, tag=None):
-        if type(scores) == list:
-            longest = 0
-            for score in scores:
-                longest = max(longest, score.cur_time)
-                self.insert_score(score, self.cur_time, tag)
-            self.cur_time += longest
-        else:
-            self.insert_score(scores, self.cur_time, tag)
-            self.cur_time += scores.cur_time
+    def append_scores(self, scores: list[ScoreBasic], tag: str = None):
+        longest = 0
+        for score in scores:
+            longest = max(longest, score.cur_time)
+            self.insert_score(score, self.cur_time, tag)
+        self.cur_time += longest
+        self.clear_flags()
+        return self
+
+    def append_score(self, scores: ScoreBasic, tag: str = None):
+        self.insert_score(score, self.cur_time, tag)
+        self.cur_time += score.cur_time
         self.clear_flags()
         return self
             
-    def insert_measure(self, m):
+    def insert_measure(self, m: Measure):
         self.measures.append(m)
         self.clear_flags()
         return self
         
-    def append_measure(self, dur, type):
+    def append_measure(self, dur: float, type: str):
         m = Measure(self.m_cur_time, dur, type)
         self.measures.append(m)
         self.m_cur_time += dur

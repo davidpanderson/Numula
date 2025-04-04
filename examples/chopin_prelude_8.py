@@ -416,7 +416,7 @@ def main():
         parts.append(soprano)
     if if_bass:
         parts.append(bass)
-    ns.append_score(parts)
+    ns.append_scores(parts)
     if nuance:
         if if_vphrase != 'off':
             ns.vol_adjust_pft(vphrase)

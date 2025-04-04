@@ -2,7 +2,7 @@
 
 import sys, os
 
-def print_red(x):
+def print_red(x: str):
     try:
         # in Idle
         color = sys.stdout.shell
@@ -16,7 +16,7 @@ def print_red(x):
     print(' ', end='')
 
 # in case of error, show context
-def show_context(items, i):
+def show_context(items: list[str], i: int):
     n = len(items)
     print('error in shorthand: ', end='')
     for j in range(i-5, i+6):
@@ -30,7 +30,7 @@ def show_context(items, i):
 
 # expand '*4 foo *' into 'foo foo foo foo', with nesting
 #
-def expand_iter(items):
+def expand_iter(items: list[str]):
     if '*' not in items:
         return items
 
@@ -75,7 +75,7 @@ def expand_iter(items):
 # expand macros in shorthand
 # for now the only macro type is iteration (*n)
 #
-def expand_all(items):
+def expand_all(items: list[str]):
     return expand_iter(items)
 
 #############   stuff related to measures in shorthands   ##################

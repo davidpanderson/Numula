@@ -24,13 +24,13 @@ IPA_BOOL = 6
 IPA_LAYER = 7
     # tag for a nuance layer: on/hide/off
 
-def var_lookup(name):
+def var_lookup(name: str):
     for v in vars:
         if v['name'] == name:
             return v
     return None
 
-def check_tags_defined(tag_list):
+def check_tags_defined(tag_list: list[str]):
     for tag in tag_list:
         v = var_lookup(tag)
         if not v:
@@ -40,7 +40,7 @@ def check_tags_defined(tag_list):
 
 # is the var hidden given tag values?
 #
-def should_hide_var(var):
+def should_hide_var(var: str):
     for x in var['tags']:
         v2 = var_lookup(x)
         if v2['type'] == IPA_BOOL:
@@ -51,10 +51,10 @@ def should_hide_var(var):
                 return True
     return False
 
-def numeric(type):
+def numeric(type: int):
     return type in (IPA_VOL, IPA_VOL_MULT, IPA_TEMPO, IPA_DT_SEC)
 
-def fraction_value(str):
+def fraction_value(str: str):
     a = str.split('/')
     try:
         num = int(a[0])

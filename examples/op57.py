@@ -840,32 +840,32 @@ def main():
     do_300_2 = True
     
     ns = Score(tempo=144, verbose=False)
-    # must make copies first; append_score() changes note times
+    # must make copies first; append_scores() changes note times
     lh_118_211_copy = copy.deepcopy(lh_118_211)
     rh_118_211_copy = copy.deepcopy(rh_118_211)
     lh_212_299_copy = copy.deepcopy(lh_212_299)
     rh_212_299_copy = copy.deepcopy(rh_212_299)
     if do_20:
         t_20 = ns.cur_time
-        ns.append_score([lh_20_117, rh_20_117])
+        ns.append_scores([lh_20_117, rh_20_117])
     if do_118:
         t_118 = ns.cur_time
-        ns.append_score([lh_118_211, rh_118_211])
+        ns.append_scores([lh_118_211, rh_118_211])
     if do_212:
         t_212 = ns.cur_time
-        ns.append_score([lh_212_299, rh_212_299])
+        ns.append_scores([lh_212_299, rh_212_299])
     if do_300_1:
         t_300_1 = ns.cur_time
-        ns.append_score([rh_300_307, lh_300_307])
+        ns.append_scores([rh_300_307, lh_300_307])
     if do_118_rep:
         t_118_rep = ns.cur_time
-        ns.append_score([lh_118_211_copy, rh_118_211_copy])
+        ns.append_scores([lh_118_211_copy, rh_118_211_copy])
     if do_212_rep:
         t_212_rep = ns.cur_time
-        ns.append_score([lh_212_299_copy, rh_212_299_copy])
+        ns.append_scores([lh_212_299_copy, rh_212_299_copy])
     if do_300_2:
         t_300_2 = ns.cur_time
-        ns.append_score([rh_300_end, lh_300_end])
+        ns.append_scores([rh_300_end, lh_300_end])
     nuance = True
 
     # pedal control

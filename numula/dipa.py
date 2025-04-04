@@ -38,7 +38,7 @@ space             play from start to start+dur
 up/down arrow     inc/dec current var
     ''')
 
-def type_name(type):
+def type_name(type: int):
     if type == IPA_VOL: return 'Volume'
     if type == IPA_VOL_MULT: return 'Volume multiplier'
     if type == IPA_DT_SCORE: return 'Score time'
@@ -51,7 +51,7 @@ def type_name(type):
 # rows: list of lists of n strings
 # print them so that columns line up
 #
-def print_table(rows, n):
+def print_table(rows: list[str], n: int):
     width = [0]*n
     for row in rows:
         for i in range(n):
@@ -68,7 +68,7 @@ def print_table(rows, n):
 
 # show non-hidden variables
 #
-def show_vars(cur_var):
+def show_vars(cur_var: int):
     print('variables:')
     n = len(ipa.vars)
     rows = [['#', 'name', 'value', 'type', 'tags', 'description']]
@@ -95,7 +95,7 @@ def show_vars(cur_var):
 
 # write adjustable variables to a file
 #
-def write_vars(fname):
+def write_vars(fname: str):
     with open(fname, 'w') as f:
         for var in ipa.vars:
             name = var['name']
@@ -106,7 +106,7 @@ def write_vars(fname):
 
 # inc or dec a numeric adjustable variable
 #
-def adjust(ivar, up):
+def adjust(ivar: int, up: bool):
     x = ipa.vars[ivar]
     if not ipa.numeric(x['type']):
         print(x['name']+' is not numeric')

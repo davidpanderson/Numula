@@ -239,7 +239,7 @@ def main():
         alto.vol_adjust_pft(alto_v1)
         tenor.vol_adjust_pft(tenor_v0)
         bass.vol_adjust_pft(bass_v0)
-    ns.append_score([
+    ns.append_scores([
         soprano,
         alto,
         tenor,
