@@ -29,6 +29,7 @@ volume
         a single PFT
 '''
 
+import numula_path
 from numula.ipa import *
 from numula.nuance import *
 from numula.notate_score import *

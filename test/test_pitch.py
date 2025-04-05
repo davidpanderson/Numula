@@ -1,3 +1,4 @@
+import numula_path
 from comp.pitch import *
 from comp.time_list import *
 from comp.curtain import *

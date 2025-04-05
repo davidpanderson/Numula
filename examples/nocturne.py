@@ -17,6 +17,7 @@
 # example of using tempo_adjust_pft() for rubato.
 # a few measures from Chopin's Nocturne no 1
 
+import numula_path
 from numula.notate_score import *
 from numula.nuance import *
 import numula.pianoteq as pianoteq

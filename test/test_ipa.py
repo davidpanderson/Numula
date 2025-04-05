@@ -1,3 +1,4 @@
+import numula_path
 from numula.ipa import *
 from numula.notate_score import *
 from numula.notate_nuance import *

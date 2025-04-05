@@ -1,3 +1,4 @@
+import numula_path
 from numula.nscore import *
 from comp.surf import *
 import numula.pianoteq as pianoteq

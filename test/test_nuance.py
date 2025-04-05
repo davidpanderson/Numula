@@ -16,6 +16,7 @@
 
 # tests of nuance functions (not shorthands)
 
+import numula_path
 from numula.nscore import *
 from numula.notate_score import *
 from numula.nuance import *

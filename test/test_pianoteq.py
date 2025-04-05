@@ -1,3 +1,4 @@
+import numula_path
 import numula.pianoteq as pianoteq
 import time
 

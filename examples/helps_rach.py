@@ -1,5 +1,6 @@
 # Robert Helps: Hommage a Rachmaninoff
 
+import numula_path
 from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *

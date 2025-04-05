@@ -16,8 +16,10 @@
 
 # test program: play random notes
 
-from numula.nscore import *
 import random
+
+import numula_path
+from numula.nscore import *
 
 ns = ScoreBasic()
 for i in range(200):

@@ -16,6 +16,7 @@
 
 # tests of score notation (sh_score())
 
+import numula_path
 from numula.nscore import *
 from numula.notate_score import *
 

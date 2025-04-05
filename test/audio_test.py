@@ -1,5 +1,6 @@
 # combine signals with panning
 
+import numula_path
 from numula.spatialize import *
 
 def pos_func(t):

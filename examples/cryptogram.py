@@ -1,4 +1,5 @@
 import numpy
+import numula_path
 import numula.read_midifile, numula.pianoteq
 from numula.nuance import Linear
 from numula.vol_name import *

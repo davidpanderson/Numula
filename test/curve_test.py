@@ -1,3 +1,4 @@
+import numula_path
 import numula.nscore as nscore
 import numula.nuance as nuance
 import numula.pianoteq as pianoteq

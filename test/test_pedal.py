@@ -1,3 +1,4 @@
+import numula_path
 from numula.nuance import *
 from numula.MidiFile import *
 from numula.pianoteq import *
