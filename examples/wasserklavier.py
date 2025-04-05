@@ -24,6 +24,8 @@
 #       metric accents
 
 import numpy as np
+import sys
+sys.path.append('..')
 from numula.notate_score import *
 from numula.nuance import *
 from numula.notate_nuance import *

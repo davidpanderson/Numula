@@ -178,18 +178,18 @@ class ScoreBasic:
         self.clear_flags()
         return self
 
-    def insert_pedal(self, pedal):
+    def insert_pedal(self, pedal: PedalUse):
         self.pedals.append(pedal)
         self.clear_flags()
         return self
 
-    def tag(self, tag):
+    def tag(self, tag: str):
         for note in self.notes:
             note.tags.append(tag)
         return self
         
     # convert score time to real time, given tempo
-    def score_to_perf(self, t):
+    def score_to_perf(self, t: float):
         return t*4*60/self.tempo
 
     def time_sort(self):
