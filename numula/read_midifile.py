@@ -2,7 +2,7 @@
 # see https://github.com/davidpanderson/Numula/wiki/read_midifile.py
 
 import mido, copy
-import numula.nscore as nscore
+from numula.nuance import *
 
 def print_midi_event(e):
     if e.type == 'note_on':
@@ -16,7 +16,7 @@ def read_midifile(file, ticks_per_beat=960, use_velocity=True):
     debug = False
     ticks_per_measure = ticks_per_beat*4
     mf = mido.MidiFile(file)
-    ns = nscore.Score()
+    ns = Score()
     for i, track in enumerate(mf.tracks):
         if debug:
             print('track', i)
@@ -44,7 +44,7 @@ def read_midifile(file, ticks_per_beat=960, use_velocity=True):
                     n.time = t
                     n.vol = vol
                 else:
-                    n = nscore.Note(t, 0, pitch, vol, [tag])
+                    n = Note(t, 0, pitch, vol, [tag])
                     notes[pitch] = n
             elif msg.type == 'note_off':
                 t += msg.time/3840

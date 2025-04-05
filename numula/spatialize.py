@@ -133,7 +133,7 @@ def pan_signal(isig, framerate, ang, pos_array, osig):
 def play_wav(fname):
     s = platform.system()
     if s == 'Windows':
-        prog = "C:\Program Files (x86)\Windows Media Player/wmplayer.exe"
+        prog = "C:/Program Files (x86)/Windows Media Player/wmplayer.exe"
         cmd = '"%s" %%cd%%/%s'%(prog, fname)
             # wmplayer requires full path
     else:
