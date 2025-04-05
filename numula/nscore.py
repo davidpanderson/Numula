@@ -1,5 +1,5 @@
 # classes for notes and scores
-# see https://github.com/davidpanderson/Numula/wiki/nscore.py
+# see https://github.com/davidpanderson/Numula/wiki/Scores
 
 import numula.MidiFile
 from numula.constants import *
@@ -25,6 +25,7 @@ class Note:
         self.perf_dur: float = 0
         self.chord_pos = 0
         self.nchord = 0
+
     def __str__(self):
         t = ''
         if self.measure_type:
@@ -37,6 +38,8 @@ class Note:
         )
 
 pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+
+type Predicate = Callable[[Note], bool]
 
 def pitch_name(n: int):
     return '%s%d'%(pitch_names[n%12], n//12)
@@ -55,6 +58,7 @@ class PedalUse:
         self.pedal_type = pedal_type
         self.perf_time = 0
         self.perf_dur = 0
+
     def __str__(self):
         return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d level %f'%(
             self.time, self.dur, self.perf_time, self.perf_dur,
@@ -66,17 +70,18 @@ class Measure:
         self.time = time
         self.dur = dur
         self.type = type
+
     def __str__(self):
         return 'measure: %.4f-%.4f'%(self.time, self.time+self.dur)
         
 event_kind_note = 0
 event_kind_pedal = 1
 
+# basic score class
 # nuance functions are added in Score (inherited)
-
+#
 class ScoreBasic:
     def __init__(self,
-        scores: list[ScoreBasic] = [],
         tempo: float = 60,
         verbose = False
     ):
@@ -89,7 +94,6 @@ class ScoreBasic:
         self.done_called = False
         self.m_cur_time = 0    # for appending measures
         self.clear_flags()
-        self.append_scores(scores)
 
     def __str__(self):
         self.init_all()     # sort, set perf times, set tags
@@ -122,12 +126,12 @@ class ScoreBasic:
     def advance_time(self, dur: float):
         self.cur_time += dur
 
-    # Merge a Score into this one, starting at time t0,
+    # Merge a Score into this one, starting at time t,
     # optionally tagging the notes.
     # This doesn't copy anything, and the Notes are modified.
     # to insert a Score more than once, do a deep copy on it
     #
-    def insert_score(self, score: ScoreBasic, t: float = 0, tag: str = None):
+    def insert_score(self, score: 'ScoreBasic', t: float = 0, tag: str = None):
         for note in score.notes:
             note.time += t
             if tag:
@@ -142,11 +146,17 @@ class ScoreBasic:
         self.clear_flags()
         return self
 
-    # append a score to this one.
-    # You can also give a list of scores, in which case
-    # they're inserted in parallel
+    # append a score to this one
     #
-    def append_scores(self, scores: list[ScoreBasic], tag: str = None):
+    def append_score(self, score: 'ScoreBasic', tag: str = None):
+        self.insert_score(score, self.cur_time, tag)
+        self.cur_time += score.cur_time
+        self.clear_flags()
+        return self
+
+    # append a list of scores in parallel
+    #
+    def append_scores(self, scores: list['ScoreBasic'], tag: str = None):
         longest = 0
         for score in scores:
             longest = max(longest, score.cur_time)
@@ -155,19 +165,14 @@ class ScoreBasic:
         self.clear_flags()
         return self
 
-    def append_score(self, scores: ScoreBasic, tag: str = None):
-        self.insert_score(score, self.cur_time, tag)
-        self.cur_time += score.cur_time
-        self.clear_flags()
-        return self
             
     def insert_measure(self, m: Measure):
         self.measures.append(m)
         self.clear_flags()
         return self
         
-    def append_measure(self, dur: float, type: str):
-        m = Measure(self.m_cur_time, dur, type)
+    def append_measure(self, dur: float, mtype: str):
+        m = Measure(self.m_cur_time, dur, mtype)
         self.measures.append(m)
         self.m_cur_time += dur
         self.clear_flags()
@@ -288,7 +293,7 @@ class ScoreBasic:
     # shift perf times to start at time t >= 0
     # in particular, avoid negative times; MIDI files don't like them
     #
-    def shift_start(self, t):
+    def shift_start(self, t: float):
         self.notes.sort(key=lambda x: x.perf_time)
         t0 = self.notes[0].perf_time
         dt = t - t0
@@ -314,7 +319,9 @@ class ScoreBasic:
         return x
 
     # write selected notes to MIDI file
-    def write_midi(self, filename, pred=None, verbose=False):
+    def write_midi(self,
+        filename: str, pred: Predicate=None, verbose: bool = False
+    ):
         self.init_all()
         self.shift_start(1)
         vstr = ''
@@ -465,7 +472,7 @@ class ScoreBasic:
 
     # tag notes that are the highest or lowest sounding notes at their start
     #
-    def flag_outer_aux(active, starting):
+    def flag_outer_aux(active: list[Note], starting: list[Note]):
         #print('flag_aux: %d active, %d starting'%(len(active), len(starting)))
         min = 128
         max = -1
@@ -541,7 +548,7 @@ class ScoreBasic:
 
     # trim to times t0..t1
     #
-    def trim(self, t0, t1):
+    def trim(self, t0: float, t1: float):
         new_notes = []
         for note in self.notes:
             if note.time < t0-epsilon:
@@ -560,7 +567,7 @@ class ScoreBasic:
 
     # change note durations based on pattern
     #
-    def dur_pattern(self, durs, t0, t1):
+    def dur_pattern(self, durs: list[float], t0: float, t1: float):
         n = len(durs)
         i = 0
         for note in self.notes:
@@ -575,7 +582,7 @@ class ScoreBasic:
 
     # scale volumes to given range
     #
-    def vol_scale(self, v0, v1):
+    def vol_scale(self, v0: float, v1: float):
         d = v1 - v0
         for note in self.notes:
             note.vol = v0 + note.vol*d

@@ -32,7 +32,8 @@ rh = sh_score('2/4 ++d- 1/4 b- 3/44 +b- c d- -a b- a g+ a c b- g- \
 ').tag('rh')
 
 def main():
-    ns = Score([lh, rh])
+    ns = Score()
+    ns.append_scores([lh, rh])
 
     for i in range(5):
         ns.sustain(i*3/4, (i+1)*3/4, lambda n: 'lh' in n.tags)
