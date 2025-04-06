@@ -130,13 +130,14 @@ def ipa_main():
     __name__ = 'foo'
     if len(sys.argv) != 2:
         raise Exception('usage: dipa prog')
-    prog = sys.argv[1]
+    prog_path = sys.argv[1]
+    prog = os.path.basename(prog_path)
     prog_vars = ipa.vars_file_path(prog)
     prog_midi = 'data/%s.midi'%(prog)
 
     # run the program to get its adjustable variables
     #
-    with open(prog+'.py') as f:
+    with open(prog_path+'.py') as f:
         prog_source = f.read()
     exec(prog_source, globals())
     ns = main()
