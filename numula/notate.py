@@ -1,4 +1,4 @@
-# utility functions for shorthand notation
+# utility functions for shorthand notations
 
 import sys, os
 
@@ -30,7 +30,7 @@ def show_context(items: list[str], i: int):
 
 # expand '*4 foo *' into 'foo foo foo foo', with nesting
 #
-def expand_iter(items: list[str]):
+def expand_iter(items: list[str]) -> list[str]:
     if '*' not in items:
         return items
 
@@ -75,7 +75,7 @@ def expand_iter(items: list[str]):
 # expand macros in shorthand
 # for now the only macro type is iteration (*n)
 #
-def expand_all(items: list[str]):
+def expand_all(items: list[str]) -> list[str]:
     return expand_iter(items)
 
 #############   stuff related to measures in shorthands   ##################
@@ -120,17 +120,17 @@ def comment(item, t):
 
 # process an item s of the form meas4/4
 #
-def set_measure_dur(s, t):
+def set_measure_dur(s: str, t: float):
     global meas_first, meas_prev_t, meas_dur
     if not meas_first and t > meas_prev_t:
         raise Exception("|n required before setting new measure length")
-    t = s[4:]
-    a = t.split('/')
+    x = s[4:]
+    a = x.split('/')
     try:
         num = int(a[0])
         denom = int(a[1])
     except:
-        print(t)
+        print('bad measure dur: ', s)
         return False
     meas_dur = num/denom
     return True
@@ -138,6 +138,6 @@ def set_measure_dur(s, t):
 # set the measure duration globally
 # (so you don't need meas4/4 in shorthands)
 #
-def measure_duration(t):
+def measure_duration(t: float):
     global meas_dur
     meas_dur = t

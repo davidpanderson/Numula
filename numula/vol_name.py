@@ -34,6 +34,8 @@ fff_    = 1.84
 _ffff   = 1.92
 ffff    = 1.99
 
+# export all symbols (even those starting w/ _)
+
 __all__ = [
     'pppp', 'pppp_',
     '_ppp', 'ppp', 'ppp_',

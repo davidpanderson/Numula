@@ -92,9 +92,7 @@ def valid_value(val, t):
 # Note: adding the var to globals() makes it visible only in this module.
 # Someday I'll figure out how to make it visible outside.
 # Until then, the main program has to do
-#
-# from ipa import *
-#
+#   from ipa import *
 # after declaring variables
 
 def var_aux(
@@ -146,18 +144,18 @@ def var (
     else:
         raise Exception('bad IPA type %s'%type)
 
-def get(name):
+def get(name: str):
     return globals()[name]
 
-def set(name, val):
+def set(name: str, val):
     globals()[name] = val
 
-def vars_file_path(prog_name):
+def vars_file_path(prog_name: str):
     return 'data/%s.vars'%prog_name
 
 # read variable values from file
 #
-def read_vars(prog_name):
+def read_vars(prog_name: str):
     path = vars_file_path(prog_name)
     if not os.path.exists(path):
         return

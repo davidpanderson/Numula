@@ -725,8 +725,8 @@ class Score(ScoreBasic):
     # based on a PFT defining position as a function of score time.
     # If the performance times exceed the PFT,
     # use the final PFT value for those frames
-    def get_pos_array(self, pos_pft, framerate):
-
+    #
+    def get_pos_array(self, pos_pft, framerate: float) -> list[float]:
         # get the score's note start/end events.
         # Then extract a subset which is strictly monotonic
         # in both score and performance time.

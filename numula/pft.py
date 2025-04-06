@@ -4,7 +4,10 @@ import math
 from numula.constants import *
 
 class Linear:
-    def __init__(self, y0, y1, dt, closed_start=True, closed_end=False):
+    def __init__(self,
+        y0: float, y1: float, dt: float,
+        closed_start=True, closed_end=False
+    ):
         self.y0 = y0
         self.y1 = y1
         self.dy = y1 - y0
@@ -35,18 +38,18 @@ class Linear:
 
 # for volume PFTs: a period of unity gain
 #
-def Unity(dt):
+def Unity(dt: float):
     return Linear(1, 1, dt)
 
 # for time-shift PFTs: a period of no shift
 #
-def ZeroSeg(dt):
+def ZeroSeg(dt: float):
     return Linear(0, 0, dt)
 
 # for volume and time-shift PFTs: a momentary value
 #
 class Accent:
-    def __init__(self, y):
+    def __init__(self, y: float):
         self.y0 = y
         self.y1 = y
         self.closed_start = True
@@ -54,7 +57,7 @@ class Accent:
         self.dt = 0
     def __str__(self):
         return 'Accent %f'%self.y0
-    def val(self, t):
+    def val(self, t: float) -> float:
         return y0
     
 # An exponential parameterized by "curvature".
@@ -66,7 +69,10 @@ class Accent:
 # and if curvature < 0 more of the change happens earlier.
 # If curvature = 0 then y = x; this is handled as a special case
 class ExpCurve:
-    def __init__(self, curvature, y0, y1, dt, closed_start=True, closed_end=False):
+    def __init__(self,
+        curvature: float, y0: float, y1: float, dt: float,
+        closed_start=True, closed_end=False
+    ):
         if abs(curvature) < .001:
             self.linear = True
         else:
@@ -87,13 +93,13 @@ class ExpCurve:
             ']' if self.closed_end else ')',
             self.dt, self.curvature
         )       
-    def val(self, t):
+    def val(self, t: float) -> float:
         if self.linear:
             return self.y0 + self.dy*(t/self.dt)
         tnorm = t/self.dt
         ynorm = (1 - math.pow(self.c, tnorm))/(1-self.c)
         return self.y0 + ynorm*self.dy
-    def integral(self, t):
+    def integral(self, t: float) -> float:
         if self.linear:
             return t*(self.y0+self.val(t))/2
         if t == 0:
@@ -111,7 +117,7 @@ class ExpCurve:
         int = t*(self.y0 + int_norm*self.dy)
         #print('integral: ', t, int_norm, self.dy, int)
         return int
-    def integral_total(self):
+    def integral_total(self) -> float:
         if self.linear:
             return self.dt*(self.y0+self.y1)/2
         return self.integral(self.dt)
@@ -125,7 +131,7 @@ class ExpCurve:
 # Dirac delta; used in tempo PFTs to represent pauses
 # if after is True, pause goes after notes at that time
 class Delta:
-    def __init__(self, value, after=True):
+    def __init__(self, value: float, after=True):
         self.value = value
         self.after = after
         self.dt = 0
@@ -157,13 +163,15 @@ class PedalSeg:
 # a PFT segment whose value is an arbitrary object (e.g. a PitchSet)
 #
 class PFTObject:
-    def __init__(self, dt, value, closed_start=True, closed_end=False):
+    def __init__(self,
+        dt: float, value: float, closed_start=True, closed_end=False
+    ):
         self.dt = dt
         self.y0 = value
         self.y1 = value
         self.closed_start = closed_start
         self.closed_end = closed_end
-    def val(self, t):
+    def val(self, t: float) -> float:
         return self.y0
 
 # ------------ end of PFT primitives
@@ -192,14 +200,14 @@ def pft_check_closure(pft):
                 raise Exception('missing value in PFT at time %f'%t)
 
 # score-time duration of a PFT
-def pft_dur(pft):
+def pft_dur(pft) -> float:
     dt = 0
     for seg in pft:
         dt += seg.dt
     return dt
 
 # verify that the PFT has the given duration
-def pft_verify_dur(pft, dur):
+def pft_verify_dur(pft, dur: float):
     x = pft_dur(pft)
     if x < dur-epsilon:
         raise Exception('PFT is too short: %f < %f'%(x, dur))
@@ -207,14 +215,14 @@ def pft_verify_dur(pft, dur):
         raise Exception('PFT is too long: %f > %f'%(x, dur))
     
 # average value of pft
-def pft_avg(pft):
+def pft_avg(pft) -> float:
     sum = 0
     for seg in pft:
         sum += seg.integral_total()
     return sum/pft_dur(pft)
 
 # total delay in tempo PFT
-def pft_delay(pft):
+def pft_delay(pft) -> float:
     sum = 0
     for seg in pft:
         sum += seg.delay()
@@ -233,7 +241,7 @@ class PFTValue:
         self.prev_dur = 0       # duration of previous segs
         self.ended = False
 
-    def value(self, t):
+    def value(self, t: float) -> float:
         if self.ended:
             return self.final_value
         dt = t - self.prev_dur
@@ -252,7 +260,7 @@ class PFTValue:
                 return self.final_value
             
 # show PFT values with given spacing (for debugging)
-def show_pft_vals(pft, dt):
+def show_pft_vals(pft, dt: float):
     pft_val = PFTValue(pft)
     t = 0
     last = 0
@@ -263,7 +271,7 @@ def show_pft_vals(pft, dt):
         t += dt
 
 # same, but show integral
-def show_pft_ints(pft, dt):
+def show_pft_ints(pft, dt: float):
     for seg in pft:
         print(seg)
         print('total integral ', seg.integral_total())
