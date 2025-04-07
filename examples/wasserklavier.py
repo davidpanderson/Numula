@@ -187,31 +187,31 @@ def ta3(ns):
     ns.pause_after(t+6/8, .15)
     ns.roll(t+13/8, np.linspace(-.12, .1, 4))
     ns.pause_after(t+6/8+3/16, .15)
-    ns.roll(t+21/8, np.linspace(-.12, .1, 4), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+21/8, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
 def ta4(ns):
     t = t1 + t2 + t3
-    ns.roll(t+6/8+3/16, np.linspace(-.12, .1, 4), pred=lambda n: 'rh' in n.tags)
-    ns.roll(t+6/8+3/8,  np.linspace(-.2, .1, 3), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+6/8+3/16, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
+    ns.roll(t+6/8+3/8,  np.linspace(-.2, .1, 3), selector=lambda n: 'rh' in n.tags)
     ns.pause_after(t+6/8+3/8, .1)
     ns.pause_after(t+15/8, .2)
 def ta5(ns):
     t = t1 + t2 + t3 + t4
     ns.roll(t+6/8,  np.linspace(-.4, .1, 6))
-    ns.roll(t+14/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
-    ns.roll(t+16/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
-    ns.roll(t+18/8, np.linspace(-.2, .1, 4), pred=lambda n: 'rh' in n.tags)
-    ns.roll(t+20/8, np.linspace(-.2, .1, 5), pred=lambda n: 'rh' in n.tags)
-    ns.roll(t+22/8, np.linspace(-.2, .1, 5), pred=lambda n: 'rh' in n.tags)
+    ns.roll(t+14/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
+    ns.roll(t+16/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
+    ns.roll(t+18/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
+    ns.roll(t+20/8, np.linspace(-.2, .1, 5), selector=lambda n: 'rh' in n.tags)
+    ns.roll(t+22/8, np.linspace(-.2, .1, 5), selector=lambda n: 'rh' in n.tags)
 def ta6(ns):
     t = t1 + t2 + t3 + t4 + t5
-    ns.roll(t,  np.linspace(-.3, .1, 3), pred=lambda n: 'rh' not in n.tags)
+    ns.roll(t,  np.linspace(-.3, .1, 3), selector=lambda n: 'rh' not in n.tags)
     ns.roll(t+2/8,  np.linspace(-.4, .1, 7))
     ns.roll(t+4/8,  np.linspace(-.4, .1, 7))
     ns.roll(t+6/8,  np.linspace(-.4, .1, 7))
     ns.roll(t+8/8,  np.linspace(-.4, .1, 7))
     ns.roll(t+10/8,  np.linspace(-.4, .1, 7))
     ns.roll(t+12/8,  np.linspace(-.4, .1, 7))
-    ns.roll(t+14/8,  np.linspace(-.4, .1, 3), pred=lambda n: 'rh' not in n.tags)
+    ns.roll(t+14/8,  np.linspace(-.4, .1, 3), selector=lambda n: 'rh' not in n.tags)
     ns.roll(t+18/8,  [-.4, -.3, .2, -.1, -.2])
     ns.pause_after(t+14/4, 10)
 

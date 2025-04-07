@@ -15,7 +15,7 @@ VOL_SET = 2
 
 class Score(ScoreBasic):
     # adjust or set volume of selected notes by PFT starting at t0
-    def vol_adjust_pft(self, pft, t0=0, pred=None, mode=VOL_MULT):
+    def vol_adjust_pft(self, pft, t0=0, selector=None, mode=VOL_MULT):
         if not pft: return
         self.time_sort()
         self.tags_init()
@@ -33,7 +33,7 @@ class Score(ScoreBasic):
                 break
             if n.time < t0 - epsilon:
                 continue
-            if pred and not pred(n):
+            if selector and not selector(n):
                 continue
             while True:
                 # skip segments as needed
@@ -62,10 +62,10 @@ class Score(ScoreBasic):
                     continue
                 n.vol = v/2
             
-    def vol_adjust(self, v, pred=None, mode=VOL_MULT):
+    def vol_adjust(self, v: float, selector=None, mode=VOL_MULT):
         self.tags_init()
         for n in self.notes:
-            if pred and not pred(n):
+            if selector and not selector(n):
                 continue
             if mode == VOL_MULT:
                 n.vol *= v
@@ -74,10 +74,10 @@ class Score(ScoreBasic):
             elif mode == VOL_SET:
                 n.vol = v/2
                 
-    def vol_adjust_func(self, func, pred=None, mode=VOL_MULT):
+    def vol_adjust_func(self, func, selector=None, mode=VOL_MULT):
         self.tags_init()
         for n in self.notes:
-            if pred and not pred(n):
+            if selector and not selector(n):
                 continue
             v = func(n)
             if mode == VOL_MULT:
@@ -89,16 +89,16 @@ class Score(ScoreBasic):
 
     # randomly perturb volume
     #
-    def v_random_uniform(self, min, max, pred=None):
+    def v_random_uniform(self, min, max, selector=None):
         self.tags_init()
         for note in self.notes:
-            if pred and not pred(note): continue
+            if selector and not selector(note): continue
             note.vol *= random.uniform(min, max)
 
-    def v_random_normal(self, stddev, max_sigma=2, pred=None):
+    def v_random_normal(self, stddev, max_sigma=2, selector=None):
         self.tags_init()
         for note in self.notes:
-            if pred and not pred(note): continue
+            if selector and not selector(note): continue
             while True:
                 x = numpy.random.normal()
                 if abs(x) < max_sigma: break
@@ -138,7 +138,7 @@ class Score(ScoreBasic):
     #       Note and Pedal objects.
     #
     def tempo_adjust_pft(
-        self, _pft, t0=0, pred=None, normalize=False, bpm=True, debug=False
+        self, _pft, t0=0, selector=None, normalize=False, bpm=True, debug=False
     ):
         self.init_all()
         if bpm:
@@ -274,9 +274,9 @@ class Score(ScoreBasic):
 
             # skip if event is not selected
             #
-            if pred:
+            if selector:
                 if event.kind == event_kind_note:
-                    if not pred(event.obj):
+                    if not selector(event.obj):
                         if debug:
                             print('  not selected')
                         continue
@@ -351,7 +351,7 @@ class Score(ScoreBasic):
     # Note shifting (e.g. for agogic accents)
     # shift start time of selected notes by the PFT value
     #
-    def time_shift_pft(self, pft, t0=0, pred=None):
+    def time_shift_pft(self, pft, t0=0, selector=None):
         if not pft:
             return
         self.init_all()
@@ -369,7 +369,7 @@ class Score(ScoreBasic):
                 break
             if n.time < t0 - epsilon:
                 continue
-            if pred and not pred(n):
+            if selector and not selector(n):
                 continue
             while True:
                 # skip segments as needed
@@ -396,16 +396,16 @@ class Score(ScoreBasic):
 
     # change dur of notes starting between t0 and t1 so they end at t1
     # (like a local sustain pedal)
-    def sustain(self, t0, t1, pred=None):
+    def sustain(self, t0, t1, selector=None):
         self.time_sort()
-        if pred:
+        if selector:
             self.tags_init()
         for n in self.notes:
             if n.time<t0 - epsilon:
                 continue
             if n.time > t1:
                 break
-            if pred and not pred(n):
+            if selector and not selector(n):
                 continue
             end = n.time + n.dur
             if end < t1:
@@ -519,7 +519,7 @@ class Score(ScoreBasic):
                 raise Exception('roll amount exceeds not duration')
             ind += 1
 
-    def roll(self, t, offsets, is_up=True, pred=None, verbose=False):
+    def roll(self, t, offsets, is_up=True, selector=None, verbose=False):
         self.init_all()
         chord = []   # the notes at time t
         for note in self.notes:
@@ -527,51 +527,51 @@ class Score(ScoreBasic):
                 continue
             if note.time > t+epsilon:
                 break
-            if pred and not pred(note): continue
+            if selector and not selector(note): continue
             chord.append(note)
         if chord:
             if verbose:
                 print('roll ', offsets, list(map(lambda n: n.pitch, chord)))
             self.roll_aux(chord, offsets, is_up)
 
-    def t_adjust_list(self, offsets, pred):
+    def t_adjust_list(self, offsets, selector):
         self.init_all()
         ind = 0
         for note in self.notes:
             if ind == len(offsets):
                 break
-            if pred(note):
+            if selector(note):
                 note.perf_time += offsets[ind]
                 ind += 1
 
-    def t_adjust_notes(self, offset, pred):
+    def t_adjust_notes(self, offset, selector):
         self.init_all()
         for note in self.notes:
-            if pred(note):
+            if selector(note):
                 note.perf_time += offset
 
-    def t_adjust_func(self, func, pred):
+    def t_adjust_func(self, func, selector):
         self.init_all()
         for note in self.notes:
-            if pred(note):
+            if selector(note):
                 note.perf_time += func(note)
 
     # perturb start time, and adjust duration to keep end time the same
     # Possible TODO: adjust durations of earlier notes that end at this time
     #
-    def t_random_uniform(self, min, max, pred=None):
+    def t_random_uniform(self, min, max, selector=None):
         self.init_all()
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             x = random.uniform(min, max)
             note.perf_time += x
             note.perf_dur -= x
 
-    def t_random_normal(self, stddev, max_sigma=2, pred=None):
+    def t_random_normal(self, stddev, max_sigma=2, selector=None):
         self.init_all()
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             while True:
                 x = numpy.random.normal()
@@ -583,50 +583,50 @@ class Score(ScoreBasic):
                     
 # --------------- Articulation ----------------------
 
-    def score_dur_abs(self, dur, pred=None):
+    def score_dur_abs(self, dur, selector=None):
         self.tags_init()
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             note.dur = dur
 
-    def score_dur_rel(self, factor, pred=None):
+    def score_dur_rel(self, factor, selector=None):
         self.tags_init()
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             note.dur *= factor
 
-    def score_dur_func(self, func, pred=None):
+    def score_dur_func(self, func, selector=None):
         self.tags_init()
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             note.dur = func(note)
-                
-    def perf_dur_abs(self, dur, pred=None):
+ 
+    def perf_dur_abs(self, dur, selector=None):
         self.init_all()
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             note.perf_dur = dur
 
-    def perf_dur_rel(self, factor, pred=None):
+    def perf_dur_rel(self, factor, selector=None):
         self.init_all()
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             note.perf_dur *= factor
 
-    def perf_dur_func(self, func, pred=None):
+    def perf_dur_func(self, func, selector=None):
         self.init_all()
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             note.perf_dur = func(note)
 
     # adjust articulation with a PFT
-    def perf_dur_pft(self, pft, t0, pred=None, rel=True):
+    def perf_dur_pft(self, pft, t0, selector=None, rel=True):
         self.init_all()
         pft_check_closure(pft)
         seg_ind = 0
@@ -642,7 +642,7 @@ class Score(ScoreBasic):
                 break
             if n.time < t0 - epsilon:
                 continue
-            if pred and not pred(n):
+            if selector and not selector(n):
                 continue
             while True:
                 # skip segments as needed
@@ -671,7 +671,10 @@ class Score(ScoreBasic):
 
     # apply a virtual sustain PFT:
     # extend the (score) duration of affected notes
-    def vsustain_pft(self, pft, t0=0, pred=None, verbose=False):
+    def vsustain_pft(self,
+        pft, t0: float = 0,
+        selector: Selector=None, verbose=False
+    ):
         self.time_sort()
         # this changes score time.
         # If we've already transferred score time to perf time,
@@ -692,7 +695,7 @@ class Score(ScoreBasic):
                 break
             if n.time < t0 - epsilon:
                 continue
-            if pred and not pred(n):
+            if selector and not selector(n):
                 continue
             while True:
                 if n.time < seg_end - epsilon:

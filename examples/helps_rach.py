@@ -252,7 +252,7 @@ def main():
         ns.vsustain_pft(mped, 0, lambda n: 'bass' in n.tags)
         ns.vol_adjust_pft(v0)
         tenor.vol_adjust_pft(
-            tenor_v1, pred=lambda n: 'tenor' in n.tags, mode=VOL_SET
+            tenor_v1, selector=lambda n: 'tenor' in n.tags, mode=VOL_SET
         )
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(t1)

@@ -37,9 +37,10 @@ class Note:
             t
         )
 
-pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+# type for a note selector function
+type Selector = Callable[[Note], bool]
 
-type Predicate = Callable[[Note], bool]
+pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 def pitch_name(n: int):
     return '%s%d'%(pitch_names[n%12], n//12)
@@ -320,7 +321,7 @@ class ScoreBasic:
 
     # write selected notes to MIDI file
     def write_midi(self,
-        filename: str, pred: Predicate=None, verbose: bool = False
+        filename: str, selector: Selector=None, verbose: bool = False
     ):
         self.init_all()
         self.shift_start(1)
@@ -334,7 +335,7 @@ class ScoreBasic:
         f = numula.MidiFile.MIDIFile(deinterleave=False)
         f.addTempo(0, 0, 60)
         for note in self.notes:
-            if pred and not pred(note):
+            if selector and not selector(note):
                 continue
             if note.vol > 1:
                 print('%s at time %f has vol %f > 1; setting to 1'%(

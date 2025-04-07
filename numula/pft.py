@@ -164,7 +164,7 @@ class PedalSeg:
 #
 class PFTObject:
     def __init__(self,
-        dt: float, value: float, closed_start=True, closed_end=False
+        dt: float, value: Any, closed_start=True, closed_end=False
     ):
         self.dt = dt
         self.y0 = value

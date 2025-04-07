@@ -96,13 +96,13 @@ def valid_value(val, t):
 # after declaring variables
 
 def var_aux(
-    name,               # variable name
-    val,                # initial value
-    step,               # adjustment increment (if numeric)
-    lo, hi,             # min/max values (if numeric)
-    tags,
-    type,
-    desc                # textual description
+    name: str,              # variable name
+    val: Any,               # initial value
+    step: float,            # adjustment increment (if numeric)
+    lo: float, hi: float,   # min/max values (if numeric)
+    tags: list[str],
+    type: int,
+    desc: str               # textual description
 ):
     if name in globals():
         return
@@ -121,11 +121,11 @@ def var_aux(
     )
 
 def var (
-    name,
-    type,
-    val,
-    tags = [],
-    desc = ''
+    name: str,
+    type: int,
+    val: Any,
+    tags: list[str] = [],
+    desc: str = ''
 ):
     if type == IPA_VOL:
         var_aux(name, val, .02, 0, 1, tags, type, desc);
@@ -147,10 +147,10 @@ def var (
 def get(name: str):
     return globals()[name]
 
-def set(name: str, val):
+def set(name: str, val: Any):
     globals()[name] = val
 
-def vars_file_path(prog_name: str):
+def vars_file_path(prog_name: str) -> str:
     return 'data/%s.vars'%prog_name
 
 # read variable values from file

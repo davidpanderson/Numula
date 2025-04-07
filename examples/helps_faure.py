@@ -336,7 +336,7 @@ def main():
     if nuance:
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(pauses)
-        ns.time_shift_pft(sop_shift, pred=lambda n: 'sop' in n.tags)
+        ns.time_shift_pft(sop_shift, selector=lambda n: 'sop' in n.tags)
     #print(ns)
     numula.pianoteq.play_score(ns, 'My Presets/NY Steinway B Improv')
 

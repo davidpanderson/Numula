@@ -424,8 +424,8 @@ def main():
         if if_vmeas != 'off':
             ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
         if if_accents != 'off':
-            ns.vol_adjust_pft(rh_accents, pred=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
-            ns.vol_adjust_pft(lh_accents, pred=lambda n: 'bass' in n.tags, mode=VOL_ADD)
+            ns.vol_adjust_pft(rh_accents, selector=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
+            ns.vol_adjust_pft(lh_accents, selector=lambda n: 'bass' in n.tags, mode=VOL_ADD)
         #ns.vol_scale(.1, .7)
         if if_tbeat != 'off':
             ns.tempo_adjust_pft(tbeat)
