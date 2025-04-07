@@ -225,11 +225,11 @@ t1 = sh_tempo(f'meas3/4 \
     |83 \
 ')
 
-nuance = True
+do_nuance = True
 
 def main():
     ns = Score(tempo=72)
-    if nuance:
+    if do_nuance:
         soprano.vol_adjust_pft(soprano_v0)
         alto.vol_adjust_pft(alto_v0)
         alto.vol_adjust_pft(alto_v1)
@@ -241,7 +241,7 @@ def main():
         tenor,
         bass
     ])
-    if nuance:
+    if do_nuance:
         ns.pedal_pft(ped)
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(t1)

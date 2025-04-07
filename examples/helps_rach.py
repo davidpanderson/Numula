@@ -229,11 +229,11 @@ mped = sh_pedal('meas4/4 \
     |33 \
 ')
 
-nuance = True
+do_nuance = True
 
 def main():
     ns = Score(tempo=80, verbose=False)
-    if nuance:
+    if do_nuance:
         soprano.vol_adjust(.7, lambda n: 'bottom' in n.tags)
         soprano.vol_adjust_pft(soprano_v0)
         alto.vol_adjust_pft(alto_v0)
@@ -246,7 +246,7 @@ def main():
         tenor,
         bass
     ])
-    if nuance:
+    if do_nuance:
         ns.vsustain_pft(mped, 0, lambda n: 'alto' in n.tags)
         ns.vsustain_pft(mped, 0, lambda n: 'tenor' in n.tags)
         ns.vsustain_pft(mped, 0, lambda n: 'bass' in n.tags)

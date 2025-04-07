@@ -317,11 +317,11 @@ bass_ped = sh_pedal('meas4/4 \
     |67 \
 ')
 
-nuance = True
+do_nuance = True
 
 def main():
     ns = Score(tempo=84)
-    if nuance:
+    if do_nuance:
         soprano.vol_adjust_pft(soprano_v0)
         alto.vol_adjust_pft(alto_v0)
         bass.vol_adjust_pft(bass_v0)
@@ -333,7 +333,7 @@ def main():
         alto,
         bass
     ])
-    if nuance:
+    if do_nuance:
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(pauses)
         ns.time_shift_pft(sop_shift, selector=lambda n: 'sop' in n.tags)

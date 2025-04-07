@@ -12,9 +12,9 @@ import numula.pianoteq
 
 rh_20_117 = sh_score(' \
     |20 1/16 . (theme_a *2 \
-    *2 -c f a- c d- c b- | a- b- a- g f g a- f . * \
-    d- g- b- d- e- d- c | b- c b- a- g- a- g- f \
-    e f g e f g a- f | g a- b- g e f g e f * theme_a) \
+    *2 -c f a- c d- c b- a- b- a- g f g a- f . * \
+    d- g- b- d- e- d- c b- c b- a- g- a- g- f \
+    e f g e f g a- f g a- b- g e f g e f * theme_a) \
     |36 *2 c5 f a- c -c f a- . * \
     -b d +a- b -b d +a- b -b e g c -c e g \
     *3 . -c e g c -c e g * c -c e g c -c f a- \
