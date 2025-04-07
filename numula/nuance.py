@@ -759,7 +759,7 @@ class Score(ScoreBasic):
         ev1 = events[1]
         slope = (ev1.time - ev0.time)/(ev1.perf_time - ev0.perf_time)
         nframes = math.ceil(last_perf_time*framerate)
-        pos_array = [0]*nframes
+        pos_array = [0.]*nframes
         print('get_pos_array: nframes', nframes)
         for i in range(nframes):
             pt = i/framerate

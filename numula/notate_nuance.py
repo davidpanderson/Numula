@@ -59,17 +59,17 @@ GOT_V1 = 3
 # Note: this can be used to define PFT for other purposes.
 # maybe should factor.
 
-def sh_vol(s):
+def sh_vol(s) -> PFT:
     items = s.split()
     items = expand_all(items)
     measure_init()
     state = INIT
     pft = []
-    last_seg = None
+    last_seg: PFT_Primitive = None
     got_rb = False      # got left bracket [
     got_lb = False      # for right bracket ]
     segtype = SEGTYPE_LINEAR
-    dt = 0
+    dt = 0.
     for i in range(len(items)):
         t = items[i]
         if t[0] == '|':

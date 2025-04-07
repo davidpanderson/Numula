@@ -23,6 +23,7 @@
 
 import sys, time, os
 import readchar
+import numula_path
 import numula.pianoteq
 import numula.ipa as ipa
 
@@ -39,19 +40,19 @@ up/down arrow     inc/dec current var
     ''')
 
 def type_name(type: int):
-    if type == IPA_VOL: return 'Volume'
-    if type == IPA_VOL_MULT: return 'Volume multiplier'
-    if type == IPA_DT_SCORE: return 'Score time'
-    if type == IPA_DT_SEC: return 'Seconds'
-    if type == IPA_TEMPO: return 'Tempo'
-    if type == IPA_BOOL: return 'Boolean'
-    if type == IPA_LAYER: return 'Layer'
+    if type == ipa.IPA_VOL: return 'Volume'
+    if type == ipa.IPA_VOL_MULT: return 'Volume multiplier'
+    if type == ipa.IPA_DT_SCORE: return 'Score time'
+    if type == ipa.IPA_DT_SEC: return 'Seconds'
+    if type == ipa.IPA_TEMPO: return 'Tempo'
+    if type == ipa.IPA_BOOL: return 'Boolean'
+    if type == ipa.IPA_LAYER: return 'Layer'
     return '???'
 
 # rows: list of lists of n strings
 # print them so that columns line up
 #
-def print_table(rows: list[str], n: int):
+def print_table(rows: list[list[str]], n: int):
     width = [0]*n
     for row in rows:
         for i in range(n):
@@ -61,10 +62,10 @@ def print_table(rows: list[str], n: int):
     for i in range(n):
         codes.append('{0:%ds}'%width[i])
     for row in rows:
-        x = []
+        y: list[str] = []
         for i in range(n):
-            x.append(codes[i].format(row[i]))
-        print('  '.join(x))
+            y.append(codes[i].format(row[i]))
+        print('  '.join(y))
 
 # show non-hidden variables
 #

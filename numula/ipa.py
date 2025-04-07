@@ -3,8 +3,9 @@
 # see: https://github.com/davidpanderson/numula/wiki/Interactive-parameter-adjustment
 
 import os
+from typing import Any
 
-vars = []   # list of adjustable variables
+vars: list[dict] = []   # list of adjustable variables
             # their values are stored in globals()
 
 # variable types.  Each has default min/mix and step size
@@ -40,7 +41,7 @@ def check_tags_defined(tag_list: list[str]):
 
 # is the var hidden given tag values?
 #
-def should_hide_var(var: str):
+def should_hide_var(var: dict):
     for x in var['tags']:
         v2 = var_lookup(x)
         if v2['type'] == IPA_BOOL:

@@ -3,6 +3,7 @@
 
 import numula.MidiFile
 from numula.constants import *
+from typing import Callable
 
 class Note:
     def __init__(self,
@@ -21,8 +22,8 @@ class Note:
         self.tags = tags.copy()
         self.measure_type = None
         self.measure_offset = -1
-        self.perf_time: float = 0
-        self.perf_dur: float = 0
+        self.perf_time: float = 0.
+        self.perf_dur: float = 0.
         self.chord_pos = 0
         self.nchord = 0
 
@@ -38,7 +39,7 @@ class Note:
         )
 
 # type for a note selector function
-type Selector = Callable[[Note], bool]
+type Selector = Callable[[Note], bool] | None
 
 pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
@@ -57,8 +58,8 @@ class PedalUse:
         self.dur = dur
         self.level = level
         self.pedal_type = pedal_type
-        self.perf_time = 0
-        self.perf_dur = 0
+        self.perf_time = 0.
+        self.perf_dur = 0.
 
     def __str__(self):
         return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d level %f'%(
@@ -86,14 +87,14 @@ class ScoreBasic:
         tempo: float = 60,
         verbose = False
     ):
-        self.notes = []
-        self.cur_time = 0
+        self.notes: list[Note] = []
+        self.cur_time = 0.
         self.tempo = tempo    # beats per minute
         self.verbose = verbose
-        self.measures = []
-        self.pedals = []
+        self.measures: list[Measure] = []
+        self.pedals: list[PedalUse] = []
         self.done_called = False
-        self.m_cur_time = 0    # for appending measures
+        self.m_cur_time = 0.    # for appending measures
         self.clear_flags()
 
     def __str__(self):
@@ -132,7 +133,7 @@ class ScoreBasic:
     # This doesn't copy anything, and the Notes are modified.
     # to insert a Score more than once, do a deep copy on it
     #
-    def insert_score(self, score: 'ScoreBasic', t: float = 0, tag: str = None):
+    def insert_score(self, score: 'ScoreBasic', t: float = 0, tag: str = ''):
         for note in score.notes:
             note.time += t
             if tag:
@@ -149,7 +150,7 @@ class ScoreBasic:
 
     # append a score to this one
     #
-    def append_score(self, score: 'ScoreBasic', tag: str = None):
+    def append_score(self, score: 'ScoreBasic', tag: str = ''):
         self.insert_score(score, self.cur_time, tag)
         self.cur_time += score.cur_time
         self.clear_flags()
@@ -157,8 +158,8 @@ class ScoreBasic:
 
     # append a list of scores in parallel
     #
-    def append_scores(self, scores: list['ScoreBasic'], tag: str = None):
-        longest = 0
+    def append_scores(self, scores: list['ScoreBasic'], tag: str = ''):
+        longest = 0.
         for score in scores:
             longest = max(longest, score.cur_time)
             self.insert_score(score, self.cur_time, tag)
@@ -473,6 +474,7 @@ class ScoreBasic:
 
     # tag notes that are the highest or lowest sounding notes at their start
     #
+    @staticmethod
     def flag_outer_aux(active: list[Note], starting: list[Note]):
         #print('flag_aux: %d active, %d starting'%(len(active), len(starting)))
         min = 128
@@ -558,7 +560,7 @@ class ScoreBasic:
                 continue
             new_notes.append(note)
         self.notes = new_notes
-        new_pedals = []
+        new_pedals: list[PedalUse] = []
         for ped in self.pedals:
             if ped.time < t0-epsilon:
                 continue

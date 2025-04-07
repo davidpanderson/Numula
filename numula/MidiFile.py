@@ -38,7 +38,7 @@ class GenericEvent(object):
     '''
     The event class from which specific events are derived
     '''
-    evtname = None
+    evtname = ''
     sec_sort_order = 0
 
     def __init__(self, tick, insertion_order):

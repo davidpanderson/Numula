@@ -35,8 +35,8 @@ def expand_iter(items: list[str]) -> list[str]:
         return items
 
     # stacks
-    nleft = []
-    start = []
+    nleft: list[int] = []
+    start: list[int] = []
 
     out = []
     i = 0
@@ -58,7 +58,7 @@ def expand_iter(items: list[str]) -> list[str]:
                 nleft.append(int(t[1:]))
             except:
                 show_context(items, i)
-                raise Exception("can't parse "%t)
+                raise Exception("can't parse %s"%t)
             start.append(i)
         elif '*' in t:
             show_context(items, i)
@@ -80,8 +80,8 @@ def expand_all(items: list[str]) -> list[str]:
 
 #############   stuff related to measures in shorthands   ##################
 
-meas_dur = 0
-meas_prev_t = 0     # time at last |n
+meas_dur = 0.
+meas_prev_t = 0.     # time at last |n
 meas_prev_m = 0     # measure no. at last |n
 meas_first = True
 
@@ -90,18 +90,18 @@ meas_first = True
 def measure_init():
     global meas_first, meas_dur
     meas_first = True
-    meas_dur = 0
+    meas_dur = 0.
 
 # process a shorthand item starting with |
 # if item is of the form |M (measure number)
 # verify that t (current time) corresponds to that measure
 #
-def comment(item, t):
+def comment(item, t: float):
     global meas_dur, meas_prev_t, meas_prev_m, meas_first
 
     if not item[1:].isnumeric(): return
-    if meas_dur == 0: return
-    m = float(item[1:])
+    if meas_dur == 0.: return
+    m = int(item[1:])
     if meas_first:
         meas_prev_t = t
         meas_prev_m = m
