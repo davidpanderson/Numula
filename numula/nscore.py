@@ -40,6 +40,7 @@ class Note:
 
 # type for a note selector function
 type Selector = Callable[[Note], bool] | None
+type NoteToFloat = Callable[[Note], float]
 
 pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 

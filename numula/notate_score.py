@@ -13,7 +13,7 @@ pitch_offset = [0, 2, 4, 5, 7, 9, 11]
 # Parse a string of the form ++b- or b5-.
 # Return a pitch.
 #
-def parse_pitch(items, i, cur_pitch):
+def parse_pitch(items: list[str], i: int, cur_pitch: int):
     got_pitch = False
     off = [0,0]
     s = items[i]
@@ -61,7 +61,7 @@ def parse_pitch(items, i, cur_pitch):
 # parse a string of the form c+5
 # return pitch index
 #
-def parse_pitch2(s):
+def parse_pitch2(s: str) -> int:
     x = pitch_offset[note_names.index(s[0])]
     octave = 5
     for i in range(1, len(s)):
@@ -82,7 +82,7 @@ def parse_pitch2(s):
 # if it's -1, return the first instance below the current pitch;
 # -2, the octave below that etc.
 #
-def next_pitch(cur_pitch, pitch_class, octave_offset):
+def next_pitch(cur_pitch: int, pitch_class: int, octave_offset: int) -> int:
     cur_pitch_class = cur_pitch % 12
     cur_octave = cur_pitch // 12
     if octave_offset == 0:
@@ -119,7 +119,7 @@ def next_pitch(cur_pitch, pitch_class, octave_offset):
         else:
             return next_up
 
-def check_pitch(items, i, pitch, time):
+def check_pitch(items: list[str], i: int, pitch: int, time: float):
     if pitch<0 or pitch>127:
         show_context(items, i)
         raise Exception('illegal pitch %d at time %f'%(pitch, time))
@@ -149,7 +149,7 @@ class RepeatList:
 
 # shorthand score specification
 #
-def sh_score(s, **kwargs):
+def sh_score(s: str, **kwargs) -> Score:
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
     s = s.replace('<', ' < ')

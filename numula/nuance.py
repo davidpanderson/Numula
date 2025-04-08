@@ -111,8 +111,8 @@ class Score(ScoreBasic):
     # If we want to add a pause (in seconds) to the integral
     # we need to undo this scaling first.
     #
-    def dt_to_integral(self, dt):
-        return dt*self.tempo/240
+    def dt_to_integral(self, dt: float) -> float:
+        return dt*self.tempo/240.
         
     # adjust the timing of selected notes and pedal events.
     # pft is a tempo function, which can contain segments (such as Linear)
@@ -137,8 +137,9 @@ class Score(ScoreBasic):
     # 3)    update the (perf) time and dur of the corresponding
     #       Note and Pedal objects.
     #
-    def tempo_adjust_pft(
-        self, _pft, t0=0, selector=None, normalize=False, bpm=True, debug=False
+    def tempo_adjust_pft(self,
+        _pft: PFT, t0:float=0.,
+        selector: Selector=None, normalize=False, bpm=True, debug=False
     ):
         self.init_all()
         if bpm:
@@ -351,7 +352,7 @@ class Score(ScoreBasic):
     # Note shifting (e.g. for agogic accents)
     # shift start time of selected notes by the PFT value
     #
-    def time_shift_pft(self, pft, t0=0, selector=None):
+    def time_shift_pft(self, pft: PFT, t0: float=0, selector: Selector=None):
         if not pft:
             return
         self.init_all()
@@ -396,7 +397,7 @@ class Score(ScoreBasic):
 
     # change dur of notes starting between t0 and t1 so they end at t1
     # (like a local sustain pedal)
-    def sustain(self, t0, t1, selector=None):
+    def sustain(self, t0: float, t1: float, selector: Selector=None):
         self.time_sort()
         if selector:
             self.tags_init()
@@ -519,7 +520,10 @@ class Score(ScoreBasic):
                 raise Exception('roll amount exceeds not duration')
             ind += 1
 
-    def roll(self, t, offsets, is_up=True, selector=None, verbose=False):
+    def roll(self,
+        t: float, offsets: list[float], is_up=True,
+        selector: Selector=None, verbose=False
+    ):
         self.init_all()
         chord = []   # the notes at time t
         for note in self.notes:
@@ -534,7 +538,7 @@ class Score(ScoreBasic):
                 print('roll ', offsets, list(map(lambda n: n.pitch, chord)))
             self.roll_aux(chord, offsets, is_up)
 
-    def t_adjust_list(self, offsets, selector):
+    def t_adjust_list(self, offsets: list[float], selector: Selector):
         self.init_all()
         ind = 0
         for note in self.notes:
@@ -544,13 +548,13 @@ class Score(ScoreBasic):
                 note.perf_time += offsets[ind]
                 ind += 1
 
-    def t_adjust_notes(self, offset, selector):
+    def t_adjust_notes(self, offset: float, selector: Selector):
         self.init_all()
         for note in self.notes:
             if selector(note):
                 note.perf_time += offset
 
-    def t_adjust_func(self, func, selector):
+    def t_adjust_func(self, func: NoteToFloat, selector: Selector):
         self.init_all()
         for note in self.notes:
             if selector(note):
@@ -559,7 +563,9 @@ class Score(ScoreBasic):
     # perturb start time, and adjust duration to keep end time the same
     # Possible TODO: adjust durations of earlier notes that end at this time
     #
-    def t_random_uniform(self, min, max, selector=None):
+    def t_random_uniform(self,
+        min: float, max: float, selector: Selector=None
+    ):
         self.init_all()
         for note in self.notes:
             if selector and not selector(note):
@@ -568,7 +574,9 @@ class Score(ScoreBasic):
             note.perf_time += x
             note.perf_dur -= x
 
-    def t_random_normal(self, stddev, max_sigma=2, selector=None):
+    def t_random_normal(self,
+        stddev: float, max_sigma: float=2, selector: Selector=None
+    ):
         self.init_all()
         for note in self.notes:
             if selector and not selector(note):
@@ -583,42 +591,42 @@ class Score(ScoreBasic):
                     
 # --------------- Articulation ----------------------
 
-    def score_dur_abs(self, dur, selector=None):
+    def score_dur_abs(self, dur: float, selector: Selector=None):
         self.tags_init()
         for note in self.notes:
             if selector and not selector(note):
                 continue
             note.dur = dur
 
-    def score_dur_rel(self, factor, selector=None):
+    def score_dur_rel(self, factor: float, selector: Selector=None):
         self.tags_init()
         for note in self.notes:
             if selector and not selector(note):
                 continue
             note.dur *= factor
 
-    def score_dur_func(self, func, selector=None):
+    def score_dur_func(self, func: NoteToFloat, selector: Selector=None):
         self.tags_init()
         for note in self.notes:
             if selector and not selector(note):
                 continue
             note.dur = func(note)
  
-    def perf_dur_abs(self, dur, selector=None):
+    def perf_dur_abs(self, dur: float, selector: Selector=None):
         self.init_all()
         for note in self.notes:
             if selector and not selector(note):
                 continue
             note.perf_dur = dur
 
-    def perf_dur_rel(self, factor, selector=None):
+    def perf_dur_rel(self, factor: float, selector: Selector=None):
         self.init_all()
         for note in self.notes:
             if selector and not selector(note):
                 continue
             note.perf_dur *= factor
 
-    def perf_dur_func(self, func, selector=None):
+    def perf_dur_func(self, func: NoteToFloat, selector: Selector=None):
         self.init_all()
         for note in self.notes:
             if selector and not selector(note):
@@ -626,7 +634,9 @@ class Score(ScoreBasic):
             note.perf_dur = func(note)
 
     # adjust articulation with a PFT
-    def perf_dur_pft(self, pft, t0, selector=None, rel=True):
+    def perf_dur_pft(self,
+        pft: PFT, t0: float, selector: Selector=None, rel=True
+    ):
         self.init_all()
         pft_check_closure(pft)
         seg_ind = 0
@@ -672,7 +682,7 @@ class Score(ScoreBasic):
     # apply a virtual sustain PFT:
     # extend the (score) duration of affected notes
     def vsustain_pft(self,
-        pft, t0: float = 0,
+        pft: PFT, t0: float=0,
         selector: Selector=None, verbose=False
     ):
         self.time_sort()
@@ -729,7 +739,7 @@ class Score(ScoreBasic):
     # If the performance times exceed the PFT,
     # use the final PFT value for those frames
     #
-    def get_pos_array(self, pos_pft, framerate: float) -> list[float]:
+    def get_pos_array(self, pos_pft: PFT, framerate: float) -> list[float]:
         # get the score's note start/end events.
         # Then extract a subset which is strictly monotonic
         # in both score and performance time.

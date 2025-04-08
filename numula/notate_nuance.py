@@ -59,12 +59,12 @@ GOT_V1 = 3
 # Note: this can be used to define PFT for other purposes.
 # maybe should factor.
 
-def sh_vol(s) -> PFT:
+def sh_vol(s: str) -> PFT:
     items = s.split()
     items = expand_all(items)
     measure_init()
     state = INIT
-    pft = []
+    pft: PFT = []
     last_seg: PFT_Primitive = None
     got_rb = False      # got left bracket [
     got_lb = False      # for right bracket ]
@@ -157,12 +157,12 @@ def sh_vol(s) -> PFT:
 
 # e.g. '1/8 1.2 1/4 1.2 1/4 1.2 1/8'
 
-def sh_accents(s):
+def sh_accents(s: str) -> PFT:
     items = s.split()
     items = expand_all(items)
     measure_init()
     dt = 0
-    pft = []
+    pft: PFT = []
     for i in range(len(items)):
         t = items[i]
         if t[0] == '|':
@@ -199,11 +199,11 @@ def sh_accents(s):
 
 # e.g.: 'linear 60 8/4 80 p0.1 60 3/4 120 0.2p'
 
-def sh_tempo(s):
+def sh_tempo(s: str) -> PFT:
     items = s.split()
     items = expand_all(items)
     measure_init()
-    pft = []
+    pft: PFT = []
     t0 = None
     dur = None
     dt = 0
@@ -288,11 +288,11 @@ def sh_tempo(s):
     return pft
 
 # e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
-def sh_pedal(s, pedal_type=PEDAL_SUSTAIN):
+def sh_pedal(s: str, pedal_type=PEDAL_SUSTAIN) -> PFT:
     items = s.split()
     items = expand_all(items)
     measure_init()
-    pft = []
+    pft: PFT = []
     on = False
     dt = 0
     for i in range(len(items)):
@@ -332,11 +332,11 @@ def sh_pedal(s, pedal_type=PEDAL_SUSTAIN):
 #
 # Apply this to a Score using time_shift_pft()
 #
-def sh_shift(s):
+def sh_shift(s: str) -> PFT:
     items = s.split()
     items = expand_all(items)
     measure_init()
-    pft = []
+    pft: PFT = []
     on = False
     dt = 0
     for i in range(len(items)):
