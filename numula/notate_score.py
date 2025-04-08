@@ -148,6 +148,7 @@ class RepeatList:
         return x
 
 # shorthand score specification
+# kwargs is to pass in duration iterators (<foo> notation)
 #
 def sh_score(s: str, **kwargs) -> Score:
     s = s.replace('[', ' [ ')
@@ -168,7 +169,7 @@ def sh_score(s: str, **kwargs) -> Score:
     items = s.split()
     ped_start = -1
     ped_start_index = -1
-    dt = 0
+    dt = 0.
     measure_init()
     items = expand_all(items)
     for i in range(len(items)):
@@ -216,7 +217,11 @@ def sh_score(s: str, **kwargs) -> Score:
                     raise Exception('bad values in %s'%t)
                 dur_list.append(num/denom)
             else:
-                # <arg> where arg=iterator kw arg
+                # <foo> means use the iterator foo,
+                # which was passed as a keyword arg fo sh_score()
+                # e.g. sh_score'<foo> c d e 1/4 f', foo=iter([1/2, 1/4])
+                # copy it so that it starts from the beginning each time
+                #
                 dur = copy.copy(kwargs[t])
         elif t[0] == '|':
             comment(t, dt)
