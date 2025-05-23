@@ -426,7 +426,7 @@ class ScoreBasic:
      # make a sorted list of start/end events
     #
     def make_start_end_events(self):
-        self.start_end = []
+        self.start_end: list[Event] = []
         for note in self.notes:
             self.start_end.append(Event(note, event_kind_note, True))
             self.start_end.append(Event(note, event_kind_note, False))

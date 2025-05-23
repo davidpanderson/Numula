@@ -749,9 +749,9 @@ class Score(ScoreBasic):
         # is the value of pos_pft at score time F(t)
         #
         self.make_start_end_events()
-        last_time = 0
-        last_perf_time = 0
-        events = []
+        last_time = 0.
+        last_perf_time = 0.
+        events: list[Event] = []
         # events are sorted by score time
         for event in self.start_end:
             if event.time <= last_time:
