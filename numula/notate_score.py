@@ -149,7 +149,7 @@ class RepeatList:
 
 # shorthand score specification
 #
-def sh_score(s: str, **kwargs) -> Score:
+def sh_score(s: str, **kwargs) -> nuance.Score:
     s = s.replace('[', ' [ ')
     s = s.replace(']', ' ] ')
     s = s.replace('<', ' < ')
