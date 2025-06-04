@@ -7,6 +7,9 @@ class PFT_Primitive:
     closed_start: bool
     closed_end: bool
     y1: float
+    dt: float
+    after: bool
+    value: float
 
 class Linear(PFT_Primitive):
     def __init__(self,

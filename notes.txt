@@ -239,7 +239,7 @@ ns.sostenuto_pedal(t, dt, level)
     start perf time is determined as follows:
     sustain pedal:
         start time is the min of the start times
-        of notes with score times in the pedal interal;
+        of notes with score times in the pedal interval;
         we need to "catch" all these notes, even if they got moved earlier
     sostenuto pedal:
         if a note is active (in score time) at the pedal start,
@@ -249,7 +249,7 @@ ns.sostenuto_pedal(t, dt, level)
 Note: in Pianoteq, 0..63 is off.  64..127 is on a little to all the way
 
 Note 2: CC 64 is sustain pedal;
-CC is middle (sostenuto) pedal
+CC 66 is middle (sostenuto) pedal
     send this command after all notes of that start time
 
 ------------------
@@ -910,3 +910,44 @@ CCEvent: continuous controller event
 insert_pedal() adds down and up events
 insert_pedal_pft() takes a PFT (linear segments only)
     and generates multiple events in increments of 1
+------------------
+pedal semantics
+
+originally each PedalUse generated a pedal-down at the start
+and pedal-up at the end.
+
+But that's no good.
+We might want either
+
+pedal 1.0 for 1 beat followed by pedal 0.5 for 1 beat
+    (with no intervening pedal-up)
+
+Same, but with an intervening pedal-up
+    and need to make sure the 0 precedes the 0.5
+
+playing a chord w/o pedal and immediately lowering the pedal
+    the chord does not resonate other strings
+lowering the pedal and immediately playing a chord
+    the chord resonates other strings
+
+So: let's say a pedal PFT is made up of Linears
+    suppose consecutive segments have values x0, x1
+    we want to express
+    1) change pedal to x1, then play chord
+    2) play chord, then change pedal to x1
+    3) release pedal, play chord, pedal to x1
+    4) release pedal, pedal to x1, play chord
+    closed/closed
+        1
+    closed/open
+        2
+    open/open
+        3
+    open/closed
+        4
+
+shorthand notation
+    1.0 1/1 .5 1/1      closed/closed
+    1.0 1/1 ] .5 1/1    closed/open
+    1.0 1/1 [] .5 1/1   open/open
+    1.0 1/1 [ .5 1/1    open/closed

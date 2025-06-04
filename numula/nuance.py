@@ -156,7 +156,7 @@ class Score(ScoreBasic):
             #print('PFT integrals:')
             #show_pft_ints(pft, 1/16)
 
-        scale_factor = 1
+        scale_factor = 1.0
         if normalize:
             # the PFT consists of segments (tempo functions) and Delays.
             # To compute the scale factor we have to compute
@@ -517,7 +517,7 @@ class Score(ScoreBasic):
             note.perf_time += off
             note.perf_dur -= off
             if note.perf_dur < epsilon:
-                raise Exception('roll amount exceeds not duration')
+                raise Exception('roll amount exceeds note duration')
             ind += 1
 
     def roll(self,
@@ -531,7 +531,8 @@ class Score(ScoreBasic):
                 continue
             if note.time > t+epsilon:
                 break
-            if selector and not selector(note): continue
+            if selector and not selector(note):
+                continue
             chord.append(note)
         if chord:
             if verbose:
@@ -544,21 +545,24 @@ class Score(ScoreBasic):
         for note in self.notes:
             if ind == len(offsets):
                 break
-            if selector(note):
-                note.perf_time += offsets[ind]
-                ind += 1
+            if selector and not selector(note):
+                continue
+            note.perf_time += offsets[ind]
+            ind += 1
 
     def t_adjust_notes(self, offset: float, selector: Selector):
         self.init_all()
         for note in self.notes:
-            if selector(note):
-                note.perf_time += offset
+            if selector and not selector(note):
+                continue
+            note.perf_time += offset
 
     def t_adjust_func(self, func: NoteToFloat, selector: Selector):
         self.init_all()
         for note in self.notes:
-            if selector(note):
-                note.perf_time += func(note)
+            if selector and not selector(note):
+                continue
+            note.perf_time += func(note)
 
     # perturb start time, and adjust duration to keep end time the same
     # Possible TODO: adjust durations of earlier notes that end at this time

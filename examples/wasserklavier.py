@@ -174,7 +174,7 @@ t6 = 30/8
 def ta1(ns):
     t = 0
     ns.t_adjust_notes(-.2, lambda n: 'line1' in n.tags and n.pitch==41)
-    ns.roll(t+6/8,  np.linspace(-.1, 0, 4))
+    ns.roll(t+6/8, np.linspace(-.1, 0, 4))
     ns.pause_after(t+12/8, .2)
     ns.pause_after(t+30/8, .15)
 def ta2(ns):
@@ -183,7 +183,7 @@ def ta2(ns):
     ns.pause_after(t+33/8, .1)
 def ta3(ns):
     t = t1 + t2
-    ns.roll(t+3/8,  np.linspace(-.3, .1, 7))
+    ns.roll(t+3/8, np.linspace(-.3, .1, 7))
     ns.pause_after(t+6/8, .15)
     ns.roll(t+13/8, np.linspace(-.12, .1, 4))
     ns.pause_after(t+6/8+3/16, .15)
@@ -191,7 +191,7 @@ def ta3(ns):
 def ta4(ns):
     t = t1 + t2 + t3
     ns.roll(t+6/8+3/16, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
-    ns.roll(t+6/8+3/8,  np.linspace(-.2, .1, 3), selector=lambda n: 'rh' in n.tags)
+    ns.roll(t+6/8+3/8, np.linspace(-.2, .1, 3), selector=lambda n: 'rh' in n.tags)
     ns.pause_after(t+6/8+3/8, .1)
     ns.pause_after(t+15/8, .2)
 def ta5(ns):
@@ -204,15 +204,15 @@ def ta5(ns):
     ns.roll(t+22/8, np.linspace(-.2, .1, 5), selector=lambda n: 'rh' in n.tags)
 def ta6(ns):
     t = t1 + t2 + t3 + t4 + t5
-    ns.roll(t,  np.linspace(-.3, .1, 3), selector=lambda n: 'rh' not in n.tags)
-    ns.roll(t+2/8,  np.linspace(-.4, .1, 7))
-    ns.roll(t+4/8,  np.linspace(-.4, .1, 7))
-    ns.roll(t+6/8,  np.linspace(-.4, .1, 7))
-    ns.roll(t+8/8,  np.linspace(-.4, .1, 7))
-    ns.roll(t+10/8,  np.linspace(-.4, .1, 7))
-    ns.roll(t+12/8,  np.linspace(-.4, .1, 7))
-    ns.roll(t+14/8,  np.linspace(-.4, .1, 3), selector=lambda n: 'rh' not in n.tags)
-    ns.roll(t+18/8,  [-.4, -.3, .2, -.1, -.2])
+    ns.roll(t, np.linspace(-.3, .1, 3), selector=lambda n: 'rh' not in n.tags)
+    ns.roll(t+2/8, np.linspace(-.4, .1, 7))
+    ns.roll(t+4/8, np.linspace(-.4, .1, 7))
+    ns.roll(t+6/8, np.linspace(-.4, .1, 7))
+    ns.roll(t+8/8, np.linspace(-.4, .1, 7))
+    ns.roll(t+10/8, np.linspace(-.4, .1, 7))
+    ns.roll(t+12/8, np.linspace(-.4, .1, 7))
+    ns.roll(t+14/8, np.linspace(-.4, .1, 3), selector=lambda n: 'rh' not in n.tags)
+    ns.roll(t+18/8, [-.4, -.3, .2, -.1, -.2])
     ns.pause_after(t+14/4, 10)
 
 def time_adjust(ns):

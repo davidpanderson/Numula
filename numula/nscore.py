@@ -39,7 +39,12 @@ class Note:
         )
 
 # type for a note selector function
+#
 type Selector = Callable[[Note], bool] | None
+
+# some nuance functions take a function mapping Notes to floating point values
+# (e.g. durations or volumes)
+#
 type NoteToFloat = Callable[[Note], float]
 
 pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
