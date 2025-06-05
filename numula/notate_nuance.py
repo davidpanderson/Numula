@@ -313,9 +313,9 @@ def sh_pedal(s: str, pedal_type=PEDAL_SUSTAIN) -> PFT:
                 raise Exception('bad values in %s'%t)
             dur = num/denom
             if on:
-                pft.append(PedalSeg(dur, 1, pedal_type))
+                pft.append(PedalSeg(0, dur, 1, 1, True, True, pedal_type))
             else:
-                pft.append(PedalSeg(dur, 0, pedal_type))
+                pft.append(PedalSeg(0, dur, 0, 0, True, True, pedal_type))
             dt += dur
         elif t == '-':
             on = False

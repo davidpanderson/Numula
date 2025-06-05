@@ -52,25 +52,37 @@ pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 def pitch_name(n: int):
     return '%s%d'%(pitch_names[n%12], n//12)
 
-# represents the use of a pedal (both depress and release)
-class PedalUse:
+# this is used both as
+# - a PFT primitive
+# - an element of ScoreBasic.pedals
+#   (in which case time, perf_time, and perf_dur are defined)
+#
+class PedalSeg:
     def __init__(self,
         time: float,
         dur: float,
-        level: float = 1,
+        level0: float,
+        level1: float,
+        closed_start: bool,
+        closed_end: bool,
         pedal_type=PEDAL_SUSTAIN
     ):
         self.time = time
         self.dur = dur
-        self.level = level
+        self.level0 = level0
+        self.level1 = level1
+        self.closed_start = closed_start
+        self.closed_end = closed_end
         self.pedal_type = pedal_type
         self.perf_time = 0.
         self.perf_dur = 0.
 
     def __str__(self):
-        return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d level %f'%(
+        return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d levels %f %f closed %s %s'%(
             self.time, self.dur, self.perf_time, self.perf_dur,
-            self.pedal_type, self.level
+            self.pedal_type, self.level0, self.level1,
+            'yes' if self.closed_start else 'no',
+            'yes' if self.closed_end else 'no'
         )
     
 class Measure:
@@ -98,7 +110,7 @@ class ScoreBasic:
         self.tempo = tempo    # beats per minute
         self.verbose = verbose
         self.measures: list[Measure] = []
-        self.pedals: list[PedalUse] = []
+        self.pedals: list[PedalSeg] = []
         self.done_called = False
         self.m_cur_time = 0.    # for appending measures
         self.clear_flags()
@@ -186,7 +198,7 @@ class ScoreBasic:
         self.clear_flags()
         return self
 
-    def insert_pedal(self, pedal: PedalUse):
+    def insert_pedal(self, pedal: PedalSeg):
         self.pedals.append(pedal)
         self.clear_flags()
         return self
@@ -359,6 +371,14 @@ class ScoreBasic:
             f.addNote(0, 0, note.pitch, note.perf_time, note.perf_dur, v)
         if self.pedals:
             self.adjust_pedal_times()
+            self.write_midi_pedals(f)
+
+        with open(filename, "wb") as file:
+            f.writeFile(file)
+        if verbose:
+            print(vstr)
+
+    def unused(self):
             for pedal in self.pedals:
                 c = pedal.pedal_type
                 # in the MIDI standard, "on" is 4-127
@@ -370,11 +390,60 @@ class ScoreBasic:
                     )
                 f.addControllerEvent(0, 0, pedal.perf_time, c, level)
                 f.addControllerEvent(0, 0, pedal.perf_time + pedal.perf_dur, c, 0)
-        with open(filename, "wb") as file:
-            f.writeFile(file)
-        if verbose:
-            print(vstr)
+    # generate MIDI events for pedals
+    #
+    def write_midi_pedals(self, f):
+        soft = []
+        sost = []
+        sustain = []
+        for pedal in self.pedals:
+            if pedal.pedal_type == PEDAL_SOFT:
+                soft.append(pedal)
+            elif pedal.pedal_type == PEDAL_SOSTENUTO:
+                sost.append(pedal)
+            elif pedal.pedal_type == PEDAL_SUSTAIN:
+                sustain.append(pedal)
+        self.write_midi_pedals_type(f, soft, PEDAL_SOFT)
+        self.write_midi_pedals_type(f, sost, PEDAL_SOSTENUTO)
+        self.write_midi_pedals_type(f, sustain, PEDAL_SUSTAIN)
 
+    def write_midi_pedals_type(self, f, pedals, type):
+        prev = None
+        for pedal in pedals:
+            pedal.have_next = False
+            if prev:
+                if abs(p.perf_time+p.perf_dur - pedal.perf_time) < epsilon:
+                    prev.have_next = True
+        for pedal in pedals:
+            t0 = pedal.perf_time
+            t1 = pedal.perf_time + pedal.perf_dur
+            if pedal.closed_start:
+                t0 -= epsilon
+            else:
+                t0 += epsilon
+            if pedal.level0 == pedal.level1:
+                level = int(64+pedal.level0*63)
+                f.addControllerEvent(0, 0, t0, type, level)
+            else:
+                # e.g. if levels differ by 1, 2nd should go halfway in time
+                level0 = int(64+pedal.level0*63)
+                level1 = int(64+pedal.level1*63)
+                diff = level1 - level0
+                n = iabs(diff)
+                dt = t1 - t0
+                for i in range(n):
+                    level = level0 + i*step
+                    t = t0 + (i*dt)/n
+                    f.addControllerEvent(0, 0, t, type, level)
+                if pedal.have_next:
+                    if not pedal.closed_end:
+                        f.addControllerEvent(0, 0, t1-2*epsilon, type, 0)
+                else:
+                    if pedal.closed_end:
+                        f.addControllerEvent(0, 0, t1+epsilon, type, 0)
+                    else:
+                        f.addControllerEvent(0, 0, t1-epsilon, type, 0)
+        
     # ----- implementation ----
 
     # if a note starts while one of the same pitch is sounding,
@@ -440,7 +509,7 @@ class ScoreBasic:
             self.start_end.append(Event(pedal, event_kind_pedal, False))
         self.start_end.sort(key=lambda x: x.time)
 
-    # transfer perf times from start/end events back to Note and Pedal
+    # transfer perf times from start/end events back to Note and PedalSeg
     #
     def transfer_start_end_events(self):
         for event in self.start_end:
@@ -566,12 +635,13 @@ class ScoreBasic:
                 continue
             new_notes.append(note)
         self.notes = new_notes
-        new_pedals: list[PedalUse] = []
+        new_pedals: list[PedalSeg] = []
         for ped in self.pedals:
             if ped.time < t0-epsilon:
                 continue
             if ped.time > t1-epsilon:
                 continue
+            new_pedals.append(ped)
         self.pedals = new_pedals
 
     # change note durations based on pattern

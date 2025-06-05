@@ -155,19 +155,6 @@ class Delta(PFT_Primitive):
     def delay(self):
         return self.value
 
-# a pedal PFT is a list of these.
-# level 0 is a period of no pedal
-# pedal types don't have to all be the same
-class PedalSeg(PFT_Primitive):
-    def __init__(self, dt, level, pedal_type=PEDAL_SUSTAIN):
-        self.dt = dt
-        self.level = level
-        self.pedal_type = pedal_type
-    def __str__(self):
-        return 'PedalSeg: dt %f type %d level %f'%(
-            self.dt, self.pedal_type, self.level
-        )
-
 # a PFT segment whose value is an arbitrary object (e.g. a PitchSet)
 #
 class PFTObject:
