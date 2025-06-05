@@ -951,3 +951,58 @@ shorthand notation
     1.0 1/1 ] .5 1/1    closed/open
     1.0 1/1 [] .5 1/1   open/open
     1.0 1/1 [ .5 1/1    open/closed
+    can use + for 1.0, - for 0
+
+current:
+    we have 2 similar types:
+    PedalSeg is the PFT primitive
+        it has value, pedal_type, dt
+    PedalUse is stored in ScoreBasic
+        it has time, dur, level, type
+        these are copied on insert_score()
+        Score.time_sort(): sorts them
+    Score.pedal_pft(pft)
+        copies PedalSegs with nonzero value to PedalUse in Score.pedals
+    Score.write_midi():
+        adjust pedal times for shifted note starts
+            sustain, soft: move pedal start earlier if needed
+            sostenuto: move later
+                this is confused; remove it
+            should do this for soft pedal too
+            Also decrements all durs by .01 to prevent stuck note bug
+                need to research this
+        for each PedalUse
+            add MIDI CC on event at start time
+            add MIDI CC off event at end time
+
+new
+    use 1 type for both purposes
+    PedalSeg has
+        time, dt, y0, y1, closed_start, closed_end, type
+    ScoreBasic has a list, as now
+    Score.write_midi()
+        Divide PedalSegs into 3 lists by type
+        for each type
+            list may have gaps
+            adjust pedal times as above
+            go through list and add
+                have_next: adjacent seg?
+                if next seg starts before this one starts:
+                    remove this one
+                else if next starts before this one ends
+                    change end time of this one
+            for pedal in pedals:
+                if closed_start:
+                    t0 -= epsilon
+                else:
+                    t0 += epsilon
+                generate MIDI commands from t0 to t1
+                if have_next:
+                    if not closed_end:
+                        generate pedal off at t1-2*epsilon
+                else:
+                    if closed_end:
+                        generate pedal off at t1+epsilon
+                    else:
+                        generate pedal off at t1-epsilon
+
