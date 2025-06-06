@@ -379,18 +379,6 @@ class ScoreBasic:
         if verbose:
             print(vstr)
 
-    def unused(self):
-            for pedal in self.pedals:
-                c = pedal.pedal_type
-                # in the MIDI standard, "on" is 4-127
-                # see https://anotherproducer.com/online-tools-for-musicians/midi-cc-list/
-                level = int(64+pedal.level*63)
-                if verbose:
-                    vstr += 'MIDI pedal: start %f end %f level %f\n'%(
-                        pedal.perf_time, pedal.perf_time+pedal.perf_dur, level
-                    )
-                f.addControllerEvent(0, 0, pedal.perf_time, c, level)
-                f.addControllerEvent(0, 0, pedal.perf_time + pedal.perf_dur, c, 0)
     # generate MIDI events for pedals
     #
     def write_midi_pedals(self, f):
@@ -409,6 +397,7 @@ class ScoreBasic:
         self.write_midi_pedals_type(f, sustain, PEDAL_SUSTAIN)
 
     def write_midi_pedals_type(self, f, pedals, type):
+        # set P.have_next if there's a segment immediately following P
         prev = None
         for pedal in pedals:
             pedal.have_next = False
@@ -422,28 +411,28 @@ class ScoreBasic:
                 t0 -= epsilon
             else:
                 t0 += epsilon
-            if pedal.level0 == pedal.level1:
-                level = int(64+pedal.level0*63)
-                f.addControllerEvent(0, 0, t0, type, level)
+            level0 = int(64+pedal.level0*63)
+            level1 = int(64+pedal.level1*63)
+            if level0 == level1:
+                f.addControllerEvent(0, 0, t0, type, level0)
             else:
                 # e.g. if levels differ by 1, 2nd should go halfway in time
-                level0 = int(64+pedal.level0*63)
-                level1 = int(64+pedal.level1*63)
                 diff = level1 - level0
-                n = iabs(diff)
+                step = 1 if diff>0 else -1
+                n = abs(diff)
                 dt = t1 - t0
                 for i in range(n):
                     level = level0 + i*step
                     t = t0 + (i*dt)/n
                     f.addControllerEvent(0, 0, t, type, level)
-                if pedal.have_next:
-                    if not pedal.closed_end:
-                        f.addControllerEvent(0, 0, t1-2*epsilon, type, 0)
+            if pedal.have_next:
+                if not pedal.closed_end:
+                    f.addControllerEvent(0, 0, t1-2*epsilon, type, 0)
+            else:
+                if pedal.closed_end:
+                    f.addControllerEvent(0, 0, t1+epsilon, type, 0)
                 else:
-                    if pedal.closed_end:
-                        f.addControllerEvent(0, 0, t1+epsilon, type, 0)
-                    else:
-                        f.addControllerEvent(0, 0, t1-epsilon, type, 0)
+                    f.addControllerEvent(0, 0, t1-epsilon, type, 0)
         
     # ----- implementation ----
 
@@ -620,10 +609,10 @@ class ScoreBasic:
                 else:
                     if note.perf_time < cur_ped.perf_time:
                         cur_ped.perf_time = note.perf_time
-        for pedal in self.pedals:
+        #for pedal in self.pedals:
             # don't want pedal down during attack of notes right at end.
             # On Pianoteq this can cause stuck notes (possibly a bug)
-            pedal.perf_dur -= .01
+            #pedal.perf_dur -= .01
 
     # trim to times t0..t1
     #
