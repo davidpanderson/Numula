@@ -714,7 +714,7 @@ class Score(ScoreBasic):
             while True:
                 if n.time < seg_end - epsilon:
                     if seg_end > n.time + n.dur:
-                        if seg.level > 0:
+                        if seg.level0 > 0:
                             if verbose:
                                 vstr += 'vsus: elongating note\n'
                             n.dur = seg_end - n.time
@@ -732,8 +732,8 @@ class Score(ScoreBasic):
     def pedal_pft(self, pft, t0=0):
         t = t0
         for seg in pft:
-            if seg.level > 0:
-                self.insert_pedal(PedalUse(t, seg.dt, seg.level, seg.pedal_type))
+            seg.time = t
+            self.insert_pedal(seg)
             t += seg.dt
 
 # ----------- spatialization ----------------

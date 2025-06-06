@@ -61,14 +61,15 @@ class PedalSeg:
     def __init__(self,
         time: float,
         dur: float,
-        level0: float,
-        level1: float,
-        closed_start: bool,
-        closed_end: bool,
+        level0: float=1,
+        level1: float=1,
+        closed_start: bool=True,
+        closed_end: bool=True,
         pedal_type=PEDAL_SUSTAIN
     ):
         self.time = time
         self.dur = dur
+        self.dt = dur
         self.level0 = level0
         self.level1 = level1
         self.closed_start = closed_start
@@ -79,7 +80,7 @@ class PedalSeg:
 
     def __str__(self):
         return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d levels %f %f closed %s %s'%(
-            self.time, self.dur, self.perf_time, self.perf_dur,
+            self.time, self.dt, self.perf_time, self.perf_dur,
             self.pedal_type, self.level0, self.level1,
             'yes' if self.closed_start else 'no',
             'yes' if self.closed_end else 'no'
