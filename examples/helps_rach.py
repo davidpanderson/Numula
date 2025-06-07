@@ -223,9 +223,9 @@ t1 = sh_tempo(f'meas4/4 \
 
 # pedal over measures
 mped = sh_pedal('meas4/4 \
-    |1 *10 + 4/4 * \
-    |11 meas6/4 + 6/4 \
-    |12 meas4/4 *21 + 4/4 * \
+    |1 *10 (4/4) * \
+    |11 meas6/4 (6/4) \
+    |12 meas4/4 *21 (4/4) * \
     |33 \
 ')
 

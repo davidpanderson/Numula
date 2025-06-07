@@ -1,6 +1,7 @@
 import numula_path
 from numula.nuance import *
 from numula.notate_score import *
+from numula.notate_nuance import *
 from numula.MidiFile import *
 from numula.pianoteq import *
 
@@ -11,7 +12,18 @@ def ped_test():
     ns.write_midi('data/ped_test')
     #numula.pianoteq.play_score(ns)
 
-ped_test()
+#ped_test()
+
+def sh_test():
+    pft = sh_pedal('[1. 1/1 .2)  (.8 1/1 .5]')
+    print(*pft, sep='\n')
+#sh_test()
+
+def sh_test2():
+    pft = sh_pedal('1/4 [1/8)(.8 1/4]')
+    print(*pft, sep='\n')
+sh_test2()
+
 
 # the following 2 tests are to see how fractional pedaling works on PianoTeq
 # play a chord with the sustain pedal down.

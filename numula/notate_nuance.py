@@ -66,8 +66,8 @@ def sh_vol(s: str) -> PFT:
     state = INIT
     pft: PFT = []
     last_seg: PFT_Primitive = None
-    got_rb = False      # got left bracket [
-    got_lb = False      # for right bracket ]
+    got_rb = False      # got right bracket [
+    got_lb = False      # got left bracket ]
     segtype = SEGTYPE_LINEAR
     dt = 0.
     for i in range(len(items)):
@@ -287,42 +287,6 @@ def sh_tempo(s: str) -> PFT:
             t0 = val
     return pft
 
-# e.g. '- 1/4 + 1/8 + 1/4 - 4/4'
-def sh_pedal(s: str, pedal_type=PEDAL_SUSTAIN) -> PFT:
-    items = s.split()
-    items = expand_all(items)
-    measure_init()
-    pft: PFT = []
-    on = False
-    dt = 0
-    for i in range(len(items)):
-        t = items[i]
-        if t[0] == '|':
-            comment(t, dt)
-        elif t[0] == 'm':
-            if not set_measure_dur(t, dt):
-                show_context(items, i)
-                raise Exception("bad measure length")
-        elif '/' in t:
-            a = t.split('/')
-            try:
-                num = int(a[0])
-                denom = int(a[1])
-            except:
-                show_context(items, i)
-                raise Exception('bad values in %s'%t)
-            dur = num/denom
-            if on:
-                pft.append(PedalSeg(0, dur, 1, 1, True, True, pedal_type))
-            else:
-                pft.append(PedalSeg(0, dur, 0, 0, True, True, pedal_type))
-            dt += dur
-        elif t == '-':
-            on = False
-        elif t == '+':
-            on = True
-    return pft
-
 # Define time shifts at discrete times.
 # e.g. '.1 1/4 .3 3/4' specifies a 4/4 measure in which
 # - the downbeat is delayed by .1 sec
@@ -365,4 +329,82 @@ def sh_shift(s: str) -> PFT:
                 show_context(items, i)
                 raise Exception('bad value in %s'%t)
             pft.append(Accent(val))
+    return pft
+
+# e.g. '- 1/4 + 1/8 + [] 1/4 - 4/4'
+def sh_pedal(s: str) -> PFT:
+    s = s.replace('[', ' [ ')
+    s = s.replace(']', ' ] ')
+    s = s.replace('(', ' ( ')
+    s = s.replace(')', ' ) ')
+    items = s.split()
+    items = expand_all(items)
+    measure_init()
+    pft: PFT = []
+    in_seg = False
+    v0 = None
+    v1 = None
+    dur = None
+    dt = 0.
+    for i in range(len(items)):
+        t = items[i]
+        if t[0] == '|':
+            comment(t, dt)
+        elif t[0:4] == 'meas':
+            if not set_measure_dur(t, dt):
+                show_context(items, i)
+                raise Exception("bad measure length")
+        elif '/' in t:
+            a = t.split('/')
+            try:
+                num = int(a[0])
+                denom = int(a[1])
+            except:
+                show_context(items, i)
+                raise Exception('bad values in %s'%t)
+            dur = num/denom
+            if not in_seg:
+                pft.append(PedalSeg(0, dur, 0, 0))
+                dt += dur
+        elif t == ']' or t == ')':
+            if not in_seg or dur is None:
+                show_context(items, i)
+                raise Exception('unexpected ]')
+            if v0 is None:
+                v0 = 1.
+            if v1 is None:
+                v1 = v0
+            pft.append(PedalSeg(0, dur, v0, v1, closed, t == ']'))
+            in_seg = False
+            v0 = None
+            v1 = None
+            dt += dur
+        elif t == '[' or t == '(':
+            if in_seg:
+                show_context(items, i)
+                raise Exception('unexpected [')
+            in_seg = True
+            closed = t == '['
+        else:
+            if t == '-':
+                v = 0.
+            elif t == '+':
+                v = 1.
+            else:
+                try:
+                    v = float(t)
+                except:
+                    show_context(items, i)
+                    raise Exception('unrecognized item')
+            if not in_seg:
+                show_context(items, i)
+                raise Exception('value not in segment')
+            if v0 is None:
+                v0 = v
+            else:
+                if v1 is None:
+                    v1 = v
+                else:
+                    show_context(items, i)
+                    raise Exception('too many values')
     return pft
