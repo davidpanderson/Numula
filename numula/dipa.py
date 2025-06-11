@@ -240,7 +240,7 @@ def ipa_main():
                 else:
                     break
 
-            elif words[0] in ['?', 'h', 'help']:
+            elif words[0] in ('?', 'h', 'help'):
                 show_commands()
 
             else:
