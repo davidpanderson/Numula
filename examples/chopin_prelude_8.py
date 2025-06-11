@@ -35,62 +35,74 @@ from numula.nuance import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
-var('if_pauses', IPA_LAYER, 'on')
-var('if_tbeat', IPA_LAYER, 'on')
-var('if_tphrase', IPA_LAYER, 'on')
-var('if_accents', IPA_LAYER, 'on')
-var('if_vmeas', IPA_LAYER, 'on')
-var('if_vphrase', IPA_LAYER, 'on')
-var('if_soprano', IPA_BOOL, True)
-var('if_bass', IPA_BOOL, True)
+var('if_pauses', IPA_TOGGLE, 'on')
+var('if_tbeat', IPA_TOGGLE, 'on')
+var('if_tphrase', IPA_TOGGLE, 'on')
+var('if_accents', IPA_TOGGLE, 'on')
+var('if_vmeas', IPA_TOGGLE, 'on')
+var('if_vphrase', IPA_TOGGLE, 'on')
+var('if_rh', IPA_TOGGLE, 'on')
+var('if_lh', IPA_TOGGLE, 'on')
+
 # volume
-var('dv1', IPA_VOL, .07, ['if_vmeas'])        # volume swells in vmeas
-var('dv2', IPA_VOL, .1, ['if_vmeas'])
-var('dv3', IPA_VOL, .13, ['if_vmeas'])
-    # RH accents
-var('rha1', IPA_VOL, .14, ['if_accents'])
-var('rha2', IPA_VOL, .1, ['if_accents'])
-var('rha3', IPA_VOL, .05, ['if_accents'])
-var('rha4', IPA_VOL, 0, ['if_accents'])
-var('rha5', IPA_VOL, .05, ['if_accents'])
-var('rha6', IPA_VOL, 0, ['if_accents'])
-var('rha7', IPA_VOL, .1, ['if_accents'])
-var('rha8', IPA_VOL, .07, ['if_accents'])
-    # LH accents
-var('lha1', IPA_VOL, .14, ['if_accents'])
-var('lha2', IPA_VOL, 0, ['if_accents'])
-var('lha3', IPA_VOL, 0, ['if_accents'])
-var('lha4', IPA_VOL, .11, ['if_accents'])
+tags = ['if_vmeas']
+var('dv1', IPA_VOL, .07, tags)        # volume swells in vmeas
+var('dv2', IPA_VOL, .1, tags)
+var('dv3', IPA_VOL, .13, tags)
+
+# RH accents
+tags = ['if_accents', 'if_rh']
+var('rha1', IPA_VOL, .14, tags)
+var('rha2', IPA_VOL, .1, tags)
+var('rha3', IPA_VOL, .05, tags)
+var('rha4', IPA_VOL, 0, tags)
+var('rha5', IPA_VOL, .05, tags)
+var('rha6', IPA_VOL, 0, tags)
+var('rha7', IPA_VOL, .1, tags)
+var('rha8', IPA_VOL, .07, tags)
+
+# LH accents
+tags = ['if_accents', 'if_lh']
+var('lha1', IPA_VOL, .14, tags)
+var('lha2', IPA_VOL, 0, tags)
+var('lha3', IPA_VOL, 0, tags)
+var('lha4', IPA_VOL, .11, tags)
+
 # timing
-var('p_start', IPA_DT_SEC, .04, ['if_pauses'])
+tags = ['if_pauses']
+var('p_start', IPA_DT_SEC, .04, tags)
     # pause on measure start melody note
-var('p_start2', IPA_DT_SEC, .06, ['if_pauses'])
+var('p_start2', IPA_DT_SEC, .06, tags)
     # pause on phrase start melody note
-var('p_start3', IPA_DT_SEC, .1, ['if_pauses'])
+var('p_start3', IPA_DT_SEC, .1, tags)
     # pause on major phrase start melody note
-var('p_mel', IPA_DT_SEC, .02, ['if_pauses'])
+var('p_mel', IPA_DT_SEC, .02, tags)
     # pause on other melody notes (top and bottom)
-var('p_end', IPA_DT_SEC, .06, ['if_pauses'])
+var('p_end', IPA_DT_SEC, .06, tags)
     # pause on minor phrase end melody note
-var('p_end2', IPA_DT_SEC, .08, ['if_pauses'])
-# pause on major phrase end melody note
-    # tbeat
-var('tbeat1', IPA_TEMPO, 55, ['if_tbeat'])        # start
-var('tbeat2', IPA_TEMPO, 65, ['if_tbeat'])        # end
-    # tphrase
-var('tph_1_1', IPA_TEMPO, 40, ['if_tphrase'])
-var('tph_1_2', IPA_TEMPO, 60, ['if_tphrase'])
-var('tph_2_1', IPA_TEMPO, 50, ['if_tphrase'])
-var('tph_2_2', IPA_TEMPO, 65, ['if_tphrase'])
-var('tph_2_3', IPA_TEMPO, 50, ['if_tphrase'])
-var('tph_2_4', IPA_TEMPO, 40, ['if_tphrase'])
+var('p_end2', IPA_DT_SEC, .08, tags)
+    # pause on major phrase end melody note
+
+# beat-level tempo
+tags = ['if_tbeat']
+var('tbeat1', IPA_TEMPO, 55, tags)        # start
+var('tbeat2', IPA_TEMPO, 65, tags)        # end
+
+# phrase-level tempo
+tags = ['if_tphrase']
+var('tph_1_1', IPA_TEMPO, 40, tags)
+var('tph_1_2', IPA_TEMPO, 60, tags)
+var('tph_2_1', IPA_TEMPO, 50, tags)
+var('tph_2_2', IPA_TEMPO, 65, tags)
+var('tph_2_3', IPA_TEMPO, 50, tags)
+var('tph_2_4', IPA_TEMPO, 40, tags)
 
 if __name__ == '__main__':
     read_vars('chopin_prelude_8')
 
 from numula.ipa import *
 
-soprano = sh_score('meas4/4 \
+right_hand = sh_score('meas4/4 \
     |1 1/32 \
         *2 c5+ +c+ g+ b a f+ d +d \
             --c+ +c+ g+ b a g+ f+ +f+ \
@@ -198,13 +210,13 @@ soprano = sh_score('meas4/4 \
     |32 *4 c5+ +c+ g+ b a f+ c+ +c+ * \
     |33 1/2 [c5+ e +c+] 1/4 [b g d] [e+ c+ b] \
     |34 1/4 e5+ 2/1 [f3+ +c+ +a c+ f+ ]\
-').tag('soprano')
+').tag('right_hand')
 
 # timing in last measure:
 # play all notes as rolled chord
 # use perf_dur_abs() to make the grace note E# end at the F#
 
-bass = sh_score('meas4/4 \
+left_hand = sh_score('meas4/4 \
     < 1/24 1/24 1/24 1/8 > \
     |1 *2 a4 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ * \
     |3 a5 -d+ f+ -a +g+ d+ f+ -g+ g5 -c+ e -g +f+ c+ e -f+ \
@@ -238,7 +250,7 @@ bass = sh_score('meas4/4 \
     |33 1/2 [a3 +e a] 1/4 [g -b] [c+ +g+] \
     |34 1/1 . \
     |35 \
-').tag('bass')
+').tag('left_hand')
 
 ################ VOLUME #################
 
@@ -410,13 +422,13 @@ nuance = True
 def main():
     ns = Score(tempo=90, verbose=False)
     # virtual pedal within a beat
-    soprano.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
-    bass.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
+    right_hand.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
+    left_hand.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
     parts = []
-    if if_soprano:
-        parts.append(soprano)
-    if if_bass:
-        parts.append(bass)
+    if if_rh != 'off':
+        parts.append(right_hand)
+    if if_lh != 'off':
+        parts.append(left_hand)
     ns.append_scores(parts)
     if nuance:
         if if_vphrase != 'off':
@@ -424,8 +436,8 @@ def main():
         if if_vmeas != 'off':
             ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
         if if_accents != 'off':
-            ns.vol_adjust_pft(rh_accents, selector=lambda n: 'soprano' in n.tags, mode=VOL_ADD)
-            ns.vol_adjust_pft(lh_accents, selector=lambda n: 'bass' in n.tags, mode=VOL_ADD)
+            ns.vol_adjust_pft(rh_accents, selector=lambda n: 'right_hand' in n.tags, mode=VOL_ADD)
+            ns.vol_adjust_pft(lh_accents, selector=lambda n: 'left_hand' in n.tags, mode=VOL_ADD)
         #ns.vol_scale(.1, .7)
         if if_tbeat != 'off':
             ns.tempo_adjust_pft(tbeat)

@@ -49,8 +49,7 @@ def type_name(type: int):
     if type == ipa.IPA_DT_SCORE: return 'Score time'
     if type == ipa.IPA_DT_SEC: return 'Seconds'
     if type == ipa.IPA_TEMPO: return 'Tempo'
-    if type == ipa.IPA_BOOL: return 'Boolean'
-    if type == ipa.IPA_LAYER: return 'Layer'
+    if type == ipa.IPA_TOGGLE: return 'Toggle'
     return '???'
 
 # rows: list of lists of n strings
@@ -164,10 +163,10 @@ def ipa_main():
 
     ipa.var('start', IPA_DT_SCORE, '0/1', desc='playback start time')
     ipa.var('dur', IPA_DT_SCORE, '1/1', desc='playback duration')
-    ipa.var('show', IPA_BOOL, False, desc='show score on playback')
+    ipa.var('show', IPA_TOGGLE, 'off', desc='show score on playback')
     show_vars(cur_var)
 
-    dirty = True
+    dirty = False
         # true if variables have changed;
         # we need to regenerate score on next play
     print('Enter :h for help')
@@ -209,21 +208,13 @@ def ipa_main():
                         print('must supply a value')
                         continue
                     w = words[1]
-                    if v['type'] == IPA_BOOL:
-                        if w == 't':
-                            ipa.set(v['name'], True)
-                        elif w == 'f':
-                            ipa.set(v['name'], False)
-                        else:
-                            print('bad value: expected t or f')
-                            continue
+                    e = ipa.valid_value(w, v['type'])
+                    if e == True:
+                        ipa.set(v['name'], w)
+                        print(v['name'], ':', w)
                     else:
-                        e = ipa.valid_value(w, v['type'])
-                        if e == True:
-                            ipa.set(v['name'], w)
-                        else:
-                            print('bad value', w, ':', e)
-                            continue
+                        print('bad value', w, ':', e)
+                        continue
                     dirty = True
 
             # show commands

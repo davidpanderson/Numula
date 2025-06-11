@@ -20,10 +20,13 @@ IPA_DT_SEC = 4
     # time interval in seconds, e.g. of a pause
 IPA_TEMPO = 5
     # beats per minute, or relative to 60
-IPA_BOOL = 6
-    # typically used for section tags
-IPA_LAYER = 7
-    # tag for a nuance layer: on/hide/off
+IPA_TOGGLE = 6
+    # values: on/hide/off
+    # used for
+    # - nuance layers
+    # - voices
+    # - sections
+    # 'hide' means enable the item but hide variables with the tag
 
 def var_lookup(name: str):
     for v in vars:
@@ -36,18 +39,15 @@ def check_tags_defined(tag_list: list[str]):
         v = var_lookup(tag)
         if not v:
             raise Exception('tag %s not defined'%tag)
-        if v['type'] not in (IPA_BOOL, IPA_LAYER):
-            raise Exception('tag %s not IPA_BOOL or IPA_LAYER'%tag)
+        if v['type'] != IPA_TOGGLE:
+            raise Exception('tag %s not IPA_TOGGLE'%tag)
 
 # is the var hidden given tag values?
 #
 def should_hide_var(var: dict):
     for x in var['tags']:
         v2 = var_lookup(x)
-        if v2['type'] == IPA_BOOL:
-            if not globals()[x]:
-                return True
-        if v2['type'] == IPA_LAYER:
+        if v2['type'] == IPA_TOGGLE:
             if globals()[x] != 'on':
                 return True
     return False
@@ -66,13 +66,9 @@ def fraction_value(str: str):
     if num < 0: return None
     return num/denom
 
-# return true, or error msg if bad value
+# return True, or error msg if bad value
 #
 def valid_value(val, t):
-    if t == IPA_BOOL:
-        if isinstance(val, bool):
-            return True
-        return 'expected True or False'
     if numeric(t):
         if type(val) not in [int, float]:
             return 'expected a number'
@@ -96,8 +92,8 @@ def valid_value(val, t):
         if isinstance(val, str) and fraction_value(val) is not None:
             return True
         return 'expected N/M'
-    if t == IPA_LAYER:
-        if val in ('on', 'hide', 'off'):
+    if t == IPA_TOGGLE:
+        if val in ('on', 'off', 'hide'):
             return True
         return "expected 'on', 'off', or 'hide'"
 
@@ -154,9 +150,7 @@ def var (
         var_aux(name, val, .01, -1, 1, tags, type, desc);
     elif type == IPA_TEMPO:
         var_aux(name, val, 2, 1, 1000, tags, type, desc);
-    elif type == IPA_BOOL:
-        var_aux(name, val, 0, 0, 0, tags, type, desc);
-    elif type == IPA_LAYER:
+    elif type == IPA_TOGGLE:
         var_aux(name, val, 0, 0, 0, tags, type, desc);
     else:
         raise Exception('bad IPA type %s'%type)
