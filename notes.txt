@@ -947,11 +947,16 @@ So: let's say a pedal PFT is made up of Linears
         4
 
 shorthand notation
-    1.0 1/1 .5 1/1      closed/closed
-    1.0 1/1 ] .5 1/1    closed/open
-    1.0 1/1 [] .5 1/1   open/open
-    1.0 1/1 [ .5 1/1    open/closed
-    can use + for 1.0, - for 0
+    1/1 off for 1 measure
+    [+ 1/1] 1/1 (
+    (.5 1/1 1.0) or (.5 1.0 1/1)
+    [1 1/1]
+    etc.
+    [ means start pedal before note
+    ( means start pedal after note
+    ] means end pedal after note
+    ) means end pedal before note
+
 
 current:
     we have 2 similar types:
@@ -1005,4 +1010,13 @@ new
                         generate pedal off at t1+epsilon
                     else:
                         generate pedal off at t1-epsilon
+------------------
+picture for tempo
 
+timeline of not start/end events
+    score times map to perf times
+
+tempo function
+integrate it between the start/end times
+average integral
+multiply perf time interval by that

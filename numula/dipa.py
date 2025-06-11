@@ -245,7 +245,7 @@ def ipa_main():
             elif words[0] == 'q!':
                 break
 
-            elif words[0] in ['?', 'h', 'help']:
+            elif words[0] in ('?', 'h', 'help'):
                 show_commands()
 
             else:

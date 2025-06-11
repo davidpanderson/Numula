@@ -59,22 +59,19 @@ def pitch_name(n: int):
 #
 class PedalSeg:
     def __init__(self,
-        time: float,
         dur: float,
         level0: float=1,
         level1: float=1,
         closed_start: bool=True,
-        closed_end: bool=True,
-        pedal_type=PEDAL_SUSTAIN
+        closed_end: bool=True
     ):
-        self.time = time
+        self.time = 0.
         self.dur = dur
         self.dt = dur
         self.level0 = level0
         self.level1 = level1
         self.closed_start = closed_start
         self.closed_end = closed_end
-        self.pedal_type = pedal_type
         self.perf_time = 0.
         self.perf_dur = 0.
 
@@ -149,7 +146,7 @@ class ScoreBasic:
 
     # Merge a Score into this one, starting at time t,
     # optionally tagging the notes.
-    # This doesn't copy anything, and the Notes are modified.
+    # This doesn't copy anything, and the notes and pedals are modified.
     # to insert a Score more than once, do a deep copy on it
     #
     def insert_score(self, score: 'ScoreBasic', t: float = 0, tag: str = ''):
@@ -199,7 +196,16 @@ class ScoreBasic:
         self.clear_flags()
         return self
 
-    def insert_pedal(self, pedal: PedalSeg):
+    def insert_pedal(
+        self,
+        pedal: PedalSeg,
+        type: int = None,
+        time: float = None
+    ):
+        if time is not None:
+            pedal.time = time
+        if type is None:
+            pedal.type = PEDAL_SUSTAIN
         self.pedals.append(pedal)
         self.clear_flags()
         return self

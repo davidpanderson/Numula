@@ -729,10 +729,11 @@ class Score(ScoreBasic):
             print(vstr)
 
     # apply a pedal PFT (sustain, sostenuto, or soft)
-    def pedal_pft(self, pft, t0=0):
+    def pedal_pft(self, pft: PFT, type: int = PEDAL_SUSTAIN, t0: float = 0):
         t = t0
         for seg in pft:
             seg.time = t
+            set.type = type
             self.insert_pedal(seg)
             t += seg.dt
 
