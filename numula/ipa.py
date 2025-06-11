@@ -48,7 +48,7 @@ def should_hide_var(var: dict):
             if not globals()[x]:
                 return True
         if v2['type'] == IPA_LAYER:
-            if globals()[x] == 'hide':
+            if globals()[x] != 'on':
                 return True
     return False
 

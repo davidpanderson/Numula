@@ -30,11 +30,13 @@ import numula.ipa as ipa
 def show_commands():
     print('''
 command lines (with Enter):
-:i                set current var to the ith one
-:i val            assign value to ith var
-:s                show vars and start/dur
-:w                write var values to prog.vars
-:?                show commands
+:i          set current var to the ith one
+:i val      assign value to ith var
+:s          show vars and start/dur
+:w          write var values to prog.vars
+:q          quit with prompt
+:q!         quit
+:?          show commands
 
 single-character commands:
 space             play from start to start+dur
@@ -239,6 +241,9 @@ def ipa_main():
                     print(':w to save; ^C to quit without saving.')
                 else:
                     break
+
+            elif words[0] == 'q!':
+                break
 
             elif words[0] in ['?', 'h', 'help']:
                 show_commands()
