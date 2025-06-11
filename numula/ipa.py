@@ -48,7 +48,7 @@ def should_hide_var(var: dict):
             if not globals()[x]:
                 return True
         if v2['type'] == IPA_LAYER:
-            if globals()[x] != 'on':
+            if globals()[x] == 'hide':
                 return True
     return False
 
@@ -66,24 +66,40 @@ def fraction_value(str: str):
     if num < 0: return None
     return num/denom
 
+# return true, or error msg if bad value
+#
 def valid_value(val, t):
     if t == IPA_BOOL:
-        return isinstance(val, bool)
+        if isinstance(val, bool):
+            return True
+        return 'expected True or False'
     if numeric(t):
-        if type(val) not in [int, float]: return False
+        if type(val) not in [int, float]:
+            return 'expected a number'
     if t == IPA_VOL:
-        return 0 <= val <= 1
+        if 0 <= val <= 1:
+            return True
+        return 'expected a number in [0..1]'
     if t == IPA_VOL_MULT:
-        return 0 <= val <= 2
+        if 0 <= val <= 2:
+            return True
+        return 'expected a number in [0..2]'
     if t == IPA_TEMPO:
-        return 1 < val < 1000
+        if 1 < val < 1000:
+            return True
+        return 'expected a number in [1..1000]'
     if t == IPA_DT_SEC:
-        return 0 <= val <= 10
+        if 0 <= val <= 10:
+            return True
+        return 'expected a number in [0..10]'
     if t == IPA_DT_SCORE:
-        if not isinstance(val, str): return False
-        return fraction_value(val) is not None
+        if isinstance(val, str) and fraction_value(val) is not None:
+            return True
+        return 'expected N/M'
     if t == IPA_LAYER:
-        return val in ('on', 'hide', 'off')
+        if val in ('on', 'hide', 'off'):
+            return True
+        return "expected 'on', 'off', or 'hide'"
 
 # declare an adjustable variable
 # val: initial value

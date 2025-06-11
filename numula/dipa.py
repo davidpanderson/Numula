@@ -17,7 +17,7 @@
 # :i val            assign value to ith var
 # :s                show vars and start/dur
 # :w                write var values to prog.vars
-# :?                show commands
+# :h                show commands
 # space             play from start to start+dur
 # up/down arrow     inc/dec current var
 
@@ -29,12 +29,14 @@ import numula.ipa as ipa
 
 def show_commands():
     print('''
-commands:
+command lines (with Enter):
 :i                set current var to the ith one
 :i val            assign value to ith var
 :s                show vars and start/dur
 :w                write var values to prog.vars
 :?                show commands
+
+single-character commands:
 space             play from start to start+dur
 up/down arrow     inc/dec current var
     ''')
@@ -166,6 +168,7 @@ def ipa_main():
     dirty = True
         # true if variables have changed;
         # we need to regenerate score on next play
+    print('Enter :h for help')
     while True:
         x = readchar.readkey()
         if x == ':':
@@ -187,12 +190,13 @@ def ipa_main():
                         try:
                             x = float(w)
                         except:
-                            print('bad value ', w)
+                            print('bad value', w, ': expected a number')
                             continue
-                        if ipa.valid_value(x, v['type']):
+                        e = ipa.valid_value(x, v['type'])
+                        if e == True:
                             ipa.set(v['name'], x)
                         else:
-                            print('bad value ', w)
+                            print('bad value', w, ':', e)
                             continue
                         dirty = True
                     else:
@@ -209,13 +213,14 @@ def ipa_main():
                         elif w == 'f':
                             ipa.set(v['name'], False)
                         else:
-                            print('bad value: use t/f')
+                            print('bad value: expected t or f')
                             continue
                     else:
-                        if ipa.valid_value(w, v['type']):
+                        e = ipa.valid_value(w, v['type'])
+                        if e == True:
                             ipa.set(v['name'], w)
                         else:
-                            print('bad value ', w)
+                            print('bad value', w, ':', e)
                             continue
                     dirty = True
 
@@ -226,6 +231,7 @@ def ipa_main():
             # write vars to disk
             elif words[0] == 'w':
                 write_vars(prog_vars)
+                print('wrote variables to ', prog_vars)
 
             elif words[0] == 'q':
                 if dirty:
@@ -234,7 +240,7 @@ def ipa_main():
                 else:
                     break
 
-            elif words[0] == '?':
+            elif words[0] in ['?', 'h', 'help']:
                 show_commands()
 
             else:
