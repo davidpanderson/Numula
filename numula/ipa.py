@@ -85,9 +85,9 @@ def valid_value(val, t):
             return True
         return 'expected a number in [1..1000]'
     if t == IPA_DT_SEC:
-        if 0 <= val <= 10:
+        if -10 <= val <= 10:
             return True
-        return 'expected a number in [0..10]'
+        return 'expected a number in [-10..10]'
     if t == IPA_DT_SCORE:
         if isinstance(val, str) and fraction_value(val) is not None:
             return True
