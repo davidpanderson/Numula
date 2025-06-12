@@ -3,13 +3,13 @@ from numula.ipa import *
 from numula.notate_score import *
 from numula.notate_nuance import *
 
-var('pvol', IPA_LAYER, 'on')
-from numula.ipa import *
-var('v1', IPA_VOL, .2, ['pvol'], 'starting volume')
-var('v2', IPA_VOL, .6, ['pvol'], 'peak volume')
-var('v3', IPA_VOL, .2, ['pvol'], desc='ending volume')
-var('i1', IPA_DT_SCORE, '1/2', ['pvol'])
-var('i2', IPA_DT_SCORE, '1/2', ['pvol'])
+var('pvol', IPA_TOGGLE, 'on')
+tags = ['pvol']
+var('v1', IPA_VOL, .2, tags, 'starting volume')
+var('v2', IPA_VOL, .6, tags, 'peak volume')
+var('v3', IPA_VOL, .2, tags, 'ending volume')
+var('i1', IPA_DT_SCORE, '1/2', tags)
+var('i2', IPA_DT_SCORE, '1/2', tags)
 
 if __name__ == '__main__':
     read_vars('test_ipa')
