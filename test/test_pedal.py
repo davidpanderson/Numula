@@ -7,12 +7,12 @@ from numula.pianoteq import *
 
 def ped_test():
     ns = sh_score('*3 [c4 c5 e5 g5 c6] . . . * ')
-    ns.insert_pedal(PedalSeg(1, 1/4, 1, 0, True, True, PEDAL_SUSTAIN))
+    ns.insert_pedal(PedalSeg(1/1, time=1/2))
     print(ns)
     ns.write_midi('data/ped_test')
     numula.pianoteq.play_score(ns)
 
-#ped_test()
+ped_test()
 
 # test pedal shorthand
 def sh_test():

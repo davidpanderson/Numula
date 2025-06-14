@@ -55,7 +55,7 @@ def pitch_name(n: int):
 # this is used both as
 # - a PFT primitive
 # - an element of ScoreBasic.pedals
-#   (in which case time, perf_time, and perf_dur are defined)
+#   (in which case time, perf_time, perf_dur, and pedal_type are defined)
 #
 class PedalSeg:
     def __init__(self,
@@ -63,18 +63,20 @@ class PedalSeg:
         level0: float=1,
         level1: float=1,
         closed_start: bool=True,
-        closed_end: bool=True
+        closed_end: bool=True,
+        time: float=0,
+        type: int=PEDAL_SUSTAIN
     ):
-        self.time = 0.
         self.dur = dur
         self.dt = dur
         self.level0 = level0
         self.level1 = level1
         self.closed_start = closed_start
         self.closed_end = closed_end
+        self.time = time
+        self.pedal_type = type
         self.perf_time = 0.
         self.perf_dur = 0.
-        self.pedal_type = PEDAL_SUSTAIN
 
     def __str__(self):
         return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d levels %f %f closed %s %s'%(

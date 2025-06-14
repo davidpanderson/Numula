@@ -535,7 +535,7 @@ def p20_117(ns, t0):
         |118 \
     ')
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
-    ns.insert_pedal(PedalSeg(t0+92/2, 4/2))
+    ns.insert_pedal(PedalSeg(4/2, time=t0+92/2)
 
     lh = sh_pedal(lhp_20 + ' \
         |108 (10/2) \

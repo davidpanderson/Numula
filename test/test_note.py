@@ -19,8 +19,9 @@ from numula.nscore import *
 from numula.notate_score import *
 
 def test1():
-    ns = ScoreBasic(sh_score('c d e f g a b c'))
-    ns.insert_pedal(PedalUse(4/4, 3/4))
+    ns = sh_score('c d e f g a b c')
+    ns.insert_pedal(PedalSeg(3/4, time=1/1))
+    print(ns)
     ns.write_midi('data/test1.midi')
 
 test1()

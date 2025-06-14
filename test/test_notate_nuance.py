@@ -45,14 +45,12 @@ def test_ped():
     ns = Score()
     for i in range(2):
         ns.append_score(sh_score('1/8 c d e f g a b c'))
-    #ns.insert_pedal(PedalUse(1/4, 3/4))
-    #ns.pedal_pft([PedalSeg(3/16, 0), PedalSeg(2/4, 1)])
-    p = pedal('- 1/4 + 1/8  1/4 - 4/4')
+    p = sh_pedal('1/4 (1/8) (1/4) 4/4')
     print(*p, sep='\n')
     ns.pedal_pft(p)
-    #print(ns)
+    print(ns)
     pianoteq.play_score(ns)
-#test_ped()
+test_ped()
 
 def test_shift():
     n1 = sh_score('a b c d e f g c')
