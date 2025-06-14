@@ -12,7 +12,7 @@ def ped_test():
     ns.write_midi('data/ped_test')
     numula.pianoteq.play_score(ns)
 
-ped_test()
+#ped_test()
 
 # test pedal shorthand
 def sh_test():
@@ -20,7 +20,7 @@ def sh_test():
         pft = sh_pedal(s)
         print(s)
         print(*pft, sep='\n')
-sh_test()
+#sh_test()
 
 
 # the following 2 tests are to see how fractional pedaling works on PianoTeq
@@ -50,6 +50,7 @@ def ped_test1():
 
 # play a series of staccato chords.
 # gradually lower the sustain pedal
+# conclusion: for pianoteq, 64..127 is the active range
 def ped_test2():
     f = numula.MidiFile.MIDIFile(deinterleave=False)
     f.addTempo(0, 0, 60)
@@ -64,10 +65,11 @@ def ped_test2():
     for i in range(128):
         t = 16.*i/128
         val = 63+i//2
+        #val = i
         f.addControllerEvent(0, 0, t, PEDAL_SUSTAIN, val)
     fname = 'data/ped_test2.midi'
     with open(fname, 'wb') as file:
         f.writeFile(file)
     play_midi_file_rpc(fname)
 
-#ped_test2()
+ped_test2()
