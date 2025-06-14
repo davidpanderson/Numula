@@ -364,7 +364,7 @@ def sh_pedal(s: str) -> PFT:
                 raise Exception('bad values in %s'%t)
             dur = num/denom
             if not in_seg:
-                pft.append(PedalSeg(0, dur, 0, 0))
+                pft.append(PedalSeg(dur, 0, 0))
                 dt += dur
         elif t == ']' or t == ')':
             if not in_seg or dur is None:
@@ -374,7 +374,7 @@ def sh_pedal(s: str) -> PFT:
                 v0 = 1.
             if v1 is None:
                 v1 = v0
-            pft.append(PedalSeg(0, dur, v0, v1, closed, t == ']'))
+            pft.append(PedalSeg(dur, v0, v1, closed, t == ']'))
             in_seg = False
             v0 = None
             v1 = None

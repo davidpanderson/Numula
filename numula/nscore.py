@@ -74,6 +74,7 @@ class PedalSeg:
         self.closed_end = closed_end
         self.perf_time = 0.
         self.perf_dur = 0.
+        self.pedal_type = PEDAL_SUSTAIN
 
     def __str__(self):
         return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d levels %f %f closed %s %s'%(

@@ -14,15 +14,13 @@ def ped_test():
 
 #ped_test()
 
+# test pedal shorthand
 def sh_test():
-    pft = sh_pedal('[1. 1/1 .2)  (.8 1/1 .5]')
-    print(*pft, sep='\n')
-#sh_test()
-
-def sh_test2():
-    pft = sh_pedal('1/4 [1/8)(.8 1/4]')
-    print(*pft, sep='\n')
-sh_test2()
+    for s in ['[1. 1/1 .2)  (.8 1/1 .5]', '1/4 [1/8)(.8 1/4]']:
+        pft = sh_pedal(s)
+        print(s)
+        print(*pft, sep='\n')
+sh_test()
 
 
 # the following 2 tests are to see how fractional pedaling works on PianoTeq
