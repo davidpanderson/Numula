@@ -135,16 +135,16 @@ class ScoreBasic:
             x += str(note) + '\n'
         return x
         
-    def insert_note(self, note: Note):
+    def insert_note(self, note:Note):
         self.notes.append(note)
         self.clear_flags()
 
-    def append_note(self, note: Note):
+    def append_note(self, note:Note):
         note.time = self.cur_time
         self.notes.append(note)
         self.clear_flags()
 
-    def advance_time(self, dur: float):
+    def advance_time(self, dur:float):
         self.cur_time += dur
 
     # Merge a Score into this one, starting at time t,
@@ -152,7 +152,7 @@ class ScoreBasic:
     # This doesn't copy anything, and the notes and pedals are modified.
     # to insert a Score more than once, do a deep copy on it
     #
-    def insert_score(self, score: 'ScoreBasic', t: float = 0, tag: str = ''):
+    def insert_score(self, score:'ScoreBasic', t:float=0, tag:str=''):
         for note in score.notes:
             note.time += t
             if tag:
@@ -169,7 +169,7 @@ class ScoreBasic:
 
     # append a score to this one
     #
-    def append_score(self, score: 'ScoreBasic', tag: str = ''):
+    def append_score(self, score:'ScoreBasic', tag:str=''):
         self.insert_score(score, self.cur_time, tag)
         self.cur_time += score.cur_time
         self.clear_flags()
@@ -177,7 +177,7 @@ class ScoreBasic:
 
     # append a list of scores in parallel
     #
-    def append_scores(self, scores: list['ScoreBasic'], tag: str = ''):
+    def append_scores(self, scores:list['ScoreBasic'], tag:str=''):
         longest = 0.
         for score in scores:
             longest = max(longest, score.cur_time)
@@ -187,12 +187,12 @@ class ScoreBasic:
         return self
 
             
-    def insert_measure(self, m: Measure):
+    def insert_measure(self, m:Measure):
         self.measures.append(m)
         self.clear_flags()
         return self
         
-    def append_measure(self, dur: float, mtype: str):
+    def append_measure(self, dur:float, mtype:str):
         m = Measure(self.m_cur_time, dur, mtype)
         self.measures.append(m)
         self.m_cur_time += dur
@@ -213,13 +213,13 @@ class ScoreBasic:
         self.clear_flags()
         return self
 
-    def tag(self, tag: str):
+    def tag(self, tag:str):
         for note in self.notes:
             note.tags.append(tag)
         return self
         
     # convert score time to real time, given tempo
-    def score_to_perf(self, t: float):
+    def score_to_perf(self, t:float):
         return t*4*60/self.tempo
 
     def time_sort(self):

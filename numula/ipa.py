@@ -5,8 +5,9 @@
 import os
 from typing import Any
 
-vars: list[dict] = []   # list of adjustable variables
-            # their values are stored in globals()
+# list of adjustable variables
+# their values are stored in globals()
+vars: list[dict] = []
 
 # variable types.  Each has default min/mix and step size
 
@@ -34,6 +35,8 @@ def var_lookup(name: str):
             return v
     return None
 
+# make sure a variable's tags exist and are Toggles
+#
 def check_tags_defined(tag_list: list[str]):
     for tag in tag_list:
         v = var_lookup(tag)
@@ -66,7 +69,8 @@ def fraction_value(str: str):
     if num < 0: return None
     return num/denom
 
-# return True, or error msg if bad value
+# check if value is valid for given type.
+# return True, or error msg if invalid
 #
 def valid_value(val, t):
     if numeric(t):
@@ -103,7 +107,7 @@ def valid_value(val, t):
 # lo, hi: min/max values
 #
 # Note: adding the var to globals() makes it visible only in this module.
-# Someday I'll figure out how to make it visible outside.
+# Someday maybe I'll figure out how to make it visible outside.
 # Until then, the main program has to do
 #   from ipa import *
 # after declaring variables
@@ -170,6 +174,7 @@ def read_vars(prog_name: str):
     path = vars_file_path(prog_name)
     if not os.path.exists(path):
         return
+    print('Reading IPA values from', path)
     with open(path) as f:
         lines = f.readlines()
         for line in lines:
