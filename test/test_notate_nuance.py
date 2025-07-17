@@ -27,10 +27,10 @@ import numula.pianoteq as pianoteq
 def test3():
     ns = Score([sh_score('a b c d e f g c')], tempo=120)
     x = [
-        Delta(.05, False),
+        Pause(.05, False),
         Linear(60, 60, 2/4),
-        Delta(.1, False),
-        Delta(.2, True),
+        Pause(.1, False),
+        Pause(.2, True),
         Linear(60, 60, 2/4)
     ]
     x = sh_tempo('60 2/4 60 .1p.2 60 2/4 60')

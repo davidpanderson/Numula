@@ -136,15 +136,15 @@ class ExpCurve(PFT_Primitive):
         self.y1 = 60./self.y1
         self.dy = self.y1 - self.y0
 
-# Dirac delta; used in tempo PFTs to represent pauses
+# Used in tempo PFTs to represent pauses
 # if after is True, pause goes after notes at that time
-class Delta(PFT_Primitive):
+class Pause(PFT_Primitive):
     def __init__(self, value: float, after=True):
         self.value = value
         self.after = after
         self.dt = 0.
     def __str__(self):
-        return 'Delta %f %s'%(
+        return 'Pause %f %s'%(
             self.value,
             'after' if self.after else 'before'
         )

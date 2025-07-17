@@ -53,10 +53,10 @@ def main():
                 for j in range(3):
                     x.append(Linear(90, 93, 3/8))
                     x.append(Linear(93, 90, 3/8))
-                    x.append(Delta(.015, False))
+                    x.append(Pause(.015, False))
                 x.append(Linear(90, 85, 6/8))
-                x.append(Delta(.02, False))
-            x.append(Delta(.02, False))
+                x.append(Pause(.02, False))
+            x.append(Pause(.02, False))
             return x
                     
         ns.tempo_adjust_pft(tempo_pft())

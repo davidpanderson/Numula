@@ -240,14 +240,14 @@ def sh_tempo(s: str) -> PFT:
             except:
                 show_context(items, i)
                 raise Exception('bad pause value')
-            pft.append(Delta(val, after=True))
+            pft.append(Pause(val, after=True))
         elif t[-1] == 'p':
             try:
                 val = float(t[0:-1])
             except:
                 show_context(items, i)
                 raise Exception('bad pause value')
-            pft.append(Delta(val, after=False))
+            pft.append(Pause(val, after=False))
         elif 'p' in t:
             pos = t.index('p')
             try:
@@ -255,13 +255,13 @@ def sh_tempo(s: str) -> PFT:
             except:
                 show_context(items, i)
                 raise Exception('bad pause value')
-            pft.append(Delta(val, after=False))
+            pft.append(Pause(val, after=False))
             try:
                 val = float(t[pos+1:])
             except:
                 show_context(items, i)
                 raise Exception('bad pause value')
-            pft.append(Delta(val, after=True))
+            pft.append(Pause(val, after=True))
         elif t == '.':
             pft.append(Linear(60, 60, dur))
             t0 = 60

@@ -326,7 +326,7 @@ class Score(ScoreBasic):
 
             # loop over PFT segments until last one that affects the event, i.e. either
             # E lies strictly within S, or
-            # E is at the endpoint of S and the next seg is not a before-Delta
+            # E is at the endpoint of S and the next seg is not a before-Pause
             # precondition: event.time is not strictly before current seg
             while True:
                 if debug:
@@ -339,17 +339,17 @@ class Score(ScoreBasic):
                     if debug: print('    event is at end of seg')
                     next_seg = pft[seg_ind+1]
                     if next_seg.dt > 0:
-                        if debug: print('    next seg not Delta; using and advancing')
+                        if debug: print('    next seg not Pause; using and advancing')
                         use_seg()
                         advance_seg()
                         break
                     else:
                         if next_seg.after:
-                            if debug: print('    next seg is after-Delta: use and advance')
+                            if debug: print('    next seg is after-Pause: use and advance')
                             use_seg()
                             advance_seg()
                             break
-                        if debug: print('    next seg is before-Delta: advance')
+                        if debug: print('    next seg is before-Pause: advance')
                 advance_seg()
             if debug:
                 print('  Done with event: perf time ', event.perf_time)

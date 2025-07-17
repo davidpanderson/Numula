@@ -59,10 +59,10 @@ def main():
         [
             Linear(40, 50, 2/4),
             Linear(50, 35, 2/4),
-            Delta(.15),
+            Pause(.15),
             Linear(30, 50, 3/4),
             Linear(50, 30, 2/4),
-            Delta(.1, after=False)
+            Pause(.1, after=False)
         ], 3/4, normalize=True, selector=lambda n: 'rh' in n.tags, debug=False
     )
 
