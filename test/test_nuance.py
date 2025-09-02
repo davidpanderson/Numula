@@ -122,4 +122,13 @@ def test_obj():
     while not pv.ended:
         print(t, pv.value(t))
         t += .25
-test_obj()
+#test_obj()
+
+# test PFT primitives
+def test_prim():
+    p = Linear(1, 2, 1)
+    for i in range(11):
+        x = i/10.
+        print(p.val(x))
+
+test_prim()
