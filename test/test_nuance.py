@@ -112,32 +112,29 @@ def test_pbl():
     print(ns)
 #test_pbl()
 
-def test_obj():
-    p = [
-        PFTObject(1, [1,2]),
-        PFTObject(3, [4,5])
-    ]
-    pv = PFTValue(p)
-    t = 0
-    while not pv.ended:
-        print(t, pv.value(t))
-        t += .25
-#test_obj()
+def scale():
+    ns = Score([
+        sh_score('c d e f g a b c d').tag('rh'),
+        sh_score('-c d e f g a b c d').tag('lh')
+    ])
 
-# test PFT primitives
-def test_prim():
-    p = Linear(1, 2, 1)
-    print('linear')
-    for i in range(11):
-        x = i/10.
-        print('val %.3f int %.3f inv %.3f'%(p.val(x), p.integral(x), p.integral_inverse(x)))
-    c = -0.01
-    p = ExpCurve(c, 1, 2, 1)
-    print('exponential, curvature', c)
-    for i in range(11):
-        x = i/10.
-        inv = p.integral_inverse(x)
-        print('val %.3f int %.3f inv %.3f'%(p.val(x), p.integral(x), inv))
-        #print('val %.3f int %.3f'%(p.val(x), p.integral(x)))
+    ns.vol_adjust_pft(
+        [
+            Linear(pp, ff, 4/4),
+            Linear(f, p, 4/4, closed_start=True)
+        ], pred=lambda n: 'rh' in n.tags
+    )
 
-test_prim()
+    print(ns)
+    print('---')
+    ns.tempo_adjust_pft(
+        [
+            Linear(60, 120, 4/4),
+            Linear(120, 60, 4/4)
+        ], normalize=True,
+        pred=lambda n: 'rh' in n.tags
+    )
+
+    print(ns)
+    pianoteq.play_score(ns)
+#scale()

@@ -71,5 +71,11 @@ def ped_test2():
     with open(fname, 'wb') as file:
         f.writeFile(file)
     play_midi_file_rpc(fname)
+#ped_test2()
 
-ped_test2()
+def test1():
+    ns = sh_score('c d e f g a b c')
+    ns.insert_pedal(PedalSeg(3/4, time=1/1))
+    print(ns)
+    ns.write_midi('data/test1.midi')
+#test1()

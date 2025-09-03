@@ -42,6 +42,16 @@ def test3():
 
 #test3()
 
+def meas_test():
+    sh_score(' \
+        1/4 . \
+        |10 m3/4 . . . \
+        |11 m4/4 \
+        . . . . \
+        |12 \
+    ')
+#meas_test()
+
 def test4():
     s = sh_score('<1/4 1/2> [c 1/1 d] e')
     print(s)

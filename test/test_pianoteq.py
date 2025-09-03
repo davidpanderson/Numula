@@ -23,3 +23,7 @@ test_file()
 
 #print(pianoteq.midiPlay())
 
+def preset_test():
+    pianoteq.play_midi_file('data/scale.midi', preset='C. Grimaldi Harpsichord A')
+    #pianoteq.midi_to_wav('data/scale.midi', 'data/scale.wav', preset='Celesta Tremo')
+#preset_test()

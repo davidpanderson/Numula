@@ -5,6 +5,10 @@ import numpy, random, copy, math
 from numula.nscore import *
 from numula.pft import *
 
+TIME_TEMPO = 0
+TIME_PSEUDO_TEMPO = 1
+TIME_INVERSE_TEMPO = 2
+
 # ------------------- Dynamics ------------------------
 
 VOL_MULT = 0
@@ -29,7 +33,7 @@ class Score(ScoreBasic):
             # start time of that segment
         seg_end = t0 + seg.dt
         t_end = t0 + pft_dur(pft)
-            # end time of function
+            # end time of PFT
         for n in self.notes:
             if n.time > t_end + epsilon:
                 break
@@ -120,16 +124,20 @@ class Score(ScoreBasic):
     def dt_to_integral(self, dt: float) -> float:
         return dt*self.tempo/240.
         
-    # adjust the timing of selected notes and pedal events.
-    # pft is a tempo function, which can contain segments (such as Linear)
-    # and Dirac deltas.
-    # If bpm is False, its value is performance time per unit score time;
-    # larger is slower.
-    # If bpm is True, its value is inverted, so that larger is faster
-    # (60 = no change, 120 = speed up by 2X)
-    # In both cases, the value of Dirac deltas is in performance time.
-    #
     # Apply the PFT, starting at score time t0, to the selected notes.
+    # and to all pedal events.
+    # pft is a tempo function,
+    # which can contain segments (e.g. Linear) and Pauses
+    # modes:
+    # TIME_INVERSE_TEMPO
+    #   PFT value is performance time per unit score time; larger is slower.
+    # TIME_TEMPO
+    #   use integral_inverse(); larger is faster
+    #   (60 = no change, 120 = speed up by 2X)
+    # TIME_PSEUDO_TEMPO
+    #   invert tempo params of segments; larger is faster.
+    #   Use this if some segments don't have integral_inverse()
+    # In all modes, the value of Pauses is performance time.
     #
     # If "normalize" is True, scale the PFT so that its average is 1.
     #
@@ -145,13 +153,14 @@ class Score(ScoreBasic):
     #
     def tempo_adjust_pft(self,
         _pft:PFT, t0:float=0.,
-        selector:Selector=None, normalize:bool=False, bpm:bool=True,
+        selector:Selector=None, normalize:bool=False,
+        mode:int=TIME_PSEUDO_TEMPO,
         debug:bool=False
     ):
         self.init_all()
-        if bpm:
+        if mode == TIME_PSEUDO_TEMPO:
             pft = copy.deepcopy(_pft)
-            pft_bpm(pft)    # invert tempo function
+            pft_bpm(pft)    # invert tempo function, making it slowness
         else:
             pft = copy.copy(_pft)
 
@@ -175,7 +184,10 @@ class Score(ScoreBasic):
 
         # append infinite unity segment
         # needed to handle events that lie beyond PFT domain
-        pft.append(Unity(9999999))
+        if mode == TIME_TEMPO:
+            pft.append(Linear(60, 60, 9999999)
+        else:
+            pft.append(Unity(9999999))
         
         self.make_start_end_events()
 

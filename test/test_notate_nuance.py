@@ -24,6 +24,8 @@ from numula.notate_nuance import *
 from numula.vol_name import *
 import numula.pianoteq as pianoteq
 
+########## Timing ###########
+
 def test3():
     ns = Score([sh_score('a b c d e f g c')], tempo=120)
     x = [
@@ -40,17 +42,6 @@ def test3():
     print(ns)
     pianoteq.play_score(ns)
 #test3()
-
-def test_ped():
-    ns = Score()
-    for i in range(2):
-        ns.append_score(sh_score('1/8 c d e f g a b c'))
-    p = sh_pedal('1/4 (1/8) (1/4) 4/4')
-    print(*p, sep='\n')
-    ns.pedal_pft(p)
-    print(ns)
-    pianoteq.play_score(ns)
-test_ped()
 
 def test_shift():
     n1 = sh_score('a b c d e f g c')
@@ -83,3 +74,30 @@ def test5():
     print(ns)
     #pianoteq.play_score(ns)
 #test5()
+
+def tempo_test():
+    x = sh_tempo('*2 60 8/4 80 p.01 60 3/4 120 0.2p *')
+    print(*x, sep='\n')
+#tempo_test()
+
+def pause_test():
+    x = sh_tempo('.2p 4/4 . . .1p .')
+    print(*x, sep='\n')
+#pause_test()
+
+########## Pedal ###########
+
+def test_ped():
+    ns = Score()
+    for i in range(2):
+        ns.append_score(sh_score('1/8 c d e f g a b c'))
+    p = sh_pedal('1/4 (1/8) (1/4) 4/4')
+    print(*p, sep='\n')
+    ns.pedal_pft(p)
+    print(ns)
+    pianoteq.play_score(ns)
+#test_ped()
+
+def pedal_test():
+    x = sh_pedal('- 1/4 + 1/8 + 1/4 - 4/4')
+    print(*x, sep='\n')
