@@ -1,6 +1,7 @@
 # PFT (piecewise function of time) primitives and functions
 
 import math
+import cmath
 from numula.constants import *
 
 class PFT_Primitive:
@@ -20,6 +21,7 @@ class Linear(PFT_Primitive):
         self.y1 = y1
         self.dy = y1 - y0
         self.dt = dt
+        self.slope = self.dy/self.dt
         self.closed_start = closed_start
         self.closed_end = closed_end
     def __str__(self):
@@ -30,9 +32,11 @@ class Linear(PFT_Primitive):
             self.dt
         )
     def val(self, t):
-        return self.y0 + self.dy*(t/self.dt)
+        return self.y0 + t*self.slope
     def integral(self, t):
-        return t*(self.y0+self.val(t))/2
+        return t*(self.slope*t/2 + self.y0)
+    def integral_inverse(self, t):
+        return math.log(self.slope*t + self.y0)/self.slope
     def integral_total(self):
         return self.dt*(self.y0+self.y1)/2
     def delay(self):
@@ -81,50 +85,68 @@ class ExpCurve(PFT_Primitive):
         curvature: float, y0: float, y1: float, dt: float,
         closed_start=True, closed_end=False
     ):
-        if abs(curvature) < .001:
-            self.linear = True
-        else:
-            self.linear = False
-            self.c = math.exp(curvature)
-            self.logc = curvature
         self.y0 = y0
         self.y1 = y1
         self.dy = y1 - y0
         self.dt = dt
+        self.slope = self.dy/self.dt
         self.closed_start = closed_start
         self.closed_end = closed_end
-        self.curvature = curvature
+        if abs(curvature) < .001:
+            self.linear = True
+            self.c = 0
+            self.ec = 1
+        else:
+            self.linear = False
+            self.c = curvature
+            self.ec = math.exp(curvature)
+            self.invint0 = self.invint(0)
     def __str__(self):
         return 'ExpCurve: %s %f %f %s, dt %f curvature %f'%(
             '[' if self.closed_start else '(',
             self.y0, self.y1,
             ']' if self.closed_end else ')',
-            self.dt, self.curvature
+            self.dt, self.c
         )       
     def val(self, t: float) -> float:
         if self.linear:
             return self.y0 + self.dy*(t/self.dt)
         tnorm = t/self.dt
-        ynorm = (1 - math.pow(self.c, tnorm))/(1-self.c)
+        ynorm = (1 - math.pow(self.ec, tnorm))/(1-self.ec)
         return self.y0 + ynorm*self.dy
     def integral(self, t: float) -> float:
         if self.linear:
             return t*(self.y0+self.val(t))/2
         if t == 0.:
             return 0.
-        # I assume you know that the integral of a^x is a^x/ln(a) + C
-        # (OK, so I had to look it up)
-        #
         tnorm = t/self.dt
-
-        a = (math.pow(self.c, tnorm) - 1)/self.logc
-
-        int_norm = (tnorm-a)/(1.-self.c)
-
+        num = tnorm*self.c - math.pow(self.ec, tnorm) + 1
+        denom = (1-self.ec)*self.c
+        int_norm = num/denom
         # convert from normalized coords
         int = t*(self.y0 + int_norm*self.dy)
         #print('integral: ', t, int_norm, self.dy, int)
         return int
+
+    # the indefinite integral of the inverse
+    # sources:
+    # integral-calculator.com
+    # https://wolframalpha.com (alternate form assuming...)
+    # they give the same answer
+    def invint(self, t):
+        ct = math.exp(self.c*t)
+        d = self.y0*(self.ec-1) + self.dy*(ct - 1)
+        d = math.fabs(d)
+        num = (self.ec - 1)*(t*self.c - math.log(d))
+        denom = self.c*(self.y0*(self.ec - 1) - self.dy)
+        return 2+num/denom
+
+    # definite integral from 0 to t; subtract value at 0
+    def integral_inverse(self, t: float) -> float:
+        if self.linear:
+            return math.log(self.slope*t + self.y0)/self.slope
+        return self.invint(t) - self.invint0
+
     def integral_total(self) -> float:
         if self.linear:
             return self.dt*(self.y0+self.y1)/2
