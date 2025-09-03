@@ -139,7 +139,7 @@ class ExpCurve(PFT_Primitive):
         d = math.fabs(d)
         num = (self.ec - 1)*(t*self.c - math.log(d))
         denom = self.c*(self.y0*(self.ec - 1) - self.dy)
-        return 2+num/denom
+        return num/denom
 
     # definite integral from 0 to t; subtract value at 0
     def integral_inverse(self, t: float) -> float:
