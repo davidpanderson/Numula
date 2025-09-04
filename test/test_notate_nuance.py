@@ -27,7 +27,8 @@ import numula.pianoteq as pianoteq
 ########## Timing ###########
 
 def test3():
-    ns = Score([sh_score('a b c d e f g c')], tempo=120)
+    ns = sh_score('a b c d e f g c')
+    ns.tempo = 120
     x = [
         Pause(.05, False),
         Linear(60, 60, 2/4),
@@ -46,15 +47,16 @@ def test3():
 def test_shift():
     n1 = sh_score('a b c d e f g c')
     n2 = sh_score('a5 b c d e f g c').tag('n2')
-    ns = Score([n1,n2])
+    ns = Score()
+    ns.append_scores([n1,n2])
     s = sh_shift('.1 2/4 .15')
     print(*s, sep='\n')
-    ns.time_shift_pft(s, pred = lambda n: 'n2' in n.tags)
+    ns.time_shift_pft(s, selector = lambda n: 'n2' in n.tags)
     print(ns)
 #test_shift()
 
 def test4():
-    ns = Score([sh_score('a b c d e f g c')])
+    ns = sh_score('a b c d e f g c')
     v = sh_tempo('.12p.13 60 10/4 60')
     print(*v, sep='\n')
     ns.tempo_adjust_pft(v, debug=True)
@@ -62,7 +64,7 @@ def test4():
 #test4()
 
 def test5():
-    ns = Score([sh_score('1/16 a4 b c d e f g a ')])
+    ns = sh_score('1/16 a4 b c d e f g a ')
     v = sh_tempo('exp1.0 80 2/4 40')
     #pft_bpm(v)
     #show_pft_vals(v, 1/16)

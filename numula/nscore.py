@@ -243,8 +243,6 @@ class ScoreBasic:
             if self.verbose: print('already inited')
             return
         self.perf_inited = True
-        if not self.notes:
-            raise Exception('no notes')
         if len(self.notes) != len(set(self.notes)):
             raise Exception('self.notes has dups!!')
         # set perf time and dur in such a way that playback will be at the

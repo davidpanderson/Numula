@@ -22,24 +22,22 @@ from numula.notate_score import *
 
 def test1():
     s = 'c (foo d 1/8 _ e foo)'
+    s = sh_score(s)
     ns = ScoreBasic()
-    ns.append_score(sh_score(s))
+    ns.append_score(s)
     print(ns)
     ns.write_midi('data/test1.midi')
-
 #test1()
 
 def test2():
     s = sh_score('<1/2 1/4> a b c d e f')
     print(s)
-
 #test2()
 
 def test3():
     foo = iter([1,2,3])
     s = sh_score('<x> a b c <1/4 1/2> d e f g', x=foo)
     print(s)
-
 #test3()
 
 def meas_test():
@@ -55,13 +53,15 @@ def meas_test():
 def test4():
     s = sh_score('<1/4 1/2> [c 1/1 d] e')
     print(s)
-
 #test4()
 
-def test_tag():
-    ns = ScoreBasic([
-        sh_score(' |300 1/16 [c f a- c] g a- b- c d e f'),
-        sh_score(' |300 1/4 f3 1/8 . [c f a- c] *4 [-c e g b- c] * ')
-    ], verbose=True)
+def test_append():
+    ns = ScoreBasic(verbose=True)
+    ns.append_scores(
+        [
+            sh_score(' |300 1/16 [c f a- c] g a- b- c d e f'),
+            sh_score(' |300 1/4 f3 1/8 . [c f a- c] *4 [-c e g b- c] * ')
+        ]
+    )
     print(ns)
-test_tag()
+#test_append()

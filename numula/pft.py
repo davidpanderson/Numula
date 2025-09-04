@@ -32,9 +32,9 @@ class Linear(PFT_Primitive):
             self.dt
         )
     def val(self, t):
-        return self.y0 + t*self.slope
+        return self.y0 + self.dy*(t/self.dt)
     def integral(self, t):
-        return t*(self.slope*t/2 + self.y0)
+        return t*(self.y0+self.val(t))/2
     def integral_inverse(self, t):
         return math.log(self.slope*t + self.y0)/self.slope
     def integral_total(self):

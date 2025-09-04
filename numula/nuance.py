@@ -185,7 +185,7 @@ class Score(ScoreBasic):
         # append infinite unity segment
         # needed to handle events that lie beyond PFT domain
         if mode == TIME_TEMPO:
-            pft.append(Linear(60, 60, 9999999)
+            pft.append(Linear(60, 60, 9999999))
         else:
             pft.append(Unity(9999999))
         
@@ -434,6 +434,7 @@ class Score(ScoreBasic):
     # insert a pause of dt before time t.
     # If connect is True, extend earlier notes ending at t to preserve legato
 
+    @staticmethod
     def pb_aux(items, t, dt, connect):
         for item in items:
             if item.time + item.dur < t-epsilon:
@@ -449,8 +450,8 @@ class Score(ScoreBasic):
 
     def pause_before(self, t:float, dt:float, connect:bool=True):
         self.init_all()
-        pb_aux(self.notes, t, dt, connect)
-        pb_aux(self.pedals, t, dt, connect)
+        self.pb_aux(self.notes, t, dt, connect)
+        self.pb_aux(self.pedals, t, dt, connect)
 
     # pause after notes at t.
     @staticmethod

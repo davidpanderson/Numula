@@ -27,9 +27,9 @@ import numula.pianoteq as pianoteq
 # various timing-related functions
 def test1():
     ns = sh_score('c d e [f a c] g a b c')
-    #ns.tempo_adjust_pft([Linear(60, 120, 8/4)])
+    ns.tempo_adjust_pft([Linear(60, 120, 8/4)])
     ns.pause_before(3/4, .7, False)
-    #ns.roll(3/4, [-.2, -.1, 0], True, True)
+    ns.roll(3/4, [-.2, -.1, 0], True)
     print(ns)
     pianoteq.play_score(ns)
 #test1()
@@ -107,22 +107,25 @@ def test_vol():
 #test_vol()
 
 def test_pbl():
-    ns = Score([sh_score('c d e [f a c] g a b c')], verbose=True)
+    ns = sh_score('c d e [f a c] g a b c')
     ns.pause_before_list([3/4, 5/4, 13/8], [.1, .2, .3])
     print(ns)
 #test_pbl()
 
 def scale():
-    ns = Score([
-        sh_score('c d e f g a b c d').tag('rh'),
-        sh_score('-c d e f g a b c d').tag('lh')
-    ])
+    ns = Score()
+    ns.append_scores(
+        [
+            sh_score('c d e f g a b c d').tag('rh'),
+            sh_score('-c d e f g a b c d').tag('lh')
+        ]
+    )
 
     ns.vol_adjust_pft(
         [
             Linear(pp, ff, 4/4),
             Linear(f, p, 4/4, closed_start=True)
-        ], pred=lambda n: 'rh' in n.tags
+        ], selector=lambda n: 'rh' in n.tags
     )
 
     print(ns)
@@ -132,7 +135,7 @@ def scale():
             Linear(60, 120, 4/4),
             Linear(120, 60, 4/4)
         ], normalize=True,
-        pred=lambda n: 'rh' in n.tags
+        selector=lambda n: 'rh' in n.tags
     )
 
     print(ns)
