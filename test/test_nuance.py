@@ -26,12 +26,18 @@ import numula.pianoteq as pianoteq
 
 # various timing-related functions
 def test1():
-    ns = sh_score('c d e [f a c] g a b c')
-    ns.tempo_adjust_pft([Linear(60, 120, 8/4)])
-    ns.pause_before(3/4, .7, False)
-    ns.roll(3/4, [-.2, -.1, 0], True)
+    ns = sh_score('c d e [f a c] g a b c d e f')
+    s1 = sh_tempo('60 8/4 120')
+    s2 = sh_tempo('60 4/4 90 4/4 120')
+    s2p = sh_tempo('60 4/4 90 .1p 4/4 120')
+    s3 = sh_tempo('1 8/4 .5')
+    #ns.tempo_adjust_pft(s2p, mode=TIME_PSEUDO_TEMPO)
+    ns.tempo_adjust_pft(s2p, mode=TIME_TEMPO)
+    #ns.tempo_adjust_pft(s3 , mode=TIME_SLOWNESS)
+    #ns.pause_before(3/4, .7, False)
+    #ns.roll(3/4, [-.2, -.1, 0], True)
     print(ns)
-    pianoteq.play_score(ns)
+    #pianoteq.play_score(ns)
 #test1()
 
 def test2():

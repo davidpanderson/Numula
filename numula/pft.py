@@ -24,6 +24,7 @@ class Linear(PFT_Primitive):
         self.slope = self.dy/self.dt
         self.closed_start = closed_start
         self.closed_end = closed_end
+        self.intinv0 = self.intinv(0)
     def __str__(self):
         return 'Linear: %s %f %f %s, dt %f'%(
             '[' if self.closed_start else '(',
@@ -35,10 +36,14 @@ class Linear(PFT_Primitive):
         return self.y0 + self.dy*(t/self.dt)
     def integral(self, t):
         return t*(self.y0+self.val(t))/2
+    def intinv(self, t):
+        if self.slope == 0:
+            return t/self.y0
+        else:
+            return math.log(self.slope*t + self.y0)/self.slope
     def integral_inverse(self, t):
-        return math.log(self.slope*t + self.y0)/self.slope
-    def integral_total(self):
-        return self.dt*(self.y0+self.y1)/2
+        x = self.intinv(t) - self.intinv0
+        return x
     def delay(self):
         return 0.
     # convert from tempo function in BPM (60-centered)
@@ -147,10 +152,6 @@ class ExpCurve(PFT_Primitive):
             return math.log(self.slope*t + self.y0)/self.slope
         return self.invint(t) - self.invint0
 
-    def integral_total(self) -> float:
-        if self.linear:
-            return self.dt*(self.y0+self.y1)/2
-        return self.integral(self.dt)
     def delay(self):
         return 0.
     def bpm(self):
@@ -172,8 +173,6 @@ class Pause(PFT_Primitive):
         )
     def bpm(self):
         return
-    def integral_total(self):
-        return 0.
     def delay(self):
         return self.value
 
@@ -237,10 +236,16 @@ def pft_verify_dur(pft, dur: float):
 def pft_avg(pft) -> float:
     sum = 0.
     for seg in pft:
-        sum += seg.integral_total()
+        sum += seg.integral(seg.dt)
     return sum/pft_dur(pft)
 
-# total delay in tempo PFT
+def pft_inverse_avg(pft) -> float:
+    sum = 0.
+    for seg in pft:
+        sum += seg.integral_inverse(seg.dt)
+    return sum/pft_dur(pft)
+
+# total delay in a tempo PFT
 def pft_delay(pft) -> float:
     sum = 0.
     for seg in pft:
@@ -294,7 +299,7 @@ def show_pft_vals(pft, dt: float):
 def show_pft_ints(pft, dt: float):
     for seg in pft:
         print(seg)
-        print('total integral ', seg.integral_total())
+        print('total integral ', seg.integral(seg.dt))
         t = 0.
         last = 0
         while t<=seg.dt:

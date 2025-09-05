@@ -5,12 +5,19 @@ import numpy, random, copy, math
 from numula.nscore import *
 from numula.pft import *
 
+# modes for adjust_tempo_pft()
+#
 TIME_TEMPO = 0
+    # larger is faster; use integral_inverse()
 TIME_PSEUDO_TEMPO = 1
-TIME_INVERSE_TEMPO = 2
+    # larger is faster; invert params, use integral()
+TIME_SLOWNESS = 2
+    # larger is slower; use integral()
 
 # ------------------- Dynamics ------------------------
 
+# modes for vol_adjust_pft() and other dynamic functions
+#
 VOL_MULT = 0
 VOL_ADD = 1
 VOL_SET = 2
@@ -184,10 +191,10 @@ class Score(ScoreBasic):
 
         # append infinite unity segment
         # needed to handle events that lie beyond PFT domain
-        if mode == TIME_TEMPO:
-            pft.append(Linear(60, 60, 9999999))
-        else:
+        if mode == TIME_SLOWNESS:
             pft.append(Unity(9999999))
+        else:
+            pft.append(Linear(60, 60, 9999999))
         
         self.make_start_end_events()
 
@@ -210,19 +217,26 @@ class Score(ScoreBasic):
         # and advance to the next segment
         # 
         def advance_seg():
-            nonlocal seg_start, seg_integral, seg_ind, seg, seg_end
+            nonlocal seg_start, seg_integral, seg_ind, seg, seg_end, mode
             seg_start += seg.dt
             if seg.dt == 0:
                 si = self.dt_to_integral(seg.value)
             else:
-                si = seg.integral_total()
+                if mode == TIME_TEMPO:
+                    si = 60*seg.integral_inverse(seg.dt)
+                else:
+                    si = seg.integral(seg.dt)
             seg_integral += si
             if debug:
                 print('    moving to next seg')
             seg_ind += 1
             seg = pft[seg_ind]
             if debug:
-                print('    next segment: dt %f integral %f'%(seg.dt, seg.integral_total()))
+                if mode == TIME_TEMPO:
+                    si = 60*seg.integral_inverse(seg.dt)
+                else:
+                    si = seg.integral(seg.dt)
+                print('    next segment: dt %f integral %f'%(seg.dt, si))
             seg_end = seg_start + seg.dt
 
         # the event lies in the current segment.
@@ -235,7 +249,10 @@ class Score(ScoreBasic):
             if seg.dt == 0:
                 si = self.dt_to_integral(seg.value)
             else:
-                si = seg.integral(event.time - seg_start)
+                if mode == TIME_TEMPO:
+                    si = 60*seg.integral_inverse(event.time - seg_start)
+                else:
+                    si = seg.integral(event.time - seg_start)
             i = seg_integral + si
                 # integral of pft at this point
             if debug:
