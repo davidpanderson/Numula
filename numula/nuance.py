@@ -123,9 +123,9 @@ class Score(ScoreBasic):
 
 # ------------------- Timing ------------------------
 
-    # perf time is score time * 240/tempo
+    # perf time is score time * 240/score.tempo
     # so the integral of the PFT is scaled by this.
-    # If we want to add a pause (in seconds) to the integral
+    # To add a pause (in seconds) to the integral,
     # we need to undo this scaling first.
     #
     def dt_to_integral(self, dt: float) -> float:
@@ -166,8 +166,9 @@ class Score(ScoreBasic):
     ):
         self.init_all()
         if mode == TIME_PSEUDO_TEMPO:
+            # this modifies the primitives, so copy them
             pft = copy.deepcopy(_pft)
-            pft_bpm(pft)    # invert tempo function, making it slowness
+            pft_invert(pft)    # invert tempo function, making it slowness
         else:
             pft = copy.copy(_pft)
 
@@ -186,15 +187,23 @@ class Score(ScoreBasic):
             # the total effect of both.
             pftd = pft_dur(pft)
             delay = pft_delay(pft)
-            y = pftd*pft_avg(pft) + self.dt_to_integral(delay)
+            if mode == TIME_TEMPO:
+                avg = pft_inverse_avg(pft)
+            else:
+                avg = pft_avg(pft)
+            y = pftd*avg + self.dt_to_integral(delay)
             scale_factor = pftd/y
+            if debug:
+                print('normalize')
+                print('   pft dur', pftd)
+                print('   pft delay', delay)
+                print('   pft avg', pft_avg(pft))
+                print('   y', y)
+                print('   scale_factor', scale_factor)
 
         # append infinite unity segment
-        # needed to handle events that lie beyond PFT domain
-        if mode == TIME_SLOWNESS:
-            pft.append(Unity(9999999))
-        else:
-            pft.append(Linear(60, 60, 9999999))
+        # to correctly handle events that lie beyond PFT domain
+        pft.append(Unity(9999999))
         
         self.make_start_end_events()
 
@@ -223,7 +232,7 @@ class Score(ScoreBasic):
                 si = self.dt_to_integral(seg.value)
             else:
                 if mode == TIME_TEMPO:
-                    si = 60*seg.integral_inverse(seg.dt)
+                    si = seg.integral_inverse(seg.dt)
                 else:
                     si = seg.integral(seg.dt)
             seg_integral += si
@@ -231,9 +240,9 @@ class Score(ScoreBasic):
                 print('    moving to next seg')
             seg_ind += 1
             seg = pft[seg_ind]
-            if debug:
+            if debug and seg.dt>0:
                 if mode == TIME_TEMPO:
-                    si = 60*seg.integral_inverse(seg.dt)
+                    si = seg.integral_inverse(seg.dt)
                 else:
                     si = seg.integral(seg.dt)
                 print('    next segment: dt %f integral %f'%(seg.dt, si))
@@ -250,7 +259,7 @@ class Score(ScoreBasic):
                 si = self.dt_to_integral(seg.value)
             else:
                 if mode == TIME_TEMPO:
-                    si = 60*seg.integral_inverse(event.time - seg_start)
+                    si = seg.integral_inverse(event.time - seg_start)
                 else:
                     si = seg.integral(event.time - seg_start)
             i = seg_integral + si
@@ -431,8 +440,9 @@ class Score(ScoreBasic):
             n.perf_time += v
             n.perf_dur -= v
 
-    # change dur of notes starting between t0 and t1 so they end at t1
-    # (like a local sustain pedal)
+    # change dur of notes starting between t0 and t1
+    # so they end at (at least) t1.
+    # same effect as virtual sustain pedal but no PFT needed
     def sustain(self, t0:float, t1:float, selector:Selector=None):
         self.time_sort()
         if selector:

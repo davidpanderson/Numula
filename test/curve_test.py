@@ -32,7 +32,7 @@ def exp_tempo(curvature):
         ns.insert_note(nscore.Note(i/64, 1/64, p, .5))
     ns.tempo_adjust_pft(
         [
-            nuance.ExpCurve(curvature, 40, 80, 1)
+            nuance.ExpCurve(curvature, .7, 1.3, 1)
         ]
     )
     ns.write_midi('data/exp_tempo_%d.midi'%curvature)

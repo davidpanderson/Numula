@@ -46,11 +46,10 @@ class Linear(PFT_Primitive):
         return x
     def delay(self):
         return 0.
-    # convert from tempo function in BPM (60-centered)
-    # to 1-centered inverse tempo function
-    def bpm(self):
-        self.y0 = 60/self.y0
-        self.y1 = 60/self.y1
+    # convert to inverse tempo function
+    def invert(self):
+        self.y0 = 1/self.y0
+        self.y1 = 1/self.y1
         self.dy = self.y1 - self.y0
 
 # for volume PFTs: a period of unity gain
@@ -154,9 +153,9 @@ class ExpCurve(PFT_Primitive):
 
     def delay(self):
         return 0.
-    def bpm(self):
-        self.y0 = 60./self.y0
-        self.y1 = 60./self.y1
+    def invert(self):
+        self.y0 = 1./self.y0
+        self.y1 = 1./self.y1
         self.dy = self.y1 - self.y0
 
 # Used in tempo PFTs to represent pauses
@@ -171,7 +170,7 @@ class Pause(PFT_Primitive):
             self.value,
             'after' if self.after else 'before'
         )
-    def bpm(self):
+    def invert(self):
         return
     def delay(self):
         return self.value
@@ -232,16 +231,19 @@ def pft_verify_dur(pft, dur: float):
     if x > dur+epsilon:
         raise Exception('PFT is too long: %f > %f'%(x, dur))
     
-# average value of pft
+# average value of PFT
 def pft_avg(pft) -> float:
     sum = 0.
     for seg in pft:
+        if seg.dt == 0: continue
         sum += seg.integral(seg.dt)
     return sum/pft_dur(pft)
 
+# average value of 1/PFT
 def pft_inverse_avg(pft) -> float:
     sum = 0.
     for seg in pft:
+        if seg.dt == 0: continue
         sum += seg.integral_inverse(seg.dt)
     return sum/pft_dur(pft)
 
@@ -249,13 +251,14 @@ def pft_inverse_avg(pft) -> float:
 def pft_delay(pft) -> float:
     sum = 0.
     for seg in pft:
+        if seg.dt > 0: continue
         sum += seg.delay()
     return sum
 
-# convert tempo PFT from BPM units
-def pft_bpm(pft):
+# invert tempo parameters of the PFT's interval primitives
+def pft_invert(pft):
     for seg in pft:
-        seg.bpm()
+        seg.invert()
 
 # class for getting the values of a PFT at increasing times
 class PFTValue:

@@ -199,7 +199,7 @@ def sh_accents(s: str) -> PFT:
 
 # e.g.: 'linear 60 8/4 80 p0.1 60 3/4 120 0.2p'
 
-def sh_tempo(s: str) -> PFT:
+def sh_tempo(s: str, bpm:bool = True) -> PFT:
     items = s.split()
     items = expand_all(items)
     measure_init()
@@ -263,8 +263,8 @@ def sh_tempo(s: str) -> PFT:
                 raise Exception('bad pause value')
             pft.append(Pause(val, after=True))
         elif t == '.':
-            pft.append(Linear(60, 60, dur))
-            t0 = 60
+            pft.append(Linear(1, 1, dur))
+            t0 = 1
             dt += dur
         else:
             # parse a tempo
@@ -278,9 +278,15 @@ def sh_tempo(s: str) -> PFT:
                     show_context(items, i)
                     raise Exception('missing start tempo')
                 if segtype == SEGTYPE_LINEAR:
-                    seg = Linear(t0, val, dur)
+                    if bpm:
+                        seg = Linear(t0/60., val/60., dur)
+                    else:
+                        seg = Linear(t0, val, dur)
                 else:
-                    seg = ExpCurve(curvature, t0, val, dur)
+                    if bpm:
+                        seg = ExpCurve(curvature, t0/60., val/60., dur)
+                    else:
+                        seg = ExpCurve(curvature, t0, val, dur)
                 pft.append(seg)
                 dt += dur
                 dur = None

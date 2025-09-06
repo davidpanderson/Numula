@@ -25,20 +25,32 @@ from numula.vol_name import *
 import numula.pianoteq as pianoteq
 
 # various timing-related functions
-def test1():
+def test1(mode, name, pause):
+    print('mode:', name, 'pause:', pause);
     ns = sh_score('c d e [f a c] g a b c d e f')
+    ns.tempo = 120
     s1 = sh_tempo('60 8/4 120')
-    s2 = sh_tempo('60 4/4 90 4/4 120')
-    s2p = sh_tempo('60 4/4 90 .1p 4/4 120')
-    s3 = sh_tempo('1 8/4 .5')
-    #ns.tempo_adjust_pft(s2p, mode=TIME_PSEUDO_TEMPO)
-    ns.tempo_adjust_pft(s2p, mode=TIME_TEMPO)
-    #ns.tempo_adjust_pft(s3 , mode=TIME_SLOWNESS)
+    if pause:
+        s2 = sh_tempo('60 4/4 90 .1p 4/4 120')
+        s3 = sh_tempo('1 4/4 .75 .1p 4/4 .5', bpm=False)
+    else:
+        s2 = sh_tempo('60 4/4 90 4/4 120')
+        s3 = sh_tempo('1 8/4 .5', bpm=False)
+
+    if mode == TIME_SLOWNESS:
+        ns.tempo_adjust_pft(s3, mode=mode, normalize=False)
+    else:
+        ns.tempo_adjust_pft(s2, mode=mode, normalize=False, debug=False)
     #ns.pause_before(3/4, .7, False)
     #ns.roll(3/4, [-.2, -.1, 0], True)
     print(ns)
     #pianoteq.play_score(ns)
-#test1()
+test1(TIME_TEMPO, 'tempo', False)
+test1(TIME_TEMPO, 'tempo', True)
+test1(TIME_PSEUDO_TEMPO, 'pseudo-tempo', False)
+test1(TIME_PSEUDO_TEMPO, 'pseudo-tempo', True)
+test1(TIME_SLOWNESS, 'slowness', False)
+test1(TIME_SLOWNESS, 'slowness', True)
 
 def test2():
     ns = Score()
@@ -138,8 +150,8 @@ def scale():
     print('---')
     ns.tempo_adjust_pft(
         [
-            Linear(60, 120, 4/4),
-            Linear(120, 60, 4/4)
+            Linear(1, 2, 4/4),
+            Linear(2, 1, 4/4)
         ], normalize=True,
         selector=lambda n: 'rh' in n.tags
     )
