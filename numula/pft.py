@@ -24,7 +24,7 @@ class Linear(PFT_Primitive):
         self.slope = self.dy/self.dt
         self.closed_start = closed_start
         self.closed_end = closed_end
-        self.intinv0 = self.intinv(0)
+        self.intinv0 = None
     def __str__(self):
         return 'Linear: %s %f %f %s, dt %f'%(
             '[' if self.closed_start else '(',
@@ -40,8 +40,11 @@ class Linear(PFT_Primitive):
         if self.slope == 0:
             return t/self.y0
         else:
+            print(self.slope, t, self.y0)
             return math.log(self.slope*t + self.y0)/self.slope
     def integral_inverse(self, t):
+        if self.intinv0 is None:
+            self.intinv0 = self.intinv(0)
         x = self.intinv(t) - self.intinv0
         return x
     def delay(self):
@@ -104,7 +107,7 @@ class ExpCurve(PFT_Primitive):
             self.linear = False
             self.c = curvature
             self.ec = math.exp(curvature)
-            self.invint0 = self.invint(0)
+            self.invint0 = None
     def __str__(self):
         return 'ExpCurve: %s %f %f %s, dt %f curvature %f'%(
             '[' if self.closed_start else '(',
@@ -149,6 +152,8 @@ class ExpCurve(PFT_Primitive):
     def integral_inverse(self, t: float) -> float:
         if self.linear:
             return math.log(self.slope*t + self.y0)/self.slope
+        if self.intinv0 is None:
+            self.intinv0 = self.intinv(0)
         return self.invint(t) - self.invint0
 
     def delay(self):
