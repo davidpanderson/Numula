@@ -1011,12 +1011,12 @@ new
                     else:
                         generate pedal off at t1-epsilon
 ------------------
-picture for tempo
+the vibrato problem
 
-timeline of not start/end events
-    score times map to perf times
+Suppose you have e.g. a grace note.
+You want it to sound .1 sec before the main note,
+regardless of tempo transformations.
+You can do this with a time shift.
 
-tempo function
-integrate it between the start/end times
-average integral
-multiply perf time interval by that
+Suppose you have a more complex ornament, e.g. a turn.
+You want to describe its timing in real time.

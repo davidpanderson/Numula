@@ -146,7 +146,7 @@ def set_vol(ns):
     #ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
     ns.vol_adjust(0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
     ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
-    ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1, 2])
+    ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
 
 #  timing nuance
 

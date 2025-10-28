@@ -7,7 +7,7 @@ import platform, subprocess, os
 #
 def pianoteq_path():
     s = platform.system()
-    for v in (8, 7):
+    for v in (9, 8, 7):
         if s == 'Windows':
             p = 'c:/program files/modartt/pianoteq %d/pianoteq %d.exe'%(v,v)
         elif s == 'Darwin':
