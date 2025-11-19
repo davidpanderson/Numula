@@ -5,9 +5,13 @@ import platform, subprocess, os
 
 # return path of latest PianoTeq executable
 #
-def pianoteq_path():
+def pianoteq_path(version):
     s = platform.system()
-    for v in (9, 8, 7):
+    if version:
+        versions = (version)
+    else:
+        versions = (9, 8, 7)
+    for v in versions:
         if s == 'Windows':
             p = 'c:/program files/modartt/pianoteq %d/pianoteq %d.exe'%(v,v)
         elif s == 'Darwin':
@@ -21,9 +25,9 @@ def pianoteq_path():
     raise Exception('Pianoteq not found')
 
 # play MIDI file, launching a new Pianoteq
-def play_midi_file(file, preset=None):
+def play_midi_file(file, preset=None, version=None):
     p = ' --preset "%s"'%preset if preset else ''
-    cmd = '"%s" --play --midi %s%s'%(pianoteq_path(), file, p)
+    cmd = '"%s" --play --midi %s%s'%(pianoteq_path(version), file, p)
     subprocess.call(cmd, shell=True)
 
 # play MIDI file via RPC
@@ -48,10 +52,10 @@ def play_score(ns, preset=None):
     play_midi_file_rpc('data/temp.midi', preset)
 
 # render MIDI file to .WAV
-def midi_to_wav(ifile, ofile, mono=False, preset=None):
+def midi_to_wav(ifile, ofile, mono=False, preset=None, version=None):
     m = ' --mono' if mono else ''
     p = ' --preset "%s"'%preset if preset else ''
-    cmd = '"%s"%s --wav %s --headless --midi %s%s'%(pianoteq_path(), m, ofile, ifile, p)
+    cmd = '"%s"%s --wav %s --headless --midi %s%s'%(pianoteq_path(version), m, ofile, ifile, p)
     print(cmd)
     subprocess.call(cmd, shell=True)
 
@@ -62,8 +66,8 @@ import sys, requests, json
 remote_server = '127.0.0.1:8081'
 
 # run pianoteq as an RPC server
-def run_server():
-    cmd = '"%s" --serve 8081'%(pianoteq_path())
+def run_server(version=None):
+    cmd = '"%s" --serve 8081'%(pianoteq_path(version))
     subprocess.Popen(cmd, shell=True)
 
 # perform a jsonrpc call and return its result,
