@@ -4,18 +4,21 @@ import time
 
 def test_rpc():
     all_presets = pianoteq.rpc("getListOfPresets")["result"]
-    print(all_presets)
+    with open('presets.json', 'w') as f:
+        print(all_presets, file=f)
 
 #test_rpc()
+
+def test_preset():
+    ret = pianoteq.loadPreset('NY Steinway D Classical (for wasser)', 'My Presets')
+#test_preset()
 
 def test_file():
     ret = pianoteq.loadMidiFile('data/wasserklavier.midi')
     print(ret)
     for i in range(2):
         ret = pianoteq.midiSeek(30)
-        print(ret)
         ret = pianoteq.midiPlay()
-        print(ret)
         time.sleep(5)
         pianoteq.midiStop()
         

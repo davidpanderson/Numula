@@ -29,7 +29,11 @@ def play_midi_file(file, preset=None):
 # play MIDI file via RPC
 def play_midi_file_rpc(file, preset=None):
     if preset:
-        loadPreset(preset)
+        x = preset.split('/')
+        if len(x) == 1:
+            loadPreset(x[0], '')
+        else:
+            loadPreset(x[1], x[0])
     loadMidiFile(file)
     midiPlay()
 
@@ -41,7 +45,7 @@ def play_score_aux(ns, preset=None):
 # play score using RPC to Pianoteq server
 def play_score(ns, preset=None):
     ns.write_midi('data/temp.midi')
-    play_midi_file_rpc('data/temp.midi')
+    play_midi_file_rpc('data/temp.midi', preset)
 
 # render MIDI file to .WAV
 def midi_to_wav(ifile, ofile, mono=False, preset=None):
@@ -78,11 +82,15 @@ def rpc(method, params=None, id=0):
         "id": id}
 
     try:
-        result=requests.post(url, json=payload)
+        result = requests.post(url, json=payload)
     except requests.exceptions.ConnectionError:
-        print('Can\'t connect to Pianoteq.  Run pianoteq_server.py to create server.')
+        raise Exception(
+            'Can\'t connect to Pianoteq.  Run pianoteq_server.py to create server.'
+        )
         return None
-    return result.json()
+    r = result.json()
+    if 'error' in r:
+        raise Exception(r['error']['message'])
 
 def loadMidiFile(file):
     path = os.path.abspath(file)
@@ -100,5 +108,5 @@ def midiStop():
 def midiPause():
     return rpc('midiPause')
 
-def loadPreset(name):
-    return rpc('loadPreset', [name])
+def loadPreset(name, bank):
+    return rpc('loadPreset', [name, bank])
