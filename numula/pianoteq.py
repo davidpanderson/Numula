@@ -8,7 +8,7 @@ import platform, subprocess, os
 def pianoteq_path(version):
     s = platform.system()
     if version:
-        versions = (version)
+        versions = [version]
     else:
         versions = (9, 8, 7)
     for v in versions:

@@ -35,7 +35,7 @@ import numula.pianoteq
 # todo: use absolute pitches here and there
 #
 def make_score():
-    rh1 = sh_score('3/16 .  ++d- 2/8 c 1/8 +c \
+    rh1 = sh_score('3/16 .  d6- 2/8 c 1/8 +c \
         3/8 -f [c (more -c more) ] \
         3/16 [ -g 3/8 (more +e- more) ] +d- 2/8 [c (more -f more) ] 1/8 ++c \
         3/16 [5/8 -f 3/8 (more -g more) ] +d- 2/8  [c (more a- more) ] 1/8 ++c \
@@ -133,10 +133,6 @@ def set_vol(ns):
         ')
     )
 
-    # bring out inner voices
-    ns.vol_adjust(1.5, lambda n: 'more' in n.tags)
-    ns.vol_adjust(.7, lambda n: 'less' in n.tags)
-    
     # voice to top/bottom
     ns.vol_adjust(1.1, lambda n: 'top' in n.tags and 'rh' in n.tags)
     ns.vol_adjust(.6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
@@ -147,6 +143,10 @@ def set_vol(ns):
     ns.vol_adjust(0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
     ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
     ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
+
+    # bring out inner voices
+    ns.vol_adjust(.2, lambda n: 'more' in n.tags, mode=VOL_ADD)
+    ns.vol_adjust(.7, lambda n: 'less' in n.tags)
 
 #  timing nuance
 
@@ -185,7 +185,7 @@ def ta3(ns):
     t = t1 + t2
     ns.roll(t+3/8, np.linspace(-.3, .1, 7))
     ns.pause_after(t+6/8, .15)
-    ns.roll(t+13/8, np.linspace(-.12, .1, 4))
+    ns.roll(t+13/8, np.linspace(-.16, .1, 4))
     ns.pause_after(t+6/8+3/16, .15)
     ns.roll(t+21/8, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
 def ta4(ns):
@@ -231,11 +231,20 @@ def main():
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)
-        #print(ns)
+        print(ns)
+
+    if True:
         numula.pianoteq.play_score(ns,
-            preset='My Presets/NY Steinway D Classical (for wasser)'
+            #preset='My Presets/NY Steinway D Classical (for wasser)'
+            preset='NY Steinway D Classical'
         )
     else:
-        ns.write_midi('data/wasserklavier_plain.midi')
+        ns.write_midi('data/wasserklavier.midi')
+        numula.pianoteq.midi_to_wav(
+            'data/wasserklavier.midi',
+            'data/wasserklavier9.wav',
+            version=9,
+            preset='NY Steinway D Classical'
+        )
 
 main()
