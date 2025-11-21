@@ -178,7 +178,7 @@ def set_tempo(ns):
         ')
     )
 
-# timing adjustment -  do this after overall tempo
+# pauses/rolls -  do this after overall tempo
 
 # durations of the 6 lines:
 t1 = 30/8
@@ -191,26 +191,37 @@ t6 = 30/8
 def ta1(ns):
     t = 0
     #ns.t_adjust_notes(-.2, lambda n: 'line1' in n.tags and n.pitch==41)
-    ns.roll(t+6/8, np.linspace(-.1, 0, 4))
-    ns.pause_after(t+12/8, .2)
-    ns.pause_after(t+30/8, .15)
+    ns.tempo_adjust_pft(
+        sh_tempo('12/8 . p.2 18/8 . p.15')
+    )
+    ns.roll(t+6/8, roller(4, -.1, 0))
+
 def ta2(ns):
     t = t1
-    ns.pause_after(t+6/8, .15)
-    ns.pause_after(t+33/8, .1)
+    ns.tempo_adjust_pft(
+        sh_tempo('6/8 . p.15 27/8 . p.1'),
+        t1
+    )
+
 def ta3(ns):
     t = t1 + t2
+    ns.tempo_adjust_pft(
+        '6/8 . p.15 3/16 . p.15',
+        t
+    )
     ns.roll(t+3/8, np.linspace(-.3, .1, 7))
-    ns.pause_after(t+6/8, .15)
     ns.roll(t+13/8, np.linspace(-.16, .1, 4))
-    ns.pause_after(t+6/8+3/16, .15)
     ns.roll(t+21/8, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
+
 def ta4(ns):
     t = t1 + t2 + t3
+    ns.tempo_adjust_pft(
+        '9/8 . p.1 6/8 . p.2',
+        t
+    )
     ns.roll(t+6/8+3/16, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
     ns.roll(t+6/8+3/8, np.linspace(-.2, .1, 3), selector=lambda n: 'rh' in n.tags)
-    ns.pause_after(t+6/8+3/8, .1)
-    ns.pause_after(t+15/8, .2)
+
 def ta5(ns):
     t = t1 + t2 + t3 + t4
     ns.roll(t+6/8,  np.linspace(-.4, .1, 6))
@@ -219,8 +230,13 @@ def ta5(ns):
     ns.roll(t+18/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
     ns.roll(t+20/8, np.linspace(-.2, .1, 5), selector=lambda n: 'rh' in n.tags)
     ns.roll(t+22/8, np.linspace(-.2, .1, 5), selector=lambda n: 'rh' in n.tags)
+
 def ta6(ns):
     t = t1 + t2 + t3 + t4 + t5
+    ns.tempo_adjust_pft(
+        '14/4 p10',
+        t
+    )
     ns.roll(t, np.linspace(-.3, .1, 3), selector=lambda n: 'rh' not in n.tags)
     ns.roll(t+2/8, np.linspace(-.4, .1, 7))
     ns.roll(t+4/8, np.linspace(-.4, .1, 7))
@@ -230,7 +246,6 @@ def ta6(ns):
     ns.roll(t+12/8, np.linspace(-.4, .1, 7))
     ns.roll(t+14/8, np.linspace(-.4, .1, 3), selector=lambda n: 'rh' not in n.tags)
     ns.roll(t+18/8, [-.4, -.3, .2, -.1, -.2])
-    ns.pause_after(t+14/4, 10)
 
 def time_adjust(ns):
     ta1(ns)

@@ -835,3 +835,45 @@ class Score(ScoreBasic):
                 pos = pft_val.value(t)
             pos_array[i] = pos
         return pos_array
+
+# return list of time offsets for a rolled chord
+
+def roller(
+    n,              # how many notes
+    t0, t1,         # last offsets of first, last notes
+    ratio=1,        # ratio of each interval to previous one
+                    # e.g. .5 makes the roll speed up as it goes
+    m0=0, m1=0      # increment initial, final interval by this
+):
+    dur = t1-t0 - (m0+m1)   # duration without increments
+    if dur < 0:
+        raise Exception('roll: negative dur')
+
+    # compute intervals
+
+    ints = []
+    dt = 1
+    sum = 0
+    for i in range(n-1):
+        ints.append(dt)
+        sum += dt
+        dt *= ratio
+
+    # scale intervals to match requested total dur
+
+    scale = dur/sum
+    for i in range(n-1):
+        ints[i] *= scale
+    ints[0] += m0
+    ints[n-2] += m1
+
+    # map intervals to offsets
+
+    offs = []
+    t = t0
+    for i in range(n-1):
+        offs.append(t)
+        t += ints[i]
+    offs.append(t)
+
+    return offs
