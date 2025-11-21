@@ -31,7 +31,7 @@ def play_midi_file(file, preset=None, version=None):
     subprocess.call(cmd, shell=True)
 
 # play MIDI file via RPC
-def play_midi_file_rpc(file, preset=None):
+def play_midi_file_rpc(file, preset=None, time=0):
     if preset:
         x = preset.split('/')
         if len(x) == 1:
@@ -39,6 +39,8 @@ def play_midi_file_rpc(file, preset=None):
         else:
             loadPreset(x[1], x[0])
     loadMidiFile(file)
+    if time:
+        midiSeek(time)
     midiPlay()
 
 # play score, launching a new Pianoteq
@@ -47,9 +49,10 @@ def play_score_aux(ns, preset=None):
     play_midi_file('data/temp.midi', preset)
 
 # play score using RPC to Pianoteq server
-def play_score(ns, preset=None):
+def play_score(ns, preset=None, score_time=0):
+    perf_time = ns.score_to_perf(score_time) - 1
     ns.write_midi('data/temp.midi')
-    play_midi_file_rpc('data/temp.midi', preset)
+    play_midi_file_rpc('data/temp.midi', preset, perf_time)
 
 # render MIDI file to .WAV
 def midi_to_wav(ifile, ofile, mono=False, preset=None, version=None):

@@ -217,7 +217,9 @@ class ScoreBasic:
         for note in self.notes:
             note.tags.append(tag)
         return self
-        
+     
+    ############ IMPLEMENTATION FOLLOWS #############
+
     # convert score time to real time, given tempo
     def score_to_perf(self, t:float):
         return t*4*60/self.tempo
@@ -441,8 +443,6 @@ class ScoreBasic:
                 else:
                     f.addControllerEvent(0, 0, t1-epsilon, type, 0)
         
-    # ----- implementation ----
-
     # if a note starts while one of the same pitch is sounding,
     # truncate the first note.
     # MIDIUtil doesn't handle this case correctly -
@@ -494,7 +494,7 @@ class ScoreBasic:
         if verbose:
             print(vstr)
 
-     # make a sorted list of start/end events
+    # make a sorted list of start/end events
     #
     def make_start_end_events(self):
         self.start_end: list[Event] = []
@@ -621,7 +621,7 @@ class ScoreBasic:
             # On Pianoteq this can cause stuck notes (possibly a bug)
             #pedal.perf_dur -= .01
 
-    # trim to times t0..t1
+    # trim score to times t0..t1
     #
     def trim(self, t0: float, t1: float):
         new_notes = []
@@ -663,6 +663,13 @@ class ScoreBasic:
         for note in self.notes:
             note.vol = v0 + note.vol*d
             
+    # map a score time to a performance time
+    def score_to_perf(self, s):
+        for note in self.notes:
+            if note.score_time >= s:
+                return note.perf_time
+        raise Exception('score_to_perf(): too large')
+
 # end of Score
 
 # represents the start or end of a note or pedal application
