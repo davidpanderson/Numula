@@ -38,21 +38,21 @@ import numula.pianoteq
 def make_score():
     top1 = sh_score('3/16 .  d6- 2/8 c 1/8 +c \
         3/8 -f c \
-        3/16 . 3/8 +d- 2/8 c 1/8 ++c \
-        3/16 [5/8 -f] +d- 2/8  c 1/8 ++c \
+        3/16 . +d- 2/8 c 1/8 +c \
+        3/16 [5/8 -f] d- 2/8  c 1/8 +c \
         3/16 -f d- [c -e-] c7 \
     ').tag('rh')
     inner1 = sh_score('6/8 . \
         2/8 a4- 1/8 b- 2/8 c 1/8 d- \
         3/8 e- f \
-        g a-
-    ')
+        g a- \
+    ').tag('more')
     inner1a = sh_score('6/8 . \
         2/8 c4 1/8 d- 2/8 e- 1/8 f \
         3/8 g a- \
         b- c \
-        b-
-    ')
+        b- \
+    ').tag('more')
     bass1 = sh_score('6/8 . 3/8 f3 f \
         f f f f f 3/16 f [f5 +d-] \
     ')
@@ -114,7 +114,7 @@ def make_score():
     ')
 
     ns = Score()
-    ns.append_scores([rh1, inner1, inner1a, lh1], 'line1')
+    ns.append_scores([top1, inner1, inner1a, bass1], 'line1')
     ns.append_scores([rh2, lh2], 'line2')
     ns.append_scores([rh3, lh3], 'line3')
     ns.append_scores([rh4, lh4], 'line4')
@@ -161,14 +161,15 @@ def set_vol(ns):
     ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
 
     # bring out inner voices
-    ns.vol_adjust(.2, lambda n: 'more' in n.tags, mode=VOL_ADD)
+    ns.vol_adjust(.1, lambda n: 'more' in n.tags, mode=VOL_ADD)
     ns.vol_adjust(.7, lambda n: 'less' in n.tags)
 
 #  timing
 
 def set_tempo(ns):
     ns.tempo_adjust_pft(
-        sh_tempo('65 30/8 60 \
+        sh_tempo('\
+            65 30/8 60 \
             65 9/8 55 60 9/8 70 18/8 80 \
             65 27/8 55 \
             55 24/8 50 |time_change 30 6/8 40 \
@@ -189,7 +190,7 @@ t6 = 30/8
 
 def ta1(ns):
     t = 0
-    ns.t_adjust_notes(-.2, lambda n: 'line1' in n.tags and n.pitch==41)
+    #ns.t_adjust_notes(-.2, lambda n: 'line1' in n.tags and n.pitch==41)
     ns.roll(t+6/8, np.linspace(-.1, 0, 4))
     ns.pause_after(t+12/8, .2)
     ns.pause_after(t+30/8, .15)
@@ -238,7 +239,7 @@ def time_adjust(ns):
     ta4(ns)
     ta5(ns)
     ta6(ns)
-    ns.t_random_normal(.015, 2)
+    #ns.t_random_normal(.015, 2)
     
 def main():
     ns = make_score()
