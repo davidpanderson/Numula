@@ -159,3 +159,12 @@ def scale():
     print(ns)
     pianoteq.play_score(ns)
 #scale()
+
+# various rolled chords
+def test_roll():
+    ns = sh_score('2/4 *4 [c4 +g c e g c +c 3]')
+    ns.roll(0, roller(7, 0, .5)
+    ns.roll(2/4, roller(7, 0, .5, .8)
+    ns.roll(4/4, roller(7, 0, .5, 1.2)
+    ns.roll(6/4, roller(7, 0, .5, .8, .2, .1)
+    pianoteq.play_score(ns)
