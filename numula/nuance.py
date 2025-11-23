@@ -564,7 +564,7 @@ class Score(ScoreBasic):
             note.perf_time += off
             note.perf_dur -= off
             if note.perf_dur < epsilon:
-                raise Exception('roll amount exceeds note duration')
+                raise Exception('roll amount exceeds note duration', str(note))
             ind += 1
 
     def roll(self,
@@ -840,7 +840,7 @@ class Score(ScoreBasic):
 
 def roller(
     n,              # how many notes
-    t0, t1,         # last offsets of first, last notes
+    t0, t1,         # offsets of first, last notes
     ratio=1,        # ratio of each interval to previous one
                     # e.g. .5 makes the roll speed up as it goes
     m0=0, m1=0      # increment initial, final interval by this
@@ -875,5 +875,4 @@ def roller(
         offs.append(t)
         t += ints[i]
     offs.append(t)
-
     return offs

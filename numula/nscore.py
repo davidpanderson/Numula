@@ -663,10 +663,10 @@ class ScoreBasic:
         for note in self.notes:
             note.vol = v0 + note.vol*d
             
-    # map a score time to a performance time
-    def score_to_perf(self, s):
+    # get first perf time at or after score time
+    def first_perf(self, s):
         for note in self.notes:
-            if note.score_time >= s:
+            if note.time >= s:
                 return note.perf_time
         raise Exception('score_to_perf(): too large')
 

@@ -46,13 +46,13 @@ def make_score():
         2/8 a4- 1/8 b- 2/8 c 1/8 d- \
         3/8 e- f \
         g a- \
-    ').tag('more')
+    ').tag('more').tag('inner')
     inner1a = sh_score('6/8 . \
         2/8 c4 1/8 d- 2/8 e- 1/8 f \
         3/8 g a- \
         b- c \
         b- \
-    ').tag('more')
+    ').tag('more').tag('inner2')
     bass1 = sh_score('6/8 . 3/8 f3 f \
         f f f f f 3/16 f [f5 +d-] \
     ')
@@ -150,12 +150,12 @@ def set_vol(ns):
     )
 
     # voice to top/bottom
-    ns.vol_adjust(1.1, lambda n: 'top' in n.tags and 'rh' in n.tags)
+    ns.vol_adjust(.2, lambda n: 'top' in n.tags and 'rh' in n.tags, VOL_ADD)
     ns.vol_adjust(.6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
     ns.vol_adjust(.8, lambda n: 'top' not in n.tags and 'bottom' in n.tags)
 
     # metric accents
-    #ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
+    ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
     ns.vol_adjust(0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
     ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
     ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
@@ -190,11 +190,17 @@ t6 = 30/8
 
 def ta1(ns):
     t = 0
-    #ns.t_adjust_notes(-.2, lambda n: 'line1' in n.tags and n.pitch==41)
+    ns.t_adjust_notes(-.1, lambda n: 'line1' in n.tags and n.pitch==41)
     ns.tempo_adjust_pft(
-        sh_tempo('12/8 . p.2 18/8 . p.15')
+        sh_tempo('5/8 . .2p 1/8 . \
+            6/8 . \
+            p.3 6/8 . \
+            5/8 . .3p 1/8 . \
+            9/16 . .3p \
+        ')
     )
-    ns.roll(t+6/8, roller(4, -.1, 0))
+    ns.roll(t+6/8, roller(4, -.4, .2, .8, .1, .1))
+    ns.time_shift_pft(sh_shift('-.2 30/8'), selector=lambda n: 'inner' in n.tags)
 
 def ta2(ns):
     t = t1
@@ -206,7 +212,7 @@ def ta2(ns):
 def ta3(ns):
     t = t1 + t2
     ns.tempo_adjust_pft(
-        '6/8 . p.15 3/16 . p.15',
+        sh_tempo('6/8 . p.15 3/16 . p.15'),
         t
     )
     ns.roll(t+3/8, np.linspace(-.3, .1, 7))
@@ -216,7 +222,7 @@ def ta3(ns):
 def ta4(ns):
     t = t1 + t2 + t3
     ns.tempo_adjust_pft(
-        '9/8 . p.1 6/8 . p.2',
+        sh_tempo('9/8 . p.1 6/8 . p.2'),
         t
     )
     ns.roll(t+6/8+3/16, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
@@ -234,16 +240,17 @@ def ta5(ns):
 def ta6(ns):
     t = t1 + t2 + t3 + t4 + t5
     ns.tempo_adjust_pft(
-        '14/4 p10',
+        sh_tempo('14/4 . p10'),
         t
     )
+    roll1 = roller(8, -.4, .1, .8, .1)
     ns.roll(t, np.linspace(-.3, .1, 3), selector=lambda n: 'rh' not in n.tags)
-    ns.roll(t+2/8, np.linspace(-.4, .1, 7))
-    ns.roll(t+4/8, np.linspace(-.4, .1, 7))
-    ns.roll(t+6/8, np.linspace(-.4, .1, 7))
-    ns.roll(t+8/8, np.linspace(-.4, .1, 7))
-    ns.roll(t+10/8, np.linspace(-.4, .1, 7))
-    ns.roll(t+12/8, np.linspace(-.4, .1, 7))
+    ns.roll(t+2/8, roll1)
+    ns.roll(t+4/8, roll1)
+    ns.roll(t+6/8, roll1)
+    ns.roll(t+8/8, roll1)
+    ns.roll(t+10/8, roll1)
+    ns.roll(t+12/8, roll1)
     ns.roll(t+14/8, np.linspace(-.4, .1, 3), selector=lambda n: 'rh' not in n.tags)
     ns.roll(t+18/8, [-.4, -.3, .2, -.1, -.2])
 
@@ -258,17 +265,18 @@ def time_adjust(ns):
     
 def main():
     ns = make_score()
+    #ns.verbose = True
     if True:
-        #print(ns)
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)
-        print(ns)
+        #print(ns)
 
     if True:
         numula.pianoteq.play_score(ns,
             #preset='My Presets/NY Steinway D Classical (for wasser)'
             preset='NY Steinway D Classical'
+            #score_time = 30/8
         )
     else:
         ns.write_midi('data/wasserklavier.midi')

@@ -45,12 +45,12 @@ def test1(mode, name, pause):
     #ns.roll(3/4, [-.2, -.1, 0], True)
     print(ns)
     #pianoteq.play_score(ns)
-test1(TIME_TEMPO, 'tempo', False)
-test1(TIME_TEMPO, 'tempo', True)
-test1(TIME_PSEUDO_TEMPO, 'pseudo-tempo', False)
-test1(TIME_PSEUDO_TEMPO, 'pseudo-tempo', True)
-test1(TIME_SLOWNESS, 'slowness', False)
-test1(TIME_SLOWNESS, 'slowness', True)
+#test1(TIME_TEMPO, 'tempo', False)
+#test1(TIME_TEMPO, 'tempo', True)
+#test1(TIME_PSEUDO_TEMPO, 'pseudo-tempo', False)
+#test1(TIME_PSEUDO_TEMPO, 'pseudo-tempo', True)
+#test1(TIME_SLOWNESS, 'slowness', False)
+#test1(TIME_SLOWNESS, 'slowness', True)
 
 def test2():
     ns = Score()
@@ -162,9 +162,10 @@ def scale():
 
 # various rolled chords
 def test_roll():
-    ns = sh_score('2/4 *4 [c4 +g c e g c +c 3]')
-    ns.roll(0, roller(7, 0, .5)
-    ns.roll(2/4, roller(7, 0, .5, .8)
-    ns.roll(4/4, roller(7, 0, .5, 1.2)
-    ns.roll(6/4, roller(7, 0, .5, .8, .2, .1)
+    ns = sh_score('2/4 *4 [c4 +g c e g c +c e] *')
+    ns.roll(0, roller(8, 0, .7))
+    ns.roll(2/4, roller(8, 0, .7, .7))
+    ns.roll(4/4, roller(8, 0, .7, 1.3))
+    ns.roll(6/4, roller(8, 0, .7, .8, .2, .2))
     pianoteq.play_score(ns)
+test_roll()

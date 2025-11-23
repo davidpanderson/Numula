@@ -50,7 +50,7 @@ def play_score_aux(ns, preset=None):
 
 # play score using RPC to Pianoteq server
 def play_score(ns, preset=None, score_time=0):
-    perf_time = ns.score_to_perf(score_time) - 1
+    perf_time = ns.first_perf(score_time) - 1
     ns.write_midi('data/temp.midi')
     play_midi_file_rpc('data/temp.midi', preset, perf_time)
 
