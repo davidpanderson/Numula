@@ -209,10 +209,15 @@ t5 = t4 + 30/8
 t6 = t5 + 24/8
 tend = t6 + 30/8
 
-roll4_slow = roller(4, -.3, .2, .8, .05)
-roll4= roller(4, -.1, .1, .8)
+roll4_long = roller(4, -.3, .2, .8, .05)
+roll4 = roller(4, -.1, .1, .8)
+roll5 = roller(5, -.15, .1, .8)
+roll5_long = roller(5, -.3, .2, .8)
+roll6 = roller(6, -.2, .1, .8)
+roll7 = roller(7, -.2, .15, .8)
 roll3 = roller(3, -.1, .1, .8)
 roll2 = [-.1, .1]
+roll_grace4 = [-.12, -.09, 0, .08]
 
 def ta1(ns):
     ns.tempo_adjust_pft(
@@ -224,17 +229,17 @@ def ta1(ns):
         ')
     )
     m = 6/8
-    ns.roll(m, roll4_slow)
+    ns.roll(m, roll4_long)
     ns.roll(m+2/8, roll2)
     ns.roll(m+3/8, roll4)
     ns.roll(m+5/8, roll2)
-    m = 12/8
+    m += 6/8
     ns.roll(m, roll3)
     ns.roll(m+3/8, roll4)
-    m = 18/8
+    m += 6/8
     ns.roll(m, roll4)
     ns.roll(m+3/8, roll4)
-    m = 24/8
+    m += 6/8
     ns.roll(m, roll3)
     ns.roll(m+3/8, roll3)
 
@@ -243,47 +248,73 @@ def ta2(ns):
         sh_tempo('6/8 . p.15 27/8 . p.1'),
         t2
     )
+    m = t2 + 9/8
+    ns.roll(m+3/8, roll4)
+    ns.roll(m+6/8, roll3)
+    m += 9/8
+    ns.roll(m, roll4)
+    ns.roll(m+3/8, roll4)
+    ns.roll(m+6/8, roll5)
+    m += 9/8
+    ns.roll(m, roll4)
+    ns.roll(m+3/8, roll3)
+    ns.roll(m+6/8, roll5_long)
+
 
 def ta3(ns):
     ns.tempo_adjust_pft(
         sh_tempo('6/8 . p.15 3/16 . p.15'),
         t3
     )
-    ns.roll(t3+3/8, np.linspace(-.3, .1, 7))
-    ns.roll(t3+13/8, np.linspace(-.16, .1, 4))
-    ns.roll(t3+21/8, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
+    m = t3
+    ns.roll(m+3/8, roll7)
+    m += 9/8
+    ns.roll(m+5/8, roll_grace4)
+    m += 6/8
+    m += 6/8
+    ns.roll(m, roll_grace4, selector=lambda n: 'rh' in n.tags)
 
 def ta4(ns):
     ns.tempo_adjust_pft(
         sh_tempo('9/8 . p.1 6/8 . p.2'),
         t4
     )
-    ns.roll(t4+6/8+3/16, np.linspace(-.12, .1, 4), selector=lambda n: 'rh' in n.tags)
-    ns.roll(t4+6/8+3/8, np.linspace(-.2, .1, 3), selector=lambda n: 'rh' in n.tags)
+    m = t4
+    m += 6/8
+    ns.roll(m+3/16, roll_grace4, selector=lambda n: 'rh' in n.tags)
+    ns.roll(m+3/8, roll3, selector=lambda n: 'rh' in n.tags)
 
 def ta5(ns):
-    ns.roll(t5+6/8,  np.linspace(-.4, .1, 6))
-    ns.roll(t5+14/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
-    ns.roll(t5+16/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
-    ns.roll(t5+18/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
-    ns.roll(t5+20/8, np.linspace(-.2, .1, 5), selector=lambda n: 'rh' in n.tags)
-    ns.roll(t5+22/8, np.linspace(-.2, .1, 5), selector=lambda n: 'rh' in n.tags)
+    m = t + 6/8
+    ns.roll(m, roll_grace4, selector=lambda n: 'rh' in n.tags)
+    m += 6/8
+    ns.roll(m,  roll6)
+    m += 6/8
+    ns.roll(m+2/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
+    ns.roll(m+4/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
+    m += 6/8
+    ns.roll(m, roll4, selector=lambda n: 'rh' in n.tags)
+    ns.roll(m+2/8, roll5, selector=lambda n: 'rh' in n.tags)
+    ns.roll(m+4/8, roll5, selector=lambda n: 'rh' in n.tags)
 
 def ta6(ns):
     ns.tempo_adjust_pft(
         sh_tempo('14/4 . p10'),
         t6
     )
-    roll1 = roller(8, -.4, .1, .8, .1)
-    ns.roll(t6, np.linspace(-.3, .1, 3), selector=lambda n: 'rh' not in n.tags)
-    ns.roll(t6+2/8, roll1)
-    ns.roll(t6+4/8, roll1)
-    ns.roll(t6+6/8, roll1)
-    ns.roll(t6+8/8, roll1)
-    ns.roll(t6+10/8, roll1)
-    ns.roll(t6+12/8, roll1)
-    ns.roll(t6+14/8, np.linspace(-.4, .1, 3), selector=lambda n: 'rh' not in n.tags)
-    ns.roll(t6+18/8, [-.4, -.3, .2, -.1, -.2])
+    m = t6
+    ns.roll(m, roll7)
+    ns.roll(m+2/8, roll7)
+    ns.roll(m+4/8, roll7)
+    m += 6/8
+    ns.roll(m, roll7)
+    ns.roll(m+2/8, roll7)
+    ns.roll(m+4/8, roll7)
+    m += 6/8
+    ns.roll(m, roll7)
+    ns.roll(t6+14/8, roller(3, -.4, .1), selector=lambda n: 'lh' in n.tags)
+    m += 6/8
+    ns.roll(m, [-.4, -.3, .2, -.1, -.2])
 
 def time_adjust(ns):
     ta1(ns)
