@@ -61,12 +61,12 @@ def make_score():
     top2 = sh_score('3/16 [e6- c] [f d-] d- e- 2/8 c 1/8 c \
         3/16 b- +b- a- d- 3/8 -g- \
         3/16 . f 3/8 b- 2/8 a- 1/8 -a- \
-        3/8 g6- 3/16 d- ++e- d- e- \
+        3/8 g6- 3/16 d- +c d- e- \
     ').tag('mel')
     mid2 = sh_score('3/8 g5- f e- \
         e- 3/16 [f b-] b- 2/8 c 1/8 c \
         3/8 [f4 +c f] 3/16 [b- +f] e5- [a- d- f] d5- \
-        [c 3/8 d6-] [d-  2/8 b4-] 3/8 [c5 g6-] \
+        [c 3/8 d6-] b- [d-  2/8 b4-] 3/8 [c5 g6-] \
     ').tag('inner')
     bass2 = sh_score('3/8 [g5- --f] [+f b- ---f] [+f +e-] \
         --g- f e- \
@@ -96,7 +96,7 @@ def make_score():
         1/4 --f 1/8 [1/4 f 1/8 +d- +b-]  [c -e-] [-f +f] g \
     ')
 
-    rh5 = sh_score('1/32 _ 1/64 e5- +d- 1/6 [e- +d-] 1/12 c 1/4 [b- -d-] +a- \
+    rh5 = sh_score('2/12 [e5- +d- e- +d-] 1/12 c 1/4 [b- -d-] +a- \
         [b- +g] 1/6 --d- 1/12 c 1/8 [+g +e- +b-] -d- \
         1/6 [d- +a- d-] 1/12 c 1/4 [b- g -c -e-] [d- +b- +f a-] \
         1/8 [g e- -a- -c] ++d- [--b- +g +d- f +d-] c [b- -e- c -f -a-] ++d- \
@@ -171,10 +171,8 @@ def vol1(ns):
     )
 
 def vol2(ns):
-    s = sh_vol('pp 9/8 pp [ ppp 18/8 ppp [ pp 9/8 p')
-    print(s)
     ns.vol_adjust_pft(
-        s, t2,
+        sh_vol('pp 9/8 pp [ ppp 18/8 ppp [ pp 9/8 p'), t2,
         lambda n: 'line2' in n.tags
     )
 
@@ -192,13 +190,13 @@ def vol4(ns):
 
 def vol5(ns):
     ns.vol_adjust_pft(
-        sh_vol('pp 24/8 f'), t5,
+        sh_vol('pp 24/8 ff'), t5,
         lambda n: 'line5' in n.tags
     )
 
 def vol6(ns):
     ns.vol_adjust_pft(
-        sh_vol('f 24/8 ppp 6/8 ppp'), t6,
+        sh_vol('ff 24/8 ppp 6/8 ppp'), t6,
         lambda n: 'line6' in n.tags
     )
 def set_vol(ns):
@@ -229,17 +227,15 @@ def set_tempo(ns):
     ns.tempo_adjust_pft(
         sh_tempo('\
             50 6/8 50 60 9/8 60 65 6/8 65 55 9/8 40 \
-            65 30/8 60 \
-            65 9/8 55 60 9/8 70 18/8 80 \
+            65 9/8 55 60 9/8 65 18/8 70 \
             65 27/8 55 \
-            55 24/8 50 |time_change 30 6/8 40 \
+            55 24/8 50 30 6/8 40 \
             40 24/8 50 \
-            50 30/8 30 \
+            50 30/8 25 \
         ')
     )
 
 # pauses/rolls -  do this after overall tempo
-
 
 roll4_long = roller(4, -.3, .2, .8, .05)
 roll4 = roller(4, -.1, .1, .8)
@@ -301,7 +297,7 @@ def ta3(ns):
     m = t3
     ns.roll(m+3/8, roll7)
     m += 9/8
-    ns.roll(m+5/8, roll_grace4)
+    ns.roll(m+4/8, roll_grace4)
     m += 6/8
     m += 6/8
     ns.roll(m, roll_grace4, selector=lambda n: 'rh' in n.tags)
@@ -317,13 +313,15 @@ def ta4(ns):
     ns.roll(m+3/8, roll3, selector=lambda n: 'rh' in n.tags)
 
 def ta5(ns):
-    m = t5 + 6/8
+    m = t5
     ns.roll(m, roll_grace4, selector=lambda n: 'rh' in n.tags)
     m += 6/8
-    ns.roll(m,  roll6)
+    ns.roll(m, roll6)
+    ns.roll(m+4/8, roll5)
     m += 6/8
-    ns.roll(m+2/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
-    ns.roll(m+4/8, np.linspace(-.2, .1, 4), selector=lambda n: 'rh' in n.tags)
+    ns.roll(m, roll5)
+    ns.roll(m+2/8, roll4, selector=lambda n: 'rh' in n.tags)
+    ns.roll(m+4/8, roll4, selector=lambda n: 'rh' in n.tags)
     m += 6/8
     ns.roll(m, roll4, selector=lambda n: 'rh' in n.tags)
     ns.roll(m+2/8, roll5, selector=lambda n: 'rh' in n.tags)
@@ -331,7 +329,7 @@ def ta5(ns):
 
 def ta6(ns):
     ns.tempo_adjust_pft(
-        sh_tempo('14/4 . p10'),
+        sh_tempo('14/4 . p5'),
         t6
     )
     m = t6
