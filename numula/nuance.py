@@ -29,7 +29,8 @@ class Score(ScoreBasic):
     def vol_adjust_pft(
         self, pft:PFT, t0:float=0, selector:Selector=None, mode:int=VOL_MULT
     ):
-        if not pft: return
+        if not pft:
+            raise Exception('no PFT')
         self.time_sort()
         self.tags_init()
         pft_check_closure(pft)
@@ -41,6 +42,7 @@ class Score(ScoreBasic):
         seg_end = t0 + seg.dt
         t_end = t0 + pft_dur(pft)
             # end time of PFT
+        found_note = False
         for n in self.notes:
             if n.time > t_end + epsilon:
                 break
@@ -48,6 +50,7 @@ class Score(ScoreBasic):
                 continue
             if selector and not selector(n):
                 continue
+            found_note = True
             while True:
                 # skip segments as needed
                 if n.time < seg_end - epsilon:
@@ -74,26 +77,34 @@ class Score(ScoreBasic):
                 if v < 0:
                     continue
                 n.vol = v/2
+        if selector and not found_note:
+            raise Exception('no notes selected')
             
     def vol_adjust(self, v:float, selector:Selector=None, mode:int=VOL_MULT):
         self.tags_init()
+        found_note = False
         for n in self.notes:
             if selector and not selector(n):
                 continue
+            found_note = True
             if mode == VOL_MULT:
                 n.vol *= v
             elif mode == VOL_ADD:
                 n.vol += v
             elif mode == VOL_SET:
                 n.vol = v/2
+        if selector and not found_note:
+            raise Exception('no notes selected')
                 
     def vol_adjust_func(
         self, func:NoteToFloat, selector:Selector=None, mode:int=VOL_MULT
     ):
         self.tags_init()
+        found_note = False
         for n in self.notes:
             if selector and not selector(n):
                 continue
+            found_note = True
             v = func(n)
             if mode == VOL_MULT:
                 n.vol *= v
@@ -101,25 +112,37 @@ class Score(ScoreBasic):
                 n.vol += v
             elif mode == VOL_SET:
                 n.vol = v/2
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     # randomly perturb volume
     #
     def v_random_uniform(self, min:float, max:float, selector:Selector=None):
         self.tags_init()
+        found_note = False
         for note in self.notes:
-            if selector and not selector(note): continue
+            if selector and not selector(note):
+                continue
+            found_note = True
             note.vol *= random.uniform(min, max)
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def v_random_normal(
         self, stddev:float, max_sigma:float=2, selector:Selector=None
     ):
         self.tags_init()
+        found_note = False
         for note in self.notes:
-            if selector and not selector(note): continue
+            if selector and not selector(note):
+                continue
+            found_note = True
             while True:
                 x = numpy.random.normal()
                 if abs(x) < max_sigma: break
             note.vol *= 1+stddev*x
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
 # ------------------- Timing ------------------------
 
@@ -301,6 +324,7 @@ class Score(ScoreBasic):
 
         # loop over events
         #
+        found_note = False
         for event in self.start_end:
             # skip if event is before start of PFT
             #
@@ -326,6 +350,7 @@ class Score(ScoreBasic):
                         if debug:
                             print('  not selected')
                         continue
+                found_note = True
 
             # same score time as prev event, use same perf time
             #
@@ -391,6 +416,8 @@ class Score(ScoreBasic):
                 advance_seg()
             if debug:
                 print('  Done with event: perf time ', event.perf_time)
+        if selector and not found_note:
+            raise Exception('no notes selected')
         # end loop over events
         self.transfer_start_end_events()
 
@@ -410,6 +437,7 @@ class Score(ScoreBasic):
         seg_end = t0 + seg.dt
         t_end = t0 + pft_dur(pft)
             # end time of function
+        found_note = False
         for n in self.notes:
             if n.time > t_end + epsilon:
                 break
@@ -417,6 +445,7 @@ class Score(ScoreBasic):
                 continue
             if selector and not selector(n):
                 continue
+            found_note = True
             while True:
                 # skip segments as needed
                 if n.time < seg_end - epsilon:
@@ -439,6 +468,8 @@ class Score(ScoreBasic):
                 continue
             n.perf_time += v
             n.perf_dur -= v
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     # change dur of notes starting between t0 and t1
     # so they end at (at least) t1.
@@ -447,6 +478,7 @@ class Score(ScoreBasic):
         self.time_sort()
         if selector:
             self.tags_init()
+        found_note = False
         for n in self.notes:
             if n.time<t0 - epsilon:
                 continue
@@ -454,9 +486,12 @@ class Score(ScoreBasic):
                 break
             if selector and not selector(n):
                 continue
+            found_note = True
             end = n.time + n.dur
             if end < t1:
                 n.dur = t1 - n.time
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     # insert a pause of dt before time t.
     # If connect is True, extend earlier notes ending at t to preserve legato
@@ -573,6 +608,7 @@ class Score(ScoreBasic):
     ):
         self.init_all()
         chord = []   # the notes at time t
+        found_note = False
         for note in self.notes:
             if note.time < t-epsilon:
                 continue
@@ -580,56 +616,77 @@ class Score(ScoreBasic):
                 break
             if selector and not selector(note):
                 continue
+            found_note = True
             chord.append(note)
         if chord:
             if verbose:
                 print('roll ', offsets, list(map(lambda n: n.pitch, chord)))
             self.roll_aux(chord, offsets, is_up)
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def t_adjust_list(self, offsets:list[float], selector:Selector):
         self.init_all()
         ind = 0
+        found_note = False
         for note in self.notes:
             if ind == len(offsets):
                 break
             if selector and not selector(note):
                 continue
+            found_note = True
             note.perf_time += offsets[ind]
             ind += 1
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def t_adjust_notes(self, offset:float, selector:Selector):
         self.init_all()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             note.perf_time += offset
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def t_adjust_func(self, func:NoteToFloat, selector:Selector):
         self.init_all()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             note.perf_time += func(note)
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     # perturb start time, and adjust duration to keep end time the same
     # Possible TODO: adjust durations of earlier notes that end at this time
     #
     def t_random_uniform(self, min:float, max:float, selector:Selector=None):
         self.init_all()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             x = random.uniform(min, max)
             note.perf_time += x
             note.perf_dur -= x
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def t_random_normal(self,
         stddev:float, max_sigma:float=2, selector:Selector=None
     ):
         self.init_all()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             while True:
                 x = numpy.random.normal()
                 if abs(x) < max_sigma:
@@ -637,50 +694,76 @@ class Score(ScoreBasic):
             y = stddev*x
             note.perf_time += y
             note.perf_dur -= y
+        if selector and not found_note:
+            raise Exception('no notes selected')
                     
 # --------------- Articulation ----------------------
 
     def score_dur_abs(self, dur:float, selector:Selector=None):
         self.tags_init()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             note.dur = dur
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def score_dur_rel(self, factor:float, selector:Selector=None):
         self.tags_init()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             note.dur *= factor
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def score_dur_func(self, func:NoteToFloat, selector:Selector=None):
         self.tags_init()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             note.dur = func(note)
+        if selector and not found_note:
+            raise Exception('no notes selected')
  
     def perf_dur_abs(self, dur:float, selector:Selector=None):
         self.init_all()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             note.perf_dur = dur
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def perf_dur_rel(self, factor:float, selector:Selector=None):
         self.init_all()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             note.perf_dur *= factor
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     def perf_dur_func(self, func:NoteToFloat, selector:Selector=None):
         self.init_all()
+        found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
+            found_note = True
             note.perf_dur = func(note)
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
     # adjust articulation with a PFT
     def perf_dur_pft(self,
@@ -696,6 +779,7 @@ class Score(ScoreBasic):
         seg_end = t0 + seg.dt
         t_end = t0 + pft_dur(pft)
             # end time of function
+        found_note = False
         for n in self.notes:
             if n.time > t_end + epsilon:
                 break
@@ -703,6 +787,7 @@ class Score(ScoreBasic):
                 continue
             if selector and not selector(n):
                 continue
+            found_note = True
             while True:
                 # skip segments as needed
                 if n.time < seg_end - epsilon:
@@ -725,6 +810,8 @@ class Score(ScoreBasic):
                 n.perf_dur *= v
             else:
                 n.perf_dur = v
+        if selector and not found_note:
+            raise Exception('no notes selected')
 
 # ----------- pedals -------------
 
@@ -746,6 +833,7 @@ class Score(ScoreBasic):
         seg_end = t0 + seg.dt
         t_end = t0 + pft_dur(pft)
         vstr = ''
+        found_note = False
         for n in self.notes:
             if verbose:
                 vstr += 'vsus: %s\n'%n.__str__()
@@ -755,6 +843,7 @@ class Score(ScoreBasic):
                 continue
             if selector and not selector(n):
                 continue
+            found_note = True
             while True:
                 if n.time < seg_end - epsilon:
                     if seg_end > n.time + n.dur:
@@ -769,6 +858,8 @@ class Score(ScoreBasic):
                 seg_start += seg.dt
                 seg = pft[seg_ind]
                 seg_end = seg_start + seg.dt
+        if selector and not found_note:
+            raise Exception('no notes selected')
         if verbose:
             print(vstr)
 
