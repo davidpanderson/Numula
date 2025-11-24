@@ -157,7 +157,7 @@ def sh_vol(s: str) -> PFT:
 
 # e.g. '1/8 1.2 1/4 1.2 1/4 1.2 1/8'
 
-def sh_accents(s: str) -> PFT:
+def sh_accents(s: str, mode: int = VOL_MULT) -> PFT:
     items = s.split()
     items = expand_all(items)
     measure_init()
@@ -180,7 +180,10 @@ def sh_accents(s: str) -> PFT:
                 show_context(items, i)
                 raise Exception('bad values in %s'%t)
             dur = num/denom
-            pft.append(Unity(dur))
+            if mode == VOL_MULT:
+                pft.append(Unity(dur))
+            else:
+                pft.append(ZeroSeg(dur))
             dt += dur
         else:
             if t in vol_keys:
