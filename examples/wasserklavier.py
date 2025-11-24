@@ -58,16 +58,21 @@ def make_score():
         f f f f f 3/16 f [f5 +d-] \
     ').tag('bass')
 
-    rh2 = sh_score('3/16 [c6 e-] [d- f] d- e- 1/4 c 1/8 c \
-        3/16 [-e- +b-] +b- [--f b- +a-] [d- --b-] 1/4 [c 3/8 +g-] 1/8 -c \
-        3/16 [--f +c f] +f [b- f -b-] -e- [a- d- f 1/4 a-] --d- 1/8 _ +a- \
-        3/16 [c 3/8 d- g-] -b- d- +c [d- -d- 3/8 g-] [e- +e-] \
-    ').tag('rh')
-    lh2 = sh_score('3/8 [g5- --f] [+f b- ---f] [+f +e-] \
+    top2 = sh_score('3/16 [e6- c] [f d-] d- e- 2/8 c 1/8 c \
+        3/16 b- +b- a- d- 3/8 -g- \
+        3/16 . f 3/8 b- 2/8 a- 1/8 -a- \
+        3/8 g6- 3/16 d- ++e- d- e- \
+    ').tag('mel')
+    mid2 = sh_score('3/8 g5- f e- \
+        e- 3/16 [f b-] b- 2/8 c 1/8 c \
+        3/8 [f4 +c f] 3/16 [b- +f] e5- [a- d- f] d5- \
+        [c 3/8 d6-] [d-  2/8 b4-] 3/8 [c5 g6-] \
+    ').tag('inner')
+    bass2 = sh_score('3/8 [g5- --f] [+f b- ---f] [+f +e-] \
         --g- f e- \
         d- c b- \
         1/4 e- 1/8 f 1/4 [g- ++b-] 1/8 --a- 3/8 [a ++c] \
-    ')
+    ').tag('bass')
 
     rh3 = sh_score('3/16 [e6- 3/8 f -b- f] [+d- +d-] [e- -f c a- f] +++f 1/4 [--f b-] 1/8 [e- -e-] \
         3/16 [-f b- +g-] [+f +f] 1/8 .  [----c +c  c +c] [-c -c] \
@@ -116,7 +121,7 @@ def make_score():
 
     ns = Score()
     ns.append_scores([top1, inner1, inner1a, bass1], 'line1')
-    ns.append_scores([rh2, lh2], 'line2')
+    ns.append_scores([top2, mid2, bass2], 'line2')
     ns.append_scores([rh3, lh3], 'line3')
     ns.append_scores([rh4, lh4], 'line4')
     ns.append_scores([rh5, lh5], 'line5')
