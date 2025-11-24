@@ -2,26 +2,27 @@
 # see https://github.com/davidpanderson/Numula/wiki/Example:-wasserklavier
 # Copyright (C) 2022 David P. Anderson
 
-# tags
-# lh, rh
-# 'line1'...'line6'
-# 'more' and 'less'
+# The score has 6 systems, and each one has several voices.
+# We encode each of these separately,
+# and give them various tags:
+# some of these involve all systems
+#   'bass', 'top_mel'
+# and others are specific to a system
+#   'inner1', 'inner1a'
+#   'sys1'...'sys6'
 
 # nuance structure
-# timing
-#   1) a tempo PFT that applies to everything
-#       todo: add measure checks
-#   2) functions ta1...ta6 that do note-level adjustments using
-#       roll() and pause_after()
-#       todo: use PFT for pauses
-#
 # volume
-#   1) a volume PFT that applies to everything
-#       todo: add measure checks
-#   2) vol_adjust()s (multiplicative) for
-#       'more', 'less'
-#       voice to top/bottom
-#       metric accents
+#   there is no overall volume.
+#   we do initial volume for each voice separately
+#   there is an adjustment for metric accents
+# timing
+#   1) a global tempo PFT
+#   2) functions ta1()...ta6() that do adjustments:
+#       - a PFT for pauses
+#       - roll() to roll chords
+#           almost everything is rolled.
+#           We use non-roll as a change of pace
 
 import numpy as np
 import numula_path
@@ -46,13 +47,13 @@ def make_score():
         2/8 a4- 1/8 b- 2/8 c 1/8 d- \
         3/8 e- f \
         g a- \
-    ').tag('more').tag('inner')
+    ').tag('more').tag('inner1')
     inner1a = sh_score('6/8 . \
         2/8 c4 1/8 d- 2/8 e- 1/8 f \
         3/8 g a- \
         b- c \
         b- \
-    ').tag('more').tag('inner2')
+    ').tag('more').tag('inner1a')
     bass1 = sh_score('6/8 . 3/8 f3 f \
         f f f f f 3/16 f [f5 +d-] \
     ')
@@ -139,7 +140,7 @@ def make_score():
 
 def set_vol(ns):
     ns.vol_adjust_pft(
-        sh_vol('ppp 30/8 pp \
+        sh_vol('mm 30/8 mm \
             pp 9/8 ppp 18/8 pp 9/8 p \
             p 27/8 mp \
             [ p 17/8 ppp 15/8 pp \
@@ -149,10 +150,28 @@ def set_vol(ns):
         ')
     )
 
+    # system 1
+    ns.vol_adjust_pft(
+        sh_vol('pp 12/8 ppp ] p 9/8 mf ] pp 6/8 ppp ] p 3/8 p'),
+        selector = lambda n: 'mel1' in n.tags
+    )
+    ns.vol_adjust_pft(
+        sh_vol('mm 6/8 mm [ppp 12/8 p 12/8 ppp'),
+        selector = lambda n: 'inner1' in n.tags
+    )
+    ns.vol_adjust_pft(
+        sh_vol('mm 6/8 mm [ppp 12/8 pp 12/8 ppp'),
+        selector = lambda n: 'inner1a' in n.tags
+    )
+    ns.vol_adjust_pft(
+        sh_vol('mm 6/8 mm [ppp 12/8 p 12/8 ppp'),
+        selector = lambda n: 'bass1' in n.tags
+    )
+
     # voice to top/bottom
-    ns.vol_adjust(.2, lambda n: 'top' in n.tags and 'rh' in n.tags, VOL_ADD)
-    ns.vol_adjust(.6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
-    ns.vol_adjust(.8, lambda n: 'top' not in n.tags and 'bottom' in n.tags)
+    #ns.vol_adjust(.2, lambda n: 'top' in n.tags and 'rh' in n.tags, VOL_ADD)
+    #ns.vol_adjust(.6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
+    #ns.vol_adjust(.8, lambda n: 'top' not in n.tags and 'bottom' in n.tags)
 
     # metric accents
     ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
@@ -161,14 +180,15 @@ def set_vol(ns):
     ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
 
     # bring out inner voices
-    ns.vol_adjust(.1, lambda n: 'more' in n.tags, mode=VOL_ADD)
-    ns.vol_adjust(.7, lambda n: 'less' in n.tags)
+    #ns.vol_adjust(.1, lambda n: 'more' in n.tags, mode=VOL_ADD)
+    #ns.vol_adjust(.7, lambda n: 'less' in n.tags)
 
 #  timing
 
 def set_tempo(ns):
     ns.tempo_adjust_pft(
         sh_tempo('\
+            50 6/8 50 60 9/8 60 70 6/8 70 55 9/8 40 \
             65 30/8 60 \
             65 9/8 55 60 9/8 70 18/8 80 \
             65 27/8 55 \
@@ -188,9 +208,12 @@ t4 = 30/8
 t5 = 24/8
 t6 = 30/8
 
+roll4_slow = roller(4, -.4, .2, .8, .05)
+roll4= roller(4, -.2, .1, .8)
+roll3 = roller(3, -.2, .1, .8)
+roll2 = [-.1, .1]
+
 def ta1(ns):
-    t = 0
-    ns.t_adjust_notes(-.1, lambda n: 'line1' in n.tags and n.pitch==41)
     ns.tempo_adjust_pft(
         sh_tempo('5/8 . .2p 1/8 . \
             6/8 . \
@@ -199,8 +222,20 @@ def ta1(ns):
             9/16 . .3p \
         ')
     )
-    ns.roll(t+6/8, roller(4, -.4, .2, .8, .1, .1))
-    ns.time_shift_pft(sh_shift('-.2 30/8'), selector=lambda n: 'inner' in n.tags)
+    m = 6/8
+    ns.roll(m, roll4_slow)
+    ns.roll(m+2/8, roll2)
+    ns.roll(m+3/8, roll4)
+    ns.roll(m+5/8, roll2)
+    m = 12/8
+    ns.roll(m, roll3)
+    ns.roll(m+3/8, roll4)
+    m = 18/8
+    ns.roll(m, roll4)
+    ns.roll(m+3/8, roll4)
+    m = 24/8
+    ns.roll(m, roll3)
+    ns.roll(m+3/8, roll3)
 
 def ta2(ns):
     t = t1
