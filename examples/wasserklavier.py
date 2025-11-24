@@ -66,7 +66,7 @@ def make_score():
     mid2 = sh_score('3/8 g5- f e- \
         e- 3/16 [f b-] b- 2/8 c 1/8 c \
         3/8 [f4 +c f] 3/16 [b- +f] e5- [a- d- f] d5- \
-        [c 3/8 d6-] b- [d-  2/8 b4-] 3/8 [c5 g6-] \
+        [c 3/8 d6-] b- [d- 2/8 b4-] c7 [d6- 3/8 c5 g6-] e6- \
     ').tag('inner')
     bass2 = sh_score('3/8 [g5- --f] [+f b- ---f] [+f +e-] \
         --g- f e- \
@@ -105,7 +105,7 @@ def make_score():
         [1/4 ---f +f 1/8 ++g +e-] [f -a-] 1/4 [a- --f -f] (less [f +f] \
         [-f +f] [-f +f] [-f +f] \
         [-f +f] [-f +f] [-f +f] less) \
-    ')
+    ').tag('lh')
 
     rh6 = sh_score('1/8 [(more d7- more) e- +a- d-] c 1/4 [b- g -c a-] [g b- +f a-] \
         [g e- -a- f] [e- g +d- f] [e- c -f -d-] \
@@ -154,8 +154,12 @@ tend = t6 + 30/8
 
 def vol1(ns):
     ns.vol_adjust_pft(
-        sh_vol('pp 12/8 p 9/8 mf ] pp 6/8 ppp ] p 3/8 p'),
+        sh_vol('p 12/8 p 9/8 mf ] pp 6/8 ppp ] p 3/8 p'),
         selector = lambda n: 'mel' in n.tags
+    )
+    ns.vol_adjust_pft(
+        sh_accents('6/8 .1 12/8 .1 6/8 .2'),
+        selector = lambda n: 'mel' in n.tags, mode=VOL_ADD
     )
     ns.vol_adjust_pft(
         sh_vol('mm 6/8 mm [ ppp 12/8 p 12/8 ppp'),
@@ -172,38 +176,38 @@ def vol1(ns):
 
 def vol2(ns):
     ns.vol_adjust_pft(
-        sh_vol('pp 9/8 pp [ ppp 18/8 ppp [ pp 9/8 p'), t2,
+        sh_vol('pp 9/8 pp [ pp 27/8 f'), t2,
         lambda n: 'line2' in n.tags
     )
 
 def vol3(ns):
     ns.vol_adjust_pft(
-        sh_vol('p 27/8 mp'), t3,
+        sh_vol('mf 1/8 mf ] f 27/8 mp'), t3,
         lambda n: 'line3' in n.tags
     )
-    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line3' in tags)
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line3' in n.tags)
 
 def vol4(ns):
     ns.vol_adjust_pft(
         sh_vol('p 15/8 ppp 18/8 pp'), t4,
         lambda n: 'line4' in n.tags
     )
-    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line4' in tags)
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line4' in n.tags)
 
 def vol5(ns):
     ns.vol_adjust_pft(
         sh_vol('pp 24/8 ff'), t5,
         lambda n: 'line5' in n.tags
     )
-    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line5' in tags)
-    ns.vol_adjust(.8, lambda n: 'lh' in n.tags and 'line5' in tags)
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line5' in n.tags)
+    ns.vol_adjust(.8, lambda n: 'lh' in n.tags and 'line5' in n.tags)
 
 def vol6(ns):
     ns.vol_adjust_pft(
         sh_vol('ff 24/8 ppp 6/8 ppp'), t6,
         lambda n: 'line6' in n.tags
     )
-    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line6' in tags)
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line6' in n.tags)
 
 def set_vol(ns):
     vol1(ns)
@@ -214,7 +218,7 @@ def set_vol(ns):
     vol6(ns)
 
     # metric accents
-    #ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
+    #ns.vol_adjust(.1, lambda n: n.measure_offset==0, VOL_ADD)
     #ns.vol_adjust(0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
     #ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
     #ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
@@ -224,7 +228,7 @@ def set_vol(ns):
 def set_tempo(ns):
     ns.tempo_adjust_pft(
         sh_tempo('\
-            50 6/8 50 60 9/8 60 65 6/8 65 55 9/8 40 \
+            55 6/8 50 60 9/8 60 65 6/8 65 55 9/8 40 \
             65 9/8 55 60 9/8 65 18/8 70 \
             65 27/8 55 \
             55 24/8 50 30 6/8 40 \
@@ -250,8 +254,8 @@ def ta1(ns):
         sh_tempo('5/8 . .2p 1/8 . \
             6/8 . \
             p.3 6/8 . \
-            5/8 . .2p 1/8 . \
-            9/16 . .3p \
+            5/8 . .1p 1/8 . \
+            9/16 . .2p \
         ')
     )
     m = 6/8

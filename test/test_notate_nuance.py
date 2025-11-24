@@ -108,4 +108,9 @@ def test_sh_vol():
     x = sh_vol('pp 9/8 pp [ ppp 18/8 ppp [ pp 9/8 p')
     #x = sh_vol('pp 1/4 mf 1/4 pp')
     print(*x, sep='\n')
-test_sh_vol()
+#test_sh_vol()
+
+def test_sh_accents():
+    x = sh_accents('6/8 .1 12/8 .1 6/8 .2')
+    print(*x, sep='\n')
+test_sh_accents()
