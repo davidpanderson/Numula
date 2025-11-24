@@ -47,13 +47,13 @@ def make_score():
         2/8 a4- 1/8 b- 2/8 c 1/8 d- \
         3/8 e- f \
         g a- \
-    ').tag('more').tag('inner1')
+    ').tag('inner1')
     inner1a = sh_score('6/8 . \
         2/8 c4 1/8 d- 2/8 e- 1/8 f \
         3/8 g a- \
         b- c \
         b- \
-    ').tag('more').tag('inner1a')
+    ').tag('inner1a')
     bass1 = sh_score('6/8 . 3/8 f3 f \
         f f f f f 3/16 f [f5 +d-] \
     ').tag('bass')
@@ -112,7 +112,7 @@ def make_score():
         [b- -d- -f] [f +c +a-] [g -b- f] \
         [f a- +g] 1/2 [e -g f] \
         3/4 [ (more g more) 6/4 -c -f] +f \
-    ')
+    ').tag('lh')
 
     ns = Score()
     ns.append_scores([top1, inner1, inner1a, bass1], 'line1')
@@ -136,21 +136,18 @@ def make_score():
         ns.append_measure(3/4, '3/4')
     return ns
 
+# start times of the 6 systems
+t1 = 0
+t2 = t1 + 30/8
+t3 = t2 + 36/8
+t4 = t3 + 27/8
+t5 = t4 + 30/8
+t6 = t5 + 24/8
+tend = t6 + 30/8
+
 #  volume
 
-def set_vol(ns):
-    ns.vol_adjust_pft(
-        sh_vol('mm 30/8 mm \
-            [ pp 9/8 [ ppp 18/8 [ pp 9/8 p \
-            p 27/8 mp \
-            [ p 17/8 ppp 15/8 pp \
-            pp 24/8 f \
-            f 24/8 ppp \
-            ppp 6/8 ppp \
-        ')
-    )
-
-    # system 1
+def vol1(ns):
     ns.vol_adjust_pft(
         sh_vol('pp 12/8 p 9/8 mf ] pp 6/8 ppp ] p 3/8 p'),
         selector = lambda n: 'mel' in n.tags
@@ -168,16 +165,54 @@ def set_vol(ns):
         selector = lambda n: 'bass' in n.tags
     )
 
+def vol2(ns):
+    s = sh_vol('pp 9/8 pp [ ppp 18/8 ppp [ pp 9/8 p')
+    print(s)
+    ns.vol_adjust_pft(
+        s, t2,
+        lambda n: 'line2' in n.tags
+    )
+
+def vol3(ns):
+    ns.vol_adjust_pft(
+        sh_vol('p 27/8 mp'), t3,
+        lambda n: 'line3' in n.tags
+    )
+
+def vol4(ns):
+    ns.vol_adjust_pft(
+        sh_vol('p 15/8 ppp 18/8 pp'), t4,
+        lambda n: 'line4' in n.tags
+    )
+
+def vol5(ns):
+    ns.vol_adjust_pft(
+        sh_vol('pp 24/8 f'), t5,
+        lambda n: 'line5' in n.tags
+    )
+
+def vol6(ns):
+    ns.vol_adjust_pft(
+        sh_vol('f 24/8 ppp 6/8 ppp'), t6,
+        lambda n: 'line6' in n.tags
+    )
+def set_vol(ns):
+    vol1(ns)
+    vol2(ns)
+    vol3(ns)
+    vol4(ns)
+    vol5(ns)
+    vol6(ns)
     # voice to top/bottom
     #ns.vol_adjust(.2, lambda n: 'top' in n.tags and 'rh' in n.tags, VOL_ADD)
     #ns.vol_adjust(.6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
     #ns.vol_adjust(.8, lambda n: 'top' not in n.tags and 'bottom' in n.tags)
 
     # metric accents
-    ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
-    ns.vol_adjust(0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
-    ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
-    ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
+    #ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
+    #ns.vol_adjust(0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
+    #ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
+    #ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
 
     # bring out inner voices
     #ns.vol_adjust(.1, lambda n: 'more' in n.tags, mode=VOL_ADD)
@@ -188,7 +223,7 @@ def set_vol(ns):
 def set_tempo(ns):
     ns.tempo_adjust_pft(
         sh_tempo('\
-            50 6/8 50 60 9/8 60 70 6/8 70 55 9/8 40 \
+            50 6/8 50 60 9/8 60 65 6/8 65 55 9/8 40 \
             65 30/8 60 \
             65 9/8 55 60 9/8 70 18/8 80 \
             65 27/8 55 \
@@ -200,14 +235,6 @@ def set_tempo(ns):
 
 # pauses/rolls -  do this after overall tempo
 
-# start times of the 6 systems
-t1 = 0
-t2 = t1 + 30/8
-t3 = t2 + 36/8
-t4 = t3 + 27/8
-t5 = t4 + 30/8
-t6 = t5 + 24/8
-tend = t6 + 30/8
 
 roll4_long = roller(4, -.3, .2, .8, .05)
 roll4 = roller(4, -.1, .1, .8)
@@ -224,7 +251,7 @@ def ta1(ns):
         sh_tempo('5/8 . .2p 1/8 . \
             6/8 . \
             p.3 6/8 . \
-            5/8 . .3p 1/8 . \
+            5/8 . .2p 1/8 . \
             9/16 . .3p \
         ')
     )
@@ -285,7 +312,7 @@ def ta4(ns):
     ns.roll(m+3/8, roll3, selector=lambda n: 'rh' in n.tags)
 
 def ta5(ns):
-    m = t + 6/8
+    m = t5 + 6/8
     ns.roll(m, roll_grace4, selector=lambda n: 'rh' in n.tags)
     m += 6/8
     ns.roll(m,  roll6)
@@ -332,7 +359,7 @@ def main():
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)
-        #print(ns)
+        print(ns)
 
     if True:
         numula.pianoteq.play_score(ns,
