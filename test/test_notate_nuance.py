@@ -103,3 +103,9 @@ def test_ped():
 def pedal_test():
     x = sh_pedal('- 1/4 + 1/8 + 1/4 - 4/4')
     print(*x, sep='\n')
+
+def test_sh_vol():
+    x = sh_vol('pp 9/8 pp [ ppp 18/8 ppp [ pp 9/8 p')
+    #x = sh_vol('pp 1/4 mf 1/4 pp')
+    print(*x, sep='\n')
+test_sh_vol()
