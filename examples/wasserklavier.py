@@ -181,24 +181,30 @@ def vol3(ns):
         sh_vol('p 27/8 mp'), t3,
         lambda n: 'line3' in n.tags
     )
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line3' in tags)
 
 def vol4(ns):
     ns.vol_adjust_pft(
         sh_vol('p 15/8 ppp 18/8 pp'), t4,
         lambda n: 'line4' in n.tags
     )
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line4' in tags)
 
 def vol5(ns):
     ns.vol_adjust_pft(
         sh_vol('pp 24/8 ff'), t5,
         lambda n: 'line5' in n.tags
     )
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line5' in tags)
+    ns.vol_adjust(.8, lambda n: 'lh' in n.tags and 'line5' in tags)
 
 def vol6(ns):
     ns.vol_adjust_pft(
         sh_vol('ff 24/8 ppp 6/8 ppp'), t6,
         lambda n: 'line6' in n.tags
     )
+    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line6' in tags)
+
 def set_vol(ns):
     vol1(ns)
     vol2(ns)
@@ -206,20 +212,12 @@ def set_vol(ns):
     vol4(ns)
     vol5(ns)
     vol6(ns)
-    # voice to top/bottom
-    #ns.vol_adjust(.2, lambda n: 'top' in n.tags and 'rh' in n.tags, VOL_ADD)
-    #ns.vol_adjust(.6, lambda n: 'top' not in n.tags and 'bottom' not in n.tags)
-    #ns.vol_adjust(.8, lambda n: 'top' not in n.tags and 'bottom' in n.tags)
 
     # metric accents
     #ns.vol_adjust(1.1, lambda n: n.measure_offset==0)
     #ns.vol_adjust(0.9, lambda n: n.measure_type=='9/8' and n.measure_offset not in [0, 3/8, 6/8])
     #ns.vol_adjust(0.9, lambda n: n.measure_type=='6/8' and n.measure_offset not in [0, 3/8])
     #ns.vol_adjust(0.9, lambda n: n.measure_type=='3/4' and n.measure_offset not in [0, 1/4, 2/4])
-
-    # bring out inner voices
-    #ns.vol_adjust(.1, lambda n: 'more' in n.tags, mode=VOL_ADD)
-    #ns.vol_adjust(.7, lambda n: 'less' in n.tags)
 
 #  timing
 
@@ -329,7 +327,7 @@ def ta5(ns):
 
 def ta6(ns):
     ns.tempo_adjust_pft(
-        sh_tempo('14/4 . p5'),
+        sh_tempo('14/4 . p2'),
         t6
     )
     m = t6
