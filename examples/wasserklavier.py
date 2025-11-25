@@ -158,7 +158,7 @@ def vol1(ns):
         selector = lambda n: 'mel' in n.tags
     )
     ns.vol_adjust_pft(
-        sh_accents('6/8 .1 12/8 .1 6/8 .2'),
+        sh_accents('6/8 .1 12/8 .1 6/8 .2', VOL_ADD),
         selector = lambda n: 'mel' in n.tags, mode=VOL_ADD
     )
     ns.vol_adjust_pft(
