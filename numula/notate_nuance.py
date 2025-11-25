@@ -195,6 +195,7 @@ def sh_accents(s: str, mode: int = VOL_MULT) -> PFT:
                     show_context(items, i)
                     raise Exception('unrecognized item')
             pft.append(Accent(v))
+    pft_check_closure(pft)
     return pft
 
 #x = sh_accents('1/8 1.2 1/4 1.3 1/2')
