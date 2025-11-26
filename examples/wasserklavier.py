@@ -62,16 +62,16 @@ def make_score():
         3/16 b- +b- a- d- 3/8 -g- \
         3/16 . f 3/8 b- 2/8 a- 1/8 -a- \
         3/8 g6- 3/16 d- +c d- e- \
-    ').tag('mel')
+    ').tag('mel2')
     mid2 = sh_score('3/8 g5- f e- \
         e- 3/16 [f b-] b- 2/8 c 1/8 c \
         3/8 [f4 +c f] 3/16 [b- +f] e5- [a- d- f] d5- \
-        [c 3/8 d6-] b- [d- 2/8 b4-] c7 [d6- 3/8 c5 g6-] e6- \
+        [c 3/8 d6-] b- [d- 2/8 b4-] c7 [d5- 3/8 g6-] e6- \
     ').tag('inner')
     bass2 = sh_score('3/8 [g5- --f] [+f b- ---f] [+f +e-] \
         --g- f e- \
         d- c b- \
-        1/4 e- 1/8 f 1/4 [g- ++b-] 1/8 --a- 3/8 [a ++c] \
+        1/4 e- 1/8 f 1/4 [g- ++b-] 1/8 --a- 3/8 [a c5] \
     ').tag('bass')
 
     rh3 = sh_score('3/16 [e6- 3/8 f -b- f] [+d- +d-] [e- -f c a- f] +++f 1/4 [--f b-] 1/8 [e- -e-] \
@@ -81,8 +81,8 @@ def make_score():
     ').tag('rh')
     lh3 = sh_score(' 3/8 [b4- -b-] 3/16 [c +a-] [d- -d-] 1/4 [c +g-] 1/8 [-c +c] \
         3/8 [b- f -b-] [a- +a-] \
-        3/16 [g- -g-] ++b- 1/4 c 1/8 [c +c] \
-        3/16 [---f +f] ++d- 3/8 [--e- -e-] \
+        3/16 [6/8 g- -g-] ++b- 1/4 c 1/8 [c +c] \
+        3/16 [3/8 ---f +f] ++d- 3/8 [--e- -e-] \
     ')
 
     rh4 = sh_score('3/16 f7 b- [--c a-] [++f +c] \
@@ -90,10 +90,15 @@ def make_score():
         [f d-] +d- 1/4 ++d- 1/8 c 3/8 b- \
         1/8 [ ---c e 1/4 a-] [f -a-] 1/4 +g 1/8 [d- +a-] [-e- +d-] \
     ').tag('rh')
-    lh4 = sh_score(' 3/16 [d4- -d-] [f5 +d-] d3 a5- \
-        [e4- -e-] [e6- d-] 3/8 --d- --c \
-        3/16 +c b- 1/4 a- 1/8 [++d- f] 3/16 --g [c ++e] \
-        1/4 --f 1/8 [1/4 f 1/8 +d- +b-]  [c -e-] [-f +f] g \
+    lh4 = sh_score(' 3/16 d4- [f5 +d-] . a5- \
+        e4- [e6- d-] 3/8 . . \
+        3/8 . 2/8 . 1/8 [d5- f] 3/16 . [e5 c4] \
+        1/4 . 1/8 [d4- +b-] [c -e-] f g \
+    ')
+    bass4 = sh_score('3/8 d3- d \
+        e- +d- c3 \
+        3/16 c4 b- 3/8 a- g \
+        2/8 f f f \
     ')
 
     rh5 = sh_score('2/12 [e5- +d- e- +d-] 1/12 c 1/4 [b- -d-] +a- \
@@ -123,7 +128,7 @@ def make_score():
     ns.append_scores([top1, inner1, inner1a, bass1], 'line1')
     ns.append_scores([top2, mid2, bass2], 'line2')
     ns.append_scores([rh3, lh3], 'line3')
-    ns.append_scores([rh4, lh4], 'line4')
+    ns.append_scores([rh4, lh4, bass4], 'line4')
     ns.append_scores([rh5, lh5], 'line5')
     ns.append_scores([rh6, lh6], 'line6')
 
@@ -158,7 +163,7 @@ def vol1(ns):
         selector = lambda n: 'mel' in n.tags
     )
     ns.vol_adjust_pft(
-        sh_accents('6/8 .1 12/8 .1 6/8 .2', VOL_ADD),
+        sh_accents('6/8 .1 12/8 .1 6/8 .25', VOL_ADD),
         selector = lambda n: 'mel' in n.tags, mode=VOL_ADD
     )
     ns.vol_adjust_pft(
@@ -176,13 +181,14 @@ def vol1(ns):
 
 def vol2(ns):
     ns.vol_adjust_pft(
-        sh_vol('pp 9/8 pp [ pp 27/8 f'), t2,
+        sh_vol('pp 9/8 _ppp [ pp 27/8 mf'), t2,
         lambda n: 'line2' in n.tags
     )
+    ns.vol_adjust(1.2, lambda n: 'mel2' in n.tags)
 
 def vol3(ns):
     ns.vol_adjust_pft(
-        sh_vol('mf 1/8 mf ] f 27/8 mp'), t3,
+        sh_vol('mp 1/8 mf 27/8 p'), t3,
         lambda n: 'line3' in n.tags
     )
     ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line3' in n.tags)
@@ -196,15 +202,19 @@ def vol4(ns):
 
 def vol5(ns):
     ns.vol_adjust_pft(
-        sh_vol('pp 24/8 ff'), t5,
+        sh_vol('pp 24/8 f'), t5,
         lambda n: 'line5' in n.tags
+    )
+    ns.vol_adjust_pft(
+        sh_accents('.1 9/8', VOL_ADD), t5,
+        lambda n: 'top' in n.tags and 'line5' in n.tags, VOL_ADD
     )
     ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line5' in n.tags)
     ns.vol_adjust(.8, lambda n: 'lh' in n.tags and 'line5' in n.tags)
 
 def vol6(ns):
     ns.vol_adjust_pft(
-        sh_vol('ff 24/8 ppp 6/8 ppp'), t6,
+        sh_vol('f 24/8 ppp 6/8 ppp'), t6,
         lambda n: 'line6' in n.tags
     )
     ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line6' in n.tags)
@@ -228,8 +238,8 @@ def set_vol(ns):
 def set_tempo(ns):
     ns.tempo_adjust_pft(
         sh_tempo('\
-            55 6/8 50 60 9/8 60 65 6/8 65 55 9/8 40 \
-            65 9/8 55 60 9/8 65 18/8 70 \
+            55 6/8 50 60 9/8 60 63 6/8 60 55 9/8 40 \
+            60 9/8 50 60 9/8 65 18/8 70 \
             65 27/8 55 \
             55 24/8 50 30 6/8 40 \
             40 24/8 50 \
@@ -242,12 +252,12 @@ def set_tempo(ns):
 roll4_long = roller(4, -.3, .2, .8, .05)
 roll4 = roller(4, -.1, .1, .8)
 roll5 = roller(5, -.15, .1, .8)
-roll5_long = roller(5, -.3, .2, .8)
+roll5_long = roller(5, -.2, .2, .8)
 roll6 = roller(6, -.2, .1, .8)
 roll7 = roller(7, -.2, .15, .8)
 roll3 = roller(3, -.1, .1, .8)
 roll2 = [-.1, .1]
-roll_grace4 = [-.12, -.09, 0, .08]
+roll_grace4 = [-.15, -.1, .05, .1]
 
 def ta1(ns):
     ns.tempo_adjust_pft(
@@ -275,7 +285,7 @@ def ta1(ns):
 
 def ta2(ns):
     ns.tempo_adjust_pft(
-        sh_tempo('6/8 . p.15 27/8 . p.1'),
+        sh_tempo('6/8 . p.2 3/8 . 18/8 . 6/8 . p.6'),
         t2
     )
     m = t2 + 9/8
@@ -331,7 +341,7 @@ def ta5(ns):
 
 def ta6(ns):
     ns.tempo_adjust_pft(
-        sh_tempo('14/4 . p2'),
+        sh_tempo('14/4 . p3'),
         t6
     )
     m = t6
@@ -369,7 +379,7 @@ def main():
     if True:
         numula.pianoteq.play_score(ns,
             #preset='My Presets/NY Steinway D Classical (for wasser)'
-            preset='NY Steinway D Classical'
+            preset='NY Steinway D Sombre'
             #score_time = 30/8
         )
     else:
@@ -378,7 +388,7 @@ def main():
             'data/wasserklavier.midi',
             'data/wasserklavier9.wav',
             version=9,
-            preset='NY Steinway D Classical'
+            preset='NY Steinway D Sombre'
         )
 
 main()
