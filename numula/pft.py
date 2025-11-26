@@ -200,7 +200,9 @@ type PFT = list[PFT_Primitive]
 
 #from pprint import pprint
 
-# make sure the pft has well-defined values at segment boundaries
+# Make sure the PFT has well-defined values at segment boundaries
+# If the PFT has accents (momentary values) adjust surrounding closures
+#
 def pft_check_closure(pft):
     n = len(pft)
     t = 0.

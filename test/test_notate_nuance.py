@@ -111,6 +111,6 @@ def test_sh_vol():
 #test_sh_vol()
 
 def test_sh_accents():
-    x = sh_accents('6/8 .1 12/8 .1 6/8 .2')
+    x = sh_accents('6/8 .1 12/8 .1 6/8 .2 6/8')
     print(*x, sep='\n')
 test_sh_accents()
