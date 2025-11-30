@@ -90,15 +90,13 @@ def pause_test():
 ########## Pedal ###########
 
 def test_ped():
-    ns = Score()
-    for i in range(2):
-        ns.append_score(sh_score('1/8 c d e f g a b c'))
-    p = sh_pedal('1/4 (1/8) (1/4) 4/4')
+    ns = sh_score('*2 1/8 c5 d e f g a b c *')
+    p = sh_pedal('*4 (2/4) *')
     print(*p, sep='\n')
     ns.pedal_pft(p)
     print(ns)
     pianoteq.play_score(ns)
-#test_ped()
+test_ped()
 
 def pedal_test():
     x = sh_pedal('- 1/4 + 1/8 + 1/4 - 4/4')
@@ -111,6 +109,6 @@ def test_sh_vol():
 #test_sh_vol()
 
 def test_sh_accents():
-    x = sh_accents('6/8 .1 12/8 .1 6/8 .2 6/8')
+    x = sh_accents('6/8 .1 12/8 .1 6/8 .2')
     print(*x, sep='\n')
-test_sh_accents()
+#test_sh_accents()

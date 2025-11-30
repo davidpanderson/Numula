@@ -198,7 +198,7 @@ def vol4(ns):
         sh_vol('p 15/8 ppp 18/8 pp'), t4,
         lambda n: 'line4' in n.tags
     )
-    ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line4' in n.tags)
+    ns.vol_adjust(1.3, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line4' in n.tags)
 
 def vol5(ns):
     ns.vol_adjust_pft(
@@ -214,7 +214,7 @@ def vol5(ns):
 
 def vol6(ns):
     ns.vol_adjust_pft(
-        sh_vol('f 24/8 ppp 6/8 ppp'), t6,
+        sh_vol('exp-2.0 f 24/8 ppp 6/8 ppp'), t6,
         lambda n: 'line6' in n.tags
     )
     ns.vol_adjust(1.2, lambda n: 'top' in n.tags and 'rh' in n.tags and 'line6' in n.tags)
@@ -242,8 +242,8 @@ def set_tempo(ns):
             60 9/8 50 60 9/8 65 18/8 70 \
             65 27/8 55 \
             55 24/8 50 30 6/8 40 \
-            40 24/8 50 \
-            50 30/8 25 \
+            40 24/8 48 \
+            48 30/8 25 \
         ')
     )
 
@@ -254,7 +254,7 @@ roll4 = roller(4, -.1, .1, .8)
 roll5 = roller(5, -.15, .1, .8)
 roll5_long = roller(5, -.2, .2, .8)
 roll6 = roller(6, -.2, .1, .8)
-roll7 = roller(7, -.2, .15, .8)
+roll7 = roller(7, -.2, .15, .8, .03, .02)
 roll3 = roller(3, -.1, .1, .8)
 roll2 = [-.1, .1]
 roll_grace4 = [-.15, -.1, .05, .1]
@@ -366,11 +366,18 @@ def time_adjust(ns):
     ta5(ns)
     ta6(ns)
     #ns.t_random_normal(.015, 2)
-    
+
+def do_pedal(ns):
+    ns.pedal_pft(
+        sh_pedal('*18 (1/4) * (1/4) (2/4) (6/4)'),
+        t5
+    )
+                
 def main():
     ns = make_score()
     #ns.verbose = True
     if True:
+        do_pedal(ns)
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)
