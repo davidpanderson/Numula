@@ -218,3 +218,39 @@ curtains
 jitter
     a series of notes, randomly pitch N and N+1.
     Occasionally, with a rhythm, jumping to a melody
+
+--------------
+generalization of cycles
+
+generators: return sequences of things
+    (pitches, durations, volumes)
+PFT: functions of time
+    (volumes, articulation)
+
+player(
+    pitch: generator
+        could be e.g.
+            cycle
+            random
+                white
+                1/f 
+    dur: generator
+        negative duration means rest
+    vol: generator or PFT
+    play(score, pitch, dur, vol):
+        might e.g.
+            play a note
+            play a chord w/ that note
+            play a sequence of notes or chords with decaying volume
+            play a scale from previous note up to this note
+):
+    returns a score
+
+cycle_gen(
+    top, bottom, incr: PFT
+)
+
+repeater:
+    wraps a generator
+    enumerates a stretch, then repeats it 2-3 times
+    need to think more about this
