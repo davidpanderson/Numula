@@ -35,8 +35,8 @@ def dtgen():
     while True:
         for i in range(4):
             yield 1/32
-#        for i in range(3):
-#            yield 1/24
+        for i in range(3):
+            yield 1/24
 
 def test_cycle():
     dts = dtgen()
@@ -117,7 +117,6 @@ def player(
     t = 0
     vol_is_pft = False
     next(pitch_gen)
-    print(type(vol))
     if isinstance(vol, list):
         vpft = PFTValue(vol)
         vol_is_pft = True
@@ -134,20 +133,25 @@ def player(
 
 def dur_gen():
     while True:
-        yield 1/32
-
+        for i in range(8):
+            yield 1/32
+        for i in range(6):
+            yield 1/24
+import random
 def play_note(ns, t, p, d, v):
-    ns.insert_note(Note(t, d, int(p), v))
+    for i in [0, 4, 8]:
+        x = random.uniform(.5, 1.5)
+        ns.insert_note(Note(t, d*x, int(p)+i, v))
     
 def test_player():
     bottom = sh_vol('45 12/1 40')
-    top = sh_vol('55 12/1 80')
-    incr = sh_vol('7 12/1 31')
+    top = sh_vol('55 6/1 80 6/1 50')
+    incr = sh_vol('7 12/1 11')
     cg = cycle_gen(bottom, top, incr)
     ns = player(
         cg,
-        dur_gen(),
-        sh_vol('pp 6/1 ff 6/1 pp'),
+        dtgen(),
+        sh_vol('0 6/1 fff 6/1 0'),
         12/1,
         play_note
     )

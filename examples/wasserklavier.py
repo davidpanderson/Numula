@@ -369,7 +369,7 @@ def time_adjust(ns):
 
 def do_pedal(ns):
     ns.pedal_pft(
-        sh_pedal('*18 (1/4) * (1/4) (2/4) (6/4)'),
+        sh_pedal('*18 [1/4) * [1/4) [2/4) [2/4)'),
         t5
     )
                 
