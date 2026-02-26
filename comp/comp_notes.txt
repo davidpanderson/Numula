@@ -219,6 +219,46 @@ jitter
     a series of notes, randomly pitch N and N+1.
     Occasionally, with a rhythm, jumping to a melody
 
+layers
+    layer zero is very soft: a dense thatch of high notes
+    layer one is louder, lower, slower; more melodic
+    layer two is moreso
+    layer three is slow bass notes
+
+pieces that mimic nature
+    surf
+    water waves
+    birds
+        individual song
+        pair
+        flock
+    butterflies
+    windstorm
+    rain
+    snow (slow descent)
+
+practice room hall
+    lots of study-type voices
+    (scales, arpeggios, chopin etude fragments)
+    bad technique, mistakes, stopping etc.
+    listener approaches from far away,
+    walks down hall, pausing at doors, then leaves
+    how would this work?
+        could do at the Score/MIDI level; problems:
+            sustain pedal would apply to all
+            can't use different piano sounds
+        better: generate .WAV files
+            combine with 1/r^2 attenuation
+            possibly spatialize them
+
+piano approximation of real sounds
+    compute FFT of all Pianoteq notes at several volume levels
+    given a real-world recording
+        say, of speech, or a chamber or symphonic recording
+    compute its PvT
+    approximate that with piano notes
+        with constraints on e.g. how long the notes last
+
 --------------
 generalization of cycles
 
@@ -254,3 +294,6 @@ repeater:
     wraps a generator
     enumerates a stretch, then repeats it 2-3 times
     need to think more about this
+-------------
+harmony theory:
+https://www.youtube.com/watch?v=wEMbPfi7MgQ
