@@ -64,18 +64,26 @@ def ped_test2():
         f.addNote(0, 0, 72, t, dt, 64)
     for i in range(128):
         t = 16.*i/128
-        val = 63+i//2
-        #val = i
+        #val = 63+i//2
+        val = i
         f.addControllerEvent(0, 0, t, PEDAL_SUSTAIN, val)
     fname = 'data/ped_test2.midi'
     with open(fname, 'wb') as file:
         f.writeFile(file)
     play_midi_file_rpc(fname)
-#ped_test2()
+ped_test2()
 
 def test1():
     ns = sh_score('c d e f g a b c')
     ns.insert_pedal(PedalSeg(3/4, time=1/1))
     print(ns)
-    ns.write_midi('data/test1.midi')
+    numula.pianoteq.play_score(ns)
 #test1()
+
+def ped_test3():
+    ns = sh_score('*27 c *')
+    p = sh_pedal('*18 [1/8) 1/8 * [1/4) [2/4) [2/4)')
+    print(*p, sep='\n')
+    ns.pedal_pft(p, 0)
+    #numula.pianoteq.play_score(ns)
+#ped_test3()

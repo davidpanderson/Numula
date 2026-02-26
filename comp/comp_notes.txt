@@ -297,3 +297,37 @@ repeater:
 -------------
 harmony theory:
 https://www.youtube.com/watch?v=wEMbPfi7MgQ
+---------------
+2/13/2026
+
+piece idea
+    first section consists of two parallel parts
+        - regularly-spaced 2-note chords, various intervals,
+            mostly stepwise motion
+        - notes that 'circle' these (above, below, sideways),
+            with an unrelated rhythm,
+            harmonically related but always changing
+        visual image: a stable figure (square)
+            that's surrounded by unstable geometries
+    second section:
+        a swarm of notes, from the same harmony,
+        irregularly spaced in time,
+        from a range of an octave or so.
+        Over time:
+        - the rate of notes speeds up
+        - the harmonies change at a rate proportional to speed
+        - the range moves up as speed increases
+        ... and then the opposite
+    third section:
+        like first but 3 or 4 note chords
+        how do this and the 1st part evolve?
+---------------
+general
+
+pieces need shape
+    continuous evolution (harmony, tempo, range, etc.)
+        with high points and lulls
+    discontinuities: new ideas
+    endings on large and small scales
+        think about starts/ends, not just steady state
+---------------

@@ -17,6 +17,7 @@ def cycle(
 
     while t <= dur:
         dt = next(dtgen)
+        print(t, p)
         ns.insert_note(Note(t, dt*2, int(p), vol.value(t)/2))
         t += dt
         inc = incr.value(t)
@@ -47,65 +48,114 @@ def test_cycle():
         dts
     )
     #print(ns)
-    numula.pianoteq.play_score(ns)
+    #numula.pianoteq.play_score(ns)
     
 #test_cycle()
 
-from abc import ABC, abstractmethod
 
-# an object that encapsulates a function of time
-class Function_of_Time(ABC):
-    @abstractmethod
-    def value(t):
-        pass
+# Generator for pitches
+def cycle_gen(
+    bottom: PFT,
+    top: PFT,
+    incr: PFT
+):
+    dur = pft_dur(bottom)
+    if pft_dur(top) != dur or pft_dur(incr) != dur:
+        raise Exception('Inconsistent PFT durations')
+    bottom = PFTValue(bottom)
+    top = PFTValue(top)
+    incr = PFTValue(incr)
 
-class CycleGen(Function_of_Time):
-    def __init__(
-        bottom: PFT,
-        top: PFT,
-        incr: PFT
-    ):
-        self.bottom = PFTValue(bottom)
-        self.top = PFTValue(top)
-        self.incr = PFTValue(incr)
-        self.val = None;    # last returned value
-        self.dur = pft_dur(bottom)
-        if pft_dur(top) != self.dur or pft_dur(incr) != self.dur
-            raise Exception('Inconsistent PFT durations')
-
-    def value(t):
+    t = yield None
+    val = None
+    while True:
         if t > dur + epsilon:
-            return None
-        if self.val is None:
-            self.val = bottom.value(t)
-            return self.val
+            yield None
+        if val is None:
+            val = bottom.value(0)
+            t = yield val
         inc = incr.value(t)
         bt = bottom.value(t)
         tp = top.value(t)
-        self.val += inc
+        val += inc
         diff = tp - bt
-        if self.val > top.value(t):
-            while self.val-diff > bt:
-                self.val -= diff
-        return self.val
+        if val > tp:
+            while val - diff > bt:
+                val -= diff
+        t = yield val
 
 def test_cycle_gen():
     bottom = sh_vol('45 12/1 40')
     top = sh_vol('55 12/1 80')
     incr = sh_vol('7 12/1 31')
-    cg = CycleGen(bottom, top, incr)
+    cg = cycle_gen(bottom, top, incr)
     t = 0
+    next(cg)
     while True:
-        x = cg.value(t)
+        x = cg.send(t)
         if x is None:
             break;
         print(t, x)
-        t += 1/4
-    
+        t += 1/32
+#test_cycle_gen()
+
+from typing import Generator
+
+# general function for combining sources of pitch, duration, and volume
+# and producing a Score.
+# Pitch and duration come from Generators.
+# Volume can come from a Generator or a PFT.
+#
 def player(
-    pitch_gen: Function_of_Time,
-    dur: generator,
-    vol: generator|PFT,
-    play: function
-)->Score:
-    pass
+    pitch_gen: Generator[int, None, None],
+    note_dur: Generator[float, None, None],
+    vol: Generator[float, None, None]|PFT,
+    duration: float,
+    play: Callable
+) -> Score:
+    ns = Score()
+    t = 0
+    vol_is_pft = False
+    next(pitch_gen)
+    if isinstance(vol, list):
+        vpft = PFTValue(vol)
+        vol_is_pft = True
+    while t <= duration:
+        p = pitch_gen.send(t)
+        d = next(note_dur)
+        if vol_is_pft:
+            v = vpft.value(t)
+        else:
+            v = next(vol)
+        play(ns, t, p, d, v/2)
+        t += d
+    return ns
+
+def dur_gen():
+    while True:
+        for i in range(8):
+            yield 1/32
+        for i in range(6):
+            yield 1/24
+import random
+def play_note(ns, t, p, d, v):
+    for i in [0, 4, 8]:
+        x = random.uniform(.5, 1.5)
+        ns.insert_note(Note(t, d*x, int(p)+i, v))
+    
+def test_player():
+    bottom = sh_vol('45 12/1 40')
+    top = sh_vol('55 6/1 80 6/1 50')
+    incr = sh_vol('7 12/1 11')
+    cg = cycle_gen(bottom, top, incr)
+    ns = player(
+        cg,
+        dtgen(),
+        sh_vol('0 6/1 fff 6/1 0'),
+        12/1,
+        play_note
+    )
+    #print(ns)
+    numula.pianoteq.play_score(ns)
+
+test_player()

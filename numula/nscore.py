@@ -420,8 +420,8 @@ class ScoreBasic:
                 t0 -= epsilon
             else:
                 t0 += epsilon
-            level0 = int(64+pedal.level0*63)
-            level1 = int(64+pedal.level1*63)
+            level0 = int(64+pedal.level0*127)
+            level1 = int(64+pedal.level1*127)
             if level0 == level1:
                 f.addControllerEvent(0, 0, t0, type, level0)
             else:
