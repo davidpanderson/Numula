@@ -868,7 +868,7 @@ class Score(ScoreBasic):
         t = t0
         for seg in pft:
             seg.time = t
-            seg.type = type
+            seg.pedal_type = type
             self.insert_pedal(seg)
             t += seg.dt
 

@@ -71,7 +71,7 @@ def ped_test2():
     with open(fname, 'wb') as file:
         f.writeFile(file)
     play_midi_file_rpc(fname)
-ped_test2()
+#ped_test2()
 
 def test1():
     ns = sh_score('c d e f g a b c')
@@ -86,4 +86,5 @@ def ped_test3():
     print(*p, sep='\n')
     ns.pedal_pft(p, 0)
     #numula.pianoteq.play_score(ns)
-#ped_test3()
+    print(ns)
+ped_test3()
