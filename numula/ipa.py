@@ -9,7 +9,7 @@ from typing import Any
 # their values are stored in globals()
 vars: list[dict] = []
 
-# variable types.  Each has default min/mix and step size
+# variable control types.  Each has default min/mix and step size
 
 IPA_VOL = 1
     # volume, absolute or increment: 0..1

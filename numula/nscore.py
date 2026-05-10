@@ -65,7 +65,7 @@ class PedalSeg:
         closed_start: bool=True,
         closed_end: bool=True,
         time: float=0,
-        type: int=PEDAL_SUSTAIN
+        pedal_type: int=PEDAL_SUSTAIN
     ):
         self.dur = dur
         self.dt = dur
@@ -79,7 +79,7 @@ class PedalSeg:
         self.perf_dur = 0.
 
     def __str__(self):
-        return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f type %d levels %f %f closed %s %s'%(
+        return 'pedal time %.4f dur %.4f perf_time %.4f perf_dur %.4f pedal_type %d levels %f %f closed %s %s'%(
             self.time, self.dt, self.perf_time, self.perf_dur,
             self.pedal_type, self.level0, self.level1,
             'yes' if self.closed_start else 'no',
@@ -87,10 +87,10 @@ class PedalSeg:
         )
     
 class Measure:
-    def __init__(self, time: float, dur: float, type: str):
+    def __init__(self, time: float, dur: float, measure_type: str):
         self.time = time
         self.dur = dur
-        self.type = type
+        self.measure_type = measure_type
 
     def __str__(self):
         return 'measure: %.4f-%.4f'%(self.time, self.time+self.dur)
@@ -202,13 +202,13 @@ class ScoreBasic:
     def insert_pedal(
         self,
         pedal: PedalSeg,
-        type: int = None,
+        pedal_type: int = None,
         time: float = None
     ):
         if time is not None:
             pedal.time = time
-        if type is None:
-            pedal.type = PEDAL_SUSTAIN
+        if pedal_type is None:
+            pedal.pedal_type = PEDAL_SUSTAIN
         self.pedals.append(pedal)
         self.clear_flags()
         return self
@@ -405,7 +405,7 @@ class ScoreBasic:
         self.write_midi_pedals_type(f, sost, PEDAL_SOSTENUTO)
         self.write_midi_pedals_type(f, sustain, PEDAL_SUSTAIN)
 
-    def write_midi_pedals_type(self, f, pedals, type):
+    def write_midi_pedals_type(self, f, pedals, pedal_type):
         # set P.have_next if there's a segment immediately following P
         prev = None
         for pedal in pedals:
@@ -423,7 +423,7 @@ class ScoreBasic:
             level0 = int(64+pedal.level0*127)
             level1 = int(64+pedal.level1*127)
             if level0 == level1:
-                f.addControllerEvent(0, 0, t0, type, level0)
+                f.addControllerEvent(0, 0, t0, pedal_type, level0)
             else:
                 # e.g. if levels differ by 1, 2nd should go halfway in time
                 diff = level1 - level0
@@ -433,15 +433,15 @@ class ScoreBasic:
                 for i in range(n):
                     level = level0 + i*step
                     t = t0 + (i*dt)/n
-                    f.addControllerEvent(0, 0, t, type, level)
+                    f.addControllerEvent(0, 0, t, pedal_type, level)
             if pedal.have_next:
                 if not pedal.closed_end:
-                    f.addControllerEvent(0, 0, t1-2*epsilon, type, 0)
+                    f.addControllerEvent(0, 0, t1-2*epsilon, pedal_type, 0)
             else:
                 if pedal.closed_end:
-                    f.addControllerEvent(0, 0, t1+epsilon, type, 0)
+                    f.addControllerEvent(0, 0, t1+epsilon, pedal_type, 0)
                 else:
-                    f.addControllerEvent(0, 0, t1-epsilon, type, 0)
+                    f.addControllerEvent(0, 0, t1-epsilon, pedal_type, 0)
         
     # if a note starts while one of the same pitch is sounding,
     # truncate the first note.
@@ -539,7 +539,7 @@ class ScoreBasic:
                     break
             if m_ind < len(self.measures):
                 if m.time < note.time + epsilon:
-                    note.measure_type = m.type
+                    note.measure_type = m.measure_type
                     note.measure_offset = note.time - m.time
             if not note.measure_type:
                 raise Exception('note is not in any measure')
