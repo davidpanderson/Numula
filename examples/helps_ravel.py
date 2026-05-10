@@ -136,19 +136,6 @@ bass = sh_score('meas3/4 \
     |86 \
 ')
 
-ped = sh_pedal('meas3/4 \
-    |1 (48/4) \
-    |17 *4 \
-        *4 (2/4) (1/4) * \
-        * \
-    |33 (48/4) \
-    |49 *16 (2/4) (1/4) * \
-    |65 (6/4) \
-    |67 *16 (2/4) (1/4) * \
-    |83 (9/4) \
-    |86 1/4 \
-')
-
 soprano_v0 = sh_vol('meas3/4 \
     |1 *2 [ mp 12/4 mp [ p 12/4 p * \
     |17 [ _p 12/4 _p [ pp 12/4 pp [ mf 12/4 mf [ p 12/4 p \
@@ -225,6 +212,25 @@ t1 = sh_tempo(f'meas3/4 \
     |83 \
 ')
 
+pedal = sh_pedal(f'meas3/4 \
+    |1 [48/4] \
+    |17 *8 (2/4)(1/4) * \
+    |25 (5/4) (1/4) (3/4) (3/4) *3 (2/4) (1/4) * (3/4) \
+    |33 (48/4) \
+    |49 *8 (2/4) (1/4) * \
+    |57 *3 (2/4) (1/4) * (3/4) \
+    |61 *3 (2/4) (1/4) * (9/4) \
+    |67 *15 (2/4) (1/4) * (12/4) \
+    |86 \
+')
+
+soft_pedal = sh_pedal(f'meas3/4 \
+    |1 [168/4) \
+    |57 12/4 \
+    |61 [75/4) \
+    |86 \
+')
+
 do_nuance = True
 
 def main():
@@ -242,10 +248,12 @@ def main():
         bass
     ])
     if do_nuance:
-        ns.pedal_pft(ped)
+        ns.pedal_pft(pedal)
+        ns.pedal_pft(soft_pedal, type=PEDAL_SOFT)
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(t1)
     #print(ns)
+    #print(*ns.pedals, sep='\n')
     numula.pianoteq.play_score(ns)
     #numula.read_midifile.print_midifile(fname)
 main()
