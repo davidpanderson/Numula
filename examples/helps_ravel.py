@@ -6,7 +6,7 @@ from numula.notate_score import *
 from numula.notate_nuance import *
 import numula.pianoteq
 
-# the half/quarter pattern repeating throughout
+# the half/quarter pattern that repeats throughout.
 # not always on top
 soprano = sh_score('meas3/4 \
     |1 <*3 1/2 1/4 * 3/4> f6 e f c f e d- \
@@ -35,7 +35,7 @@ soprano = sh_score('meas3/4 \
     |86 \
 ')
 
-# the main accompaniment, not always lower
+# the main accompaniment, sometimes above soprano
 alto = sh_score('meas3/4 \
     |1 1/8 . e6 e c . -f . +e e d- . -f . +e -f +e . c  . e e c+ e -f \
     |5 . +e c -f . +d- . e e c . -f . f +c e . f . e d- -f f +e \
@@ -139,7 +139,17 @@ bass = sh_score('meas3/4 \
     |86 \
 ')
 
-soprano_v0 = sh_vol('meas3/4 \
+######## VOLUME ###########
+
+# accent levels
+a5 = 1.4
+a4 = 1.3
+a3 = 1.1
+a2 = 1.0
+a1 = .9
+a0 = .8
+
+soprano_vol_overall = sh_vol('meas3/4 \
     |1 *2 [ mp 12/4 mp [ p 12/4 p * \
     |17 [ _p 12/4 _p [ pp 12/4 pp [ mf 12/4 mf [ p 12/4 p \
     |33 [ mp 48/4 mp \
@@ -151,7 +161,21 @@ soprano_v0 = sh_vol('meas3/4 \
     |86 \
 ')
 
-alto_v0 = sh_vol('meas3/4 \
+# swells over 4 bars
+soprano_vol_4bar = sh_vel('meas3/4 \
+    |1 *16 mm 6/4 mf 6/4 mm * \
+    |65 6/4 mm \
+    |67 *4 mm 6/4 mf 6/4 mm * \
+    |83 \
+')
+
+# de-accent 3rd beats
+soprano_accents = sh_accents('meas3/4 \
+    |1 *86 2/4 . {a0} 1/4 * \
+    |86 \
+')
+
+alto_vol_overall = sh_vol('meas3/4 \
     |1 ppp 48/4 ppp \
     |17 [ ppp 12/4 ppp [ _ppp 12/4 _ppp [ p 12/4 p [ _pp 12/4 _pp \
     |33 [ pppp_ 48/4 pppp_ \
@@ -163,20 +187,22 @@ alto_v0 = sh_vol('meas3/4 \
     |86 \
 ')
 
-# accent levels
-a5 = 1.4
-a4 = 1.3
-a3 = 1.1
-a2 = 1.0
-a1 = .9
-
-alto_v1 = sh_accents(f' \
-    |1 *48 1. 1/4 {a4} 1/4 {a4} 1/4 * \
-    |49 *12 *3 {a5} 1/12 {a4} 1/12 {a4} 1/12 * * \
-    |61 \
+# measure-level swells
+alto_vol_1bar = sh_vol('meas3/4 \
+    |1 *86 mm 1/4 mf 2/4 mm * \
+    |86 \
 ')
 
-tenor_v0 = sh_vol('meas3/4 \
+
+alto_accents = sh_accents(f' \
+    |1 *48 3/4  * \
+    |49 *8 *3 {a5} 1/12 {a4} 1/12 {a4} 1/12 * * \
+    |57 *4 *9 {a4} 1/48 {a1} 1/48 {a3} 1/48 {a1} 1/48 * * \
+    |61 *5 *9 {a4} 1/12 * * \
+    |66 \
+')
+
+tenor_vol_overall = sh_vol('meas3/4 \
     |1 *31 mm 3/4 mm * \
     |32 [ p 3/4 p \
     |33 *24 [ mm 3/4 mm * \
@@ -188,14 +214,31 @@ tenor_v0 = sh_vol('meas3/4 \
     |86 \
 ')
 
-bass_v0 = sh_vol('meas3/4 \
+tenor_vol_1bar = sh_vol('meas3/4 \
+    |1 *86 mm 1/4 mf 2/4 mm * \
+    |86 \
+')
+
+bass_vol_overall = sh_vol('meas3/4 \
     |1 *66 mm 3/4 mm * \
     |67 [ mp 12/4 mp [ p 12/4 p [ mf 12/4 mf [ mp 12/4 pp \
     |83 pp 9/4 pp \
     |86 \
 ')
 
-t0 = sh_tempo('meas3/4 \
+bass_vol_4bar = sh_vol('meas3/4 \
+    |1 *66 mm 3/4 mm * \
+    |67 *4 mm 6/4 mf 6/4 mm * \
+    |83 \
+')
+
+bass_accents = sh_accents('meas3/4 \
+    |1 *66 3/4 \
+    |67 *16 2/4 . {a0} 1/4 * \
+    |83 \
+')
+
+tempo = sh_tempo('meas3/4 \
     |1 *16 60 6/4 68 6/4 55 * \
     |65 55 6/4 30 \
     |67 *4 60 6/4 68 6/4 55 * \
@@ -209,7 +252,7 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 
-t1 = sh_tempo(f'meas3/4 \
+pauses = sh_tempo(f'meas3/4 \
     |1 *16 {dt3}p{dt2} 6/4 . {dt2}p{dt1} 6/4 . * \
     |65 6/4 . .3p \
     |67 *4 {dt3}p{dt2} 6/4 . {dt2}p{dt1} 6/4 . * \
@@ -240,11 +283,17 @@ do_nuance = True
 def main():
     ns = Score(tempo=72)
     if do_nuance:
-        soprano.vol_adjust_pft(soprano_v0)
-        alto.vol_adjust_pft(alto_v0)
-        alto.vol_adjust_pft(alto_v1)
-        tenor.vol_adjust_pft(tenor_v0)
-        bass.vol_adjust_pft(bass_v0)
+        soprano.vol_adjust_pft(soprano_vol_overall)
+        soprano.vol_adjust_pft(soprano_vol_4bar)
+        soprano.vol_adjust_pft(soprano_accents)
+        alto.vol_adjust_pft(alto_vol_overall)
+        alto.vol_adjust_pft(alto_vol_1bar)
+        alto.vol_adjust_pft(alto_accents)
+        tenor.vol_adjust_pft(tenor_vol_overall)
+        tenor.vol_adjust_pft(tenor_vol_1bar)
+        bass.vol_adjust_pft(bass_vol_overall)
+        bass.vol_adjust_pft(bass_vol_4bar)
+        bass.vol_adjust_pft(bass_accents)
     ns.append_scores([
         soprano,
         alto,
@@ -254,8 +303,8 @@ def main():
     if do_nuance:
         ns.pedal_pft(pedal)
         ns.pedal_pft(soft_pedal, type=PEDAL_SOFT)
-        ns.tempo_adjust_pft(t0)
-        ns.tempo_adjust_pft(t1)
+        ns.tempo_adjust_pft(tempo)
+        ns.tempo_adjust_pft(pauses)
     #print(ns)
     #print(*ns.pedals, sep='\n')
     numula.pianoteq.play_score(ns)
