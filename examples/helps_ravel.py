@@ -6,6 +6,8 @@ from numula.notate_score import *
 from numula.notate_nuance import *
 import numula.pianoteq
 
+# the half/quarter pattern repeating throughout
+# not always on top
 soprano = sh_score('meas3/4 \
     |1 <*3 1/2 1/4 * 3/4> f6 e f c f e d- \
     |5 f e f d- f e c \
@@ -33,6 +35,7 @@ soprano = sh_score('meas3/4 \
     |86 \
 ')
 
+# the main accompaniment, not always lower
 alto = sh_score('meas3/4 \
     |1 1/8 . e6 e c . -f . +e e d- . -f . +e -f +e . c  . e e c+ e -f \
     |5 . +e c -f . +d- . e e c . -f . f +c e . f . e d- -f f +e \
@@ -160,6 +163,7 @@ alto_v0 = sh_vol('meas3/4 \
     |86 \
 ')
 
+# accent levels
 a5 = 1.4
 a4 = 1.3
 a3 = 1.1
