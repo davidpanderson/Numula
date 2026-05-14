@@ -154,33 +154,33 @@ soprano_vol_overall = sh_vol('meas3/4 \
     |17 [ _p 12/4 _p [ pp 12/4 pp [ mf 12/4 mf [ p 12/4 p \
     |33 [ mp 48/4 mp \
     |49 [ p 24/4 p \
-    |57 [ f 12/4 f \
-    |61 [ p 9/4 p [ mf 9/4 f \
-    |67 [ pp 48/4 pp \
+    |57 [ ff 12/4 ff \
+    |61 [ mp 9/4 mp [ mf 9/4 f \
+    |67 [ *4 _pp 12/4 _pp * \
     |83 [ pp 9/4 pp \
     |86 \
 ')
 
 # swells over 4 bars
-soprano_vol_4bar = sh_vel('meas3/4 \
-    |1 *16 mm 6/4 mf 6/4 mm * \
-    |65 6/4 mm \
-    |67 *4 mm 6/4 mf 6/4 mm * \
+soprano_vol_4bar = sh_vol('meas3/4 \
+    |1 *16 [ mp 6/4 mf 6/4 p * \
+    |65 [ mm 6/4 mm \
+    |67 *4 [ mm 6/4 mf_ 6/4 mp * \
     |83 \
 ')
 
 # de-accent 3rd beats
-soprano_accents = sh_accents('meas3/4 \
-    |1 *86 2/4 . {a0} 1/4 * \
+soprano_accents = sh_accents(f'meas3/4 \
+    |1 *85 2/4 {a1} 1/4 * \
     |86 \
 ')
 
 alto_vol_overall = sh_vol('meas3/4 \
     |1 ppp 48/4 ppp \
     |17 [ ppp 12/4 ppp [ _ppp 12/4 _ppp [ p 12/4 p [ _pp 12/4 _pp \
-    |33 [ pppp_ 48/4 pppp_ \
-    |49 [ ppp 24/4 ppp \
-    |57 [ f 12/4 f \
+    |33 [ ppp 48/4 ppp \
+    |49 [ ppp 21/4 ppp 3/4 mf\
+    |57 [ _mf 9/4 _mf 3/4 pp \
     |61 [ pp 12/4 pp 3/4 pp [ p 3/4 pp \
     |67 [ ppp 36/4 ppp \
     |79 ppp 12/4 ppp 9/4 pppp \
@@ -189,7 +189,11 @@ alto_vol_overall = sh_vol('meas3/4 \
 
 # measure-level swells
 alto_vol_1bar = sh_vol('meas3/4 \
-    |1 *86 mm 1/4 mf 2/4 mm * \
+    |1 *48 mp 1/4 mf 2/4 mp * \
+    |49 *7 [ pp 3/8 f 3/8 pp * \
+        [ pp 3/4 mm \
+    |57 *4 [ pp 3/8 f 3/8 pp * \
+    |61 *25 [ mp 1/4 mf 2/4 mp * \
     |86 \
 ')
 
@@ -206,7 +210,7 @@ tenor_vol_overall = sh_vol('meas3/4 \
     |1 *31 mm 3/4 mm * \
     |32 [ p 3/4 p \
     |33 *24 [ mm 3/4 mm * \
-    |57 [ f 12/4 f \
+    |57 [ mf 12/4 mf \
     |61 [ p 9/4 p [ ff 3/4 ff \
     |65 [ pp 6/4 p \
     |67 [ ppp 48/4 ppp \
@@ -215,7 +219,7 @@ tenor_vol_overall = sh_vol('meas3/4 \
 ')
 
 tenor_vol_1bar = sh_vol('meas3/4 \
-    |1 *86 mm 1/4 mf 2/4 mm * \
+    |1 *85 mm 1/4 mf 2/4 mm * \
     |86 \
 ')
 
@@ -232,17 +236,28 @@ bass_vol_4bar = sh_vol('meas3/4 \
     |83 \
 ')
 
-bass_accents = sh_accents('meas3/4 \
-    |1 *66 3/4 \
-    |67 *16 2/4 . {a0} 1/4 * \
+bass_accents = sh_accents(f'meas3/4 \
+    |1 *66 3/4 * \
+    |67 *16 2/4 {a0} 1/4 * \
     |83 \
 ')
 
+# deemphasize non-top notes
+
+def voice_to_top(ns):
+    ns.vol_adjust(.85, lambda n: 'top' not in n.tags)
+    
+######### TIMING ############
+
 tempo = sh_tempo('meas3/4 \
-    |1 *16 60 6/4 68 6/4 55 * \
+    |1 *7 60 6/4 68 6/4 55 * \
+    |29 60 6/4 68 3/4 60 3/4 50 \
+    |33 *5 60 6/4 68 3/4 60 3/4 55 * \
+    |53 60 6/4 68 3/4 60 3/4 50 \
+    |57 *2 60 6/4 68 3/4 60 3/4 55 * \
     |65 55 6/4 30 \
-    |67 *4 60 6/4 68 6/4 55 * \
-    |83 55 9/4 30 \
+    |67 *4 55 6/4 65 6/4 50 * \
+    |83 50 9/4 30 \
     |86 \
 ')
 
@@ -251,11 +266,21 @@ dt1 = .05
 dt2 = .08
 dt3 = .11
 dt4 = .14
+dt5 = .17
 
 pauses = sh_tempo(f'meas3/4 \
-    |1 *16 {dt3}p{dt2} 6/4 . {dt2}p{dt1} 6/4 . * \
-    |65 6/4 . .3p \
-    |67 *4 {dt3}p{dt2} 6/4 . {dt2}p{dt1} 6/4 . * \
+    |1 *4 \
+        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt2} \
+        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt2} \
+        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt3} \
+        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt5} \
+        * \
+    |65 6/4 . .5p \
+    |67 \
+        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt2} \
+        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt2} \
+        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt3} \
+        6/4 . {dt2}p{dt1} 3/4 . {dt3}p{dt5} . {dt3}p{dt5} \
     |83 \
 ')
 
@@ -286,9 +311,11 @@ def main():
         soprano.vol_adjust_pft(soprano_vol_overall)
         soprano.vol_adjust_pft(soprano_vol_4bar)
         soprano.vol_adjust_pft(soprano_accents)
+        voice_to_top(soprano)
         alto.vol_adjust_pft(alto_vol_overall)
         alto.vol_adjust_pft(alto_vol_1bar)
         alto.vol_adjust_pft(alto_accents)
+        voice_to_top(alto)
         tenor.vol_adjust_pft(tenor_vol_overall)
         tenor.vol_adjust_pft(tenor_vol_1bar)
         bass.vol_adjust_pft(bass_vol_overall)
