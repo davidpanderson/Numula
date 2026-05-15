@@ -153,7 +153,7 @@ soprano_vol_overall = sh_vol('meas3/4 \
     |1 *2 [ mp 12/4 mp [ p 12/4 p * \
     |17 [ _p 12/4 _p [ pp 12/4 pp [ mf 12/4 mf [ p 12/4 p \
     |33 [ mp 48/4 mp \
-    |49 [ p 24/4 p \
+    |49 [ mp 24/4 mp \
     |57 [ ff 12/4 ff \
     |61 [ mp 9/4 mp [ mf 9/4 f \
     |67 [ *4 _pp 12/4 _pp * \
@@ -165,7 +165,7 @@ soprano_vol_overall = sh_vol('meas3/4 \
 soprano_vol_4bar = sh_vol('meas3/4 \
     |1 *16 [ mp 6/4 mf 6/4 p * \
     |65 [ mm 6/4 mm \
-    |67 *4 [ mm 6/4 mf_ 6/4 mp * \
+    |67 *4 [ mm 6/4 mf 6/4 mp * \
     |83 \
 ')
 
@@ -183,7 +183,7 @@ alto_vol_overall = sh_vol('meas3/4 \
     |57 [ _mf 9/4 _mf 3/4 pp \
     |61 [ pp 12/4 pp 3/4 pp [ p 3/4 pp \
     |67 [ ppp 36/4 ppp \
-    |79 ppp 12/4 ppp 9/4 pppp \
+    |79 ppp 12/4 ppp 6/4 pppp [ pp 3/4 pp \
     |86 \
 ')
 
@@ -192,7 +192,7 @@ alto_vol_1bar = sh_vol('meas3/4 \
     |1 *48 mp 1/4 mf 2/4 mp * \
     |49 *7 [ pp 3/8 f 3/8 pp * \
         [ pp 3/4 mm \
-    |57 *4 [ pp 3/8 f 3/8 pp * \
+    |57 *4 [ pp 3/8 mf 3/8 pp * \
     |61 *25 [ mp 1/4 mf 2/4 mp * \
     |86 \
 ')
@@ -225,7 +225,7 @@ tenor_vol_1bar = sh_vol('meas3/4 \
 
 bass_vol_overall = sh_vol('meas3/4 \
     |1 *66 mm 3/4 mm * \
-    |67 [ mp 12/4 mp [ p 12/4 p [ mf 12/4 mf [ mp 12/4 pp \
+    |67 [ mp_ 12/4 mp_ [ mp 12/4 mp [ mf 12/4 mf [ mp 12/4 pp \
     |83 pp 9/4 pp \
     |86 \
 ')
@@ -245,7 +245,7 @@ bass_accents = sh_accents(f'meas3/4 \
 # deemphasize non-top notes
 
 def voice_to_top(ns):
-    ns.vol_adjust(.85, lambda n: 'top' not in n.tags)
+    ns.vol_adjust(.75, lambda n: 'top' not in n.tags)
     
 ######### TIMING ############
 
@@ -254,9 +254,9 @@ tempo = sh_tempo('meas3/4 \
     |29 60 6/4 68 3/4 60 3/4 50 \
     |33 *5 60 6/4 68 3/4 60 3/4 55 * \
     |53 60 6/4 68 3/4 60 3/4 50 \
-    |57 *2 60 6/4 68 3/4 60 3/4 55 * \
-    |65 55 6/4 30 \
-    |67 *4 55 6/4 65 6/4 50 * \
+    |57 *2 60 6/4 68 3/4 55 3/4 55 * \
+    |65 50 6/4 30 \
+    |67 *4 52 6/4 62 6/4 48 * \
     |83 50 9/4 30 \
     |86 \
 ')
@@ -267,20 +267,22 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 dt5 = .17
+dt6 = .20
+dt7 = .23
 
 pauses = sh_tempo(f'meas3/4 \
     |1 *4 \
         6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt2} \
         6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt2} \
         6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt3} \
-        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt5} \
+        6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt7} \
         * \
     |65 6/4 . .5p \
     |67 \
         6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt2} \
         6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt2} \
         6/4 . {dt2}p{dt1} 6/4 . {dt3}p{dt3} \
-        6/4 . {dt2}p{dt1} 3/4 . {dt3}p{dt5} . {dt3}p{dt5} \
+        6/4 . {dt2}p{dt1} 3/4 . {dt3}p{dt5} . {dt3}p.4 \
     |83 \
 ')
 
