@@ -87,4 +87,23 @@ def ped_test3():
     ns.pedal_pft(p, 0)
     #numula.pianoteq.play_score(ns)
     print(ns)
-ped_test3()
+#ped_test3()
+
+// test panning. need to configure Pianoteq MIDI first
+def pan_test():
+    f = numula.MidiFile.MIDIFile(deinterleave=False)
+    f.addTempo(0, 0, 60)
+    dt = 1.
+    f.addNote(0, 0, 48, 0, dt, 64)
+    f.addNote(0, 0, 60, 1., dt, 64)
+    f.addNote(0, 0, 64, 2., dt, 64)
+    f.addNote(0, 0, 67, 3., dt, 64)
+    f.addNote(0, 0, 72, 4., dt, 64)
+
+    f.addControllerEvent(0, 0, 0, 10, 0)
+    f.addControllerEvent(0, 0, 1., 10, 32)
+    f.addControllerEvent(0, 0, 2., 10, 64)
+    f.addControllerEvent(0, 0, 3., 10, 96)
+    f.addControllerEvent(0, 0, 4., 10, 127)
+    numula.pianoteq.play_score(ns)
+pan_test()
