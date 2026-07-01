@@ -1,5 +1,8 @@
 # functions for expressing nuance
-# see https://github.com/davidpanderson/Numula/wiki/nuance.py
+# see https://github.com/davidpanderson/Numula/wiki/
+
+# These are implemented as member functions of class Score,
+# which extends ScoreBasic.
 
 import numpy, random, copy, math
 from numula.nscore import *

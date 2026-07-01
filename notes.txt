@@ -1011,12 +1011,114 @@ new
                     else:
                         generate pedal off at t1-epsilon
 ------------------
-the vibrato problem
+ornaments
 
-Suppose you have e.g. a grace note.
-You want it to sound .1 sec before the main note,
-regardless of tempo transformations.
-You can do this with a time shift.
+You can notate ornaments explicitly in Numula.
+However, we want to provide notations that
+1) are compact (e.g. don't list all the notes in a trill)
+2) make it clear that it's an ornament, and of a particular type
+3) do the timing calculations for you
+4) generate tags for
+    - type of ornament
+    - specific ornament
+    - main/upper/lower note
+5) make it possible to apply nuance (timing, volume, articulation)
+    to specific ornaments, or ornaments of a particular type
 
-Suppose you have a more complex ornament, e.g. a turn.
-You want to describe its timing in real time.
+we define an 'initial ornament' as a sequence of 'ornament notes'
+at the beginning of a 'main note'.
+The ornament notes have equal score duration.
+They can occur before or after the score time of the main note.
+An ornament has 2 or 3 pitches: a main, and upper and/or lower pitches.
+
+Not all ornaments are initial; for example:
+- the rhythm changes, e.g. a triplet at the end
+- it's not at the beginning; e.g. a turn in the middle of a note
+
+An 'ornament pattern' is the sequence of main/upper/lower notes,
+    possibly with an indication of a repeating part
+    e.g. 0+ for an upper mordent
+    [+0]+ for an upper trill
+
+A particular ornament is described by
+    - an ornament pattern
+    - the specific notes
+    - how many repetitions of the repeating part
+    - the total dur
+
+In Numula score shorthand, there's a notion of 'current duration' Y.
+If the ornament duration X < Y,
+a main-pitch note with duration Y-X is added after the ornament.
+
+see https://en.wikipedia.org/wiki/Ornament_(music)
+
+ornaments to be followed by the main note:
+trill
+    [+0]+
+    [0+]
+trill_turn
+    [+0]-
+    [0+]0-
+lower mordent
+    [0-]
+upper mordent
+    [0+]
+mordent_turn
+    [+0]-
+up_mordent
+    -[0+]
+down_mordent
+    +0-[0+]
+
+ornaments that end with the main note:
+turn
+    +0-0
+    0+0-0
+up_mordent_turn
+    -0[+0]-0
+down_mordent_turn
+    +0-0[+0]-0
+
+The terminology is kinda wonky,
+so let's stick with the strings
+
+---------
+the shorthand syntax might be
+
+1/4 b orn([0-] pitch=(c b) dur=1/16 rep=2 tags=(a b) before) d
+which results in
+1/4 b 1/64 c b c b 3/16 c 1/4 d
+
+---------
+implementation
+
+python API
+    score.ornament(
+        pattern, main, upper, lower, reps, orn_dur, total_dur, before,
+        tags
+    )
+    this adds notes to the score,
+    and records the ornament (start time, dur, tags) in a list
+    notes are tagged with tags
+    (and maybe also 'main', 'upper', or 'lower')
+
+shorthand:
+    the parser for sh_score() sees 'orn'.
+    it gets the contents of the (...)
+    and parses them (with type checking).
+    then it calls ns.ornament(...)
+---------
+Inflecting ornaments
+
+What if you want to add volume or timing nuance to an ornament?
+
+ns.vol_adjust_pft(pft, t0, selector = lambda n: 'tag' in tags)
+    could normalize length of pft to ornament dur
+
+ns.tempo_adjust_pft(pft, t0, normalize=true)
+
+selecting ornaments:
+    foreach orn in filter(lambda x: 'foo' in x.tags, ornaments):
+        if x.dur != pft.dur:
+            normalize pft
+        ns.tempo_adjust_pft(pft, x.t0, normalize=true)
