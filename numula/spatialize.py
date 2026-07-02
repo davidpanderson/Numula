@@ -2,8 +2,8 @@
 # - read .wav files into signals (arrays of float samples)
 # - manipulate and combine signals (e.g. scale, pan)
 # - write signals as .wav files
-# - play .wav files using
-# see https://github.com/davidpanderson/Numula/wiki/spatialize.py
+# - play .wav files using Windows Media Player
+# see https://github.com/davidpanderson/numula/wiki/Spatialization
 
 # see https://docs.python.org/3/library/wave.html
 

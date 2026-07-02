@@ -1052,41 +1052,40 @@ a main-pitch note with duration Y-X is added after the ornament.
 
 see https://en.wikipedia.org/wiki/Ornament_(music)
 
+Patterns: the terminology is kinda wonky, so let's use strings
+
 ornaments to be followed by the main note:
 trill
-    [21]2
-    [12]
+    <21>2
+    <12>
 trill_turn
-    [21]0
-    [12]10
+    <21>0
+    <12>10
 lower mordent
-    [10]
+    <10>
 upper mordent
-    [12]
+    <12>
 mordent_turn
-    [21]0
+    <21>0
 up_mordent
-    0[12]
+    0<12>
 down_mordent
-    210[12]
+    210<12>
 
 ornaments that end with the main note:
 turn
     2101
     12101
 up_mordent_turn
-    01[21]01
+    01<21>01
 down_mordent_turn
-    2101[21]01
-
-The terminology is kinda wonky,
-so let's stick with the strings
+    2101<21>01
 
 ---------
 the shorthand syntax might be
 
-1/4 b orn([10] pitch=(c b) dur=1/16 rep=2 tags=(a b) before) d
-which results in
+1/4 b orn('0<10>' pitches=[c b] dur=1/16 reps=2 tags=[a b]) d
+which produces
 1/4 b 1/64 c b c b 3/16 c 1/4 d
 
 ---------

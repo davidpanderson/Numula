@@ -1,8 +1,8 @@
 import numula_path
-from numula.ornament import *
+from numula.nuance import *
 
 def test():
-    ns = ScoreOrnament();
+    ns = Score();
     ns.ornament(
         '[10]',
         [59, 60, 62],

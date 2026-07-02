@@ -1,6 +1,6 @@
 # textual music notation
-# E.g. n('1/8 a b c') returns a list of Note objects for 8th note A, B, C
-# see https://github.com/davidpanderson/Numula/wiki/notate.py
+# E.g. sh_score('1/8 a b c') returns a list of Note objects for 8th note A, B, C
+# see https://github.com/davidpanderson/numula/wiki/Shorthand-score-notation
 
 import copy
 import numula.nuance as nuance
@@ -58,8 +58,9 @@ def parse_pitch(items: list[str], i: int, cur_pitch: int):
         pitch_class = (pitch_class + 12) % 12
         return next_pitch(cur_pitch, pitch_class, octave_offset)
       
-# parse a string of the form c+5
-# return pitch index
+# parse an absolute pitch: a string of the form c+5
+# (meaning the C# above middle C).
+# return pitch
 #
 def parse_pitch2(s: str) -> int:
     x = pitch_offset[note_names.index(s[0])]
@@ -147,6 +148,96 @@ class RepeatList:
             self.i = 0
         return x
 
+#####  ornaments
+
+# ornament parsing functions.
+# i is first token to be parsed,
+# and on return i is next unparsed token
+
+def orn_pattern(items, &i):
+    if items[i] != '\'':
+        raise Exception('ornament parse error')
+    i += 1
+    pattern = ''
+    while True:
+        c = items[i]
+        match c:
+            case '0'|'1'|'2'|'<'|'>':
+                pattern += c
+            case '\'':
+                break;
+    i += 1
+    return pattern
+
+def orn_list(items, &i):
+    if items[i] != '=':
+        show_context(items, i)
+        raise Exception('ornament parse error')
+    i += 1
+    if items[i] != '[':
+        show_context(items, i)
+        raise Exception('ornament parse error')
+    out = []
+    while True:
+        i += 1
+        c = items[i]
+        if c == ']':
+            break
+        out.append(c)
+    i += 1
+    return out
+
+def orn_int(items, &i):
+    if items[i] != '=':
+        show_context(items, i)
+        raise Exception('ornament parse error')
+    i += 1
+    c = items[i];
+    if !c.isdigit():
+        show_context(items, i)
+        raise Exception('ornament parse error')
+    i += 1
+    return int(c)
+
+def orn_dur(items, i):
+    if items[i] != '=':
+        show_context(items, i)
+        raise Exception('ornament parse error')
+    i += 1
+    d = parse_dur(items, i)
+    i += 1
+    return d
+
+def parse_ornament(ns, items, i, total_dur):
+    i += 1
+    if items[i] != '(':
+        show_context(items, i)
+        raise Exception('ornament parse error')
+    i += 1
+    pattern = orn_pattern(items, i)
+    before = False
+    while True:
+        c = items[i]
+        i += 1
+        match c:
+            case 'pitches':
+                pitches_str = orn_list(items, i)
+            case 'dur':
+                dur = orn_dur(items, i)
+            case 'rep':
+                reps = orn_int(items, i)
+            case 'tags':
+                tags = orn_list(items, i)
+            case 'before':
+                before = True
+            case ')':
+                break;
+            case _:
+                show_context(items, i)
+                raise Exception('ornament parse error')
+
+    ns.ornament(pattern, pitches, reps, before, dur, total_dur, tags)
+
 # shorthand score specification
 # kwargs is to pass in duration iterators (<foo> notation)
 #
@@ -155,6 +246,7 @@ def sh_score(s: str, **kwargs) -> nuance.Score:
     s = s.replace(']', ' ] ')
     s = s.replace('<', ' < ')
     s = s.replace('>', ' > ')
+    s = s.replace('=', ' = ')
     ns = nuance.Score()
     cur_pitch = 60
     in_chord = False
@@ -218,7 +310,7 @@ def sh_score(s: str, **kwargs) -> nuance.Score:
                 dur_list.append(num/denom)
             else:
                 # <foo> means use the iterator foo,
-                # which was passed as a keyword arg fo sh_score()
+                # which was passed as a keyword arg of sh_score()
                 # e.g. sh_score'<foo> c d e 1/4 f', foo=iter([1/2, 1/4])
                 # copy it so that it starts from the beginning each time
                 #

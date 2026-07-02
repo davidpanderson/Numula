@@ -1,5 +1,5 @@
 # Textual notation of various types of nuance
-# See https://github.com/davidpanderson/Numula/wiki/nuance_notate.py
+# See https://github.com/davidpanderson/numula/wiki/Shorthand-notations
 
 import numula.nscore
 from numula.nuance import *
