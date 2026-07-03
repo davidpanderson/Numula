@@ -10,6 +10,17 @@ from numula.notate import *
 note_names = ['c', 'd', 'e', 'f', 'g', 'a', 'b']
 pitch_offset = [0, 2, 4, 5, 7, 9, 11]
 
+def parse_dur(items, i):
+    t = items[i]
+    a = t.split('/')
+    try:
+        num = int(a[0])
+        denom = int(a[1])
+    except:
+        show_context(items, i)
+        raise Exception('bad values in %s'%t)
+    return num/denom
+
 # Parse a string of the form ++b- or b5-.
 # Return a pitch.
 #
@@ -154,89 +165,44 @@ class RepeatList:
 # i is first token to be parsed,
 # and on return i is next unparsed token
 
-def orn_pattern(items, &i):
-    if items[i] != '\'':
-        raise Exception('ornament parse error')
-    i += 1
+def orn_pattern(items, i):
     pattern = ''
-    while True:
-        c = items[i]
+    p = items[i]
+    for c in p:
         match c:
-            case '0'|'1'|'2'|'<'|'>':
+            case '0'|'1'|'2'|'('|')':
                 pattern += c
-            case '\'':
-                break;
+            case _:
+                show_context(items, i)
+                raise Exception('ornament parse error')
     i += 1
-    return pattern
+    return [i, pattern]
 
-def orn_list(items, &i):
-    if items[i] != '=':
-        show_context(items, i)
-        raise Exception('ornament parse error')
+def parse_ornament(ns, items, i, total_dur, cur_pitch):
     i += 1
     if items[i] != '[':
         show_context(items, i)
         raise Exception('ornament parse error')
-    out = []
-    while True:
-        i += 1
-        c = items[i]
-        if c == ']':
-            break
-        out.append(c)
     i += 1
-    return out
-
-def orn_int(items, &i):
-    if items[i] != '=':
-        show_context(items, i)
-        raise Exception('ornament parse error')
-    i += 1
-    c = items[i];
-    if !c.isdigit():
-        show_context(items, i)
-        raise Exception('ornament parse error')
-    i += 1
-    return int(c)
-
-def orn_dur(items, i):
-    if items[i] != '=':
-        show_context(items, i)
-        raise Exception('ornament parse error')
-    i += 1
-    d = parse_dur(items, i)
-    i += 1
-    return d
-
-def parse_ornament(ns, items, i, total_dur):
-    i += 1
-    if items[i] != '(':
-        show_context(items, i)
-        raise Exception('ornament parse error')
-    i += 1
-    pattern = orn_pattern(items, i)
+    [i, pattern] = orn_pattern(items, i)
     before = False
+    tags = []
+    pitches = []
     while True:
         c = items[i]
+        if (c == ']'):
+            break
+        if c.startswith('reps='):
+            reps = int(c[5:])
+        elif c.startswith('tag='):
+            tags.append(c[4:])
+        elif c[0].isdigit():
+            dur = parse_dur(items, i)
+        else:
+            pitches.append(parse_pitch(items, i, cur_pitch))
         i += 1
-        match c:
-            case 'pitches':
-                pitches_str = orn_list(items, i)
-            case 'dur':
-                dur = orn_dur(items, i)
-            case 'rep':
-                reps = orn_int(items, i)
-            case 'tags':
-                tags = orn_list(items, i)
-            case 'before':
-                before = True
-            case ')':
-                break;
-            case _:
-                show_context(items, i)
-                raise Exception('ornament parse error')
-
     ns.ornament(pattern, pitches, reps, before, dur, total_dur, tags)
+    return i
 
 # shorthand score specification
 # kwargs is to pass in duration iterators (<foo> notation)
@@ -246,7 +212,6 @@ def sh_score(s: str, **kwargs) -> nuance.Score:
     s = s.replace(']', ' ] ')
     s = s.replace('<', ' < ')
     s = s.replace('>', ' > ')
-    s = s.replace('=', ' = ')
     ns = nuance.Score()
     cur_pitch = 60
     in_chord = False
@@ -264,7 +229,9 @@ def sh_score(s: str, **kwargs) -> nuance.Score:
     dt = 0.
     measure_init()
     items = expand_all(items)
-    for i in range(len(items)):
+    i = 0
+    nitems = len(items)
+    while i < nitems:
         t = items[i]
         if t == '[':
             if in_chord:
@@ -378,6 +345,8 @@ def sh_score(s: str, **kwargs) -> nuance.Score:
                 raise Exception('-p with no matching +p')
             ns.sustain(ped_start, ns.cur_time)
             ped_start = -1
+        elif t == 'orn':
+            i = parse_ornament(ns, items, i, dur_val(dur), cur_pitch)
         else:
             # note
             pitch = parse_pitch(items, i, cur_pitch)
@@ -391,6 +360,7 @@ def sh_score(s: str, **kwargs) -> nuance.Score:
                 ns.advance_time(d)
                 dt += d
             cur_pitch = pitch
+        i += 1
     if in_chord:
         raise Exception('unmatched [')
     if in_dur:

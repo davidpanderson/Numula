@@ -950,23 +950,22 @@ class Score(ScoreBasic):
                         middle += c
                     else:
                         suffix += c
-                case '[':
+                case '(':
                     if phase == 'prefix':
                         phase = 'pattern'
                     else:
-                        raise exception('bad pattern')
-                case ']':
+                        raise Exception(f'bad pattern: {pattern}')
+                case ')':
                     if phase == 'pattern':
                         phase = 'suffix'
                     else:
-                        raise exception('bad pattern')
+                        raise Exception(f'bad pattern: {pattern}')
                 case _:
-                    raise exception('bad pattern')
+                    raise Exception(f'bad pattern: {pattern}')
         out = prefix
         for i in range(reps):
             out += middle
         out += suffix
-        print('prefix', prefix)
         return out
 
     def ornament(
@@ -974,7 +973,7 @@ class Score(ScoreBasic):
         orn_dur:float, total_dur:float,
         tags:list[str]
     ):
-        pattern = expand(pattern, reps)
+        pattern = self.expand(pattern, reps)
         n = len(pattern)
         note_dur = orn_dur/n
         if before:
