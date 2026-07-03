@@ -18,7 +18,7 @@ def test():
 #test()
 
 def test2():
-    ns = sh_score('b orn[0(10) b c 1/16 reps=2 tag=a tag=foo] d')
+    ns = sh_score('b orn[0(10) b c 1/16 reps=2 tag=foo] d')
     print(ns)
 
 test2()

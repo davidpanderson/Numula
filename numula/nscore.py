@@ -94,7 +94,20 @@ class Measure:
 
     def __str__(self):
         return 'measure: %.4f-%.4f'%(self.time, self.time+self.dur)
-        
+
+# represents an ornament
+#
+class Ornament:
+    def __init__(self, start_time, dur, pattern, tags):
+        self.start_time = start_time
+        self.dur = dur
+        self.pattern = pattern
+        self.tags = tags
+    def __str__(self):
+        return 'ornament: pattern %s start_time %.4f dur %.4f %s'%(
+            self.pattern, self.start_time, self.dur, ','.join(self.tags)
+        )
+
 event_kind_note = 0
 event_kind_pedal = 1
 
@@ -112,6 +125,7 @@ class ScoreBasic:
         self.verbose = verbose
         self.measures: list[Measure] = []
         self.pedals: list[PedalSeg] = []
+        self.ornaments: list[Ornament] = []
         self.done_called = False
         self.m_cur_time = 0.    # for appending measures
         self.clear_flags()
@@ -120,6 +134,7 @@ class ScoreBasic:
         self.init_all()     # sort, set perf times, set tags
         m_ind = 0
         pedal_ind = 0
+        ornament_ind = 0
         x = ''
         for note in self.notes:
             if m_ind < len(self.measures):
@@ -132,6 +147,11 @@ class ScoreBasic:
                 if note.time > p.time - epsilon:
                     x += str(p) + '\n'
                     pedal_ind += 1
+            if ornament_ind < len(self.ornaments):
+                p = self.ornaments[ornament_ind]
+                if note.time > p.start_time - epsilon:
+                    x += str(p) + '\n'
+                    ornament_ind += 1
             x += str(note) + '\n'
         return x
         
@@ -641,7 +661,7 @@ class ScoreBasic:
             new_pedals.append(ped)
         self.pedals = new_pedals
 
-    # change note durations based on pattern
+    # change note durations based on repeating pattern (list of durs)
     #
     def dur_pattern(self, durs: list[float], t0: float, t1: float):
         n = len(durs)
@@ -669,6 +689,89 @@ class ScoreBasic:
             if note.time >= s:
                 return note.perf_time
         raise Exception('score_to_perf(): too large')
+
+# ----------- ornamentation ----------------
+
+    # expand a pattern containing a repeated part.
+    # e.g. '0<12>2' and reps=2 gives 012122
+    #
+    @staticmethod
+    def expand(pattern, reps):
+        phase = 'prefix'
+        prefix = ''
+        middle = ''
+        suffix = ''
+        for c in pattern:
+            match c:
+                case '0' | '1' | '2':
+                    if phase == 'prefix':
+                        prefix += c
+                    elif phase == 'pattern':
+                        middle += c
+                    else:
+                        suffix += c
+                case '(':
+                    if phase == 'prefix':
+                        phase = 'pattern'
+                    else:
+                        raise Exception(f'bad pattern: {pattern}')
+                case ')':
+                    if phase == 'pattern':
+                        phase = 'suffix'
+                    else:
+                        raise Exception(f'bad pattern: {pattern}')
+                case _:
+                    raise Exception(f'bad pattern: {pattern}')
+        out = prefix
+        for i in range(reps):
+            out += middle
+        out += suffix
+        return out
+
+    def ornament(
+        self, pattern:str, pitch:list[int], reps:int, before:bool,
+        orn_dur:float, total_dur:float,
+        tags:list[str]
+    ):
+        exp_pattern = self.expand(pattern, reps)
+        n = len(exp_pattern)
+        note_dur = orn_dur/n
+        if before:
+            self.cur_time -= orn_dur
+        start_time = self.cur_time
+        for c in exp_pattern:
+            match c:
+                case '0': p = pitch[0]
+                case '1': p = pitch[1]
+                case '2': p = pitch[2]
+            self.append_note(
+                Note(
+                    self.cur_time,
+                    note_dur,
+                    p,
+                    .5,
+                    tags
+                )
+            )
+            self.advance_time(note_dur)
+        if orn_dur < total_dur - epsilon:
+            self.append_note(
+                Note(
+                    self.cur_time,
+                    total_dur - orn_dur,
+                    pitch[1],
+                    .5
+                )
+            )
+            self.advance_time(total_dur - orn_dur)
+        self.ornaments.append(
+            Ornament(
+                start_time,
+                orn_dur,
+                pattern,
+                tags
+            )
+        )
 
 # end of Score
 
