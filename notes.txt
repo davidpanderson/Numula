@@ -1014,47 +1014,49 @@ new
 ornaments
 
 You can notate ornaments explicitly in Numula.
-However, we want to provide notations that
-1) are compact (e.g. don't list all the notes in a trill)
+However, we want to provide constructs that
+1) are compact (e.g. you don't list all the notes in a trill)
 2) make it clear that it's an ornament, and of a particular type
 3) do the timing calculations for you
-4) generate tags for
-    - type of ornament
-    - specific ornament
+4) generate tags indicating
+    - the type of ornament
+    - the specific ornament
     - main/upper/lower note
-5) make it possible to apply nuance (timing, volume, articulation)
-    to specific ornaments, or ornaments of a particular type
+These tags make it possible to apply nuance (timing, volume, articulation)
+to specific ornaments, or ornaments of a particular type
 
-we define an 'initial ornament' as a sequence of 'ornament notes'
-at the beginning of a 'main note'.
-The ornament notes have equal score duration.
-They can occur before or after the score time of the main note.
-An ornament has 2 or 3 pitches: a main, and upper and/or lower pitches.
+We define an 'initial ornament' as a sequence of 'ornament notes'
+optionally followed by a 'main note', with the restrictions that
+- the ornament notes have equal score duration
+- the ornament involves 3 pitches:
+    the pitch of the main note, and 'upper' and 'lower' pitches,
+    typically a half or whole step away from the main pitch.
+
+There are two timing options:
+- 'before': the ornament notes are before the nominal start time
+    of the main note
+- 'after': the ornament notes begin at the nominal start time
+    of the main note.
+    The main note sounds after the ornament notes;
+    its duration is reduced accordingly.
+    If the duration of the ornament exceeds the nominal
+    duration of the main note, the main note does not sound.
 
 Not all ornaments are initial; for example:
-- the rhythm changes, e.g. a triplet at the end
-- it's not at the beginning; e.g. a turn in the middle of a note
+- the rhythm changes, e.g. a triplet at the end of a trill
+- the ornament (e.g. a turn) is in the middle of the main note
 
-An 'ornament pattern' is the sequence of main/upper/lower notes,
-    possibly with an indication of a repeating part
-    e.g. 0+ for an upper mordent
-    [+0]+ for an upper trill
+An 'ornament pattern' is a sequence of main/upper/lower pitches
+    possibly with a repeating part
+    The terminology for ornament patterns is inconsistent
+    see https://en.wikipedia.org/wiki/Ornament_(music)
+    So instead we just use a textual notation where
+    the lower, main, and upper notes are represented by 0/1/2,
+    and the repeating part is enclosed in ()
+    e.g. 12 for an upper mordent
+    (21)2 for an upper trill
 
-A particular ornament is described by
-    - an ornament pattern
-    - the specific notes
-    - how many repetitions of the repeating part
-    - the total dur
-
-In Numula score shorthand, there's a notion of 'current duration' Y.
-If the ornament duration X < Y,
-a main-pitch note with duration Y-X is added after the ornament.
-
-see https://en.wikipedia.org/wiki/Ornament_(music)
-
-Patterns: the terminology is kinda wonky, so let's use strings
-
-ornaments to be followed by the main note:
+ornaments followed by the main note:
 trill
     <21>2
     <12>
@@ -1081,31 +1083,45 @@ up_mordent_turn
 down_mordent_turn
     2101<21>01
 
+A particular ornament is described by
+    - an ornament pattern
+    - the lower, main, and upper pitches
+    - how many repetitions of the repeating part
+    - the dur of the ornament
+
 ---------
-the shorthand syntax might be
-
-1/4 b orn('0<10>' pitches=[c b] dur=1/16 reps=2 tags=[a b]) d
-which produces
-1/4 b 1/64 c b c b 3/16 c 1/4 d
-
----------
-implementation
-
 python API
     score.ornament(
         pattern, main, upper, lower, reps, orn_dur, total_dur, before,
         tags
     )
-    this adds notes to the score,
-    and records the ornament (start time, dur, tags) in a list
-    notes are tagged with tags
-    (and maybe also 'main', 'upper', or 'lower')
+    'tags' can include
+        a unique ID for the ornament, or
+        an name for a group of ornaments
+    This adds notes to the score.
+    Each note is tagged with
+        - lower, main, or upper
+        - the ornament's tags
+    It makes an 'ornament record' and adds it to a list in the score.
+    The record contains:
+        r.t0: the start time
+        r.dur: the duration
+        r.pattern: the pattern
+        r.tags
 
-shorthand:
-    the parser for sh_score() sees 'orn'.
-    it gets the contents of the (...)
-    and parses them (with type checking).
-    then it calls ns.ornament(...)
+---------
+score shorthand:
+
+1/4 b orn[0(10) c b 1/16 reps=2 tag=a tag=b] d
+which produces
+1/4 b 1/64 c b c b 3/16 c 1/4 d
+
+Let Y be the current duration.
+If the ornament duration X < Y,
+a main-pitch note with duration Y-X is added after the ornament.
+
+the sh_score() parser sees 'orn', gets the contents of the (...),
+and parses them; then it calls ns.ornament(...)
 ---------
 Inflecting ornaments
 
@@ -1117,7 +1133,7 @@ ns.vol_adjust_pft(pft, t0, selector = lambda n: 'tag' in tags)
 ns.tempo_adjust_pft(pft, t0, normalize=true)
 
 selecting ornaments:
-    foreach orn in filter(lambda x: 'foo' in x.tags, ornaments):
+    for orn in filter(lambda x: 'foo' in x.tags, ns.ornaments):
         if x.dur != pft.dur:
             normalize pft
         ns.tempo_adjust_pft(pft, x.t0, normalize=true)
