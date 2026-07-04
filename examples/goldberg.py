@@ -4,11 +4,15 @@
 
 import numula_path
 from numula.nuance import *
+from numula.notate_score import *
+from numula.notate_nuance import *
 import numula.pianoteq
 
 soprano = sh_score(' \
-    |1 1/4 g6 g 3/16 a 1/16 b 1/8 a f+ 1/2 d \
-    |3 1/4 g5 3/8 g 1/16 f+ g 1/32 a g /16 f+ 1/32 g f+ 1/16 e 1/2 d \
+    |1 1/4 g6 g 3/16 orn[(21)0 g a b 1/8 rep=2] 1/16 b \
+    |2 1/8 a orn[2 - f+ g 1/16] 1/2 orn[2 - d e 1/8] \
+    |3 1/4 orn[(21)0 f5+ g a 1/8 rep=2] 3/8 orn[210(12) f+ g a rep=2 1/4] 1/16 f+ g \
+    |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[2 - d e 1/8] \
     |5 \
 ').tag('soprano')
 
@@ -35,6 +39,7 @@ def main():
         tenor,
         bass
     ])
+    print(ns)
     numula.pianoteq.play_score(ns)
 
 main()

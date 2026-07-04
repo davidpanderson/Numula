@@ -696,7 +696,7 @@ class ScoreBasic:
     # e.g. '0<12>2' and reps=2 gives 012122
     #
     @staticmethod
-    def expand(pattern, reps):
+    def expand(pattern, rep):
         phase = 'prefix'
         prefix = ''
         middle = ''
@@ -723,17 +723,17 @@ class ScoreBasic:
                 case _:
                     raise Exception(f'bad pattern: {pattern}')
         out = prefix
-        for i in range(reps):
+        for i in range(rep):
             out += middle
         out += suffix
         return out
 
     def append_ornament(
-        self, pattern:str, pitch:list[int], reps:int, before:bool,
+        self, pattern:str, pitch:list[int], rep:int, before:bool,
         orn_dur:float, total_dur:float,
         tags:list[str]
     ):
-        exp_pattern = self.expand(pattern, reps)
+        exp_pattern = self.expand(pattern, rep)
         n = len(exp_pattern)
         note_dur = orn_dur/n
         if before:

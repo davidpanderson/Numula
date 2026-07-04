@@ -272,7 +272,7 @@ def pft_normalize_dur(pft, dt:float):
     x = pft_dur(pft)
     scale = dt/x
     for seg in pft:
-        seg.dur *= scale
+        seg.dt *= scale
 
 # class for getting the values of a PFT at increasing times
 class PFTValue:

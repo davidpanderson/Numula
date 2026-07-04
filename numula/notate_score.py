@@ -188,21 +188,29 @@ def parse_ornament(ns, items, i, total_dur, cur_pitch):
     before = False
     tags = []
     pitches = []
+    rep = 1
+    dur = 0
     while True:
         c = items[i]
-        if (c == ']'):
+        if c == ']':
             break
-        if c.startswith('reps='):
-            reps = int(c[5:])
+        if c.startswith('rep='):
+            rep = int(c[4:])
         elif c.startswith('tag='):
             tags.append(c[4:])
         elif c[0].isdigit():
             dur = parse_dur(items, i)
+        elif c == '-':
+            pitches.append(0)
         else:
-            pitches.append(parse_pitch(items, i, cur_pitch))
+            cur_pitch = parse_pitch(items, i, cur_pitch)
+            pitches.append(cur_pitch)
         i += 1
-    ns.append_ornament(pattern, pitches, reps, before, dur, total_dur, tags)
-    return i
+    if dur == 0:
+        show_context(items, i)
+        raise Exception('no dur specified in ornament')
+    ns.append_ornament(pattern, pitches, rep, before, dur, total_dur, tags)
+    return [i, cur_pitch]
 
 # shorthand score specification
 # kwargs is to pass in duration iterators (<foo> notation)
@@ -346,7 +354,7 @@ def sh_score(s: str, **kwargs) -> nuance.Score:
             ns.sustain(ped_start, ns.cur_time)
             ped_start = -1
         elif t == 'orn':
-            i = parse_ornament(ns, items, i, dur_val(dur), cur_pitch)
+            [i, cur_pitch] = parse_ornament(ns, items, i, dur_val(dur), cur_pitch)
         else:
             # note
             pitch = parse_pitch(items, i, cur_pitch)
