@@ -728,7 +728,7 @@ class ScoreBasic:
         out += suffix
         return out
 
-    def ornament(
+    def append_ornament(
         self, pattern:str, pitch:list[int], reps:int, before:bool,
         orn_dur:float, total_dur:float,
         tags:list[str]

@@ -201,7 +201,7 @@ def parse_ornament(ns, items, i, total_dur, cur_pitch):
         else:
             pitches.append(parse_pitch(items, i, cur_pitch))
         i += 1
-    ns.ornament(pattern, pitches, reps, before, dur, total_dur, tags)
+    ns.append_ornament(pattern, pitches, reps, before, dur, total_dur, tags)
     return i
 
 # shorthand score specification
