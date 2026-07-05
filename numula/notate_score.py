@@ -354,7 +354,9 @@ def sh_score(s: str, **kwargs) -> nuance.Score:
             ns.sustain(ped_start, ns.cur_time)
             ped_start = -1
         elif t == 'orn':
-            [i, cur_pitch] = parse_ornament(ns, items, i, dur_val(dur), cur_pitch)
+            d = dur_val(dur)
+            [i, cur_pitch] = parse_ornament(ns, items, i, d, cur_pitch)
+            dt += d
         else:
             # note
             pitch = parse_pitch(items, i, cur_pitch)
