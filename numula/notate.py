@@ -31,9 +31,6 @@ def show_context(items: list[str], i: int):
 # expand '*4 foo *' into 'foo foo foo foo', with nesting
 #
 def expand_iter(items: list[str]) -> list[str]:
-    if '*' not in items:
-        return items
-
     # stacks
     nleft: list[int] = []
     start: list[int] = []

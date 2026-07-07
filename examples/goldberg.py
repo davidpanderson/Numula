@@ -11,15 +11,15 @@ import numula.pianoteq
 soprano = sh_score('meas3/4 \
     |1 1/4 g6 g 3/16 orn[10 g a b 1/16] 1/16 b \
     |2 1/8 a orn[2 - f+ g 1/16] 1/2 orn[2 - d e 1/8] \
-    |3 1/4 orn[10 f5+ g a 1/16] 3/8 orn[210(12)1 f+ g a rep=4 3/8] 1/16 f+ g \
+    |3 1/4 orn[10 f5+ g a 1/16] 3/8 orn[210(12)1 f+ g a rep=5 3/8] 1/16 f+ g \
     |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[2 - d e 1/8] \
     |5 1/4 +d d 3/16 orn[ 10 d e 1/16] 1/16 f \
     |6 1/8 e orn[2 - c d 1/16] 3/8 orn[2 - a b 1/8] 1/8 orn[2101 +e f+ g 1/8] \
     |7 <1/32 3/32> g f+ a g f+ e d c 3/16 orn[0 c +a 1/16] 1/16 -c \
     |8 1/32 b 3/32 g 1/8 f+ 1/4 f+ 1/4 orn[10 f+ g 1/16] \
     |9 1/4 b b 3/16 orn[10 b c+ d 1/16] 1/16 d \
-    |10 d c+ b 9/16 a \
-    |11 1/4 [g b e g] 3/8 orn[2101(21)0 f+ g a 1/4 rep=3] 1/16 f+ g \
+    |10 d c+ b 9/16 a 1/2 _ d6 \
+    |11 1/4 [g5 b e g] 3/8 orn[2101(21)0 f+ g a 1/4 rep=3] 1/16 f+ g \
     |12 1/8 g orn[2 - e f+ 1/16] 3/8 orn[2101(21)0 b5 c+ d 1/4 rep=3] 1/8 e \
     |13 1/16 a g f+ e 1/8 d 9/32 a 1/32 b 1/16 c \
     |14 1/16 b a g f+ 1/8 e 9/32 orn[2 - +c+ d 1/16] 1/32 d 1/16 e \
@@ -31,7 +31,7 @@ soprano = sh_score('meas3/4 \
 alto = sh_score('meas3/4 \
     |1 1/4 . . d5 . . d . . c+ . . a \
     |5 . . g . . a 3/4 . . \
-    |9 1/4 . . +e 1/4 . 1/2 d6 3/4 . . \
+    |9 1/4 . . +e 3/4 . . . \
     |13 1/4 . . d5 3/4 . . 3/8 . 1/8 a 1/4 d \
     |17 \
 ').tag('alto')
@@ -74,7 +74,19 @@ bass_v0 = sh_vol('meas3/4 \
 ')
 
 tempo0 = sh_tempo('meas3/4 \
-    |1 *16 65 3/4 50 * \
+    |1 *8 60 3/4 65 3/4 50 * \
+    |17 \
+')
+
+dt0 = .03
+dt1 = .05
+dt2 = .08
+dt3 = .11
+dt4 = .14
+dt5 = .18
+
+pauses = sh_tempo(f'meas3/4 \
+    |1 *8 6/4 . {dt4}p * \
     |17 \
 ')
 
