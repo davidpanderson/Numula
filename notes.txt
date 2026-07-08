@@ -1058,30 +1058,30 @@ An 'ornament pattern' is a sequence of main/upper/lower pitches
 
 ornaments followed by the main note:
 trill
-    <21>2
-    <12>
+    (21)2
+    (12)
 trill_turn
-    <21>0
-    <12>10
+    (21)0
+    (12)10
 lower mordent
-    <10>
+    (10)
 upper mordent
-    <12>
+    (12)
 mordent_turn
-    <21>0
+    (21)0
 up_mordent
-    0<12>
+    0(12)
 down_mordent
-    210<12>
+    210(12)
 
 ornaments that end with the main note:
 turn
     2101
     12101
 up_mordent_turn
-    01<21>01
+    01(21)01
 down_mordent_turn
-    2101<21>01
+    2101(21)01
 
 A particular ornament is described by
     - an ornament pattern
@@ -1092,22 +1092,22 @@ A particular ornament is described by
 ---------
 python API
     score.ornament(
-        pattern, main, upper, lower, reps, orn_dur, total_dur, before,
-        tags
+        pattern:str, pitches:list[int], reps:int, before:bool,
+        orn_dur:float, total_dur:float, tags:list[str]
     )
-    'tags' can include
-        a unique ID for the ornament, or
-        an name for a group of ornaments
-    This adds notes to the score.
-    Each note is tagged with
-        - lower, main, or upper
-        - the ornament's tags
-    It makes an 'ornament record' and adds it to a list in the score.
-    The record contains:
-        r.t0: the start time
-        r.dur: the duration
-        r.pattern: the pattern
-        r.tags
+'tags' can include
+    a unique ID for the ornament, or
+    an name for a group of ornaments
+This adds notes to the score.
+Each note is tagged with
+    - lower, main, or upper
+    - the ornament's tags
+It makes an 'ornament record' and adds it to a list in the score.
+The record contains:
+    r.t0: the start time
+    r.dur: the duration
+    r.pattern: the pattern
+    r.tags
 
 ---------
 score shorthand:
@@ -1137,3 +1137,32 @@ selecting ornaments:
         if x.dur != pft.dur:
             normalize pft
         ns.tempo_adjust_pft(pft, x.t0, normalize=true)
+-----------
+goldberg aria
+
+final 16ths (or pairs of 16ths); want to shorten and delay them
+    use a normalized tempo pft, slow to fast
+        kludge, but can't think of anything better
+
+slurs signs
+    are these part of score?
+        yes; use (slur slur)
+
+    are ornaments slurred?
+        default yes; optional slur=no
+        The final note is not slurred
+    score.slur(
+        slur_tag,
+        selector,
+        ratio=1
+    )
+
+    go through selected notes N.
+    if N has the slur tag
+        if the next selected note also has the slur tag
+            dt = perf time diff
+            set N.perf_dur to ratio*dt
+
+articulation
+    default portamento (perf_dur_rel .9 or so)
+    use connect()

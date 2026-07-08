@@ -190,6 +190,7 @@ def parse_ornament(ns, items, i, total_dur, cur_pitch):
     pitches = []
     rep = 1
     dur = 0
+    slur = True
     while True:
         c = items[i]
         if c == ']':
@@ -198,6 +199,15 @@ def parse_ornament(ns, items, i, total_dur, cur_pitch):
             rep = int(c[4:])
         elif c.startswith('tag='):
             tags.append(c[4:])
+        elif c.startswith('slur='):
+            match c[5:]:
+                case 'no':
+                    slur = False
+                case 'yes':
+                    pass
+                _:
+                    show_context(items, i)
+                    raise Exception('bad slur= value')
         elif c[0].isdigit():
             dur = parse_dur(items, i)
         elif c == '-':
@@ -209,6 +219,8 @@ def parse_ornament(ns, items, i, total_dur, cur_pitch):
     if dur == 0:
         show_context(items, i)
         raise Exception('no dur specified in ornament')
+    if slur:
+        tags.append('slur')
     ns.append_ornament(pattern, pitches, rep, before, dur, total_dur, tags)
     return [i, cur_pitch]
 

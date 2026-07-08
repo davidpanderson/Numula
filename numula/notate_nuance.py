@@ -304,7 +304,7 @@ def sh_tempo(s: str, bpm:bool = True) -> PFT:
 # This is typically used to add agogic accents to selected notes.
 # Note: it's different from pauses because later notes are not affected
 #
-# Apply this to a Score using time_shift_pft()
+# Apply this to a Score using start_adjust_pft()
 #
 def sh_shift(s: str) -> PFT:
     items = s.split()

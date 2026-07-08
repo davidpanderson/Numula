@@ -424,56 +424,6 @@ class Score(ScoreBasic):
         # end loop over events
         self.transfer_start_end_events()
 
-    # Note shifting (e.g. for agogic accents)
-    # shift start time of selected notes by the PFT value
-    #
-    def time_shift_pft(self, pft:PFT, t0:float=0, selector:Selector=None):
-        if not pft:
-            return
-        self.init_all()
-        pft_check_closure(pft)
-        seg_ind = 0
-        seg = pft[0]
-            # which segment we're on
-        seg_start = t0
-            # start time of that segment
-        seg_end = t0 + seg.dt
-        t_end = t0 + pft_dur(pft)
-            # end time of function
-        found_note = False
-        for n in self.notes:
-            if n.time > t_end + epsilon:
-                break
-            if n.time < t0 - epsilon:
-                continue
-            if selector and not selector(n):
-                continue
-            found_note = True
-            while True:
-                # skip segments as needed
-                if n.time < seg_end - epsilon:
-                    v = seg.val(n.time - seg_start)
-                    break
-                if n.time < seg_end + epsilon:
-                    # note is at end of this seg
-                    if seg.closed_end:
-                        v = seg.y1
-                        break
-                    if seg_ind == len(pft)-1:
-                        return
-                # move to next seg
-                seg_start += seg.dt
-                seg_ind += 1
-                seg = pft[seg_ind]
-                seg_end = seg_start + seg.dt
-            # v is the shift factor
-            if v == 0:
-                continue
-            n.perf_time += v
-            n.perf_dur -= v
-        if selector and not found_note:
-            raise Exception('no notes selected')
-
     # change dur of notes starting between t0 and t1
     # so they end at (at least) t1.
     # same effect as virtual sustain pedal but no PFT needed
@@ -628,8 +578,36 @@ class Score(ScoreBasic):
         if selector and not found_note:
             raise Exception('no notes selected')
 
-    def t_adjust_list(self, offsets:list[float], selector:Selector):
-        self.init_all()
+## functions that adjust note start times, e.g. for agogic accents
+
+    def start_adjust(
+        self, offset:float, selector:Selector, is_perf:bool=True
+    ):
+        if is_perf:
+            self.init_all()
+        found_note = False
+        for note in self.notes:
+            if selector and not selector(note):
+                continue
+            found_note = True
+            if is_perf:
+                if offset > note.perf_dur - epsilon:
+                    raise Exception('note shift is more than duration')
+                note.perf_time += offset
+                note.perf_dur -= offset
+            else:
+                if offset > note.dur - epsilon:
+                    raise Exception('note shift is more than duration')
+                note.time += offset
+                note.dur -= offset
+        if selector and not found_note:
+            raise Exception('no notes selected')
+
+    def start_adjust_list(
+        self, offsets:list[float], selector:Selector, is_perf:bool=True
+    ):
+        if is_perf:
+            self.init_all()
         ind = 0
         found_note = False
         for note in self.notes:
@@ -638,30 +616,91 @@ class Score(ScoreBasic):
             if selector and not selector(note):
                 continue
             found_note = True
-            note.perf_time += offsets[ind]
+            dt = offsets[ind]
+            if is_perf:
+                if dt > note.perf_dur - epsilon:
+                    raise Exception('note shift is more than duration')
+                note.perf_time += dt
+                note.perf_dur -= dt
+            else:
+                if dt > note.dur - epsilon:
+                    raise Exception('note shift is more than duration')
+                note.time += dt
+                note.dur -= dt
             ind += 1
         if selector and not found_note:
             raise Exception('no notes selected')
 
-    def t_adjust_notes(self, offset:float, selector:Selector):
-        self.init_all()
+    def start_adjust_func(
+        self, func:NoteToFloat, selector:Selector, is_perf:bool=True
+    ):
+        if is_perf:
+            self.init_all()
         found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
             found_note = True
-            note.perf_time += offset
+            dt = func(note)
+            if is_perf:
+                if dt > note.perf_dur - epsilon:
+                    raise Exception('note shift is more than duration')
+                note.perf_time += dt
+                note.perf_dur -= dt
+            else:
+                if dt > note.dur - epsilon:
+                    raise Exception('note shift is more than duration')
+                note.time += dt
+                note.dur -= dt
         if selector and not found_note:
             raise Exception('no notes selected')
 
-    def t_adjust_func(self, func:NoteToFloat, selector:Selector):
+    # adjust start time of selected notes by the PFT value
+    #
+    def start_adjust_pft(self, pft:PFT, t0:float=0, selector:Selector=None):
+        if not pft:
+            return
         self.init_all()
+        pft_check_closure(pft)
+        seg_ind = 0
+        seg = pft[0]
+            # which segment we're on
+        seg_start = t0
+            # start time of that segment
+        seg_end = t0 + seg.dt
+        t_end = t0 + pft_dur(pft)
+            # end time of function
         found_note = False
-        for note in self.notes:
-            if selector and not selector(note):
+        for n in self.notes:
+            if n.time > t_end + epsilon:
+                break
+            if n.time < t0 - epsilon:
+                continue
+            if selector and not selector(n):
                 continue
             found_note = True
-            note.perf_time += func(note)
+            while True:
+                # skip segments as needed
+                if n.time < seg_end - epsilon:
+                    v = seg.val(n.time - seg_start)
+                    break
+                if n.time < seg_end + epsilon:
+                    # note is at end of this seg
+                    if seg.closed_end:
+                        v = seg.y1
+                        break
+                    if seg_ind == len(pft)-1:
+                        return
+                # move to next seg
+                seg_start += seg.dt
+                seg_ind += 1
+                seg = pft[seg_ind]
+                seg_end = seg_start + seg.dt
+            # v is the shift factor
+            if v == 0:
+                continue
+            n.perf_time += v
+            n.perf_dur -= v
         if selector and not found_note:
             raise Exception('no notes selected')
 
@@ -815,6 +854,25 @@ class Score(ScoreBasic):
                 n.perf_dur = v
         if selector and not found_note:
             raise Exception('no notes selected')
+
+    # Scan the selected notes.
+    # If a note N is tagged as slurred, and so is the following note M,
+    # multiply N's performance duration by the given ratio
+    # (i.e., if ratio>1, so that it overlaps M)
+    #
+    def slur(self, slur_tag:str, selector:Selector, ratio:float):
+        self.init_all()
+        slur_note = None
+        for note in self.notes:
+            if selector(note):
+                continue
+            if slur_note is not None and slur_tag in notes.tags:
+                dt = note.perf_time - slut_note.perf_time
+                slut_note.perf_dur = ratio*dt
+            if slur_tag in note.tags:
+                slur_note = note
+            else
+                slur_note = None
 
 # ----------- pedals -------------
 

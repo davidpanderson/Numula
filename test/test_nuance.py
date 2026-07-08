@@ -57,7 +57,7 @@ def test2():
     ns.insert_score(sh_score('c d e (foo [f a c] g foo) a b c'))
     ns.insert_measure(Measure(0, 4/4, '4/4'))
     ns.insert_measure(Measure(1, 4/4, '4/4'))
-    ns.t_adjust_list([.1, .2], lambda x: 'foo' in x.tags)
+    ns.start_adjust_list([.1, .2], lambda x: 'foo' in x.tags)
     ns.t_random_uniform(-.1, .1)
     ns.t_random_normal(.1, 3)
     ns.v_random_normal(.1)

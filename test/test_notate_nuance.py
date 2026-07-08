@@ -51,7 +51,7 @@ def test_shift():
     ns.append_scores([n1,n2])
     s = sh_shift('.1 2/4 .15')
     print(*s, sep='\n')
-    ns.time_shift_pft(s, selector = lambda n: 'n2' in n.tags)
+    ns.start_adjust_pft(s, selector = lambda n: 'n2' in n.tags)
     print(ns)
 #test_shift()
 

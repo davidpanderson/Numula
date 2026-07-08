@@ -1,5 +1,5 @@
-# aria from Bach's Goldberg variations
-# it's mostly 3 voices (soprano/tenor/bass)
+# Aria from Bach's Goldberg variations
+# It's mostly 3 voices (soprano/tenor/bass)
 # Occasionally there's a 4th voice, alto.
 
 import numula_path
@@ -9,15 +9,15 @@ from numula.notate_nuance import *
 import numula.pianoteq
 
 soprano = sh_score('meas3/4 \
-    |1 1/4 g6 g 3/16 orn[10 g a b 1/16] 1/16 b \
+    |1 1/4 g6 g 3/16 orn[10 g a b 1/16] 1/16 (short b short) \
     |2 1/8 a orn[2 - f+ g 1/16] 1/2 orn[2 - d e 1/8] \
     |3 1/4 orn[10 f5+ g a 1/16] 3/8 orn[210(12)1 f+ g a rep=5 3/8] 1/16 f+ g \
     |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[2 - d e 1/8] \
-    |5 1/4 +d d 3/16 orn[ 10 d e 1/16] 1/16 f \
+    |5 1/4 +d d 3/16 orn[ 10 d e 1/16] 1/16 (short f short) \
     |6 1/8 e orn[2 - c d 1/16] 3/8 orn[2 - a b 1/8] 1/8 orn[2101 +e f+ g 1/8] \
     |7 <1/32 3/32> g f+ a g f+ e d c 3/16 orn[0 c +a 1/16] 1/16 -c \
     |8 1/32 b 3/32 g 1/8 f+ 1/4 f+ 1/4 orn[10 f+ g 1/16] \
-    |9 1/4 b b 3/16 orn[10 b c+ d 1/16] 1/16 d \
+    |9 1/4 b b 3/16 orn[10 b c+ d 1/16] 1/16 (short d short) \
     |10 d c+ b 9/16 a 1/2 _ d6 \
     |11 1/4 [g5 b e g] 3/8 orn[2101(21)0 f+ g a 1/4 rep=3] 1/16 f+ g \
     |12 1/8 g orn[2 - e f+ 1/16] 3/8 orn[2101(21)0 b5 c+ d 1/4 rep=3] 1/8 e \
@@ -56,27 +56,53 @@ bass = sh_score('meas3/4 \
     |17 \
 ').tag('bass')
 
+# volume, accents
+
 soprano_v0 = sh_vol('meas3/4 \
-    |1 mm 48/4 mm \
+    |1 mp 3/4 mf 3/4 mp \
+    |3 mp 3/8 mf 1/4 mp 1/8 mf 3/4 mp \
+    |5 mp 3/4 mf 3/8 mm 3/8 mf \
+    |7 mf 2/4 _f 1/4 mf 3/4 p \
+    |9 [ mm 24/4 mm
     |17 \
 ')
+
 alto_v0 = sh_vol('meas3/4 \
     |1 p 48/4 p \
     |17 \
 ')
+
 tenor_v0 = sh_vol('meas3/4 \
     |1 p 48/4 p \
     |17 \
 ')
+
 bass_v0 = sh_vol('meas3/4 \
     |1 p 48/4 p \
     |17 \
 ')
 
+# accent appogiaturas
+def accent_apps(ns):
+    ns.vol_adjust(1.2, lambda n: 'app' in tags)
+
+# tempo, pauses
+
 tempo0 = sh_tempo('meas3/4 \
-    |1 *8 60 3/4 65 3/4 50 * \
+    |1 60 3/4 65 3/4 55 \
+    |3 60 3/4 50 60 3/4 50 \
+    |5 60 3/4 65 3/4 55 \
+    |7 65 6/4 55 \
+    |9 60 3/4 65 3/4 55 \
+    |11 60 6/4 55 \
+    |13 60 12/4 50 \
     |17 \
 ')
+
+# shorten tagged 16ths
+#
+def shorten_16ths(ns):
+    ns.start_adjust(1/64, lambda n: 'short' in tags)
 
 dt0 = .03
 dt1 = .05
@@ -86,7 +112,13 @@ dt4 = .14
 dt5 = .18
 
 pauses = sh_tempo(f'meas3/4 \
-    |1 *8 6/4 . {dt4}p * \
+    |1 11/16 . {dt2}p 1/16 . 3/4 . {dt3}p \
+    |3 3/4 . {dt0}p 1/8 . {dt0}p 1/8 . {dt0}p 2/4 . {dt4}p \
+    |5 11/16 . {dt2}p 1/16 . 5/8 . {dt3}p 1/8 . \
+    |7 2/4 . {dt1}p 1/4 . 11/16 . {dt3}p 1/16 . \
+    |9 11/16 . {dt2}p 1/16 . 3/4 . {dt3}p \
+    |11 6/4 . \
+    |13 *4 2/4 p{dt3} 1/4 . * \
     |17 \
 ')
 
@@ -105,7 +137,10 @@ def main():
         bass
     ])
     if do_nuance:
+        accent_apps(ns)
+        shorten_16ths(ns)
         ns.tempo_adjust_pft(tempo0)
+        ns.slur('slur', lambda n: 'soprano' in tags, 1.1)
     ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
     print(ns)
     numula.pianoteq.play_score(ns)

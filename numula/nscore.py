@@ -730,8 +730,7 @@ class ScoreBasic:
 
     def append_ornament(
         self, pattern:str, pitch:list[int], rep:int, before:bool,
-        orn_dur:float, total_dur:float,
-        tags:list[str]
+        orn_dur:float, total_dur:float, tags:list[str]
     ):
         exp_pattern = self.expand(pattern, rep)
         n = len(exp_pattern)
@@ -754,6 +753,9 @@ class ScoreBasic:
                 )
             )
             self.advance_time(note_dur)
+
+        # append the final note, if any.  No tags.
+        #
         if orn_dur < total_dur - epsilon:
             self.append_note(
                 Note(
