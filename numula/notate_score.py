@@ -205,7 +205,7 @@ def parse_ornament(ns, items, i, total_dur, cur_pitch):
                     slur = False
                 case 'yes':
                     pass
-                _:
+                case _:
                     show_context(items, i)
                     raise Exception('bad slur= value')
         elif c[0].isdigit():

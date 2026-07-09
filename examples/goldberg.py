@@ -9,12 +9,12 @@ from numula.notate_nuance import *
 import numula.pianoteq
 
 soprano = sh_score('meas3/4 \
-    |1 1/4 g6 g 3/16 orn[10 g a b 1/16] 1/16 (short b short) \
-    |2 1/8 a orn[2 - f+ g 1/16] 1/2 orn[2 - d e 1/8] \
+    |1 1/4 g6 g 3/16 orn[10 g a b 1/20] 1/16 (short b short) \
+    |2 1/8 a orn[2 - f+ g 1/16] 1/2 orn[2 - d e 1/8 tag=app] \
     |3 1/4 orn[10 f5+ g a 1/16] 3/8 orn[210(12)1 f+ g a rep=5 3/8] 1/16 f+ g \
-    |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[2 - d e 1/8] \
+    |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[2 - d e 1/8 tag=app] \
     |5 1/4 +d d 3/16 orn[ 10 d e 1/16] 1/16 (short f short) \
-    |6 1/8 e orn[2 - c d 1/16] 3/8 orn[2 - a b 1/8] 1/8 orn[2101 +e f+ g 1/8] \
+    |6 1/8 e orn[2 - c d 1/16] 3/8 orn[2 - a b 1/8 tag=app] 1/8 orn[2101 +e f+ g 1/8] \
     |7 <1/32 3/32> g f+ a g f+ e d c 3/16 orn[0 c +a 1/16] 1/16 -c \
     |8 1/32 b 3/32 g 1/8 f+ 1/4 f+ 1/4 orn[10 f+ g 1/16] \
     |9 1/4 b b 3/16 orn[10 b c+ d 1/16] 1/16 (short d short) \
@@ -59,11 +59,13 @@ bass = sh_score('meas3/4 \
 # volume, accents
 
 soprano_v0 = sh_vol('meas3/4 \
-    |1 mp 3/4 mf 3/4 mp \
-    |3 mp 3/8 mf 1/4 mp 1/8 mf 3/4 mp \
-    |5 mp 3/4 mf 3/8 mm 3/8 mf \
-    |7 mf 2/4 _f 1/4 mf 3/4 p \
-    |9 [ mm 24/4 mm
+    |1 p_ 3/4 _mf \
+    |2 [ mf_ 1/8 mf_ [ mp 1/8 mm 1/2 p_ \
+    |3 [ p_ 1/4 p 1/4 p [ mm 1/4 p \
+    |4 [ p 3/4 _p \
+    |5 [ mp 3/4 mf 3/8 mm 3/8 mf \
+    |7 [ mf 2/4 _f 1/4 mf 3/4 p \
+    |9 [ mm 24/4 mm \
     |17 \
 ')
 
@@ -84,14 +86,14 @@ bass_v0 = sh_vol('meas3/4 \
 
 # accent appogiaturas
 def accent_apps(ns):
-    ns.vol_adjust(1.2, lambda n: 'app' in tags)
+    ns.vol_adjust(1.1, lambda n: 'app' in n.tags)
 
 # tempo, pauses
 
 tempo0 = sh_tempo('meas3/4 \
-    |1 60 3/4 65 3/4 55 \
+    |1 55 3/4 65 3/4 55 \
     |3 60 3/4 50 60 3/4 50 \
-    |5 60 3/4 65 3/4 55 \
+    |5 55 3/4 65 3/4 55 \
     |7 65 6/4 55 \
     |9 60 3/4 65 3/4 55 \
     |11 60 6/4 55 \
@@ -102,7 +104,7 @@ tempo0 = sh_tempo('meas3/4 \
 # shorten tagged 16ths
 #
 def shorten_16ths(ns):
-    ns.start_adjust(1/64, lambda n: 'short' in tags)
+    ns.start_adjust(1/50, lambda n: 'short' in n.tags)
 
 dt0 = .03
 dt1 = .05
@@ -110,21 +112,23 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 dt5 = .18
+dt6 = .23
+dt7 = .29
 
 pauses = sh_tempo(f'meas3/4 \
-    |1 11/16 . {dt2}p 1/16 . 3/4 . {dt3}p \
+    |1 11/16 . {dt7}p 1/16 . 3/4 . {dt3}p \
     |3 3/4 . {dt0}p 1/8 . {dt0}p 1/8 . {dt0}p 2/4 . {dt4}p \
     |5 11/16 . {dt2}p 1/16 . 5/8 . {dt3}p 1/8 . \
     |7 2/4 . {dt1}p 1/4 . 11/16 . {dt3}p 1/16 . \
     |9 11/16 . {dt2}p 1/16 . 3/4 . {dt3}p \
     |11 6/4 . \
-    |13 *4 2/4 p{dt3} 1/4 . * \
+    |13 *4 2/4 . p{dt3} 1/4 . * \
     |17 \
 ')
 
-do_nuance = True
 def main():
     ns = Score(tempo=55)
+    do_nuance = True
     if do_nuance:
         soprano.vol_adjust_pft(soprano_v0)
         alto.vol_adjust_pft(alto_v0)
@@ -140,7 +144,12 @@ def main():
         accent_apps(ns)
         shorten_16ths(ns)
         ns.tempo_adjust_pft(tempo0)
-        ns.slur('slur', lambda n: 'soprano' in tags, 1.1)
+        ns.tempo_adjust_pft(pauses)
+        ns.perf_dur_rel(0.9,
+            lambda n: 'soprano' in n.tags and 'slur' not in n.tags and 'orn' not in n.tags
+        )
+        ns.slur('slur', lambda n: 'soprano' in n.tags, 1.2)
+        ns.slur('orn', lambda n: 'soprano' in n.tags, 1.2)
     ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
     print(ns)
     numula.pianoteq.play_score(ns)

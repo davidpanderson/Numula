@@ -24,6 +24,15 @@ from numula.notate_nuance import *
 from numula.vol_name import *
 import numula.pianoteq as pianoteq
 
+def vol_test():
+    x = sh_vol('meas3/4 \
+        |1 p_ 3/4 _mf \
+        |2 [ mf_ 1/8 mp [ mf 1/8 mm 1/2 p_ \
+        |3 \
+    ')
+    print(*x, sep='\n')
+vol_test()
+
 ########## Timing ###########
 
 def test3():
@@ -96,7 +105,7 @@ def test_ped():
     ns.pedal_pft(p)
     print(ns)
     pianoteq.play_score(ns)
-test_ped()
+#test_ped()
 
 def pedal_test():
     x = sh_pedal('- 1/4 + 1/8 + 1/4 - 4/4')

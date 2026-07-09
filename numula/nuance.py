@@ -866,12 +866,12 @@ class Score(ScoreBasic):
         for note in self.notes:
             if selector(note):
                 continue
-            if slur_note is not None and slur_tag in notes.tags:
-                dt = note.perf_time - slut_note.perf_time
-                slut_note.perf_dur = ratio*dt
+            if slur_note is not None and slur_tag in note.tags:
+                dt = note.perf_time - slur_note.perf_time
+                slur_note.perf_dur = ratio*dt
             if slur_tag in note.tags:
                 slur_note = note
-            else
+            else:
                 slur_note = None
 
 # ----------- pedals -------------
