@@ -162,7 +162,7 @@ def scale():
 
     print(ns)
     #pianoteq.play_score(ns)
-scale()
+#scale()
 
 # various rolled chords
 def test_roll():
@@ -173,4 +173,24 @@ def test_roll():
     ns.roll(6/4, roller(8, 0, .7, .8, .2, .2))
     pianoteq.play_score(ns)
 #test_roll()
+
+def test_orn():
+    sop = sh_score('1/4 c 3/8 orn[210(12)1 f+ g a rep=6 3/8] 1/16 f+ g \
+').tag('soprano')
+    alto = sh_score('1/4 c c c').tag('alto')
+    ns = Score(tempo=55)
+    ns.append_scores([sop, alto])
+    x = sh_tempo('40 1/2 80 1/4 40')
+    pft_normalize_dur(x, 2/4)
+    ns.tempo_adjust_pft(x, 1/4, lambda n: 'soprano' in n.tags, normalize=True, debug=True)
+    print('second')
+    print(ns)
+    ns.perf_dur_rel(0.9,
+        lambda n: 'soprano' in n.tags and 'slur' not in n.tags and 'orn' not in n.tags
+    )
+
+    print('third')
+    print(ns)
+
+test_orn()
 
