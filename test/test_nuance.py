@@ -134,8 +134,8 @@ def scale():
     ns = Score()
     ns.append_scores(
         [
-            sh_score('c d e f g a b c d').tag('rh'),
-            sh_score('-c d e f g a b c d').tag('lh')
+            sh_score('c5 d e f c d e f c d e f').tag('rh'),
+            sh_score('c4 d e f c d e f c d e f').tag('lh')
         ]
     )
 
@@ -148,17 +148,21 @@ def scale():
 
     print(ns)
     print('---')
+    x = sh_tempo('80 6/4 40 2/4 60')
+    print(*x, sep='\n')
+    pft_normalize_dur(x, 4/4)
+    print('---')
+    print(*x, sep='\n')
     ns.tempo_adjust_pft(
-        [
-            Linear(1, 2, 4/4),
-            Linear(2, 1, 4/4)
-        ], normalize=True,
-        selector=lambda n: 'rh' in n.tags
+        x,
+        4/4,
+        lambda n: 'rh' in n.tags,
+        True
     )
 
     print(ns)
-    pianoteq.play_score(ns)
-#scale()
+    #pianoteq.play_score(ns)
+scale()
 
 # various rolled chords
 def test_roll():
