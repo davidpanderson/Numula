@@ -289,7 +289,7 @@ class ScoreBasic:
     #
     def clear_note_tags(self):
         for note in self.notes:
-            note.tags = [t for t in tags if t not in ['top', 'bottom', 'chord']]
+            note.tags = [t for t in note.tags if t not in ['top', 'bottom', 'chord']]
 
     def tags_init(self):
         if self.tags_inited:

@@ -148,9 +148,7 @@ def main():
         
         x = sh_tempo('40 1/2 80 1/4 40')
         pft_normalize_dur(x, 2/4)
-        print(*x, sep='\n')
         ns.tempo_adjust_pft(x, 7/4, lambda n: 'soprano' in n.tags, True)
-        
         ns.perf_dur_rel(0.9,
             lambda n: 'soprano' in n.tags and 'slur' not in n.tags and 'orn' not in n.tags
         )
@@ -159,6 +157,6 @@ def main():
         ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
 
     print(ns)
-    numula.pianoteq.play_score(ns)
+    #numula.pianoteq.play_score(ns)
 
 main()
