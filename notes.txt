@@ -1166,3 +1166,37 @@ slurs signs
 articulation
     default portamento (perf_dur_rel .9 or so)
     use connect()
+---------
+if you create a sub-Score and add nuance (e.g. volume) it assigns tags.
+Every note is top and bottom.
+You add it to a main score, it gets more (duplicate) tags.
+
+solution:
+append_score(): strip top/bottom/chord tags
+---------
+order of timing adjustments matters
+
+e.g.
+change perf durations, e.g. perf_dur_rel()
+    this changes perf duration, but not score dur.
+    So note ends have perf times that don't correspond to score times
+If you then do tempo_adjust_pft(), you get wrong results
+
+rules:
+order:
+- things that change score time or duration
+    these should clear perf_inited, or recompute perf times
+- tempo adjustments
+    these assume perf times correspond to score times
+- things that change perf time
+    after this, perf times do not correspond to score times
+    can only do these to final score
+
+Notes:
+- most of these functions call init_all().
+    this does:
+        - sort notes by score time
+        - assign perf_time and perf_dur
+        - assign tags: top/bottom/chord
+    This is needed to make sure note tags are assigned,
+    in case selectors use them.

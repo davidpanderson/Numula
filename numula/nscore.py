@@ -185,6 +185,7 @@ class ScoreBasic:
             measure.time += t
             self.insert_measure(measure)
         self.clear_flags()
+        self.clear_note_tags()
         return self
 
     # append a score to this one
@@ -193,6 +194,7 @@ class ScoreBasic:
         self.insert_score(score, self.cur_time, tag)
         self.cur_time += score.cur_time
         self.clear_flags()
+        self.clear_note_tags()
         return self
 
     # append a list of scores in parallel
@@ -204,6 +206,7 @@ class ScoreBasic:
             self.insert_score(score, self.cur_time, tag)
         self.cur_time += longest
         self.clear_flags()
+        self.clear_note_tags()
         return self
 
             
@@ -280,7 +283,14 @@ class ScoreBasic:
     def perf_init_clear(self):
         if self.verbose: print('perf_init_clear()')
         self.perf_inited = False
-        
+
+    # clear top/bottom/chord tags.
+    # When Scores are combined, these tags must be recomputed
+    #
+    def clear_note_tags(self):
+        for note in self.notes:
+            note.tags = [t for t in tags if t not in ['top', 'bottom', 'chord']]
+
     def tags_init(self):
         if self.tags_inited:
             return True
