@@ -10,8 +10,8 @@ import numula.pianoteq
 
 soprano = sh_score('meas3/4 \
     |1 1/4 g6 g 3/16 orn[10 g a b 1/20] 1/16 (short b short) \
-    |2 1/8 a orn[2 - f+ g 1/16] 1/2 orn[2 - d e 1/8 tag=app] \
-    |3 1/4 orn[10 f5+ g a 1/16] 3/8 orn[210(12)1 f+ g a rep=5 3/8] 1/16 f+ g \
+    |2 1/8 a orn[2 - f+ g 1/16] 1/2 orn[2 - d e 1/8 ] \
+    |3 1/4 orn[10 f5+ g a 1/16] 3/8 orn[210(12)1 f+ g a rep=6 3/8] 1/16 f+ g \
     |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[2 - d e 1/8 tag=app] \
     |5 1/4 +d d 3/16 orn[ 10 d e 1/16] 1/16 (short f short) \
     |6 1/8 e orn[2 - c d 1/16] 3/8 orn[2 - a b 1/8 tag=app] 1/8 orn[2101 +e f+ g 1/8] \
@@ -61,8 +61,8 @@ bass = sh_score('meas3/4 \
 soprano_v0 = sh_vol('meas3/4 \
     |1 p_ 3/4 _mf \
     |2 [ mf_ 1/8 mf_ [ mp 1/8 mm 1/2 p_ \
-    |3 [ p_ 1/4 p 1/4 p [ mm 1/4 p \
-    |4 [ p 3/4 _p \
+    |3 [ p_ 1/4 p 2/4 mm \
+    |4 [ mm 3/4 pp \
     |5 [ mp 3/4 mf 3/8 mm 3/8 mf \
     |7 [ mf 2/4 _f 1/4 mf 3/4 p \
     |9 [ mm 24/4 mm \
@@ -91,7 +91,7 @@ def accent_apps(ns):
 # tempo, pauses
 
 tempo0 = sh_tempo('meas3/4 \
-    |1 55 3/4 65 3/4 55 \
+    |1 50 3/4 65 3/4 55 \
     |3 60 3/4 50 60 3/4 50 \
     |5 55 3/4 65 3/4 55 \
     |7 65 6/4 55 \
@@ -145,12 +145,19 @@ def main():
         shorten_16ths(ns)
         ns.tempo_adjust_pft(tempo0)
         ns.tempo_adjust_pft(pauses)
+        
+        x = sh_tempo('40 1/2 80 1/4 40')
+        pft_normalize_dur(x, 2/4)
+        print(*x, sep='\n')
+        ns.tempo_adjust_pft(x, 7/4, lambda n: 'soprano' in n.tags, True)
+        
         ns.perf_dur_rel(0.9,
             lambda n: 'soprano' in n.tags and 'slur' not in n.tags and 'orn' not in n.tags
         )
         ns.slur('slur', lambda n: 'soprano' in n.tags, 1.2)
         ns.slur('orn', lambda n: 'soprano' in n.tags, 1.2)
-    ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
+        ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
+
     print(ns)
     numula.pianoteq.play_score(ns)
 
