@@ -742,6 +742,7 @@ class ScoreBasic:
         self, pattern:str, pitch:list[int], rep:int, before:bool,
         orn_dur:float, total_dur:float, tags:list[str]
     ):
+        tags.append('orn')
         exp_pattern = self.expand(pattern, rep)
         n = len(exp_pattern)
         note_dur = orn_dur/n
