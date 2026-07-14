@@ -214,7 +214,7 @@ right_hand = sh_score('meas4/4 \
 
 # timing in last measure:
 # play all notes as rolled chord
-# use perf_dur_abs() to make the grace note E# end at the F#
+# use adjust_dur_abs() to make the grace note E# end at the F#
 
 left_hand = sh_score('meas4/4 \
     < 1/24 1/24 1/24 1/8 > \
@@ -446,7 +446,7 @@ def main():
         if if_pauses != 'off':
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
-        ns.perf_dur_abs(1.9, lambda n: 'grace' in n.tags)
+        ns.adjust_dur_abs(1.9, lambda n: 'grace' in n.tags)
     #ns.trim(0, 4/1)
     #print(ns)
     return ns

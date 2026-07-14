@@ -60,7 +60,7 @@ def main():
     print(ns)
 
     # portamento in RH
-    #ns.perf_dur_rel(.5, lambda n: 'port' in n.tags)
+    #ns.adjust_dur_rel(.5, lambda n: 'port' in n.tags)
 
     pianoteq.play_score(ns)
 

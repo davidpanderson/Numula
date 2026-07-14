@@ -741,75 +741,60 @@ class Score(ScoreBasic):
                     
 # --------------- Articulation ----------------------
 
-    def score_dur_abs(self, dur:float, selector:Selector=None):
-        self.tags_init()
-        found_note = False
-        for note in self.notes:
-            if selector and not selector(note):
-                continue
-            found_note = True
-            note.dur = dur
-        if selector and not found_note:
-            raise Exception('no notes selected')
-
-    def score_dur_rel(self, factor:float, selector:Selector=None):
-        self.tags_init()
-        found_note = False
-        for note in self.notes:
-            if selector and not selector(note):
-                continue
-            found_note = True
-            note.dur *= factor
-        if selector and not found_note:
-            raise Exception('no notes selected')
-
-    def score_dur_func(self, func:NoteToFloat, selector:Selector=None):
-        self.tags_init()
-        found_note = False
-        for note in self.notes:
-            if selector and not selector(note):
-                continue
-            found_note = True
-            note.dur = func(note)
-        if selector and not found_note:
-            raise Exception('no notes selected')
- 
-    def perf_dur_abs(self, dur:float, selector:Selector=None):
+    def adjust_dur_abs(
+        self, dur:float, selector:Selector=None, is_perf:bool=True
+    ):
         self.init_all()
         found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
             found_note = True
-            note.perf_dur = dur
+            if is_perf:
+                note.perf_dur = dur
+            else:
+                note.dur = dur
         if selector and not found_note:
             raise Exception('no notes selected')
 
-    def perf_dur_rel(self, factor:float, selector:Selector=None):
+    def adjust_dur_rel(
+        self, factor:float, selector:Selector=None, is_perf:bool=True
+    ):
         self.init_all()
         found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
             found_note = True
-            note.perf_dur *= factor
+            if is_perf:
+                note.perf_dur *= factor
+            else:
+                note.dur *= factor
         if selector and not found_note:
             raise Exception('no notes selected')
 
-    def perf_dur_func(self, func:NoteToFloat, selector:Selector=None):
+    def adjust_dur_func(
+        self, func:NoteToFloat, selector:Selector=None, is_perf:bool=True
+    ):
         self.init_all()
         found_note = False
         for note in self.notes:
             if selector and not selector(note):
                 continue
             found_note = True
-            note.perf_dur = func(note)
+            if is_perf:
+                note.perf_dur = func(note)
+            else:
+                note.dur = func(note)
         if selector and not found_note:
             raise Exception('no notes selected')
 
     # adjust articulation with a PFT
-    def perf_dur_pft(self,
-        pft:PFT, t0:float, selector:Selector=None, rel:bool=True
+    def adjust_dur_pft(self,
+        pft:PFT, t0:float,
+        selector:Selector=None,
+        is_rel:bool=True,
+        is_perf:bool=True
     ):
         self.init_all()
         pft_check_closure(pft)
@@ -849,9 +834,15 @@ class Score(ScoreBasic):
                 seg_end = seg_start + seg.dt
             # v is the adjustment factor
             if rel:
-                n.perf_dur *= v
+                if is_perf:
+                    n.perf_dur *= v
+                else:
+                    n.dur *= v
             else:
-                n.perf_dur = v
+                if is_perf:
+                    n.perf_dur = v
+                else:
+                    n.dur = v
         if selector and not found_note:
             raise Exception('no notes selected')
 

@@ -910,8 +910,8 @@ def main():
             v300_end(ns, t_300_2)
             t300_end(ns, t_300_2)
 
-        ns.perf_dur_rel(0.6, lambda n: 'theme_a' in n.tags)
-        ns.perf_dur_rel(0.2, lambda n: 'stac' in n.tags)
+        ns.adjust_dur_rel(0.6, lambda n: 'theme_a' in n.tags)
+        ns.adjust_dur_rel(0.2, lambda n: 'stac' in n.tags)
         
     ns.t_random_normal(.005, 2)
     #print(ns)

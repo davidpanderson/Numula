@@ -79,13 +79,13 @@ def test_dur_pft():
     ns = Score()
     for i in range(8):
         ns.append_score(sh_score('1/8 c d e f g a b c'))
-    ns.perf_dur_pft(
+    ns.adjust_dur_pft(
         [
             Linear(.1, 1.5, 8/4),
             Linear(1.5, .1, 8/4)
         ], 0, rel=True
     )
-    ns.perf_dur_pft(
+    ns.adjust_dur_pft(
         [
             Linear(.1, .4, 8/4),
             Linear(.4, .1, 8/4)
@@ -185,7 +185,7 @@ def test_orn():
     ns.tempo_adjust_pft(x, 1/4, lambda n: 'soprano' in n.tags, normalize=True, debug=True)
     print('second')
     print(ns)
-    ns.perf_dur_rel(0.9,
+    ns.adjust_dur_rel(0.9,
         lambda n: 'soprano' in n.tags and 'slur' not in n.tags and 'orn' not in n.tags
     )
 
