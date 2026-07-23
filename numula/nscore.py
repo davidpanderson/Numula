@@ -98,14 +98,13 @@ class Measure:
 # represents an ornament
 #
 class Ornament:
-    def __init__(self, start_time, dur, pattern, tags):
+    def __init__(self, start_time, dur, tags):
         self.start_time = start_time
         self.dur = dur
-        self.pattern = pattern
         self.tags = tags
     def __str__(self):
-        return 'ornament: pattern %s start_time %.4f dur %.4f %s'%(
-            self.pattern, self.start_time, self.dur, ','.join(self.tags)
+        return 'ornament: start_time %.4f dur %.4f %s'%(
+            self.start_time, self.dur, ','.join(self.tags)
         )
 
 event_kind_note = 0
@@ -702,63 +701,30 @@ class ScoreBasic:
 
 # ----------- ornamentation ----------------
 
-    # expand a pattern containing a repeated part.
-    # e.g. '0<12>2' and reps=2 gives 012122
-    #
-    @staticmethod
-    def expand(pattern, rep):
-        phase = 'prefix'
-        prefix = ''
-        middle = ''
-        suffix = ''
-        for c in pattern:
-            match c:
-                case '0' | '1' | '2':
-                    if phase == 'prefix':
-                        prefix += c
-                    elif phase == 'pattern':
-                        middle += c
-                    else:
-                        suffix += c
-                case '(':
-                    if phase == 'prefix':
-                        phase = 'pattern'
-                    else:
-                        raise Exception(f'bad pattern: {pattern}')
-                case ')':
-                    if phase == 'pattern':
-                        phase = 'suffix'
-                    else:
-                        raise Exception(f'bad pattern: {pattern}')
-                case _:
-                    raise Exception(f'bad pattern: {pattern}')
-        out = prefix
-        for i in range(rep):
-            out += middle
-        out += suffix
-        return out
-
     def append_ornament(
-        self, pattern:str, pitch:list[int], rep:int, before:bool,
+        self, pitches:list[int], before:bool,
         orn_dur:float, total_dur:float, tags:list[str]
     ):
         tags.append('orn')
-        exp_pattern = self.expand(pattern, rep)
-        n = len(exp_pattern)
-        note_dur = orn_dur/n
+
+        # do we have a 'main note' after the orament?
+        main_note = orn_dur < total_dur - epsilon
+        n = len(pitches)
+        if main_note:
+            norn = n-1
+            main_dur = total_dur - orn_dur
+        else:
+            norn = n
+        note_dur = orn_dur/norn
         if before:
             self.cur_time -= orn_dur
         start_time = self.cur_time
-        for c in exp_pattern:
-            match c:
-                case '0': p = pitch[0]
-                case '1': p = pitch[1]
-                case '2': p = pitch[2]
+        for i in range(norn):
             self.append_note(
                 Note(
                     self.cur_time,
                     note_dur,
-                    p,
+                    pitches[i],
                     .5,
                     tags
                 )
@@ -767,21 +733,21 @@ class ScoreBasic:
 
         # append the final note, if any.  No tags.
         #
-        if orn_dur < total_dur - epsilon:
+        if main_note:
             self.append_note(
                 Note(
                     self.cur_time,
-                    total_dur - orn_dur,
-                    pitch[1],
+                    main_dur,
+                    pitches[n-1],
                     .5
                 )
             )
-            self.advance_time(total_dur - orn_dur)
+            self.advance_time(main_dur)
+
         self.ornaments.append(
             Ornament(
                 start_time,
                 orn_dur,
-                pattern,
                 tags
             )
         )
