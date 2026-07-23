@@ -24,7 +24,7 @@ def test2():
     ns = sh_score('g orn[2 - d e 1/8 ] d')
     print(ns)
     pianoteq.play_score(ns)
-test2()
+#test2()
 
 def test3():
     ns = sh_score('b orn[0(10) b c 1/8 rep=2 tag=foo] d')
@@ -40,3 +40,8 @@ def test3():
     print(ns)
     pianoteq.play_score(ns)
 #test3()
+
+def test4():
+    ns = sh_score('1/4 orn[012 c d e 1/8]')
+    print(ns)
+test4()
