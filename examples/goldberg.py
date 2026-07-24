@@ -28,6 +28,15 @@ soprano = sh_score('meas3/4 \
     |17 \
 ').tag('soprano')
 
+soprano2 = sh_score('meas3/4 \
+    |17 1/4 orn[10 g5 a 1/20] 5/16 orn[2101(21)0 g a b 1/4] 1/32 a b c d 1/16 e \
+    |18 1/8 orn[2 - e d 1/16] orn[2 - c b 1/16] 3/8 [orn 2 - a g 1/4] 1/8 g6 \
+    |19 1/16 f+ 1/8 e 1/32 f+ d+ 1/8 d 1/4 orn[10 d e 1/8] 1/32 a b a g \
+    |20 3/16 a 1/16 f+ 3/8 orn[2 - d+ 3 1/8] 1/8 b \
+    |21 3/8 orn[012 e f+ g 1/16] 5/16 orn[21 - f+ e 1/16] 1/16 b 1/21 c b a b \
+    |22 1/32 g^ 3/32 e 1/32 f+ 3/32 d+ 5/16 orn[01 d+ e 1/8 ] 1/16 g5 f+ e \
+    |23 3/16 f+ 
+
 alto = sh_score('meas3/4 \
     |1 1/4 . . d5 . . d . . c+ . . a \
     |5 . . g . . a 3/4 . . \

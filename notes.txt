@@ -1123,6 +1123,29 @@ a main-pitch note with duration Y-X is added after the ornament.
 the sh_score() parser sees 'orn', gets the contents of the (...),
 and parses them; then it calls ns.ornament(...)
 ---------
+RETHINKING OF ORNAMENTS
+
+shorthand:
+orn[b *2 c+ d * c+ 1/16 )
+apoggiatura:
+    orn[d c 1/16]
+mordent
+    orn[c b c 1/16]
+
+if dur is given and is < total dur:
+play last pitch with diff dur
+
+Each note gets tags
+orn_first if first
+orn_last if last
+orn_lower if below last
+orn_upper if above last
+... and the ornament's tags
+
+API:
+score.ornament(pfirst:list[int], prep, pfinal, reps, etc.
+---------
+
 Inflecting ornaments
 
 What if you want to add volume or timing nuance to an ornament?
