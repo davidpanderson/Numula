@@ -147,7 +147,7 @@ def main():
         ns.tempo_adjust_pft(pauses)
         
         x = sh_tempo('40 1/2 80 1/4 40')
-        pft_normalize_dur(x, 2/4)
+        pft_scale_dur(x, 2/4)
         ns.tempo_adjust_pft(x, 7/4, lambda n: 'soprano' in n.tags, True)
         ns.perf_dur_rel(0.9,
             lambda n: 'soprano' in n.tags and 'slur' not in n.tags and 'orn' not in n.tags

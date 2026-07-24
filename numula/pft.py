@@ -268,7 +268,7 @@ def pft_invert(pft):
         seg.invert()
 
 # scale PFT so total dur is dt
-def pft_normalize_dur(pft, dt:float):
+def pft_scale_dur(pft, dt:float):
     x = pft_dur(pft)
     scale = dt/x
     for seg in pft:

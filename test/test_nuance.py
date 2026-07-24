@@ -150,7 +150,7 @@ def scale():
     print('---')
     x = sh_tempo('80 6/4 40 2/4 60')
     print(*x, sep='\n')
-    pft_normalize_dur(x, 4/4)
+    pft_scale_dur(x, 4/4)
     print('---')
     print(*x, sep='\n')
     ns.tempo_adjust_pft(
@@ -181,7 +181,7 @@ def test_orn():
     ns = Score(tempo=55)
     ns.append_scores([sop, alto])
     x = sh_tempo('40 1/2 80 1/4 40')
-    pft_normalize_dur(x, 2/4)
+    pft_scale_dur(x, 2/4)
     ns.tempo_adjust_pft(x, 1/4, lambda n: 'soprano' in n.tags, normalize=True, debug=True)
     print('second')
     print(ns)

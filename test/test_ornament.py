@@ -30,7 +30,7 @@ def test3():
     ns = sh_score('b orn[b *2 c b * c 1/8 tag=foo] d')
     for orn in filter(lambda x: 'foo' in x.tags, ns.ornaments):
         pft = sh_tempo('40 1/1 80')
-        pft_normalize_dur(pft, orn.dur)
+        pft_scale_dur(pft, orn.dur)
         ns.tempo_adjust_pft(
             pft,
             orn.start_time,

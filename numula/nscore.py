@@ -98,13 +98,14 @@ class Measure:
 # represents an ornament
 #
 class Ornament:
-    def __init__(self, start_time, dur, tags):
+    def __init__(self, start_time, orn_dur, total_dur, tags):
         self.start_time = start_time
-        self.dur = dur
+        self.orn_dur = orn_dur
+        self.total_dur = total_dur
         self.tags = tags
     def __str__(self):
-        return 'ornament: start_time %.4f dur %.4f %s'%(
-            self.start_time, self.dur, ','.join(self.tags)
+        return 'ornament: start_time %.4f orn_dur %.4f total_dur %.4f %s'%(
+            self.start_time, self.orn_dur, self.total_dur, ','.join(self.tags)
         )
 
 event_kind_note = 0
@@ -748,6 +749,7 @@ class ScoreBasic:
             Ornament(
                 start_time,
                 orn_dur,
+                total_dur,
                 tags
             )
         )
