@@ -161,43 +161,22 @@ class RepeatList:
 
 #####  ornaments
 
-# ornament parsing functions.
-# i is first token to be parsed,
-# and on return i is next unparsed token
-
-def orn_pattern(items, i):
-    pattern = ''
-    p = items[i]
-    for c in p:
-        match c:
-            case '0'|'1'|'2'|'('|')':
-                pattern += c
-            case _:
-                show_context(items, i)
-                raise Exception('ornament parse error')
-    i += 1
-    return [i, pattern]
-
 def parse_ornament(ns, items, i, total_dur, cur_pitch):
     i += 1
     if items[i] != '[':
         show_context(items, i)
         raise Exception('ornament parse error')
     i += 1
-    [i, pattern] = orn_pattern(items, i)
     before = False
     tags = []
     pitches = []
-    rep = 1
     dur = 0
     slur = True
     while True:
         c = items[i]
         if c == ']':
             break
-        if c.startswith('rep='):
-            rep = int(c[4:])
-        elif c.startswith('tag='):
+        if c.startswith('tag='):
             tags.append(c[4:])
         elif c.startswith('slur='):
             match c[5:]:
@@ -221,7 +200,7 @@ def parse_ornament(ns, items, i, total_dur, cur_pitch):
         raise Exception('no dur specified in ornament')
     if slur:
         tags.append('slur')
-    ns.append_ornament(pattern, pitches, rep, before, dur, total_dur, tags)
+    ns.append_ornament(pitches, before, dur, total_dur, tags)
     return [i, cur_pitch]
 
 # shorthand score specification
