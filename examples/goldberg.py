@@ -29,13 +29,24 @@ soprano = sh_score('meas3/4 \
 ').tag('soprano')
 
 soprano2 = sh_score('meas3/4 \
-    |17 1/4 orn[10 g5 a 1/20] 5/16 orn[2101(21)0 g a b 1/4] 1/32 a b c d 1/16 e \
-    |18 1/8 orn[2 - e d 1/16] orn[2 - c b 1/16] 3/8 [orn 2 - a g 1/4] 1/8 g6 \
-    |19 1/16 f+ 1/8 e 1/32 f+ d+ 1/8 d 1/4 orn[10 d e 1/8] 1/32 a b a g \
-    |20 3/16 a 1/16 f+ 3/8 orn[2 - d+ 3 1/8] 1/8 b \
-    |21 3/8 orn[012 e f+ g 1/16] 5/16 orn[21 - f+ e 1/16] 1/16 b 1/21 c b a b \
-    |22 1/32 g^ 3/32 e 1/32 f+ 3/32 d+ 5/16 orn[01 d+ e 1/8 ] 1/16 g5 f+ e \
-    |23 3/16 f+ 
+    |17 1/4 orn[a g5 a 1/20] 5/16 orn[b a g a *3 b a * 1/4] 1/32 a b c d 1/16 e \
+    |18 1/8 orn[e d 1/16] orn[c b 1/16] 3/8 [orn a g 1/4] 1/8 g6 \
+    |19 3/16 orn[f+ e 1/8] 1/32 f+ d+ 1/8 d+ 1/4 orn[e d e 1/8] 1/32 a b a g \
+    |20 3/16 a 1/16 f+ 3/8 orn[e d+ 1/8] 1/8 b \
+    |21 3/16 orn[e f+ g 1/16] 5/16 orn[f+ e 1/18] 1/16 b 1/32 c b a b \
+    |22 1/32 g6 3/32 e 1/32 f+ 3/32 d+ 5/16 orn[d+ e 1/8] 1/16 g5 f+ e \
+    |23 3/16 f+ 1/16 e6 1/8 orn[e d+ 1/16] orn[f+ g a 1/16] g f+ \
+    |24 3/16 orn[f+ e 1/16] 1/32 f+ d+ 1/2 orn[d+ e 1/8 ] \
+    |25 1/8 e orn[d c 1/16] 3/8 orn[b a 1/8] 1/16 b c \
+    |26 1/32 d c 1/16 b 1/32 c b 1/16 a 3/8 orn[a g 1/8] 1/16 b a \
+    |27 c d c b c a e a 5/16 c 1/16 _ \
+    |28 1/16 . d c b c a f+ a c e d c \
+    |29 b c b a b g d g b g c d \
+    |30 e f e d e c g c e c +f+ g \
+    |31 a -cb a b c d -g b a g f+ \
+    |32 5/16 g 1/16 d g f+ 1/4 orn[f+ g 1/8 ] \
+    |33 \
+').tag('soprano')
 
 alto = sh_score('meas3/4 \
     |1 1/4 . . d5 . . d . . c+ . . a \
@@ -43,6 +54,12 @@ alto = sh_score('meas3/4 \
     |9 1/4 . . +e 3/4 . . . \
     |13 1/4 . . d5 3/4 . . 3/8 . 1/8 a 1/4 d \
     |17 \
+').tag('alto')
+
+alto2 = sh_score('meas3/4 \
+    |17 3/4 *8 . * \
+    |25 1/4 . 1/2 e4 \
+    |26 \
 ').tag('alto')
 
 tenor = sh_score('meas3/4 \
@@ -55,6 +72,20 @@ tenor = sh_score('meas3/4 \
     |17 \
 ').tag('tenor')
 
+tenor2 = sh_score('meas3/4 \
+    |17 1/8 . e5 1/2 orn[f+ e f+ 1/8] 1/8 . c5 1/2 d \
+    |19 1/8 . e 1/4 g 1/8 orn[g f+ g f+ 1/16] e \
+    |20 d+ e 1/2 f+ \
+    |21 1/8 . a4 orn[a g a g 1/16] f+ 1/4 g \
+    |22 1/8 . a orn[a g a g 1/16] f+ g b \
+    |23 3/8 f+5 1/8 +c b 3/8 a 1/2 g \
+    |25 1/2 . 3/8 a 1/8 f+ 1/8 ornpe d 1/16] 1/16 e f+ g f+ 1/4 g 1/8 _ \
+    |27 1/8 . e a 3/16 +e 1/16 +b a g \
+    |28 1/4 f+ 1/8 . 3/8 f+ 1/8 g . . 3/16 d 7/16 g 1/4 _ \
+    |30 3/8 . 3/16 g c 3/4 . 1/16 . c5 b a 1/2 b \
+    |33 \
+').tag('tenor')
+
 bass = sh_score('meas3/4 \
     |1 3/4 g4 f+ e 5/8 d 1/8 c \
     |5 3/4 b 5/8 c 1/8 d \
@@ -63,6 +94,18 @@ bass = sh_score('meas3/4 \
     |11 3/8 -e 1/8 e f+ g 3/8 a 1/8 b a g \
     |13 3/4 f+ g a -d \
     |17 \
+').tag('bass')
+
+bass2 = sh_score('meas3/4 \
+    |17 1/2 d5 1/4 c 3/8 b 1/8 a 1/4 b \
+    |19 3/8 c 1/8 b 1/4 a 3/8 b 1/8 a g f+ \
+    |21 1/2 e 1/4 d 1/2 c 1/4 b \
+    |23 1/8 a c b a 1/4 b 1/8 e b -e _b e d \
+    |25 3/4 c b \
+    |27 3/8 a 1/8 g f+ e d +a d c b a \
+    |29 g +d g f e d c +g c b a g \
+    |31 f+ d g b d =d 3/8 g 1/8 -d 1/4 g \
+    |33 \
 ').tag('bass')
 
 # volume, accents
