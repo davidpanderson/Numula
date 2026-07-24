@@ -11,20 +11,20 @@ import numula.pianoteq
 soprano = sh_score('meas3/4 \
     |1 1/4 g6 g 3/16 orn[a g a 1/20] 1/16 (short b short) \
     |2 1/8 a orn[g f+ 1/16] 1/2 orn[e d 1/8 ] \
-    |3 1/4 orn[g f5+ g 1/16] 3/8 orn[a g f+ *6 g a * g 3/8] 1/16 f+ g \
+    |3 1/4 orn[g5 f+ g 1/16] 3/8 orn[a g f+ *6 g a * g 3/8] 1/16 f+ g \
     |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[e d 1/8 tag=app] \
     |5 1/4 +d d 3/16 orn[e d e 1/16] 1/16 (short f short) \
-    |6 1/8 e orn[d c 1/16] 3/8 orn[a b a 1/8 tag=app] 1/8 orn[g f+ e f+ 1/8] \
+    |6 1/8 e orn[d c 1/16] 3/8 orn[b a 1/8 tag=app] 1/8 orn[g6 f+ e f+ 1/8] \
     |7 <1/32 3/32> g f+ a g f+ e d c 3/16 orn[c +a 1/16] 1/16 -c \
     |8 1/32 b 3/32 g 1/8 f+ 1/4 f+ 1/4 orn[g f+ g 1/16] \
     |9 1/4 b b 3/16 orn[c+ b c+ 1/16] 1/16 (short d short) \
     |10 d c+ b 9/16 a 1/2 _ d6 \
     |11 1/4 [g5 b e g] 3/8 orn[a g f+ g *3 a g * f+ g 1/4] 1/16 f+ g \
-    |12 1/8 g orn[f+ e 1/16] 3/8 orn[d6 c+ b c+ *3 d c+ * b d+ 1/4] 1/8 e \
+    |12 1/8 g orn[f+ e 1/16] 3/8 orn[d6 c+ b c+ *3 d c+ * b c+ 1/4] 1/8 e \
     |13 1/16 a g f+ e 1/8 d 9/32 a 1/32 b 1/16 c \
     |14 1/16 b a g f+ 1/8 e 9/32 orn[+d c+ 1/16] 1/32 d 1/16 e \
     |15 1/16 d c+ b a 1/8 +g 1/4 -b 1/8 c+ \
-    |16 5/32 orn[c+ d 1/16] 1/32 e d c+ 1/2 orn[c+ d 1/8] \
+    |16 5/32 orn[c+ d 1/16] 1/32 e d c+ 1/2 orn[c+ d 1/4] \
     |17 \
 ').tag('soprano')
 
@@ -50,7 +50,7 @@ bass = sh_score('meas3/4 \
     |1 3/4 g4 f+ e 5/8 d 1/8 c \
     |5 3/4 b 5/8 c 1/8 d \
     |7 e c 1/2 d 3/8 -g 1/8 +d 3/16 orn[e d e 1/16] 1/16 f+ \
-    |9 4/4 g 1/8 orn[g f+ g 1/16] e f+ b \
+    |9 4/4 g 1/8 orn[g f+ g f+ 1/16] e f+ b \
     |11 3/8 -e 1/8 e f+ g 3/8 a 1/8 b a g \
     |13 3/4 f+ g a -d \
     |17 \
@@ -156,7 +156,7 @@ def main():
         ns.slur('orn', lambda n: 'soprano' in n.tags, 1.2)
         ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
 
-    print(ns)
-    #numula.pianoteq.play_score(ns)
+    #print(ns)
+    numula.pianoteq.play_score(ns)
 
 main()
