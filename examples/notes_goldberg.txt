@@ -1,0 +1,8 @@
+Each section is repeated.
+Make the repeat different, in terms of
+    ornaments:
+        1: as written
+        2: more ornate
+    feel:
+        1: more aggressive
+        2: more languid, slower, softer, longer pauses
