@@ -726,15 +726,15 @@ class ScoreBasic:
         start_time = self.cur_time
         orn_notes = []
         for i in range(norn):
-            n = Note(
+            note = Note(
                 self.cur_time,
                 note_dur,
                 pitches[i],
                 .5,
                 ['orn']
             )
-            self.append_note(n)
-            orn_notes.append(n)
+            self.append_note(note)
+            orn_notes.append(note)
             self.advance_time(note_dur)
 
         # append the final note, if any.  No tags.
