@@ -192,7 +192,7 @@ pauses = sh_tempo(f'meas3/4 \
     |17 \
 ')
 
-def nuance1(ns):
+def timing1(ns):
     accent_apps(ns)
     shorten_16ths(ns)
     ns.tempo_adjust_pft(tempo0)
@@ -210,7 +210,7 @@ def nuance1(ns):
     ns.slur('slur', lambda n: 'soprano' in n.tags, 1.2)
     ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
 
-def nuance2(ns):
+def timing2(ns):
     pass
 
 def main():
@@ -229,7 +229,7 @@ def main():
         ns1 = Score(tempo=55)
         ns1.append_scores([s, a, t, b])
         if do_nuance:
-            nuance1(ns1)
+            timing1(ns1)
         ns.append_score(ns1)
     for first in [True, False]:
         s = soprano2(first)
@@ -244,7 +244,7 @@ def main():
         ns2 = Score(tempo=55)
         ns2.append_scores([s, a, t, b])
         if do_nuance:
-            nuance1(ns2)
+            timing2(ns2)
         ns.append_score(ns2)
 
     #print(ns)
