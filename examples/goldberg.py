@@ -150,7 +150,9 @@ bass_v0 = sh_vol('meas3/4 \
 
 # accent appogiaturas
 def accent_apps(ns):
-    ns.vol_adjust(1.1, lambda n: 'app' in n.tags)
+    for orn in filter(lambda x: len(x.notes) == 1, ns.ornaments):
+        for n in orn.notes:
+            ns.vol_adjust(1.1, n)
 
 # tempo, pauses
 
@@ -200,10 +202,12 @@ def nuance1(ns):
     pft_scale_dur(x, 2/4)
     ns.tempo_adjust_pft(x, 7/4, lambda n: 'soprano' in n.tags, True)
     ns.adjust_dur_rel(0.9,
-        lambda n: 'soprano' in n.tags and 'slur' not in n.tags and 'orn' not in n.tags
+        lambda n: 'soprano' in n.tags and 'orn' not in n.tags
+    )
+    ns.adjust_dur_rel(1.2,
+        lambda n: 'soprano' in n.tags and 'orn' in n.tags
     )
     ns.slur('slur', lambda n: 'soprano' in n.tags, 1.2)
-    ns.slur('orn', lambda n: 'soprano' in n.tags, 1.2)
     ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
 
 def nuance2(ns):

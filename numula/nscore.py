@@ -98,10 +98,11 @@ class Measure:
 # represents an ornament
 #
 class Ornament:
-    def __init__(self, start_time, orn_dur, total_dur, tags):
+    def __init__(self, start_time, orn_dur, total_dur, notes, tags):
         self.start_time = start_time
         self.orn_dur = orn_dur
         self.total_dur = total_dur
+        self.notes = notes
         self.tags = tags
     def __str__(self):
         return 'ornament: start_time %.4f orn_dur %.4f total_dur %.4f %s'%(
@@ -706,9 +707,12 @@ class ScoreBasic:
         self, pitches:list[int], before:bool,
         orn_dur:float, total_dur:float, tags:list[str]
     ):
-        tags.append('orn')
+        # if total dur > ornament dur then
+        #   the last note is longer, and is not flagged as an ornament note
+        #   the ornament duration is divided among the other notes
+        # else
+        #   all notes are ornament notes
 
-        # do we have a 'main note' after the orament?
         main_note = orn_dur < total_dur - epsilon
         n = len(pitches)
         if main_note:
@@ -720,16 +724,17 @@ class ScoreBasic:
         if before:
             self.cur_time -= orn_dur
         start_time = self.cur_time
+        orn_notes = []
         for i in range(norn):
-            self.append_note(
-                Note(
-                    self.cur_time,
-                    note_dur,
-                    pitches[i],
-                    .5,
-                    tags
-                )
+            n = Note(
+                self.cur_time,
+                note_dur,
+                pitches[i],
+                .5,
+                ['orn']
             )
+            self.append_note(n)
+            orn_notes.append(n)
             self.advance_time(note_dur)
 
         # append the final note, if any.  No tags.
@@ -750,6 +755,7 @@ class ScoreBasic:
                 start_time,
                 orn_dur,
                 total_dur,
+                orn_notes,
                 tags
             )
         )
