@@ -192,7 +192,7 @@ pauses = sh_tempo(f'meas3/4 \
     |17 \
 ')
 
-def timing1(ns):
+def timing1(ns, first, t):
     accent_apps(ns)
     shorten_16ths(ns)
     ns.tempo_adjust_pft(tempo0)
@@ -200,7 +200,7 @@ def timing1(ns):
     
     x = sh_tempo('40 1/2 80 1/4 40')
     pft_scale_dur(x, 2/4)
-    ns.tempo_adjust_pft(x, 7/4, lambda n: 'soprano' in n.tags, True)
+    ns.tempo_adjust_pft(x, t+7/4, lambda n: 'soprano' in n.tags, True)
     ns.adjust_dur_rel(0.9,
         lambda n: 'soprano' in n.tags and 'orn' not in n.tags
     )
@@ -208,14 +208,24 @@ def timing1(ns):
         lambda n: 'soprano' in n.tags and 'orn' in n.tags
     )
     ns.slur('slur', lambda n: 'soprano' in n.tags, 1.2)
-    ns.roll(30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
+    ns.roll(t+30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
 
-def timing2(ns):
+def timing2(ns, first, t):
     pass
+
+def timing_all(ns):
+    ns.adjust_dur_rel(0.9,
+        lambda n: 'soprano' in n.tags and 'orn' not in n.tags
+    )
+    ns.adjust_dur_rel(1.2,
+        lambda n: 'soprano' in n.tags and 'orn' in n.tags
+    )
+    ns.slur('slur', lambda n: 'soprano' in n.tags, 1.2)
 
 def main():
     ns = Score(tempo=55)
     do_nuance = True
+    t = 0
     for first in [True, False]:
         s = soprano1(first)
         a = alto1(first)
@@ -228,9 +238,10 @@ def main():
             b.vol_adjust_pft(bass_v0)
         ns1 = Score(tempo=55)
         ns1.append_scores([s, a, t, b])
-        if do_nuance:
-            timing1(ns1)
         ns.append_score(ns1)
+        if do_nuance:
+            timing1(ns, first, t)
+        t += 48/4
     for first in [True, False]:
         s = soprano2(first)
         a = alto2(first)
@@ -243,9 +254,13 @@ def main():
             b.vol_adjust_pft(bass_v0)
         ns2 = Score(tempo=55)
         ns2.append_scores([s, a, t, b])
-        if do_nuance:
-            timing2(ns2)
         ns.append_score(ns2)
+        if do_nuance:
+            timing2(ns, first, t)
+        t += 48/4
+
+    if do_nuance:
+        timing_all(ns)
 
     #print(ns)
     numula.pianoteq.play_score(ns)

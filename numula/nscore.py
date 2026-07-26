@@ -113,7 +113,7 @@ event_kind_note = 0
 event_kind_pedal = 1
 
 # basic score class
-# nuance functions are added in Score (inherited)
+# nuance functions are added in Score (derived from ScoreBasic)
 #
 class ScoreBasic:
     def __init__(self,
@@ -121,8 +121,8 @@ class ScoreBasic:
         verbose = False
     ):
         self.notes: list[Note] = []
-        self.cur_time = 0.
-        self.tempo = tempo    # beats per minute
+        self.cur_time = 0.      # score time of end
+        self.tempo = tempo      # beats per minute
         self.verbose = verbose
         self.measures: list[Measure] = []
         self.pedals: list[PedalSeg] = []
@@ -248,6 +248,7 @@ class ScoreBasic:
     def score_to_perf(self, t:float):
         return t*4*60/self.tempo
 
+    # sort everything by score time
     def time_sort(self):
         if self.time_sorted:
             return
@@ -525,7 +526,7 @@ class ScoreBasic:
         if verbose:
             print(vstr)
 
-    # make a sorted list of start/end events
+    # make a list of start/end events and sort by score time
     #
     def make_start_end_events(self):
         self.start_end: list[Event] = []
