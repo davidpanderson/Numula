@@ -32,7 +32,7 @@ def test1():
 def test2():
     s = sh_score('<1/2 1/4> a b c d e f')
     print(s)
-#test2()
+test2()
 
 def test3():
     foo = iter([1,2,3])

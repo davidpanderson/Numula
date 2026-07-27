@@ -122,7 +122,7 @@ def bass2(first):
 
 # volume, accents
 
-soprano_v0 = sh_vol('meas3/4 \
+vol_soprano1 = sh_vol('meas3/4 \
     |1 p_ 3/4 _mf \
     |2 [ mf_ 1/8 mf_ [ mp 1/8 mm 1/2 p_ \
     |3 [ p_ 1/4 p 2/4 mm \
@@ -133,20 +133,41 @@ soprano_v0 = sh_vol('meas3/4 \
     |17 \
 ')
 
-alto_v0 = sh_vol('meas3/4 \
+vol_alto1 = sh_vol('meas3/4 \
     |1 p 48/4 p \
     |17 \
 ')
 
-tenor_v0 = sh_vol('meas3/4 \
+vol_tenor1 = sh_vol('meas3/4 \
     |1 p 48/4 p \
     |17 \
 ')
 
-bass_v0 = sh_vol('meas3/4 \
+vol_bass1 = sh_vol('meas3/4 \
     |1 p 48/4 p \
     |17 \
 ')
+
+vol_soprano2 = sh_vol('meas3/4 \
+    |17 mm 48/4 mm \
+    |33 \
+')
+
+vol_alto2 = sh_vol('meas3/4 \
+    |17 p 48/4 p \
+    |33 \
+')
+
+vol_tenor2 = sh_vol('meas3/4 \
+    |17 p 48/4 p \
+    |33 \
+')
+
+vol_bass2 = sh_vol('meas3/4 \
+    |17 p 48/4 p \
+    |33 \
+')
+
 
 # accent appogiaturas
 def accent_apps(ns):
@@ -156,7 +177,7 @@ def accent_apps(ns):
 
 # tempo, pauses
 
-tempo0 = sh_tempo('meas3/4 \
+tempo1 = sh_tempo('meas3/4 \
     |1 50 3/4 65 3/4 55 \
     |3 60 3/4 50 60 3/4 50 \
     |5 55 3/4 65 3/4 55 \
@@ -165,6 +186,22 @@ tempo0 = sh_tempo('meas3/4 \
     |11 60 6/4 55 \
     |13 60 12/4 50 \
     |17 \
+')
+
+tempo2a = sh_tempo('meas3/4 \
+    |17 55 3/4 65 3/4 55 \
+    |19 55 3/4 65 3/4 55 \
+    |21 55 3/4 65 9/4 50 \
+    |25 55 12/4 65 12/4 40 \
+    |33 \
+')
+
+tempo2b = sh_tempo('meas3/4 \
+    |17 55 3/4 65 3/4 55 \
+    |19 55 3/4 65 3/4 55 \
+    |21 55 3/4 65 9/4 50 \
+    |25 55 12/4 65 12/4 30 \
+    |33 \
 ')
 
 # shorten tagged 16ths
@@ -181,7 +218,7 @@ dt5 = .18
 dt6 = .23
 dt7 = .29
 
-pauses = sh_tempo(f'meas3/4 \
+pauses1 = sh_tempo(f'meas3/4 \
     |1 11/16 . {dt7}p 1/16 . 3/4 . {dt3}p \
     |3 3/4 . {dt0}p 1/8 . {dt0}p 1/8 . {dt0}p 2/4 . {dt4}p \
     |5 11/16 . {dt2}p 1/16 . 5/8 . {dt3}p 1/8 . \
@@ -192,9 +229,23 @@ pauses = sh_tempo(f'meas3/4 \
     |17 \
 ')
 
+pauses2a = sh_tempo(f'meas3/4 \
+    |17 48/4 . \
+    |33 \
+')
+
+pauses2b = sh_tempo(f'meas3/4 \
+    |17 48/4 . \
+    |33 \
+')
+
 def timing1(ns, first, t):
-    ns.tempo_adjust_pft(tempo0, t)
-    ns.tempo_adjust_pft(pauses, t)
+    if first:
+        ns.tempo_adjust_pft(tempo1, t)
+        ns.tempo_adjust_pft(pauses1, t)
+    else:
+        ns.tempo_adjust_pft(tempo1, t)
+        ns.tempo_adjust_pft(pauses1, t)
     
     x = sh_tempo('40 1/2 80 1/4 40')
     pft_scale_dur(x, 2/4)
@@ -202,8 +253,15 @@ def timing1(ns, first, t):
     ns.roll(t+30/4, roller(4, 0, .3), False, lambda n: 'soprano' in n.tags)
 
 def timing2(ns, first, t):
-    pass
+    if first:
+        ns.tempo_adjust_pft(tempo2a, t)
+        ns.tempo_adjust_pft(pauses2a, t)
+    else:
+        ns.tempo_adjust_pft(tempo2b, t)
+        ns.tempo_adjust_pft(pauses2b, t)
 
+# adjustments that apply throughout
+#
 def timing_all(ns):
     accent_apps(ns)
     shorten_16ths(ns)
@@ -224,10 +282,10 @@ def main():
         t = tenor1(first)
         b = bass1(first)
         if do_nuance:
-            s.vol_adjust_pft(soprano_v0)
-            a.vol_adjust_pft(alto_v0)
-            t.vol_adjust_pft(tenor_v0)
-            b.vol_adjust_pft(bass_v0)
+            s.vol_adjust_pft(vol_soprano1)
+            a.vol_adjust_pft(vol_alto1)
+            t.vol_adjust_pft(vol_tenor1)
+            b.vol_adjust_pft(vol_bass1)
         ns1 = Score(tempo=55)
         ns1.append_scores([s, a, t, b])
         ns.append_score(ns1)
@@ -237,10 +295,10 @@ def main():
         t = tenor2(first)
         b = bass2(first)
         if False:
-            s.vol_adjust_pft(soprano_v0)
-            a.vol_adjust_pft(alto_v0)
-            t.vol_adjust_pft(tenor_v0)
-            b.vol_adjust_pft(bass_v0)
+            s.vol_adjust_pft(vol_soprano2)
+            a.vol_adjust_pft(vol_alto2)
+            t.vol_adjust_pft(vol_tenor2)
+            b.vol_adjust_pft(vol_bass2)
         ns2 = Score(tempo=55)
         ns2.append_scores([s, a, t, b])
         ns.append_score(ns2)
@@ -253,6 +311,6 @@ def main():
         timing_all(ns)
 
     #print(ns)
-    numula.pianoteq.play_score(ns)
+    #numula.pianoteq.play_score(ns)
 
 main()
