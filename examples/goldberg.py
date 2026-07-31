@@ -13,15 +13,15 @@ import numula.pianoteq
 
 def soprano1(first):
     return sh_score('meas3/4 \
-    |1 1/4 g6 g 3/16 orn[a g a 1/20] 1/16 (short b short) \
+    |1 1/4 g6 g 3/16 orn[a g a 1/24] 1/16 (short b short) \
     |2 1/8 a orn[g f+ 1/16] 1/2 orn[e d 1/8 ] \
-    |3 1/4 orn[g5 f+ g 1/16] 3/8 orn[a g f+ *6 g a * g 3/8] 1/16 f+ g \
+    |3 1/4 orn[g5 f+ g 1/24] 3/8 orn[a g f+ *6 g a * g 3/8] 1/16 f+ g \
     |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[e d 1/8 tag=app] \
     |5 1/4 +d d 3/16 orn[e d e 1/16] 1/16 (short f short) \
     |6 1/8 e orn[d c 1/16] 3/8 orn[b a 1/8 tag=app] 1/8 orn[g6 f+ e f+ 1/8] \
     |7 <1/32 3/32> g f+ a g f+ e d c 3/16 orn[c +a 1/16] 1/16 -c \
     |8 1/32 b 3/32 g 1/8 f+ 1/4 f+ 1/4 orn[g f+ g 1/16] \
-    |9 1/4 b b 3/16 orn[c+ b c+ 1/16] 1/16 (short d short) \
+    |9 1/4 b b 3/16 orn[c+ b c+ 1/20] 1/16 (short d short) \
     |10 d c+ b 9/16 a 1/2 _ d6 \
     |11 1/4 [g5 b e g] 3/8 orn[a g f+ g *3 a g * f+ g 1/4] 1/16 f+ g \
     |12 1/8 g orn[f+ e 1/16] 3/8 orn[d6 c+ b c+ *3 d c+ * b c+ 1/4] 1/8 e \
@@ -35,13 +35,13 @@ def soprano1(first):
 def soprano2(first):
     return sh_score('meas3/4 \
     |17 1/4 orn[a5 g a 1/20] 5/16 orn[b a g a *3 b a * 1/5] 1/32 a b c d 1/16 e \
-    |18 1/8 orn[e d 1/16] orn[c b 1/16] 3/8 orn[a g 1/16] 1/8 g6 \
+    |18 1/8 orn[e d 1/16] orn[c b 1/16] 3/8 orn[a g 1/4] 1/8 g6 \
     |19 3/16 orn[f+ e 1/16] 1/32 f+ d+ 1/8 d+ 1/4 orn[e d+ e 1/20] 1/32 a b a g \
     |20 3/16 a 1/16 f+ 3/8 orn[e d+ 1/16] 1/8 b \
     |21 3/16 orn[e f+ g 1/16] 1/16 f+ 5/16 orn[f+ e 1/18] 1/16 b 1/32 c b a b \
     |22 1/32 g6 3/32 e 1/32 f+ 3/32 d+ 5/16 orn[d+ e 1/16] 1/16 g5 f+ e \
     |23 3/16 f+ 1/16 e6 1/8 orn[e d+ 1/16] orn[f+ g a 1/16] g f+ \
-    |24 3/16 orn[f+ e 1/16] 1/32 f+ d+ 1/2 orn[d+ e 1/10 ] \
+    |24 3/16 orn[f+ e 1/16] 1/32 f+ d+ 1/2 orn[d+ e 1/4 ] \
     |25 1/8 e orn[d c 1/16] 3/8 orn[b a 1/8] 1/16 b c \
     |26 1/32 d c 1/16 b 1/32 c b 1/16 a 3/8 orn[a g 1/16] 1/16 a b \
     |27 c d c b c a e a 5/16 c 1/16 _ \
@@ -123,28 +123,13 @@ def bass2(first):
 # volume, accents
 
 vol_soprano1 = sh_vol('meas3/4 \
-    |1 p_ 3/4 _mf \
-    |2 [ mf_ 1/8 mf_ [ mp 1/8 mm 1/2 p_ \
-    |3 [ p_ 1/4 p 2/4 mm \
-    |4 [ mm 3/4 pp \
+    |1 _mf 3/4 mf \
+    |2 [ _f 1/8 mf_ [ mp 1/8 mm 1/2 p_ \
+    |3 [ mm 1/4 p 2/4 mf \
+    |4 [ _mf 3/4 p \
     |5 [ mp 3/4 mf 3/8 mm 3/8 mf \
-    |7 [ mf 2/4 _f 1/4 mf 3/4 p \
+    |7 [ mf 2/4 mf_ 1/4 mf 3/4 p \
     |9 [ mm 24/4 mm \
-    |17 \
-')
-
-vol_alto1 = sh_vol('meas3/4 \
-    |1 p 48/4 p \
-    |17 \
-')
-
-vol_tenor1 = sh_vol('meas3/4 \
-    |1 p 48/4 p \
-    |17 \
-')
-
-vol_bass1 = sh_vol('meas3/4 \
-    |1 p 48/4 p \
     |17 \
 ')
 
@@ -153,14 +138,31 @@ vol_soprano2 = sh_vol('meas3/4 \
     |33 \
 ')
 
+vol_alto1 = sh_vol('meas3/4 \
+    |1 p 48/4 p \
+    |17 \
+')
+
 vol_alto2 = sh_vol('meas3/4 \
     |17 p 48/4 p \
     |33 \
 ')
 
+vol_tenor1 = sh_vol('meas3/4 \
+    |1 p 48/4 p \
+    |17 \
+')
+
 vol_tenor2 = sh_vol('meas3/4 \
-    |17 p 48/4 p \
+    |17 p 30/4 p \
+    |27 [ mm 3/4 mm \
+    |28 15/4 mm \
     |33 \
+')
+
+vol_bass1 = sh_vol('meas3/4 \
+    |1 p 48/4 p \
+    |17 \
 ')
 
 vol_bass2 = sh_vol('meas3/4 \
@@ -178,11 +180,11 @@ def accent_apps(ns):
 # tempo, pauses
 
 tempo1 = sh_tempo('meas3/4 \
-    |1 50 3/4 65 3/4 55 \
+    |1 45 3/4 65 3/4 55 \
     |3 60 3/4 50 60 3/4 50 \
-    |5 55 3/4 65 3/4 55 \
-    |7 65 6/4 55 \
-    |9 60 3/4 65 3/4 55 \
+    |5 45 3/4 65 3/4 55 \
+    |7 60 6/4 50 \
+    |9 55 3/4 65 3/4 55 \
     |11 60 6/4 55 \
     |13 60 12/4 50 \
     |17 \
@@ -192,7 +194,7 @@ tempo2a = sh_tempo('meas3/4 \
     |17 55 3/4 65 3/4 55 \
     |19 55 3/4 65 3/4 55 \
     |21 55 3/4 65 9/4 50 \
-    |25 55 12/4 65 12/4 40 \
+    |25 55 18/4 65 6/4 50 \
     |33 \
 ')
 
@@ -200,7 +202,7 @@ tempo2b = sh_tempo('meas3/4 \
     |17 55 3/4 65 3/4 55 \
     |19 55 3/4 65 3/4 55 \
     |21 55 3/4 65 9/4 50 \
-    |25 55 12/4 65 12/4 30 \
+    |25 55 18/4 65 6/4 40 \
     |33 \
 ')
 
@@ -217,25 +219,28 @@ dt4 = .14
 dt5 = .18
 dt6 = .23
 dt7 = .29
+dt8 = .35
+dt9 = .4
 
 pauses1 = sh_tempo(f'meas3/4 \
-    |1 11/16 . {dt7}p 1/16 . 3/4 . {dt3}p \
-    |3 3/4 . {dt0}p 1/8 . {dt0}p 1/8 . {dt0}p 2/4 . {dt4}p \
-    |5 11/16 . {dt2}p 1/16 . 5/8 . {dt3}p 1/8 . \
-    |7 2/4 . {dt1}p 1/4 . 11/16 . {dt3}p 1/16 . \
-    |9 11/16 . {dt2}p 1/16 . 3/4 . {dt3}p \
+    |1 11/16 . {dt9}p 1/16 . 3/4 . {dt5}p \
+    |3 5/8 . p{dt3} 1/8 . \
+    |4 1/8 . {dt0}p 1/8 . {dt0}p 2/4 . {dt4}p \
+    |5 11/16 . {dt8}p 1/16 . 5/8 . {dt3}p 1/8 . \
+    |7 2/4 . {dt1}p 1/4 . 11/16 . {dt8}p 1/16 . \
+    |9 11/16 . {dt8}p 1/16 . 3/4 . {dt3}p \
     |11 6/4 . \
     |13 *4 2/4 . p{dt3} 1/4 . * \
     |17 \
 ')
 
 pauses2a = sh_tempo(f'meas3/4 \
-    |17 48/4 . \
+    |17 48/4 . 1.p \
     |33 \
 ')
 
 pauses2b = sh_tempo(f'meas3/4 \
-    |17 48/4 . \
+    |17 48/4 . 2.p \
     |33 \
 ')
 
@@ -245,6 +250,8 @@ def timing1(ns, first, t):
         ns.tempo_adjust_pft(pauses1, t)
     else:
         ns.tempo_adjust_pft(tempo1, t)
+        slower = sh_tempo('55 48/4 55')
+        ns.tempo_adjust_pft(slower, t)
         ns.tempo_adjust_pft(pauses1, t)
     
     x = sh_tempo('40 1/2 80 1/4 40')
@@ -294,7 +301,7 @@ def main():
         a = alto2(first)
         t = tenor2(first)
         b = bass2(first)
-        if False:
+        if do_nuance:
             s.vol_adjust_pft(vol_soprano2)
             a.vol_adjust_pft(vol_alto2)
             t.vol_adjust_pft(vol_tenor2)
@@ -311,6 +318,6 @@ def main():
         timing_all(ns)
 
     #print(ns)
-    #numula.pianoteq.play_score(ns)
+    numula.pianoteq.play_score(ns, score_time=96/4)
 
 main()
