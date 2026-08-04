@@ -17,10 +17,10 @@ def soprano1(first):
     |2 1/8 a orn[g f+ 1/16] 1/2 orn[e d 1/8 ] \
     |3 1/4 orn[g5 f+ g 1/24] 3/8 orn[a g f+ *6 g a * g 3/8] 1/16 f+ g \
     |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[e d 1/8 tag=app] \
-    |5 1/4 +d d 3/16 orn[e d e 1/16] 1/16 (short f short) \
+    |5 1/4 +d d 3/16 orn[e d e 1/20] 1/16 (short f short) \
     |6 1/8 e orn[d c 1/16] 3/8 orn[b a 1/8 tag=app] 1/8 orn[g6 f+ e f+ 1/8] \
     |7 <1/32 3/32> g f+ a g f+ e d c 3/16 orn[c +a 1/16] 1/16 -c \
-    |8 1/32 b 3/32 g 1/8 f+ 1/4 f+ 1/4 orn[g f+ g 1/16] \
+    |8 1/32 b 3/32 g 1/8 f+ 1/4 f+ 1/4 orn[g f+ g 1/20] \
     |9 1/4 b b 3/16 orn[c+ b c+ 1/20] 1/16 (short d short) \
     |10 d c+ b 9/16 a 1/2 _ d6 \
     |11 1/4 [g5 b e g] 3/8 orn[a g f+ g *3 a g * f+ g 1/4] 1/16 f+ g \
@@ -126,15 +126,30 @@ vol_soprano1 = sh_vol('meas3/4 \
     |1 _mf 3/4 mf \
     |2 [ _f 1/8 mf_ [ mp 1/8 mm 1/2 p_ \
     |3 [ mm 1/4 p 2/4 mf \
-    |4 [ _mf 3/4 p \
-    |5 [ mp 3/4 mf 3/8 mm 3/8 mf \
-    |7 [ mf 2/4 mf_ 1/4 mf 3/4 p \
-    |9 [ mm 24/4 mm \
+    |4 [ _mf 3/4 pp \
+    |5 [ mp_ 3/4 mf 3/8 mm 3/8 mf \
+    |7 [ mf 2/4 _f 1/4 mf 3/4 p \
+    |9 [ _mf 3/4 mf 3/4 mp \
+    |11 [ mm 3/4 mf 3/4 mp \
+    |13 *3 [ _mf 2/4 mp 1/4 mf * \
+    |16 [ mp 3/4 mf \
     |17 \
 ')
 
 vol_soprano2 = sh_vol('meas3/4 \
-    |17 mm 48/4 mm \
+    |17 mp 3/4 mf 3/4 mp \
+    |19 [ mm 3/4 mf 3/4 mp \
+    |21 [ mf 2/4 mp 1/4 mf \
+    |22 3/4 mp \
+    |23 3/4 mf \
+    |24 3/4 p \
+    |25 [ mm 3/4 p [ mm 3/4 p \
+    |27 [ p 1/4 mm 2/4 p \
+    |28 [ mp 1/4 _mf 2/4 mp \
+    |29 [ mp_ 1/4 mf 2/4 mp \
+    |30 [ mm 1/4 _mf 2/4 mf \
+    |31 [ mf 3/4 mp \
+    |32 [ mp 3/4 pp \
     |33 \
 ')
 
@@ -180,32 +195,26 @@ def accent_apps(ns):
 # tempo, pauses
 
 tempo1 = sh_tempo('meas3/4 \
-    |1 45 3/4 65 3/4 55 \
+    |1 45 3/4 60 3/4 50 \
     |3 60 3/4 50 60 3/4 50 \
-    |5 45 3/4 65 3/4 55 \
-    |7 60 6/4 50 \
-    |9 55 3/4 65 3/4 55 \
+    |5 45 3/4 60 3/4 55 \
+    |7 60 6/4 45 \
+    |9 50 3/4 65 3/4 55 \
     |11 60 6/4 55 \
-    |13 60 12/4 50 \
+    |13 60 9/4 52 3/4 35 \
     |17 \
 ')
 
 tempo2a = sh_tempo('meas3/4 \
-    |17 45 3/4 65 3/4 55 \
+    |17 45 3/4 60 3/4 50 \
     |19 55 3/4 60 3/4 55 \
-    |21 55 3/4 65 3/4 60 \
+    |21 55 3/4 60 3/4 60 \
     |23 60 6/4 50 \
     |25 55 18/4 60 6/4 50 \
     |33 \
 ')
 
-tempo2b = sh_tempo('meas3/4 \
-    |17 55 3/4 65 3/4 55 \
-    |19 55 3/4 65 3/4 55 \
-    |21 55 3/4 65 9/4 50 \
-    |25 55 18/4 65 6/4 40 \
-    |33 \
-')
+tempo2b = tempo2a
 
 # shorten tagged 16ths
 #
@@ -224,14 +233,15 @@ dt8 = .35
 dt9 = .4
 
 pauses1 = sh_tempo(f'meas3/4 \
-    |1 11/16 . {dt9}p 1/16 . 3/4 . {dt5}p \
+    |1 11/16 . {dt9}p 1/16 . {dt2}p 3/4 . {dt5}p \
     |3 5/8 . p{dt3} 1/8 . \
     |4 1/8 . {dt0}p 1/8 . {dt0}p 2/4 . {dt4}p \
     |5 11/16 . {dt8}p 1/16 . 5/8 . {dt3}p 1/8 . \
-    |7 2/4 . {dt1}p 1/4 . 11/16 . {dt8}p 1/16 . \
-    |9 11/16 . {dt8}p 1/16 . 3/4 . {dt3}p \
+    |7 2/4 . {dt1}p 1/4 . 11/16 . {dt9}p 1/16 . \
+    |9 11/16 . {dt8}p 1/16 . \
+    |10 p{dt1} 3/4 . {dt3}p \
     |11 6/4 . \
-    |13 *4 2/4 . p{dt3} 1/4 . * \
+    |13 *4 p{dt1} 2/4 . p{dt3} 1/4 . * \
     |17 \
 ')
 
@@ -250,15 +260,12 @@ pauses2a = sh_tempo(f'meas3/4 \
     |28 2/4 . p{dt2} 1/4 . \
     |29 3/4 . \
     |30 3/4 . \
-    |31 p{dt2} 2/4 . p{dt2} 1/4 . \
-    |32 p{dt3} 1/4 . p{dt3} 2/4 . 1.p \
+    |31 p{dt1} 2/4 . p{dt1} 1/4 . \
+    |32 p{dt1} 1/4 . p{dt3} 2/4 . 1.p \
     |33 \
 ')
 
-pauses2b = sh_tempo(f'meas3/4 \
-    |17 48/4 . 2.p \
-    |33 \
-')
+pauses2b = pauses2a
 
 def timing1(ns, first, t):
     if first:
@@ -334,6 +341,7 @@ def main():
         timing_all(ns)
 
     #print(ns)
+    #numula.pianoteq.play_score(ns)
     numula.pianoteq.play_score(ns, score_time=96/4)
 
 main()
