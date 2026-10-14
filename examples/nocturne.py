@@ -20,6 +20,7 @@
 import numula_path
 from numula.notate_score import *
 from numula.nuance import *
+from numula.notate_nuance import *
 import numula.pianoteq as pianoteq
 
 lh = sh_score('1/8 --b- +f +d- b- +f -f -b- +f +d- b- +f -f \
@@ -33,34 +34,45 @@ rh = sh_score('2/4 ++d- 1/4 b- 3/44 +b- c d- -a b- a g+ a c b- g- \
 ').tag('rh')
 
 def main():
-    ns = Score()
+    nuance = True
+
+    if nuance:
+        ns = Score()
+        lh.vsustain_pft(
+            sh_pedal('*5 (3/4) *')
+        )
+    else:
+        ns = Score(tempo=90)
+        
     ns.append_scores([lh, rh])
 
-    for i in range(5):
-        ns.sustain(i*3/4, (i+1)*3/4, lambda n: 'lh' in n.tags)
-        
-    for i in range(5):
+    if nuance:
         ns.vol_adjust_pft(
-            sh_vol('.3 2/4 .8 1/4 .3'),
-            i*3/4,
+            sh_vol('*5 pp 2/4 p 1/4 pp *'), 0,
             lambda n: 'lh' in n.tags
         )
+        ns.vol_adjust_pft(
+            sh_vol('mf 3/4 pp [ mp 3/8 mf 3/8 mp 6/8 mf 6/8 p [ mp 3/4 pp'), 0,
+            lambda n: 'rh' in n.tags
+        )
 
-    ns.tempo_adjust_pft(
-        sh_tempo('90 8/4 110 7/4 80')
-    )
-    # timing in RH
+        ns.tempo_adjust_pft(
+            sh_tempo('*4 80 3/8 90 3/8 80 .05p * 80 3/8 90 3/8 40')
+        )
+        # timing in RH
 
-    print(ns);
-    ns.tempo_adjust_pft(
-        sh_tempo('40 2/4 50 2/4 30 .15p 30 3/4 50 2/4 30 p.1'),
-        3/4, normalize=True, selector=lambda n: 'rh' in n.tags, debug=False
-    )
+        ns.tempo_adjust_pft(
+            sh_tempo('60 3/4 40'),
+            3/4, normalize=True, selector=lambda n: 'rh' in n.tags
+        )
+        ns.tempo_adjust_pft(
+            sh_tempo('40 3/4 80 3/4 40'),
+            6/4, normalize=True, selector=lambda n: 'rh' in n.tags
+        )
 
+        # portamento in RH
+        ns.adjust_dur_rel(.6, lambda n: 'port' in n.tags)
     print(ns)
-
-    # portamento in RH
-    #ns.adjust_dur_rel(.5, lambda n: 'port' in n.tags)
 
     pianoteq.play_score(ns)
 
