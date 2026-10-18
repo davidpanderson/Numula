@@ -6,7 +6,7 @@ from numula.MidiFile import *
 from numula.pianoteq import *
 
 def ped_test():
-    ns = sh_score('*3 [c4 c5 e5 g5 c6] . . . * ')
+    ns = sh_score('*3 [c3 c4 e4 g4 c5] . . . * ')
     ns.insert_pedal(PedalSeg(1/1, time=1/2))
     print(ns)
     ns.write_midi('data/ped_test')

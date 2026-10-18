@@ -134,8 +134,8 @@ def scale():
     ns = Score()
     ns.append_scores(
         [
-            sh_score('c5 d e f c d e f c d e f').tag('rh'),
-            sh_score('c4 d e f c d e f c d e f').tag('lh')
+            sh_score('c4 d e f c d e f c d e f').tag('rh'),
+            sh_score('c3 d e f c d e f c d e f').tag('lh')
         ]
     )
 
@@ -166,7 +166,7 @@ def scale():
 
 # various rolled chords
 def test_roll():
-    ns = sh_score('2/4 *4 [c4 +g c e g c +c e] *')
+    ns = sh_score('2/4 *4 [c3 +g c e g c +c e] *')
     ns.roll(0, roller(8, 0, .7))
     ns.roll(2/4, roller(8, 0, .7, .7))
     ns.roll(4/4, roller(8, 0, .7, 1.3))

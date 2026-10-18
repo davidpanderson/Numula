@@ -61,7 +61,7 @@ def parse_pitch(items: list[str], i: int, cur_pitch: int):
         show_context(items, i)
         raise Exception('no pitch specified in %s'%s)
     if absolute:
-        return pitch_class + off[1] + octave*12
+        return pitch_class + off[1] + (octave+1)*12
     else:
         octave_offset = off[0]
         accidental = off[1]
@@ -85,7 +85,7 @@ def parse_pitch2(s: str) -> int:
         else:
             octave = int(s[i:])
             break
-    n = x + octave*12
+    n = x + (octave+1)*12
     return n
     
 # compute pitch specified relative to current pitch.

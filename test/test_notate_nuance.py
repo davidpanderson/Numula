@@ -55,7 +55,7 @@ def test3():
 
 def test_shift():
     n1 = sh_score('a b c d e f g c')
-    n2 = sh_score('a5 b c d e f g c').tag('n2')
+    n2 = sh_score('a4 b c d e f g c').tag('n2')
     ns = Score()
     ns.append_scores([n1,n2])
     s = sh_shift('.1 2/4 .15')
@@ -73,7 +73,7 @@ def test4():
 #test4()
 
 def test5():
-    ns = sh_score('1/16 a4 b c d e f g a ')
+    ns = sh_score('1/16 a3 b c d e f g a ')
     v = sh_tempo('exp1.0 80 2/4 40')
     #pft_bpm(v)
     #show_pft_vals(v, 1/16)
@@ -99,7 +99,7 @@ def pause_test():
 ########## Pedal ###########
 
 def test_ped():
-    ns = sh_score('*2 1/8 c5 d e f g a b c *')
+    ns = sh_score('*2 1/8 c4 d e f g a b c *')
     p = sh_pedal('*4 (2/4) *')
     print(*p, sep='\n')
     ns.pedal_pft(p)

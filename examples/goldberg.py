@@ -13,9 +13,9 @@ import numula.pianoteq
 
 def soprano1(first):
     return sh_score('meas3/4 \
-    |1 1/4 g6 g 3/16 orn[a g a 1/24] 1/16 (short b short) \
+    |1 1/4 g5 g 3/16 orn[a g a 1/24] 1/16 (short b short) \
     |2 1/8 a orn[g f+ 1/16] 1/2 orn[e d 1/8 ] \
-    |3 1/4 orn[g5 f+ g 1/24] 3/8 orn[a g f+ *6 g a * g 3/8] 1/16 f+ g \
+    |3 1/4 orn[g4 f+ g 1/24] 3/8 orn[a g f+ *6 g a * g 3/8] 1/16 f+ g \
     |4 1/32 a g 1/16 f+ 1/32 g f+ 1/16 e 1/2 orn[e d 1/8 tag=app] \
     |5 1/4 +d d 3/16 orn[e d e 1/20] 1/16 (short f short) \
     |6 1/8 e orn[d c 1/16] 3/8 orn[b a 1/8 tag=app] 1/8 orn[g6 f+ e f+ 1/8] \
@@ -23,8 +23,8 @@ def soprano1(first):
     |8 1/32 b 3/32 g 1/8 f+ 1/4 f+ 1/4 orn[g f+ g 1/20] \
     |9 1/4 b b 3/16 orn[c+ b c+ 1/20] 1/16 (short d short) \
     |10 d c+ b 9/16 a 1/2 _ d6 \
-    |11 1/4 [g5 b e g] 3/8 orn[a g f+ g *3 a g * f+ g 1/4] 1/16 f+ g \
-    |12 1/8 g orn[f+ e 1/16] 3/8 orn[d6 c+ b c+ *3 d c+ * b c+ 1/4] 1/8 e \
+    |11 1/4 [g4 b e g] 3/8 orn[a g f+ g *3 a g * f+ g 1/4] 1/16 f+ g \
+    |12 1/8 g orn[f+ e 1/16] 3/8 orn[d5 c+ b c+ *3 d c+ * b c+ 1/4] 1/8 e \
     |13 1/16 a g f+ e 1/8 d 9/32 a 1/32 b 1/16 c \
     |14 1/16 b a g f+ 1/8 e 9/32 orn[+d c+ 1/16] 1/32 d 1/16 e \
     |15 1/16 d c+ b a 1/8 +g 1/4 -b 1/8 c+ \
@@ -34,12 +34,12 @@ def soprano1(first):
 
 def soprano2(first):
     return sh_score('meas3/4 \
-    |17 1/4 orn[a5 g a 1/24] 5/16 orn[b a g a *3 b a * 1/6] 1/32 a b c d 1/16 e \
+    |17 1/4 orn[a4 g a 1/24] 5/16 orn[b a g a *3 b a * 1/6] 1/32 a b c d 1/16 e \
     |18 1/8 orn[e d 1/16] orn[c b 1/16] 3/8 orn[a g 1/4] 1/8 g6 \
     |19 3/16 orn[f+ e 1/16] 1/32 f+ d+ 1/8 d+ 1/4 orn[e d+ e 1/20] 1/32 a b a g \
     |20 3/16 a 1/16 f+ 3/8 orn[e d+ 1/16] 1/8 b \
     |21 3/16 orn[e f+ g 1/16] 1/16 f+ 5/16 orn[f+ e 1/18] 1/16 b 1/32 c b a b \
-    |22 1/32 g6 3/32 e 1/32 f+ 3/32 d+ 5/16 orn[d+ e 1/16] 1/16 g5 f+ e \
+    |22 1/32 g5 3/32 e 1/32 f+ 3/32 d+ 5/16 orn[d+ e 1/16] 1/16 g4 f+ e \
     |23 3/16 f+ 1/16 e6 1/8 orn[e d+ 1/16] orn[f+ g a 1/16] g f+ \
     |24 3/16 orn[f+ e 1/16] 1/32 f+ d+ 1/2 orn[d+ e 1/4 ] \
     |25 1/8 e orn[d c 1/16] 3/8 orn[b a 1/8] 1/16 b c \

@@ -37,88 +37,88 @@ import numula.pianoteq
 # Put each measure on a new line
 #
 def make_score():
-    top1 = sh_score('3/16 .  d6- 2/8 c 1/8 +c \
+    top1 = sh_score('3/16 .  d5- 2/8 c 1/8 +c \
         3/8 -f c \
         3/16 . +d- 2/8 c 1/8 +c \
         3/16 [5/8 -f] d- 2/8  c 1/8 +c \
-        3/16 -f d- [c -e-] c7 \
+        3/16 -f d- [c -e-] c6 \
     ').tag('mel')
     inner1 = sh_score('6/8 . \
-        2/8 a4- 1/8 b- 2/8 c 1/8 d- \
+        2/8 a3- 1/8 b- 2/8 c 1/8 d- \
         3/8 e- f \
         g a- \
     ').tag('inner1')
     inner1a = sh_score('6/8 . \
-        2/8 c4 1/8 d- 2/8 e- 1/8 f \
+        2/8 c3 1/8 d- 2/8 e- 1/8 f \
         3/8 g a- \
         b- c \
         b- \
     ').tag('inner1a')
-    bass1 = sh_score('6/8 . 3/8 f3 f \
-        f f f f f 3/16 f [f5 +d-] \
+    bass1 = sh_score('6/8 . 3/8 f2 f \
+        f f f f f 3/16 f [f4 +d-] \
     ').tag('bass')
 
-    top2 = sh_score('3/16 [e6- c] [f d-] d- e- 2/8 c 1/8 c \
+    top2 = sh_score('3/16 [e5- c] [f d-] d- e- 2/8 c 1/8 c \
         3/16 b- +b- a- d- 3/8 -g- \
         3/16 . f 3/8 b- 2/8 a- 1/8 -a- \
-        3/8 g6- 3/16 d- +c d- e- \
+        3/8 g5- 3/16 d- +c d- e- \
     ').tag('mel2')
-    mid2 = sh_score('3/8 g5- f e- \
+    mid2 = sh_score('3/8 g4- f e- \
         e- 3/16 [f b-] b- 2/8 c 1/8 c \
-        3/8 [f4 +c f] 3/16 [b- +f] e5- [a- d- f] d5- \
-        [c 3/8 d6-] b- [d- 2/8 b4-] c7 [d5- 3/8 g6-] e6- \
+        3/8 [f3 +c f] 3/16 [b- +f] e4- [a- d- f] d4- \
+        [c 3/8 d5-] b- [d- 2/8 b3-] c6 [d4- 3/8 g5-] e5- \
     ').tag('inner')
-    bass2 = sh_score('3/8 [g5- --f] [+f b- ---f] [+f +e-] \
+    bass2 = sh_score('3/8 [g4- --f] [+f b- ---f] [+f +e-] \
         --g- f e- \
         d- c b- \
-        1/4 e- 1/8 f 1/4 [g- ++b-] 1/8 --a- 3/8 [a c5] \
+        1/4 e- 1/8 f 1/4 [g- ++b-] 1/8 --a- 3/8 [a c4] \
     ').tag('bass')
 
-    rh3 = sh_score('3/16 [e6- 3/8 f -b- f] [+d- +d-] [e- -f c a- f] +++f 1/4 [--f b-] 1/8 [e- -e-] \
+    rh3 = sh_score('3/16 [e5- 3/8 f -b- f] [+d- +d-] [e- -f c a- f] +++f 1/4 [--f b-] 1/8 [e- -e-] \
         3/16 [-f b- +g-] [+f +f] 1/8 .  [----c +c  c +c] [-c -c] \
         3/16 . [f +e-] c [+c +c] \
        3/16 [ ---f +f f +f] +f ---c [+g- +g-] \
     ').tag('rh')
-    lh3 = sh_score(' 3/8 [b4- -b-] 3/16 [c +a-] [d- -d-] 1/4 [c +g-] 1/8 [-c +c] \
+    lh3 = sh_score(' 3/8 [b3- -b-] 3/16 [c +a-] [d- -d-] 1/4 [c +g-] 1/8 [-c +c] \
         3/8 [b- f -b-] [a- +a-] \
         3/16 [6/8 g- -g-] ++b- 1/4 c 1/8 [c +c] \
         3/16 [3/8 ---f +f] ++d- 3/8 [--e- -e-] \
     ')
 
-    rh4 = sh_score('3/16 f7 b- [--c a-] [++f +c] \
+    rh4 = sh_score('3/16 f6 b- [--c a-] [++f +c] \
         [--c -g-]  3/16 [b- +b-  b- +b-] [-e- b- -b-] -e- g- g- \
         [f d-] +d- 1/4 ++d- 1/8 c 3/8 b- \
         1/8 [ ---c e 1/4 a-] [f -a-] 1/4 +g 1/8 [d- +a-] [-e- +d-] \
     ').tag('rh')
-    lh4 = sh_score(' 3/16 d4- [f5 +d-] . a5- \
-        e4- [e6- d-] 3/8 . . \
-        3/8 . 2/8 . 1/8 [d5- f] 3/16 . [e5 c4] \
-        1/4 . 1/8 [d4- +b-] [c -e-] f g \
+    lh4 = sh_score(' 3/16 d3- [f4 +d-] . a4- \
+        e3- [e5- d-] 3/8 . . \
+        3/8 . 2/8 . 1/8 [d4- f] 3/16 . [e4 c3] \
+        1/4 . 1/8 [d3- +b-] [c -e-] f g \
     ')
-    bass4 = sh_score('3/8 d3- d \
-        e- +d- c3 \
-        3/16 c4 b- 3/8 a- g \
+    bass4 = sh_score('3/8 d2- d \
+        e- +d- c2 \
+        3/16 c3 b- 3/8 a- g \
         2/8 f f f \
     ')
 
-    rh5 = sh_score('2/12 [e5- +d- e- +d-] 1/12 c 1/4 [b- -d-] +a- \
+    rh5 = sh_score('2/12 [e4- +d- e- +d-] 1/12 c 1/4 [b- -d-] +a- \
         [b- +g] 1/6 --d- 1/12 c 1/8 [+g +e- +b-] -d- \
         1/6 [d- +a- d-] 1/12 c 1/4 [b- g -c -e-] [d- +b- +f a-] \
         1/8 [g e- -a- -c] ++d- [--b- +g +d- f +d-] c [b- -e- c -f -a-] ++d- \
     ').tag('rh')
-    lh5 = sh_score(' 1/8 [f4 a- +f] [-b- +g] [a- -c -f] [+d- +b-] [c -e- -f] [+f  +d-] \
+    lh5 = sh_score(' 1/8 [f3 a- +f] [-b- +g] [a- -c -f] [+d- +b-] [c -e- -f] [+f  +d-] \
         [1/4 ---f +f 1/8 ++g +e-] [f -a-] 1/4 [a- --f -f] (less [f +f] \
         [-f +f] [-f +f] [-f +f] \
         [-f +f] [-f +f] [-f +f] less) \
     ').tag('lh')
 
-    rh6 = sh_score('1/8 [(more d7- more) e- +a- d-] c 1/4 [b- g -c a-] [g b- +f a-] \
+    rh6 = sh_score('1/8 [(more d6- more) e- +a- d-] c 1/4 [b- g -c a-] [g b- +f a-] \
         [g e- -a- f] [e- g +d- f] [e- c -f -d-] \
         [c e- +b- d-] 1/6 [-d- b-] [+a- c] [-d- b-] \
         1/4 [ (less -f less) c] 3/8 [+b- d- f a-] 1/8 [3/8 --f] \
         1/4 [3/4 a- c] -e- d- \
     ').tag('rh')
-    lh6 = sh_score(' 1/4 [f4 g5 b-] [d- -f -f] [f +e- +c] \
+    lh6 = sh_score(' 1/4 [f3 g4 b-] [d- -f -f] [f +e- +c] \
         [b- -d- -f] [f +c +a-] [g -b- f] \
         [f a- +g] 1/2 [e -g f] \
         3/4 [ (more g more) 6/4 -c -f] +f \
@@ -375,7 +375,6 @@ def do_pedal(ns):
                 
 def main():
     ns = make_score()
-    #ns.verbose = True
     if True:
         do_pedal(ns)
         set_vol(ns)
@@ -387,7 +386,6 @@ def main():
         numula.pianoteq.play_score(ns,
             #preset='My Presets/NY Steinway D Classical (for wasser)'
             preset='NY Steinway D Sombre'
-            #score_time = 30/8
         )
     else:
         ns.write_midi('data/wasserklavier.midi')

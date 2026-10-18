@@ -17,7 +17,7 @@ if __name__ == '__main__':
 from numula.ipa import *
 
 def main():
-    ns = sh_score('1/32 *4 c5 d e f g a b c * 1/4 -c')
+    ns = sh_score('1/32 *4 c4 d e f g a b c * 1/4 -c')
     if pvol != 'off':
         ns.vol_adjust_pft(
             sh_vol(f'{v1} {i1} {v2} {i2} {v3}')

@@ -15,9 +15,9 @@ r1 = '<1/2 1/4 1/4 3/4 1/4 1/4 1/4 1/4 1/4 4/4>'
 r2 = '<1/2 1/4 1/4 2/4 1/4 1/4 1/4 1/4 1/4 1/4 4/4>'
 
 soprano = sh_score(f'meas4/4 \
-    |1 {r1} b6- a- b- c- b- b- a- g- a- b- \
+    |1 {r1} b5- a- b- c- b- b- a- g- a- b- \
     |5 {r2} g- f g- b- a- g- g- f e- f g- \
-    |9 {r1} b6- a- b- c- b- b- a- g- a- b- \
+    |9 {r1} b5- a- b- c- b- b- a- g- a- b- \
     |13 g- f g- b- a- g- f c d e- \
     |17 +b- a- b- c- b- b- a- g- a- b- \
     |21 {r2} g- f g- b- a- g- g- f e- f g- \
@@ -25,12 +25,12 @@ soprano = sh_score(f'meas4/4 \
     |29 {r2} g- f g- b- a- g- g- f c d \
     |32 meas2/4 1/2 e- \
     |33 meas4/4 {r1} +b- a- b- c- b- b- a- g- a- b- \
-    |37 1/2 g5- 1/4 f g- 1/2 b- 1/4 +a- --g- +g- f e- f \
+    |37 1/2 g4- 1/4 f g- 1/2 b- 1/4 +a- --g- +g- f e- f \
     |40 meas2/4 g- f \
     |41 meas4/4 {r1} b- a- b- c- b- b- g+ g- a- b- \
     |45 g- f g- 1/2 b- . 4/4 . . . \
     |50 meas2/4 2/4 . \
-    |51 meas4/4 {r1} b5- a b- c- b- b- a- g- a- b- \
+    |51 meas4/4 {r1} b4- a b- c- b- b- a- g- a- b- \
     |55 {r2} g- f g- b- a- g- g- f e- f g- \
     |59 {r1} b- a b- c- b- b- a- g- a- b- \
     |63 g- f g- b- a- g- f c d 4/4 e- \
@@ -38,7 +38,7 @@ soprano = sh_score(f'meas4/4 \
 ').tag('sop')
 
 alto = sh_score('meas4/4 \
-    |1 1/4 . [a5- d-] . [d- e-] . [c- d-] . d- \
+    |1 1/4 . [a4- d-] . [d- e-] . [c- d-] . d- \
     |3 . [c- d-] . [c- d-] . [a- d-] . [e- f] \
     |5 . [-a- g-] . +d- . [d- c-] . d- \
     |7 . -g- . b- . [d- -g-] . . \
@@ -46,37 +46,37 @@ alto = sh_score('meas4/4 \
     |11 . [c- d-] . c- . [d- a-] . [b- +f] \
     |13 . [-a- g-] . a- . [a- d-] . d- \
     |15 . c . c 4/4 . \
-    |17 1/12 . b5- d- +b- b- +b- . b5- d- . +b- +b- \
-    |18 . c6- d- g- c- d- +c- g- d- . -d- c- \
-    |19 . c6- d- . +d- +d- . c6- d- . +d- +d- \
+    |17 1/12 . b4- d- +b- b- +b- . b4- d- . +b- +b- \
+    |18 . c5- d- g- c- d- +c- g- d- . -d- c- \
+    |19 . c5- d- . +d- +d- . c6- d- . +d- +d- \
     |20 . b5- d- +a- b- d- +b- a- e- b- a- -d- \
-    |21 . g5- b- +g- +f -b- . -b- +b- . +e- --d- \
-    |22 . c6- d- g- ++b- -d- . --c- d- . ++g- -b- \
-    |23 . a5- b- . +b- +b- . a5- ++b- . -c +c \
-    |24 . d6- +d- c b- a- f e- d- c b- f \
-    |25 . b5- d- +a- b- +b- . b5- d- . +b- +b- \
-    |26 . c6- d- g- c- d- +c- b- -d- . d6- c- \
-    |27 . c6- d- . +d- +d- . c6- d- . +d- +d- \
-    |28 . b5- d- +a- b- d- +b- a- g- e- -a- -d- \
-    |29 . g5- b- +f g- +f . b6- -b- . d6- ++e- \
-    |30 . c6- d- g- +d- +d- . c6- d- . b7- -d- \
-    |31 . a5- b- . c7 -c . f5 b- . c7 -c \
-    |32 meas2/4 . f5 b- d +c -c \
-    |33 meas4/4 1/16 . a6- e- -a- b- d- e- a- ++b- a- -d- a- . a- -e -g \
+    |21 . g4- b- +g- +f -b- . -b- +b- . +e- --d- \
+    |22 . c5- d- g- ++b- -d- . --c- d- . ++g- -b- \
+    |23 . a4- b- . +b- +b- . a5- ++b- . -c +c \
+    |24 . d5- +d- c b- a- f e- d- c b- f \
+    |25 . b4- d- +a- b- +b- . b4- d- . +b- +b- \
+    |26 . c5- d- g- c- d- +c- b- -d- . d6- c- \
+    |27 . c5- d- . +d- +d- . c5- d- . +d- +d- \
+    |28 . b4- d- +a- b- d- +b- a- g- e- -a- -d- \
+    |29 . g4- b- +f g- +f . b5- -b- . d5- ++e- \
+    |30 . c5- d- g- +d- +d- . c5- d- . b6- -d- \
+    |31 . a4- b- . c6 -c . f4 b- . c6 -c \
+    |32 meas2/4 . f4 b- d +c -c \
+    |33 meas4/4 1/16 . a5- e- -a- b- d- e- a- ++b- a- -d- a- . a- -e -g \
     |34 +d- c- b- c- d- e- g- +d- +c- b- -e- b- . a- -d -f+ \
     |35 +d c- b- c- d- +c- [e- +c-] --b- -d- c- a- b- d g- [+d- +c-] -c- \
     |36 -d- c -f a- b- d- e- a- ++b- a- [c- -e-] d- [f- -a-] g- [+c- -e-] d- \
     |37 [e- +b-] -d- b- c- [d- g-] a- [b- e-] f \
         [e- +b-] -d- [g- -b-] a- [a- +f] -g- [f +d-] -e- \
     |38 +b- a- e- -a- b- d- e- a- ++b- a- -d- b- d- a- -d- b- \
-    |39 . a5- g- a- . b6- +b- -b- . a5- g- a- . b6- +b- -b- \
+    |39 . a4- g- a- . b5- +b- -b- . a4- g- a- . b5- +b- -b- \
     |40 meas2/4 -b- a- g- a- b- +b- [+f b-] -b- \
     |41 meas4/4 -e- d- a- d- e f+ b c+ +b b- -f- -a- . g- e -g \
     |42 +f- e- c- d- g- a- b- d- +b- a- [c- -e-] d- f -a- +f+ --f \
     |43 e d b c+ e +b [c+ +b] -b -d- c- a- b- d- +c- [d- +c-] -c- \
     |44 -d- c- a- c- d- e- a- a- ++c- b- g- d- e -a -d -g \
     |45 b- a- f g- c- d- f g- [+e- +c] -d- g- -b- -b- a- +d- -g- \
-    |46 . a6- e- -a- d- e- g- +d- +d- b- -e- d- b- a- -d- a- \
+    |46 . a5- e- -a- d- e- g- +d- +d- b- -e- d- b- a- -d- a- \
     |47 ++b- a- g- -b- +g- f -c- -f ++b- a- -d- -g- +f -c- a f \
     |48 ++b- a- -d- -g- +g- f -c- -f ++b- a- f- -b- +f -c- a f \
     |49 +f e- -a f b- e- f ++g- d- -a -d- -a +a -e- -a -d- \
@@ -85,7 +85,7 @@ alto = sh_score('meas4/4 \
 ')
 
 bass = sh_score('meas4/4 \
-    |1 1/8 f5 -b- d- -e- ++a- 1/4 -d- 1/8 _ e- -e- \
+    |1 1/8 f4 -b- d- -e- ++a- 1/4 -d- 1/8 _ e- -e- \
     |2 -a- +g- +d- c- +g- d- e- -g- \
     |3 +g- -c- e- --d- ++g- 1/4 -c- 1/8 _ d- -d- \
     |4 ++a- -b- d- -e- ++a- 1/4 e- 1/8 _ g d- \
@@ -103,7 +103,7 @@ bass = sh_score('meas4/4 \
     |17 e- +b- +f d- +b- -e- a- -d- \
     |18 --a- +e- +c- +g- +d- -d- e- -g- \
     |19 d- +c- +f +c- -e- d- f -c- \
-    |20 g3- +f b- +f 1/4 d- 1/8 _ e- b- -f- \
+    |20 g2- +f b- +f 1/4 d- 1/8 _ e- b- -f- \
     |21 -c- +g- +e- b- +f -a- d- -g- \
     |22 -a- +g- +d- +a- -c- d- +c- --a- \
     |23 -b- +a- +d g- -c- a- 1/4 +d \
@@ -116,21 +116,21 @@ bass = sh_score('meas4/4 \
     |30 e- -a- ++c- -g- +g- -c- d- -e- \
     |31 b- +a- +d c +b- -c d -f \
     |32 meas2/4 1/12 --e- +b- +f g- b- +f \
-    |33 meas4/4 1/8 a- -d- -e- +b- . d6- -g -d- \
-    |34 g- -a- g- -a- e6- -g- c- -d \
-    |35 g5- -c- c- -d- ++g- d- g- -c- \
+    |33 meas4/4 1/8 a- -d- -e- +b- . d5- -g -d- \
+    |34 g- -a- g- -a- e5- -g- c- -d \
+    |35 g4- -c- c- -d- ++g- d- g- -c- \
     |36 +f -b- -e- +d- +a- d- a- -d- \
-    |37 . c5- -e- -a- . a4- . c- \
-    |38 . f4 +c- e- . e6- . c5- \
+    |37 . c4- -e- -a- . a3- . c- \
+    |38 . f3 +c- e- . e5- . c4- \
     |39 e- -a- f -b- ++d -a- f -b- \
     |40 meas2/4 [+a- +e-] --b- [+a- +e-] -b- \
-    |41 meas4/4 ++c- --e- [+b- d-] +d- 1/16 . g6- e- d- -g f- e- d- \
+    |41 meas4/4 ++c- --e- [+b- d-] +d- 1/16 . g5- e- d- -g f- e- d- \
     |42 +g- -a- c- g- +d- -e- g- -a- +e- g- c- e- +b- -d f -b \
     |43 1/12 +f -b d +b- -b d f -b d +b- -b d \
     |44 1/8 f d- -e- ++d- +d- -d- 1/4 g+ 1/8 _ -d \
-    |45 1/16 d- -e- g- -a- ++c- d- +c- g- . c6- b- a- f -c- b- a- \
+    |45 1/16 d- -e- g- -a- ++c- d- +c- g- . c5- b- a- f -c- b- a- \
     |46 1/8 +e- -f +c- +a- d- -e- g- -c- \
-    |47 *2 g5- -a- +d --b- ++e- -a- +d --b- * \
+    |47 *2 g4- -a- +d --b- ++e- -a- +d --b- * \
     |49 e- +b- 3/4 . \
     |50 meas2/4 2/4 . \
     |51 meas4/4 1/8 -e- g +d- 1/4 f- 1/8 e- d -e- \

@@ -9,7 +9,7 @@ import numula.pianoteq
 # the half/quarter pattern that repeats throughout.
 # not always on top
 soprano = sh_score('meas3/4 \
-    |1 <*3 1/2 1/4 * 3/4> f6 e f c f e d- \
+    |1 <*3 1/2 1/4 * 3/4> f5 e f c f e d- \
     |5 f e f d- f e c \
     |9 f g a g+ e g d \
     |13 f+ g+ a g e e- -b \
@@ -17,17 +17,17 @@ soprano = sh_score('meas3/4 \
     |21 [g +e-] [d- a-] [g +e-] [e -f] [g ++a-] [f+ -g+] [f+ +c+] \
     |25 [c +b] [c -f] [c +b] [g+ -c+] [c ++c+] [c -f] [g+ -c+ ] \
     |29 [c +b-] [a -d] [c+ f+] [d c] [a +g] [f -f+] [b -c] \
-    |33 f6 e f d- f e c \
+    |33 f5 e f d- f e c \
     |37 f e f c f e d- \
     |41 f g a e g+ g d \
     |45 f+ g+ a g e b e- \
     |49 [e -g] [f+ +d+] [e -g] [f+ +f+] [a --g+] [a d] [f -g] \
     |53 [g +e-] [d- a-] [g +e-] [e -f] [g ++a-] [f+ -g+] [f+ +c+] \
     |57 [c +b] [c -f] [-c +b] [g+ -c+] [c ++c+] [c -f] [g+ -c+] \
-    |61 [c6 +b-] [a -d] [c+ f+] [d c] [a +g] [f -f+] [b -c+] \
+    |61 [c5 +b-] [a -d] [c+ f+] [d c] [a +g] [f -f+] [b -c+] \
     |65 3/4 . . \
     |67 <*3 1/2 1/4 * 3/4> \
-        [g6 +e] [d+ -f+] [g +e] [f+ -f+] [g+ ++a] [-d a] [g +f] \
+        [g5 +e] [d+ -f+] [g +e] [f+ -f+] [g+ ++a] [-d a] [g +f] \
     |71 [e- -g] [a- d-] [e- -g] [f +e] [a- --g] [g+ +f+] [c+ -f+] \
     |75 [+c +b] [c -f] [+b -c] [c+ +g+] [c+ --c] [f +c] [g+ -c+] \
     |79 [c +b-] [a -d] [c+ +f+] [d c] [a +g] [f -f+] [-c +b] \
@@ -37,69 +37,69 @@ soprano = sh_score('meas3/4 \
 
 # the main accompaniment, sometimes above soprano
 alto = sh_score('meas3/4 \
-    |1 1/8 . e6 e c . -f . +e e d- . -f . +e -f +e . c  . e e c+ e -f \
+    |1 1/8 . e5 e c . -f . +e e d- . -f . +e -f +e . c  . e e c+ e -f \
     |5 . +e c -f . +d- . e e c . -f . f +c e . f . e d- -f f +e \
     |9 . e c c . -f . +e d- c . -f . +e- c +g . --f . +e c c +g --f \
     |13 . +e d -f . +e . g+ e -f . +c . d- e- -f . ++g . g+ f+ d+ c -f \
     |17 *2 \
-        1/12 . [b6 +g+] [f+ c+] [d+ -f+] [+b -c] f . [g +d] [c f] \
+        1/12 . [b5 +g+] [f+ c+] [d+ -f+] [+b -c] f . [g +d] [c f] \
         . [f+ -g+] [b- +f] [d -e] [f+ +c] [g d] . [f b-] [g c] \
         . [b +g+] [f+ c+] [d+ -f+] [g +c+] [a -d] . [f+ b] [g+ +d+] \
         . [f+ -g+] [b- +f] [-b -e+] [f+ g+] [f+ +c+] [e -g+] [f +f] [d -g] \
         * \
     |25 *2 \
-        . [b6 +b-] [a g+] [f+ -g+] [b- +f] [-b -f] . [+f b] [g -b ] \
-        . [b6 +b-] [a g+] [f+ -g+] [b- +f] [-b -f] . [+c+ f+] [f -g] \
+        . [b5 +b-] [a g+] [f+ -g+] [b- +f] [-b -f] . [+f b] [g -b ] \
+        . [b5 +b-] [a g+] [f+ -g+] [b- +f] [-b -f] . [+c+ f+] [f -g] \
         . [a +g+] [g -b] [f +e] [d -g] [a -d] . [g +f+] [c+ b+] \
         . [c +g] [a --g] [g+ +f+] [-c+ b+] [ g +f] [g -c+] [g+ ++a] [f+ -b] \
         * \
-    |33 1/12 . c6 d- 1/8 d- -f . [b ++c] 1/12 . -e c d- -f ++b 1/8 . -c \
+    |33 1/12 . c5 d- 1/8 d- -f . [b ++c] 1/12 . -e c d- -f ++b 1/8 . -c \
     |35 1/12 . e b e c+ +c 1/8 . [-f -f] 1/12 . +e d- e -f +c +b -d- f \
     |37 *2 \
         1/12 . e c d- -f +c 1/8 . [c +b] 1/12 . -e c 1/8 e [-f ++c] 1/12 . b -d- \
         . e e c -f ++g 1/8 . [b -b] 1/12 . +f e +c --f +e +c --b e \
         * \
-    |45 1/12 . c6 d- 1/8 d- -f . [b ++c] 1/12 . -e c d- -f ++b 1/8 . -c \
+    |45 1/12 . c5 d- 1/8 d- -f . [b ++c] 1/12 . -e c d- -f ++b 1/8 . -c \
     |47 1/12 . e b e c+ +c 1/8 . [-f -f] 1/12 . +e d- e -f +c +b -d- f \
-    |49 1/12 . 1/36 g7+ -b +g+ -c+ f+ c+ d+ -f+ +d+ b -c +b \
+    |49 1/12 . 1/36 g6+ -b +g+ -c+ f+ c+ d+ -f+ +d+ b -c +b \
         1/12 f . 1/36 +d -g +d c f c \
-    |50 1/12 . 1/36 g6+ +f+ -g+ b- +f -b- -e +d -e +c -f+ +c -d g d \
+    |50 1/12 . 1/36 g5+ +f+ -g+ b- +f -b- -e +d -e +c -f+ +c -d g d \
         1/12 . 1/36 f b- f +c g c \
-    |51 1/12 . 1/36 g7+ -b +g+ f+ c+ f+ d+ -f+ +d+ -g +c+ -g a -d +a \
+    |51 1/12 . 1/36 g6+ -b +g+ f+ c+ f+ d+ -f+ +d+ -g +c+ -g a -d +a \
         1/12 . 1/36 f+ b f+ g+ +d+ -g+ \
-    |52 1/12 . 1/36 f7+ -g+ +f+ f -b- +f -b -e+ +b f+ g+ f+ \
+    |52 1/12 . 1/36 f6+ -g+ +f+ f -b- +f -b -e+ +b f+ g+ f+ \
         +c+ -f+ +c+ g+ +e -g+ +f -f +f d -g +d \
-    |53 1/12 . 1/36 b6 +g+ -b +f+ c+ f+ -f+ +d+ -f+ -c +b -c \
+    |53 1/12 . 1/36 b5 +g+ -b +f+ c+ f+ -f+ +d+ -f+ -c +b -c \
         1/12 f . 1/36 g +d -g +f c f \
     |54 1/12 . 1/36 f+ -g+ +f+ f -b- +f d -e +d -f+ +c -f+ g d g \
         1/12 . 1/36 b- f b- g c g \
-    |55 1/12 . 1/36 b6 +g+ -b c+ f+ c+ -f+ +d+ -f+ +c+ -g +c+ -d +a -d \
+    |55 1/12 . 1/36 b5 +g+ -b c+ f+ c+ -f+ +d+ -f+ +c+ -g +c+ -d +a -d \
         1/12 . 1/36 +b f+ b d+ -g+ +d+ \
     |56 1/12 . 1/36 -g+ +f+ -g+ b- +f -b- -e+ +b -e+ g+ f+ g+ \
         f+ +c+ -f+ +e -g+ +e -f +f -f g +d -g \
-    |57 1/12 . 1/48 b7- -b +b- -b +a g+ a g+ g+ +f+ -g+ +f+ -b- +f -b- f+ \
+    |57 1/12 . 1/48 b6- -b +b- -b +a g+ a g+ g+ +f+ -g+ +f+ -b- +f -b- f+ \
         -f +b -f +b 1/12 . 1/48 b -f +b -f +b +g -b +g \
-    |58 1/12 . 1/48 b6 +b- -b +b- g+ ++a --g+ ++a f+ -g+ +f+ -g+ +f -b- +f -b- \
+    |58 1/12 . 1/48 b5 +b- -b +b- g+ ++a --g+ ++a f+ -g+ +f+ -g+ +f -b- +f -b- \
         b f b f 1/12 . 1/48 c+ f+ c+ f+ g +f -g +f \
-    |59 1/12 . 1/48 a6 +g+ -a +g+ -b +g -b +g f +e -f +e -g +d -g +d \
+    |59 1/12 . 1/48 a5 +g+ -a +g+ -b +g -b +g f +e -f +e -g +d -g +d \
         a -d +a -d 1/12 . 1/48 g +f+ -g +f+ c+ b+ c+ b+ \
-    |60 1/12 . 1/48 c6 +g -c +g g ++a --g ++a --g+ +f+ -f +f+ c+ b+ c+ b+ \
+    |60 1/12 . 1/48 c5 +g -c +g g ++a --g ++a --g+ +f+ -f +f+ c+ b+ c+ b+ \
         +f -g +f -g g -c+ +g -c+ +a --g+ ++a --g+ +f+ b f+ b \
-    |61 1/12 . 1/24 b7- -b +a g+ f+ -g+ +f -b- b -f 1/12 . 1/24 ++b -f g -b \
+    |61 1/12 . 1/24 b6- -b +a g+ f+ -g+ +f -b- b -f 1/12 . 1/24 ++b -f g -b \
     |62 1/12 . 1/24 +b- -b +a g+ f+ -g+ +f -b- b -f 1/12 . 1/24 ++f+ c+ +f -g \
-    |63 1/12 . 1/24 g7+ -a +g -b e -f +d -g a -d 1/12 . 1/24 ++f+ -g +c+ c \
+    |63 1/12 . 1/24 g6+ -a +g -b e -f +d -g a -d 1/12 . 1/24 ++f+ -g +c+ c \
     |64 1/12 . 1/24 +g -c +a --g +f+ -g+ c+ c f -g +g -c +a --g+ +f+ -b \
-    |65 1/12 . 1/24 g7 -c +a --g +f+ -g+ c+ c f -g +g -c +a --g+ +f+ -b \
+    |65 1/12 . 1/24 g6 -c +a --g +f+ -g+ c+ c f -g +g -c +a --g+ +f+ -b \
     |66 1/12 . [c +g] [a --g] [g+ +f+] 1/6 [c+ b+] 1/8 [c +g] [a --g+] \
     |67 1/12 *2 \
-        . [b6 +g+] [f+ c+] [d+ -f+] [b -c] f . [g +d] [c f] \
+        . [b5 +g+] [f+ c+] [d+ -f+] [b -c] f . [g +d] [c f] \
         . [f+ -g+] [b- +f] [d -e] [f+ +c] [g d] . [f b-] [g c] \
         . [b +g+] [f+ c+] [d+ -f] [g +c+] [a -d] . [f+ b] [g+ +d+] \
         . [f+ -g+] [b- +f] [-b -e+] [f+ g+] [f+ +c+] [e -g+] [f +f] [d -g] \
         * \
     |75 *2 \
-        . [b6 +b-] [a g+] [f+ -g+] [b- +f] [-b -f] . [+f +b] [g -b] \
-        . [b6 +b-] [a g+] [f+ -g+] [b- +f] [-b -f] . [+c+ f+] [f -g] \
+        . [b5 +b-] [a g+] [f+ -g+] [b- +f] [-b -f] . [+f +b] [g -b] \
+        . [b5 +b-] [a g+] [f+ -g+] [b- +f] [-b -f] . [+c+ f+] [f -g] \
         . [a +g+] [g -b] [-f +e] [d -g] [a -d] . [g +f+] [-c+ b+] \
         . [c +g] [a --g] [g+ +f+] [c+ b+] [g +f] [g -c+] [g+ ++a] [f+ -b] \
         * \
@@ -111,15 +111,15 @@ alto = sh_score('meas3/4 \
 # various off-beat notes
 tenor = sh_score('meas3/4 \
     |1 3/4 *31 . * \
-    |32 1/4 . . c6 \
+    |32 1/4 . . c5 \
     |33 3/4 *24 . * \
-    |57 1/12 . f6 e f c . . . . \
+    |57 1/12 . f5 e f c . . . . \
     |58 *2 . f e f d- . . . . * \
     |60 . f e 1/8 f c . . \
     |61 *2 3/16 . 5/16 e 1/4 . * \
     |63 3/4 . 3/8 . c+ \
     |65 2/4 . 1/16 . 3/16 c+ 1/4 . 1/8 . c+ 1/12 . 2/12 c+ \
-    |67 1/8 . e6 e c . -f . +e e d- . -f . +e -f +e . c . e e c+ e -f \
+    |67 1/8 . e5 e c . -f . +e e d- . -f . +e -f +e . c . e e c+ e -f \
     |71 . +e c -f . +d- . e e c . -f . f +c e . f . e d- -f f +e \
     |75 . e c c . -f . +e d- c . -f . +e- c +g . --f . +e c c +g --f \
     |79 . +e d -f . +e . g+ e -f . +c . d- e- -f . ++g . g+ f+ d+ c -f \
@@ -131,7 +131,7 @@ tenor = sh_score('meas3/4 \
 bass = sh_score('meas3/4 \
     |1 3/4 *66 . * \
     |67 <*3 1/2 1/4 * 3/4> \
-        f6 e f c f e d- \
+        f5 e f c f e d- \
     |71 f e f d- f e c \
     |75 f g a g+ e g d \
     |79 f+ g+ a g e e- b \

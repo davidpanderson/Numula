@@ -104,7 +104,7 @@ from numula.ipa import *
 
 right_hand = sh_score('meas4/4 \
     |1 1/32 \
-        *2 c5+ +c+ g+ b a f+ d +d \
+        *2 c4+ +c+ g+ b a f+ d +d \
             --c+ +c+ g+ b a g+ f+ +f+ \
             -f+ +f+ -a+ c+ b g+ e+ +e+ \
             -a +a -b+ d c+ b g+ +g+ \
@@ -117,99 +117,99 @@ right_hand = sh_score('meas4/4 \
         --a +a -c+ e d b g+ +g+ \
         --f+ +f+ -a+ c+ b g+ e+ +e+ \
         --d +d -f++ a g+ e+ c+ +c+ \
-    |5  c5+ +c+ g+ b a f+ d +d \
+    |5  c4+ +c+ g+ b a f+ d +d \
         --c+ +c+ g+ b a g+ f+ +f+ \
         -f+ +f+ -a+ c+ b g+ e+ +e+ \
         -a +a -b+ d c+ b g+ +g+ \
-    |6  c5+ +c+ g+ b a f+ d +d \
+    |6  c4+ +c+ g+ b a f+ d +d \
         --c+ +c+ g+ b a g+ f+ +f+ \
         -a +a -c+ e d b g+ +g+ \
         -c+ +c+ -d+ f+ e d b +b \
-    |7  e6 +e b d c a f+ +f+ \
+    |7  e5 +e b d c a f+ +f+ \
         --e +e -g+ b a f+ d+ +d+ \
         --d +d -f++ a+ g+ f e +e \
         --d +d -f+ a g e c+ +c+ \
-    |8  c6 +c -e+ g+ f+ e- d +d \
+    |8  c5 +c -e+ g+ f+ e- d +d \
         --c +c -e g f d b +b \
         -c- +c- -e- g- f- d- b- +b- \
         -b- +b- -e- g- f- d- b- +b- \
-    |9  b5- +b- -e g f d a +a \
+    |9  b4- +b- -e g f d a +a \
         -b-- +b-- -d- f- e-- c- a- +a- \
         -a- +a- -c+ e- d b g +g \
         -g +g d f e- d c +c \
-    |10  c6 +c -f+ a- g e- b +b \
+    |10  c5 +c -f+ a- g e- b +b \
         -c- +c- -e- g- f- e- b- +b- \
         -b- +b- -d+ f e c+ a +a \
         -a +a e g f e d +d \
-    |11  d6 +d -e g f e- c +c \
+    |11  d5 +d -e g f e- c +c \
         -c +c -e g f d b- +b- \
         -b- +b- -c+ e- d c a +a \
         -a +a -c+ e- d b g +g \
-    |12  g5 +g -a c b- a- f +f \
+    |12  g4 +g -a c b- a- f +f \
         --e +e -a c b- a- f +f \
         -f +f -a c- b- a- f +f \
         -g- +g- d f e- b- g- +g- \
-    |13 g5- +g- -g b- a- g- f- +f- \
+    |13 g4- +g- -g b- a- g- f- +f- \
         -f- +f- -g b- a- f- -a- +a- \
         -c- +c- -f a- g- e- c- +c- \
         --b- +b- f a- g- e- c- +c- \
-    |14 c5 +c -f a- g- f- c +c \
+    |14 c4 +c -f a- g- f- c +c \
         -d- +d- -f a- g- f- d +d \
         -d +d -f a- g- f- d +d \
         -e- +e- b- d- c- g- e- +e- \
-    |15 e5- +e- -a- d- c- a- e- +e- \
+    |15 e4- +e- -a- d- c- a- e- +e- \
         --d +d -a- d- c- a- e- +e- \
         -f +f -b- e- d b- f +f\
         -g- +g- -b- e- d b- f +f \
-    |16 e5- +e- -a- d- c- a- e- +e- \
+    |16 e4- +e- -a- d- c- a- e- +e- \
         --d +d -a- d- c- a- e- +e- \
         -f +f -b- e- d b- f +f \
         -b- +b- -e g- f d b- +b- \
-    |17 e5- +e- -a- d- c- a- e- +e- \
+    |17 e4- +e- -a- d- c- a- e- +e- \
         --d +d -a- d- c- a- e- +e- \
         -f +f -b- e- d b- f +f\
         -g- +g- -b- e- d b- f +f \
-    |18 e5- +e- -a- d- c- a- e- +e- \
+    |18 e4- +e- -a- d- c- a- e- +e- \
         --d +d -a- d- c- a- e- +e- \
         -f +f -b- e- d b- f +f \
         -e+ +e+ -b d c+ b -c+ +c+ \
-    |19 c5+ +c+ g+ b a f+ d +d \
+    |19 c4+ +c+ g+ b a f+ d +d \
         --c+ +c+ g+ b a g+ f+ +f+ \
         -f+ +f+ -a+ c+ b g+ e+ +e+ \
         -a +a -b+ d c+ b g+ +g+ \
-    |20  c5+ +c+ g+ b a f+ d +d \
+    |20 c4+ +c+ g+ b a f+ d +d \
         --c+ +c+ g+ b a g+ f+ +f+ \
         -a +a -c+ e d b g+ +g+ \
         -c+ +c+ -d+ f+ e d b +b \
-    |21 b5 +b -d+ f+ e c+ a+ +a+ \
+    |21 b4 +b -d+ f+ e c+ a+ +a+ \
         -d +d -e+ g f+ e c+ +c+ \
         -c+ +c+ -e+ g+ f+ d+ b+ +b+ \
         -e+ +e+ -g+ b a g+ f+ +f+ \
-    |22 g6+ +g+ -c++ e+ d+ b+ a +a \
+    |22 g5+ +g+ -c++ e+ d+ b+ a +a \
         --g+ +g+ -c++ e+ d+ b+ a +a \
         --g+ +g+ -c+ e d b+ a +a \
         --g+ +g+ -c+ e d b+ a +a \
-    |23 a6 +a -e+ g+ f+ c+ a +a \
+    |23 a5 +a -e+ g+ f+ c+ a +a \
         --g+ +g+ d+ f+ e c+ g+ +g+ \
         --e +e b d c+ a e +e \
         --c+ +c+ g+ b a f+ c+ +c+ \
-    |24 g5+ +g+ d+ f+ e c+ g+ +g+ \
+    |24 g4+ +g+ d+ f+ e c+ g+ +g+ \
         --f+ +f+ c+ e d a f+ +f+ \
         --e +e b d c+ a e +e \
         --d +d a c+ b g d +d \
-    |25 *4 c5+ +c+ g+ b a f+ c+ +c+ * \
-    |26 *2 c5+ +c+ -f++ a g+ f+ c+ +c+ * \
-        *2 c5+ +c+ -f++ a g+ e+ c+ +c+ * \
-    |27 *4 c5+ +c+ g+ b a f+ c+ +c+ * \
-    |28 *3 d5 +d a+ c+ b f+ d +d * \
-        f5+ +f+ -a+ c+ b f+ d +d \
-    |29 *4 c5+ +c+ g+ b a+ f+ c+ +c+ * \
-    |30 *3 d5+ +d+ a+ c+ b f+ d+ +d+ * \
-        f5+ +f+ -a+ c+ b f+ d+ +d+ \
-    |31 *4 c5+ +c+ g+ b a+ f+ c+ +c+ * \
-    |32 *4 c5+ +c+ g+ b a f+ c+ +c+ * \
-    |33 1/2 [c5+ e +c+] 1/4 [b g d] [e+ c+ b] \
-    |34 1/4 e5+ 2/1 [f3+ +c+ +a c+ f+ ]\
+    |25 *4 c4+ +c+ g+ b a f+ c+ +c+ * \
+    |26 *2 c4+ +c+ -f++ a g+ f+ c+ +c+ * \
+        *2 c4+ +c+ -f++ a g+ e+ c+ +c+ * \
+    |27 *4 c4+ +c+ g+ b a f+ c+ +c+ * \
+    |28 *3 d4 +d a+ c+ b f+ d +d * \
+        f4+ +f+ -a+ c+ b f+ d +d \
+    |29 *4 c4+ +c+ g+ b a+ f+ c+ +c+ * \
+    |30 *3 d4+ +d+ a+ c+ b f+ d+ +d+ * \
+        f4+ +f+ -a+ c+ b f+ d+ +d+ \
+    |31 *4 c4+ +c+ g+ b a+ f+ c+ +c+ * \
+    |32 *4 c4+ +c+ g+ b a f+ c+ +c+ * \
+    |33 1/2 [c4+ e +c+] 1/4 [b g d] [e+ c+ b] \
+    |34 1/4 e4+ 2/1 [f3+ +c+ +a c+ f+ ]\
 ').tag('right_hand')
 
 # timing in last measure:
@@ -218,36 +218,36 @@ right_hand = sh_score('meas4/4 \
 
 left_hand = sh_score('meas4/4 \
     < 1/24 1/24 1/24 1/8 > \
-    |1 *2 a4 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ * \
-    |3 a5 -d+ f+ -a +g+ d+ f+ -g+ g5 -c+ e -g +f+ c+ e -f+ \
-    |4 f5 c d+ -f +f -b d -f +d -g+ b -d +b -c+ e+ --c+ \
-    |5 a4 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ \
-    |6 a4 -c+ f+ -f+ ++a -c+ f+ -a ++f -b d -f +e -g+ +d -e \
-    |7 c6 -f+ a -c +b f+ a -b +b- f g+ -b- +a e g -a \
-    |8 a5- e- f+ -a- +g d f -g +a-- -d- f- -a-- +g- d- f- -g- \
-    |9 f5 -b- d -f +f -b d -f +f -g b -f +e- -g c -f \
-    |10 g5 -c e- -f ++g -c+ e -f ++g -a c+ -f +f -a d -f \
-    |11 f5 -a +e- -f +d -f b- -b- ++d -f+ +c -d +b- -d g -g \
-    |12 b4- -d +a- -b- +b- -d +a- -b- +a- -b- d -e- ++g- -b- e- -e- \
-    |13 a4- -a- d- -f- ++a- -a- d- -f- ++g- -c- e- -g- +g- -c- e- -g- \
-    |14 g4- -b- +f- -g- +g- -b- +f- -g- +f- -g- b- -c- ++e- -g- c- -c- \
-    |15 *3 a4- -c- e- -f ++a- -c- e- -f ++d -f b- -b- ++d -f b- -b- *\
-    |18 a4- -c- e- -f ++a- -c- e- -f ++d -f b- -b- ++b -c+ e+ -g+ \
-    |19 a4 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ \
-    |20 a4 -c+ f+ -f+ ++a -c+ f+ -a ++f -b d -f +e -g+ +d -e \
-    |21 g5 -c+ e -g +f+ -a+ +e -f+ a5 -d+ f+ --a ++b+ -f+ a -b+ \
-    |22 *2 f6+ -a b+ -d+ * *2 f6+ -a b+ -d * \
-    |23 f6+ -a c+ -c+ ++e -g+ c+ -c+ +c+ -e a -a +a -c+ f+ -f+ \
-    |24 e5 -g+ c+ -c+ ++d -f+ a -d +c+ -e a -a ++b -d g -b \
-    |25 *2 a4 -a c+ -c+ * g4+ -a c+ -c+ ++f+ -a c+ -c+ \
-    |26 *2 f4+ -g+ c+ -c+ * *2 e4+ -g+ c+ -c+ * \
-    |27 *4 a4 -c+ f+ -f+ * \
-    |28 *4 f4+ -f+ b -b * \
-    |29 *4 a4+ -c+ f+ -f+ * \
-    |30 *4 f4+ -f+ b -b * \
-    |31 *4 a4+ -c+ f+ -f+ * \
-    |32 *4 a4 -c+ f+ -f+ * \
-    |33 1/2 [a3 +e a] 1/4 [g -b] [c+ +g+] \
+    |1 *2 a3 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ * \
+    |3 a5 -d+ f+ -a +g+ d+ f+ -g+ g4 -c+ e -g +f+ c+ e -f+ \
+    |4 f4 c d+ -f +f -b d -f +d -g+ b -d +b -c+ e+ --c+ \
+    |5 a3 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ \
+    |6 a3 -c+ f+ -f+ ++a -c+ f+ -a ++f -b d -f +e -g+ +d -e \
+    |7 c5 -f+ a -c +b f+ a -b +b- f g+ -b- +a e g -a \
+    |8 a4- e- f+ -a- +g d f -g +a-- -d- f- -a-- +g- d- f- -g- \
+    |9 f4 -b- d -f +f -b d -f +f -g b -f +e- -g c -f \
+    |10 g4 -c e- -f ++g -c+ e -f ++g -a c+ -f +f -a d -f \
+    |11 f4 -a +e- -f +d -f b- -b- ++d -f+ +c -d +b- -d g -g \
+    |12 b3- -d +a- -b- +b- -d +a- -b- +a- -b- d -e- ++g- -b- e- -e- \
+    |13 a3- -a- d- -f- ++a- -a- d- -f- ++g- -c- e- -g- +g- -c- e- -g- \
+    |14 g3- -b- +f- -g- +g- -b- +f- -g- +f- -g- b- -c- ++e- -g- c- -c- \
+    |15 *3 a3- -c- e- -f ++a- -c- e- -f ++d -f b- -b- ++d -f b- -b- *\
+    |18 a3- -c- e- -f ++a- -c- e- -f ++d -f b- -b- ++b -c+ e+ -g+ \
+    |19 a3 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ \
+    |20 a3 -c+ f+ -f+ ++a -c+ f+ -a ++f -b d -f +e -g+ +d -e \
+    |21 g4 -c+ e -g +f+ -a+ +e -f+ a4 -d+ f+ --a ++b+ -f+ a -b+ \
+    |22 *2 f5+ -a b+ -d+ * *2 f5+ -a b+ -d * \
+    |23 f5+ -a c+ -c+ ++e -g+ c+ -c+ +c+ -e a -a +a -c+ f+ -f+ \
+    |24 e4 -g+ c+ -c+ ++d -f+ a -d +c+ -e a -a ++b -d g -b \
+    |25 *2 a3 -a c+ -c+ * g3+ -a c+ -c+ ++f+ -a c+ -c+ \
+    |26 *2 f3+ -g+ c+ -c+ * *2 e3+ -g+ c+ -c+ * \
+    |27 *4 a3 -c+ f+ -f+ * \
+    |28 *4 f3+ -f+ b -b * \
+    |29 *4 a3+ -c+ f+ -f+ * \
+    |30 *4 f3+ -f+ b -b * \
+    |31 *4 a3+ -c+ f+ -f+ * \
+    |32 *4 a3 -c+ f+ -f+ * \
+    |33 1/2 [a2 +e a] 1/4 [g -b] [c+ +g+] \
     |34 1/1 . \
     |35 \
 ').tag('left_hand')
