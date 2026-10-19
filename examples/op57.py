@@ -104,7 +104,7 @@ rh_118_211 = sh_score(' \
     |133 a b- a g a b- c a 1/8 b- 1/16 b- d- f g- f e- \
     |135 d- e- d- c b- c d- b- theme_a) \
     |136 . . b- d- f g- f e- 1/4 _ _ _ b5- a b- \
-    |137 1/16 -d- e- d- c b- c d- b- 1/4 _ b6- \
+    |137 1/16 -d- e- d- c b- c d- b- 1/4 _ b5- \
     1/16 [c5- +c-] -g- c- e- g- a- g- f \
     |139 e- f e- d- c- d- c- b- a c e- d- c d- c b- a b- a g- f e- d- c \
     |142 1/8 b- 1/4 +f 1/8 f f 1/4 g- 1/8 g- g- 1/4 f 1/8 f f c d- e- \
@@ -305,17 +305,17 @@ lh_300_end = sh_score(' \
     |300 1/4 f2 1/8 . [c f a- c] *4 [-c e g b- c] * \
     |302 1/4 [-c f a- c] 1/8 . [c f a- c] *4 [-c e g b- c] * \
     |304 1/4 [c a- f c] 1/8 . [c a- f c] *12 [+c b- g e c] * \
-    |308 1/2 *2 [f2 a- c f] * \
-    1/8 (stac *2 [+c -c] c c c [-f +f] f f f * -g +g -g g stac) \
-    1/4 c 1/8 . 1/32 c b- a- g \
-    |316 1/2 *2 [f2 a- c f] * \
-    1/8 (stac *2 [+c -c] c c c [-f +f] f f f * -g +g -g g stac) \
-    1/4 c 1/8 . 1/24 e- f g \
+    |308 1/2 *2 [f1 a- c f] * \
+    1/8 (stac *2 [c3 -c] c c c [-f +f] f f f * g1 +g -g g stac) \
+    1/4 c2 1/8 . 1/32 c b- a- g \
+    |316 1/2 *2 [f1 a- c f] * \
+    1/8 (stac *2 [c3 -c] c c c [-f +f] f f f * g1 +g -g g stac) \
+    1/4 c2 1/8 . 1/24 e- f g \
     |324 1/2 *2 [+a- e- c a-] * 1/8 (stac *2 [e2- +e-] -e- e- e- [a- -a-] +a- a- a- * \
-    |330 [f -f] f f f [b- +b-] b- b- b- -c +c -c c stac) \
+    |330 [f2 -f] f f f [b1- +b-] b- b- b- -c +c -c c stac) \
     1/4 [f -f] 1/8 . 1/24 +e- f g \
-    1/2 *2 [+a- e- c a-] * 1/8 (stac *2 [e2- +e-] -e- e- e- [a- -a-] +a- a- a- * \
-    |340 [f -f] f f f [b- +b-] b- b- b- -c +c -c c stac) \
+    1/2 *2 [+a- e- c a-] * 1/8 (stac *2 [e3- +e-] -e- e- e- [a- -a-] +a- a- a- * \
+    |340 [f2 -f] f f f [b1- +b-] b- b- b- -c +c -c c stac) \
     |343 1/16 [-f +f] *3 +p #c2 1/16 f a- c 5/16 f -p * \
     1/16 +p -f a- c 1/4 f -p 1/16 . +p -b- d- g- 5/16 b- -p \
     1/16 +p -b- d- g- 1/4 b- -p \
@@ -530,17 +530,11 @@ lhp_20 = ' \
 '
 def p20_117(ns, t0):
     # virtual pedal RH arpeggios starting in m36
-    rh = sh_pedal(rhp_20 + ' \
-        |108 (10/2) \
-        |118 \
-    ')
+    rh = sh_pedal(rhp_20)
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
     ns.insert_pedal(PedalSeg(4/2, time=t0+92/2))
 
-    lh = sh_pedal(lhp_20 + ' \
-        |108 (10/2) \
-        |118 \
-    ')
+    lh = sh_pedal(lhp_20)
     ns.vsustain_pft(lh, t0+30/2, lambda n: 'lh' in n.tags)
 
 def v118_211(ns, t0):

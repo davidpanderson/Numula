@@ -209,7 +209,7 @@ right_hand = sh_score('meas4/4 \
     |31 *4 c4+ +c+ g+ b a+ f+ c+ +c+ * \
     |32 *4 c4+ +c+ g+ b a f+ c+ +c+ * \
     |33 1/2 [c4+ e +c+] 1/4 [b g d] [e+ c+ b] \
-    |34 1/4 e4+ 2/1 [f3+ +c+ +a c+ f+ ]\
+    |34 1/4 (grace e4+ grace) 2/1 [f2+ +c+ +a c+ f+ ]\
 ').tag('right_hand')
 
 # timing in last measure:
@@ -235,7 +235,7 @@ left_hand = sh_score('meas4/4 \
     |18 a3- -c- e- -f ++a- -c- e- -f ++d -f b- -b- ++b -c+ e+ -g+ \
     |19 a3 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ \
     |20 a3 -c+ f+ -f+ ++a -c+ f+ -a ++f -b d -f +e -g+ +d -e \
-    |21 g4 -c+ e -g +f+ -a+ +e -f+ a4 -d+ f+ --a ++b+ -f+ a -b+ \
+    |21 g4 -c+ e -g +f+ -a+ +e -f+ a4 -d+ f+ -a ++b+ -f+ a -b+ \
     |22 *2 f5+ -a b+ -d+ * *2 f5+ -a b+ -d * \
     |23 f5+ -a c+ -c+ ++e -g+ c+ -c+ +c+ -e a -a +a -c+ f+ -f+ \
     |24 e4 -g+ c+ -c+ ++d -f+ a -d +c+ -e a -a ++b -d g -b \
