@@ -44,6 +44,7 @@ VOL_SCALE = 3
 # derived Score class adds member functions for nuance
 
 class Score(ScoreBasic):
+    @staticmethod
     def vol_trans(v: float, x: float, mode:int):
         # x is the adjustment factor
         if mode == VOL_MULT:

@@ -44,59 +44,6 @@ var('if_vphrase', IPA_TOGGLE, 'on')
 var('if_rh', IPA_TOGGLE, 'on')
 var('if_lh', IPA_TOGGLE, 'on')
 
-# volume
-tags = ['if_vmeas']
-var('dv1', IPA_VOL, 1.1, tags)        # volume swells in vmeas
-var('dv2', IPA_VOL, 1.15, tags)
-var('dv3', IPA_VOL, 1.2, tags)
-
-# RH accents
-tags = ['if_accents', 'if_rh']
-var('rha1', IPA_VOL, .12, tags)
-var('rha2', IPA_VOL, .1, tags)
-var('rha3', IPA_VOL, .05, tags)
-var('rha4', IPA_VOL, 0, tags)
-var('rha5', IPA_VOL, .05, tags)
-var('rha6', IPA_VOL, 0, tags)
-var('rha7', IPA_VOL, .10, tags)
-var('rha8', IPA_VOL, .07, tags)
-
-# LH accents
-tags = ['if_accents', 'if_lh']
-var('lha1', IPA_VOL, .04, tags)
-var('lha2', IPA_VOL, -.1, tags)
-var('lha3', IPA_VOL, -.1, tags)
-var('lha4', IPA_VOL, 0, tags)
-
-# timing
-tags = ['if_pauses']
-var('p_start', IPA_DT_SEC, .04, tags)
-    # pause on measure start melody note
-var('p_start2', IPA_DT_SEC, .06, tags)
-    # pause on phrase start melody note
-var('p_start3', IPA_DT_SEC, .1, tags)
-    # pause on major phrase start melody note
-var('p_mel', IPA_DT_SEC, .02, tags)
-    # pause on other melody notes (top and bottom)
-var('p_end', IPA_DT_SEC, .06, tags)
-    # pause on minor phrase end melody note
-var('p_end2', IPA_DT_SEC, .08, tags)
-    # pause on major phrase end melody note
-
-# beat-level tempo
-tags = ['if_tbeat']
-var('tbeat1', IPA_TEMPO, 57, tags)        # start
-var('tbeat2', IPA_TEMPO, 63, tags)        # end
-
-# phrase-level tempo
-tags = ['if_tphrase']
-var('tph_1_1', IPA_TEMPO, 40, tags)
-var('tph_1_2', IPA_TEMPO, 60, tags)
-var('tph_2_1', IPA_TEMPO, 50, tags)
-var('tph_2_2', IPA_TEMPO, 65, tags)
-var('tph_2_3', IPA_TEMPO, 50, tags)
-var('tph_2_4', IPA_TEMPO, 40, tags)
-
 if __name__ == '__main__':
     read_vars('chopin_prelude_8')
 
@@ -209,7 +156,7 @@ right_hand = sh_score('meas4/4 \
     |31 *4 c4+ +c+ g+ b a+ f+ c+ +c+ * \
     |32 *4 c4+ +c+ g+ b a f+ c+ +c+ * \
     |33 1/2 [c4+ e +c+] 1/4 [b g d] [e+ c+ b] \
-    |34 1/4 (grace e4+ grace) 2/1 [f2+ +c+ +a c+ f+ ]\
+    |34 1/4 (grace e4+ grace) 2/1 [f2+ +c+ +a c+ (last f+ last)]\
 ').tag('right_hand')
 
 # timing in last measure:
@@ -254,6 +201,18 @@ left_hand = sh_score('meas4/4 \
 
 ################ VOLUME #################
 
+# RH accents
+tags = ['if_accents', 'if_rh']
+var('rha1', IPA_VOL, .12, tags)
+var('rha2', IPA_VOL, .1, tags)
+var('rha3', IPA_VOL, .05, tags)
+var('rha4', IPA_VOL, 0, tags)
+var('rha5', IPA_VOL, .05, tags)
+var('rha6', IPA_VOL, 0, tags)
+var('rha7', IPA_VOL, .10, tags)
+var('rha8', IPA_VOL, .07, tags)
+from numula.ipa import *
+
 # 1 measure of RH accents
 rha = f'*4 {rha1} 1/32 {rha2} 1/32 {rha3} 1/32 {rha4} 1/32 {rha5} 1/32 {rha6} 1/32 {rha7} 1/32 {rha8} 1/32 *'
 
@@ -262,12 +221,27 @@ rh_accents = sh_accents(f'meas4/4 \
     |33 \
 ')
 
+# LH accents
+tags = ['if_accents', 'if_lh']
+var('lha1', IPA_VOL, .04, tags)
+var('lha2', IPA_VOL, -.1, tags)
+var('lha3', IPA_VOL, -.1, tags)
+var('lha4', IPA_VOL, 0, tags)
+from numula.ipa import *
+
 lh_accents = sh_accents(f'meas4/4 \
     |1 *32 \
         *4 {lha1} 1/24 {lha2} 1/24 {lha3} 1/24 {lha4} 1/8 * \
         * \
     |33 \
 ')
+
+# volume
+tags = ['if_vmeas']
+var('dv1', IPA_VOL, 1.08, tags)        # volume swells in vmeas
+var('dv2', IPA_VOL, 1.10, tags)
+var('dv3', IPA_VOL, 1.15, tags)
+from numula.ipa import *
 
 # swell to 4th beat
 vm_4_sm = f'[ mm 3/4 {dv1} 1/4 mm'
@@ -317,15 +291,6 @@ vphrase = sh_vol('meas4/4 \
 
 ################ TIMING #################
 
-# pause durations
-dt0 = .02
-dt1 = .04
-dt2 = .06
-dt3 = .08
-dt4 = .10
-dt5 = .12
-dt6 = .15
-
 # pause patterns for the 8 32ths in one beat
 # 0 melody
 # 1 melody octave
@@ -336,9 +301,31 @@ dt6 = .15
 # 6 melody
 # 7 melody octave
 
-# Go lightly with pauses, else they affect tempo
+# pause durations
+dt0 = .02
+dt1 = .04
+dt2 = .06
+dt3 = .08
+dt4 = .10
+dt5 = .12
+dt6 = .15
 
-# beat-level pauses
+tags = ['if_pauses']
+var('p_start', IPA_DT_SEC, .04, tags)
+    # pause on measure start melody note
+var('p_start2', IPA_DT_SEC, .06, tags)
+    # pause on phrase start melody note
+var('p_start3', IPA_DT_SEC, .08, tags)
+    # pause on major phrase start melody note
+var('p_mel', IPA_DT_SEC, .02, tags)
+    # pause on other melody notes (top and bottom)
+var('p_end', IPA_DT_SEC, .06, tags)
+    # pause on minor phrase end melody note
+var('p_end2', IPA_DT_SEC, .08, tags)
+    # pause on major phrase end melody note
+from numula.ipa import *
+
+# Go lightly with pauses, else they affect tempo
 
 # default: short pauses after melody notes
 pb0 = f'p{p_start} 1/32 . p{p_mel} 5/32 . p{p_mel} 1/32 . p{p_mel} 1/32 .'
@@ -368,8 +355,10 @@ pm3 = f'{pb0} {pb_end} {pb0} {pb_end}'
 pm8 = f'{pb_start_short} {pb0} {pb0} {pb_end_short}'
 
 pauses = sh_tempo(f'meas4/4 \
-    |1 {pm1} {pm2} {pm3} {pm2} \
-    |5 {pm1} {pm2} {pm3} {pm8} \
+    |1 {pm1} {pm2} \
+    |3 {pm3} {pm2} \
+    |5 {pm1} {pm2} \
+    |7 {pm3} {pm8} \
     |9 *4 {pm8} * \
     |13 {dt2}p *4 {pm8} * \
     |17 {dt3}p *2 {pm8} * \
@@ -382,10 +371,26 @@ pauses = sh_tempo(f'meas4/4 \
     |33 \
 ')
 
+# beat-level tempo
+tags = ['if_tbeat']
+var('tbeat1', IPA_TEMPO, 57, tags)        # start
+var('tbeat2', IPA_TEMPO, 63, tags)        # end
+from numula.ipa import *
+
 # accel within each beat
 tbeat = sh_tempo(f'meas4/4 \
     |1 *32 *4 {tbeat1} 1/4 {tbeat2} * * \
 ')
+
+# phrase-level tempo
+tags = ['if_tphrase']
+var('tph_1_1', IPA_TEMPO, 40, tags)
+var('tph_1_2', IPA_TEMPO, 60, tags)
+var('tph_2_1', IPA_TEMPO, 50, tags)
+var('tph_2_2', IPA_TEMPO, 65, tags)
+var('tph_2_3', IPA_TEMPO, 50, tags)
+var('tph_2_4', IPA_TEMPO, 40, tags)
+from numula.ipa import *
 
 # accel mid-measure, rit at end
 t1 = f' {tph_1_1} 2/4 {tph_1_2} 2/4 {tph_1_1}'
@@ -403,7 +408,7 @@ trit = 'exp0.5 55 1/1 40 linear'
 t7 = '50 2/4 60 2/4 50'
 
 # bigger rit
-trit2 = '60 1/1 40'
+trit2 = '60 1/1 35'
  
 # faster version of t1
 t19 = '50 2/4 70 2/4 50'
@@ -424,7 +429,11 @@ tphrase = sh_tempo(f'meas4/4 \
 ')
 
 def main():
-    ns = Score(tempo=110)
+    nuance = False
+    if nuance:
+        ns = Score(tempo=110)
+    else:
+        ns = Score(tempo=75)
     # virtual pedal within a beat
     right_hand.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
     left_hand.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
@@ -434,9 +443,8 @@ def main():
     if if_lh != 'off':
         parts.append(left_hand)
     ns.append_scores(parts)
-    nuance = True
     #ns.trim(0, 8/1)
-    print(ns)
+    #print(ns)
     if nuance:
         if if_vphrase != 'off':
             ns.vol_adjust_pft(vphrase)
@@ -445,7 +453,9 @@ def main():
         if if_accents != 'off':
             ns.vol_adjust_pft(rh_accents, selector=lambda n: 'right_hand' in n.tags, mode=VOL_ADD)
             ns.vol_adjust_pft(lh_accents, selector=lambda n: 'left_hand' in n.tags, mode=VOL_ADD)
-        #ns.vol_scale(.1, .7)
+            ns.vol_adjust(1.3, lambda n: 'top' in n.tags and n.time >= 32, mode=VOL_MULT)
+            ns.vol_adjust(1.2, lambda n: 'grace' in n.tags, mode=VOL_SET)
+            ns.vol_adjust(1.0, lambda n: 'last' in n.tags, mode=VOL_SET)
         if if_tbeat != 'off':
             ns.tempo_adjust_pft(tbeat)
         if if_tphrase != 'off':
@@ -453,8 +463,9 @@ def main():
         if if_pauses != 'off':
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
-        if False: ns.adjust_dur_abs(1.9, lambda n: 'grace' in n.tags)
-    #print(ns)
+        if True:
+            ns.adjust_dur_abs(1.9, lambda n: 'grace' in n.tags)
+    print(ns)
     return ns
 
 if __name__ == '__main__':
