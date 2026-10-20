@@ -22,8 +22,16 @@ TIME_SLOWNESS = 2
 # modes for vol_adjust_pft() and other dynamic functions
 #
 VOL_MULT = 0
+    # multiply volume by A (0..2)
+    # problem: little effect when V is small
 VOL_ADD = 1
+    # add A to volume (-1..1 but usually smaller)
 VOL_SET = 2
+    # set volume to A/2 (0..2)
+VOL_SCALE = 3
+    # if A > 1: V += (2-V)*(A-1)
+    # if A < 1: V -= V*(1-A)
+    # advantage: no overflow, works at all levels
 
 # derived Score class adds member functions for nuance
 
@@ -80,6 +88,12 @@ class Score(ScoreBasic):
                 if v < 0:
                     continue
                 n.vol = v/2
+            elif mode == VOL_SCALE:
+                if v > 1:
+                    n.vol += (2-n.vol)*(v-1)
+                elif v < 1:
+                    n.vol -= n.vol*(1-v)
+
         if selector and not found_note:
             raise Exception('no notes selected')
             
@@ -96,6 +110,11 @@ class Score(ScoreBasic):
                 n.vol += v
             elif mode == VOL_SET:
                 n.vol = v/2
+            elif mode == VOL_SCALE:
+                if v > 1:
+                    n.vol += (2-n.vol)*(v-1)
+                elif v < 1:
+                    n.vol -= n.vol*(1-v)
         if selector and not found_note:
             raise Exception('no notes selected')
                 
@@ -115,6 +134,11 @@ class Score(ScoreBasic):
                 n.vol += v
             elif mode == VOL_SET:
                 n.vol = v/2
+            elif mode == VOL_SCALE:
+                if v > 1:
+                    n.vol += (2-n.vol)*(v-1)
+                elif v < 1:
+                    n.vol -= n.vol*(1-v)
         if selector and not found_note:
             raise Exception('no notes selected')
 
