@@ -50,7 +50,7 @@ type NoteToFloat = Callable[[Note], float]
 pitch_names = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
 
 def pitch_name(n: int):
-    return '%s%d'%(pitch_names[n%12], n//12)
+    return '%s%d'%(pitch_names[n%12], n//12-1)
 
 # this is used both as
 # - a PFT primitive

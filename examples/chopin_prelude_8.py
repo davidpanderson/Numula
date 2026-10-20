@@ -46,27 +46,27 @@ var('if_lh', IPA_TOGGLE, 'on')
 
 # volume
 tags = ['if_vmeas']
-var('dv1', IPA_VOL, .07, tags)        # volume swells in vmeas
-var('dv2', IPA_VOL, .1, tags)
-var('dv3', IPA_VOL, .13, tags)
+var('dv1', IPA_VOL, 1.1, tags)        # volume swells in vmeas
+var('dv2', IPA_VOL, 1.15, tags)
+var('dv3', IPA_VOL, 1.2, tags)
 
 # RH accents
 tags = ['if_accents', 'if_rh']
-var('rha1', IPA_VOL, .14, tags)
+var('rha1', IPA_VOL, .12, tags)
 var('rha2', IPA_VOL, .1, tags)
 var('rha3', IPA_VOL, .05, tags)
 var('rha4', IPA_VOL, 0, tags)
 var('rha5', IPA_VOL, .05, tags)
 var('rha6', IPA_VOL, 0, tags)
-var('rha7', IPA_VOL, .1, tags)
+var('rha7', IPA_VOL, .10, tags)
 var('rha8', IPA_VOL, .07, tags)
 
 # LH accents
 tags = ['if_accents', 'if_lh']
-var('lha1', IPA_VOL, .14, tags)
-var('lha2', IPA_VOL, 0, tags)
-var('lha3', IPA_VOL, 0, tags)
-var('lha4', IPA_VOL, .11, tags)
+var('lha1', IPA_VOL, .04, tags)
+var('lha2', IPA_VOL, -.1, tags)
+var('lha3', IPA_VOL, -.1, tags)
+var('lha4', IPA_VOL, 0, tags)
 
 # timing
 tags = ['if_pauses']
@@ -85,8 +85,8 @@ var('p_end2', IPA_DT_SEC, .08, tags)
 
 # beat-level tempo
 tags = ['if_tbeat']
-var('tbeat1', IPA_TEMPO, 55, tags)        # start
-var('tbeat2', IPA_TEMPO, 65, tags)        # end
+var('tbeat1', IPA_TEMPO, 57, tags)        # start
+var('tbeat2', IPA_TEMPO, 63, tags)        # end
 
 # phrase-level tempo
 tags = ['if_tphrase']
@@ -219,7 +219,7 @@ right_hand = sh_score('meas4/4 \
 left_hand = sh_score('meas4/4 \
     < 1/24 1/24 1/24 1/8 > \
     |1 *2 a3 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ * \
-    |3 a5 -d+ f+ -a +g+ d+ f+ -g+ g4 -c+ e -g +f+ c+ e -f+ \
+    |3 a4 -d+ f+ -a +g+ d+ f+ -g+ g4 -c+ e -g +f+ c+ e -f+ \
     |4 f4 c d+ -f +f -b d -f +d -g+ b -d +b -c+ e+ --c+ \
     |5 a3 -c+ f+ -f+ ++a -c+ f+ -a ++d -g+ b -d +c+ -e+ b -c+ \
     |6 a3 -c+ f+ -f+ ++a -c+ f+ -a ++f -b d -f +e -g+ +d -e \
@@ -270,19 +270,22 @@ lh_accents = sh_accents(f'meas4/4 \
 ')
 
 # swell to 4th beat
-vm_4_sm = f'[ 0 3/4 {dv1} 1/4 0'
+vm_4_sm = f'[ mm 3/4 {dv1} 1/4 mm'
 
 # bigger swell
-vm_4_med = f'[ 0 3/4 {dv2} 1/4 0'
+vm_4_med = f'[ mm 3/4 {dv2} 1/4 mm'
 
 # even bigger
-vm_4_lg = f'[ 0 3/4 {dv3} 1/4 0'
+vm_4_lg = f'[ mm 3/4 {dv3} 1/4 mm'
 
 # swells to 2nd and 4th beat
-vm_24 = f'[ *2 0 1/4 {dv1} 1/4 0 *'
+vm_24 = f'[ *2 mm 1/4 {dv1} 1/4 mm *'
 
 # swell to 3rd beat
-vm_3 = f'[ 0 2/4 {dv2} 2/4 0'
+vm_3 = f'[ mm 2/4 {dv2} 2/4 mm'
+
+# no swell
+vm_0 = '[ mm 1/1 mm'
 
 vmeas = sh_vol(f'meas4/4 \
     |1 {vm_4_sm} {vm_4_med} {vm_24} {vm_3} \
@@ -291,20 +294,23 @@ vmeas = sh_vol(f'meas4/4 \
     |13 {vm_24} {vm_4_med} \
     |15 *4 {vm_4_med} * \
     |19 {vm_4_med} {vm_4_lg} {vm_24} {vm_24} \
-    |23 *4 {vm_3} * \
-    |27 *2 {vm_3} {vm_4_med} * \
-    |31 *2 {vm_24} * \
-    |33 *2 [ 0 1/1 0 * \
+    |23 *4 {vm_0} * \
+    |27 *2 {vm_0} {vm_4_sm} * \
+    |31 *2 {vm_0} * \
+    |33 *2 [ mm 1/1 mm * \
 ')
 
 vphrase = sh_vol('meas4/4 \
-    |1 pppp 8/1 pppp \
-    |9 [ pppp 4/1 _f 2/1 f 2/1 f \
+    |1 pp 8/1 pp \
+    |9 [ pp 4/1 mf \
+    |13 mf 2/1 f \
+    |15 f 2/1 f \
     |17 [ p 3/1 p \
-    |20 p 2/1 f 1/1 ff \
-    |23 ff 4/1 p 2/1 p \
+    |20 p 2/1 mf 1/1 f \
+    |23 f 4/1 p \
+    |27 2/1 p \
     |29 [ pp 2/1 pp \
-    |31 exp4.0 pp 1/1 f exp-3.5 1/1 pp linear \
+    |31 exp4.0 pp 1/1 mf exp-3.5 1/1 pp linear \
     |33 [ mp 2/1 p \
     |35 \
 ')
@@ -394,13 +400,13 @@ t3 = '50 1/4 55 1/4 45 1/4 55 1/4 45'
 trit = 'exp0.5 55 1/1 40 linear'
 
 # accel mid-measure
-t7 = '50 2/4 70 2/4 50'
+t7 = '50 2/4 60 2/4 50'
 
 # bigger rit
 trit2 = '60 1/1 40'
  
 # faster version of t1
-t19 = '50 2/4 80 2/4 50'
+t19 = '50 2/4 70 2/4 50'
 
 tphrase = sh_tempo(f'meas4/4 \
     |1 {t1} {t2} {t3} {trit} \
@@ -413,14 +419,12 @@ tphrase = sh_tempo(f'meas4/4 \
     |25 55 2/1 40 \
     |27 {t1} {trit} {t1} {trit2} \
     |31 50 1/1 70 60 1/1 45 \
-    |33 40 2/1 30 \
+    |33 30 2/1 20 \
     |35 \
 ')
 
-nuance = True
-
 def main():
-    ns = Score(tempo=90, verbose=False)
+    ns = Score(tempo=110)
     # virtual pedal within a beat
     right_hand.dur_pattern([6/32, 6/32, 2/32, 1/32, 4/32, 3/32, 2/32, 2/32], 0, 32/1)
     left_hand.dur_pattern([6/24, 2/24, 1/24, 3/24], 0, 32/1)
@@ -430,11 +434,14 @@ def main():
     if if_lh != 'off':
         parts.append(left_hand)
     ns.append_scores(parts)
+    nuance = True
+    #ns.trim(0, 8/1)
+    print(ns)
     if nuance:
         if if_vphrase != 'off':
             ns.vol_adjust_pft(vphrase)
         if if_vmeas != 'off':
-            ns.vol_adjust_pft(vmeas, mode=VOL_ADD)
+            ns.vol_adjust_pft(vmeas, mode=VOL_SCALE)
         if if_accents != 'off':
             ns.vol_adjust_pft(rh_accents, selector=lambda n: 'right_hand' in n.tags, mode=VOL_ADD)
             ns.vol_adjust_pft(lh_accents, selector=lambda n: 'left_hand' in n.tags, mode=VOL_ADD)
@@ -446,8 +453,7 @@ def main():
         if if_pauses != 'off':
             ns.tempo_adjust_pft(pauses)
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
-        ns.adjust_dur_abs(1.9, lambda n: 'grace' in n.tags)
-    #ns.trim(0, 4/1)
+        if False: ns.adjust_dur_abs(1.9, lambda n: 'grace' in n.tags)
     #print(ns)
     return ns
 
