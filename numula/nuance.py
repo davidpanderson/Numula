@@ -19,23 +19,48 @@ TIME_SLOWNESS = 2
 
 # ------------------- Dynamics ------------------------
 
-# modes for vol_adjust_pft() and other dynamic functions
+# Modes for vol_adjust_pft() and other volume-control functions.
+# Let X be the value of the PFT.
+# For a given input volume V, the output volume W is:
 #
 VOL_MULT = 0
-    # multiply volume by A (0..2)
-    # problem: little effect when V is small
+    # X is in [0,2].
+    # W = V * X
+    # problem: for a given value of X,
+    # the perceived change is small when V is small
 VOL_ADD = 1
-    # add A to volume (-1..1 but usually smaller)
+    # X is in [-1,1] but usually smaller
+    # W = V + X
+    # problem: the perceived change is large when V is small
 VOL_SET = 2
-    # set volume to A/2 (0..2)
+    # X is in [0,2]
+    # W = X
 VOL_SCALE = 3
-    # if A > 1: V += (2-V)*(A-1)
-    # if A < 1: V -= V*(1-A)
-    # advantage: no overflow, works at all levels
+    # X is in [0,2]
+    # if X > 1: W = V + (2-V)*(X-1)
+    # if A < 1: W = V + V*(X-1)
+    # advantage: no overflow, works OK at all levels
 
 # derived Score class adds member functions for nuance
 
 class Score(ScoreBasic):
+    def vol_trans(v: float, x: float, mode:int):
+        # x is the adjustment factor
+        if mode == VOL_MULT:
+            return v * x;
+        elif mode == VOL_ADD:
+            return v + x;
+        elif mode == VOL_SET:
+            if v < 0:
+                return v
+            return x/2
+        elif mode == VOL_SCALE:
+            if x > 1:
+                return v + (2-v)*(x-1)
+            else:
+                return v + v*(x-1)
+        raise Exception('bad mode')
+
     # adjust or set volume of selected notes by PFT starting at t0
     def vol_adjust_pft(
         self, pft:PFT, t0:float=0, selector:Selector=None, mode:int=VOL_MULT
@@ -65,12 +90,12 @@ class Score(ScoreBasic):
             while True:
                 # skip segments as needed
                 if n.time < seg_end - epsilon:
-                    v = seg.val(n.time - seg_start)
+                    x = seg.val(n.time - seg_start)
                     break
                 if n.time < seg_end + epsilon:
                     # note is at end of this seg
                     if seg.closed_end:
-                        v = seg.y1
+                        x = seg.y1
                         break
                     if seg_ind == len(pft)-1:
                         return
@@ -79,42 +104,20 @@ class Score(ScoreBasic):
                 seg_ind += 1
                 seg = pft[seg_ind]
                 seg_end = seg_start + seg.dt
-            # v is the adjustment factor
-            if mode == VOL_MULT:
-                n.vol *= v
-            elif mode == VOL_ADD:
-                n.vol += v
-            elif mode == VOL_SET:
-                if v < 0:
-                    continue
-                n.vol = v/2
-            elif mode == VOL_SCALE:
-                if v > 1:
-                    n.vol += (2-n.vol)*(v-1)
-                elif v < 1:
-                    n.vol -= n.vol*(1-v)
+            # x is the adjustment factor
+            n.vol = vol_trans(n.vol, x, mode)
 
         if selector and not found_note:
             raise Exception('no notes selected')
             
-    def vol_adjust(self, v:float, selector:Selector=None, mode:int=VOL_MULT):
+    def vol_adjust(self, x:float, selector:Selector=None, mode:int=VOL_MULT):
         self.tags_init()
         found_note = False
         for n in self.notes:
             if selector and not selector(n):
                 continue
             found_note = True
-            if mode == VOL_MULT:
-                n.vol *= v
-            elif mode == VOL_ADD:
-                n.vol += v
-            elif mode == VOL_SET:
-                n.vol = v/2
-            elif mode == VOL_SCALE:
-                if v > 1:
-                    n.vol += (2-n.vol)*(v-1)
-                elif v < 1:
-                    n.vol -= n.vol*(1-v)
+            n.vol = vol_trans(n.vol, x, mode)
         if selector and not found_note:
             raise Exception('no notes selected')
                 
@@ -127,18 +130,8 @@ class Score(ScoreBasic):
             if selector and not selector(n):
                 continue
             found_note = True
-            v = func(n)
-            if mode == VOL_MULT:
-                n.vol *= v
-            elif mode == VOL_ADD:
-                n.vol += v
-            elif mode == VOL_SET:
-                n.vol = v/2
-            elif mode == VOL_SCALE:
-                if v > 1:
-                    n.vol += (2-n.vol)*(v-1)
-                elif v < 1:
-                    n.vol -= n.vol*(1-v)
+            x = func(n)
+            n.vol = vol_trans(n.vol, x, mode)
         if selector and not found_note:
             raise Exception('no notes selected')
 
