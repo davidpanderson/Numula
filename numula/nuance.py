@@ -105,7 +105,7 @@ class Score(ScoreBasic):
                 seg = pft[seg_ind]
                 seg_end = seg_start + seg.dt
             # x is the adjustment factor
-            n.vol = vol_trans(n.vol, x, mode)
+            n.vol = self.vol_trans(n.vol, x, mode)
 
         if selector and not found_note:
             raise Exception('no notes selected')
@@ -117,7 +117,7 @@ class Score(ScoreBasic):
             if selector and not selector(n):
                 continue
             found_note = True
-            n.vol = vol_trans(n.vol, x, mode)
+            n.vol = self.vol_trans(n.vol, x, mode)
         if selector and not found_note:
             raise Exception('no notes selected')
                 
@@ -131,7 +131,7 @@ class Score(ScoreBasic):
                 continue
             found_note = True
             x = func(n)
-            n.vol = vol_trans(n.vol, x, mode)
+            n.vol = self.vol_trans(n.vol, x, mode)
         if selector and not found_note:
             raise Exception('no notes selected')
 
