@@ -465,7 +465,7 @@ def main():
         ns.roll(33/1+1/4, [0, .1, .2, .3, .5])
         if True:
             ns.adjust_dur_abs(1.9, lambda n: 'grace' in n.tags)
-    print(ns)
+    #print(ns)
     return ns
 
 if __name__ == '__main__':

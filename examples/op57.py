@@ -353,17 +353,25 @@ v0_20 = ' \
     |64 ] pp 32/2 mf \
     |96 mf 8/2 mf_ 4/2 _f \
 '
-v1_20 = ' \
-    |20 *2 [ mm 2/2 mm ] mf 2/2 mf ] f 2/2 f 2/2 mf * \
+
+# swell params
+
+sw1 = 1.05
+sw2 = 1.1
+sw3 = 1.15
+sw4 = 1.18
+
+v1_20 = f' \
+    |20 *2 [ mm 2/2 mm ] {sw1} 2/2 {sw1} ] {sw2} 2/2 {sw2} 2/2 {sw2} * \
     |36 *2 \
-        *2 [ mm 2/2 mf 2/2 mm * mm 2/2 mf_ 1/2 _mf 3/2 mm \
+        *2 [ mm 2/2 {sw2} 2/2 mm * mm 2/2 {sw3} 1/2 {sw2} 3/2 mm \
         * \
-    |64 *5 [ mp 1/2 f_ 1/2 mm * \
-    |74 mm 2/2 mf mf 1/2 mp 1/2 mf [ mf_ 1/2 mp_ 1/2 mf_ \
-    |80 [ mp 4/2 mf 2/2 mp \
-    |86 *2 [ mf 1/2 mp 1/2 mf * \
-    |90 [ mp 6/2 mm \
-    |96 *3 mm 2/2 mf 2/2 mm * \
+    |64 *5 [ mm 1/2 {sw3} 1/2 mm * \
+    |74 mm 2/2 {sw3} 1/2 mm 1/2 {sw3} [ {sw4} 1/2 mm 1/2 {sw4} \
+    |80 [ mm 4/2 {sw3} 2/2 mm \
+    |86 *2 [ {sw4} 1/2 mm 1/2 {sw4} * \
+    |90 [ {sw1} 6/2 mm \
+    |96 *3 mm 2/2 {sw2} 2/2 mm * \
 '
 rhv_36 = ' \
     |36 *2 *2 [ mp 1/4 mm 1/4 mp * mp 1/2 mm 1/2 mp * \
@@ -451,7 +459,7 @@ def v20_117(ns, t0):
         |118 \
     ')
     ns.vol_adjust_pft(v0, t0)
-    ns.vol_adjust_pft(v1, t0)
+    ns.vol_adjust_pft(v1, t0, mode=VOL_SCALE)
     ns.vol_adjust_pft(rhv, t0, lambda n: 'rh' in n.tags)
     ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
     ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
@@ -465,7 +473,7 @@ dt2 = .08
 dt3 = .11
 dt4 = .14
 
-ta_20 = f' \
+tempo_20_108 = f' \
     |20 60 6/2 63 2/2 55 \
     |28 60 6/2 63 2/2 2/2 50 \
     |36 *2 \
@@ -479,7 +487,7 @@ ta_20 = f' \
     |104 60 4/2 57 \
     |108 \
 '
-tb_20 = f' \
+pauses_20_108 = f' \
     |20 *2 \
         *3 60 2/2 60 {dt0}p * 1/2 60 1/2 60 {dt0}p \
         * \
@@ -497,13 +505,13 @@ tb_20 = f' \
 '
 
 def t20_117(ns, t0):
-    ta = sh_tempo(ta_20 + f' \
+    ta = sh_tempo(tempo_20_108 + f' \
         |108 57 2/2 55 2/2 50 \
         |112 4/2 60 2/2 50 \
         |118 \
     ')
     ns.tempo_adjust_pft(ta, t0)
-    tb = sh_tempo(tb_20 + f' \
+    tb = sh_tempo(pauses_20_108 + f' \
         |108 *2 {dt0}p{dt1} 60 2/2 60 * {dt4}p{dt0} \
         |112 6/2 60 {dt0}p \
         |118 \
@@ -689,11 +697,11 @@ def v212_299(ns, t0):
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
 
 def t212_299(ns, t0):
-    ta = sh_tempo(ta_20 + ' \
+    ta = sh_tempo(tempo_20_108 + ' \
         |108 \
     ')
     ns.tempo_adjust_pft(ta, t0)
-    tb = sh_tempo(tb_20 + ' \
+    tb = sh_tempo(pauses_20_108 + ' \
         |108 \
     ')
     ns.tempo_adjust_pft(tb, t0)
