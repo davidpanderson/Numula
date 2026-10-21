@@ -10,7 +10,7 @@ import numula.pianoteq
 # tags
 # theme_a: the initial RH theme
 
-rh_20_118 = sh_score(' \
+rh_20_118 = sh_score('meas2/4 ' + ' \
     |20 1/16 . (theme_a *2 \
     *2 -c f a- c d- c b- a- b- a- g f g a- f . * \
     d- g- b- d- e- d- c b- c b- a- g- a- g- f \
@@ -52,7 +52,7 @@ rh_20_118 = sh_score(' \
     g- e- c a g- e- c a *4 -g- a c e- * \
 ').tag('rh')
 
-lh_20_118 = sh_score(' \
+lh_20_118 = sh_score('meas2/4 ' + ' \
     *2 1/4 f1 . . 3/16 . 1/16 +f * \
     1/4 -b- . . 3/16 . 1/16 d- \
     1/8 c . d- . b- . c . \
@@ -95,7 +95,7 @@ lh_20_118 = sh_score(' \
 
 measure_duration(2/4)
 
-rh_118_212 = sh_score(' \
+rh_118_212 = sh_score('meas2/4 ' + ' \
     |118 (theme_a 1/16 *2 . a c e- g- a- g- f e- f e- d- c d- e- c * \
     . a c e- g- a- g- f *2 1/8 e- 1/16 e- f g- a- g- f * theme_a) \
     |125 1/8 e- par+12 g- f a 1/16 b- par (theme_a \
@@ -126,7 +126,7 @@ rh_118_212 = sh_score(' \
     |212 \
 ').tag('rh')
 
-lh_118_212 = sh_score(' \
+lh_118_212 = sh_score('meas2/4 ' + ' \
     |118 1/4 f1 . . 3/16 . 1/16 +f 1/4 -f . . 3/16 . 1/16 +f \
     |122 1/4 -f 1/16 . . +++a b- *2 c d- c b- 1/8 a 1/16 a b- * \
     c d- c b- a g- f e- *2 2/2 d- _ 1/16 . f *7 b- f * * \
@@ -161,7 +161,7 @@ lh_118_212 = sh_score(' \
     |212 \
 ').tag('lh')
 
-rh_212_300 = sh_score(' \
+rh_212_300 = sh_score('meas2/4 ' + ' \
     |212 1/16 *2 . c3 f a- c d- c b- a- b- a- g f g a- f * \
     . d- g- b- d- e- d- c b- c b- a- g- a- g- f \
     |218 e f g e f g a- f g a- b- g e f g e \
@@ -200,7 +200,7 @@ rh_212_300 = sh_score(' \
     |300 \
 ').tag('rh')
 
-lh_212_300 = sh_score(' \
+lh_212_300 = sh_score('meas2/4 ' + ' \
     |212 1/4 [f2 -f] . . . [f +f] 3/16 . 1/16 [c5 a-] 1/4 [c a-] 1/8 [a- f] . \
     1/4 [b2- -b-] 3/16 . 1/16 [b4- d-] 1/2 [b- d-] \
     |218 1/8 [b- c] par-12 c3 . d- . b- . c 1/16 -f par \
@@ -241,21 +241,21 @@ lh_212_300 = sh_score(' \
 ').tag('lh')
 
 # first ending 300-308
-rh_300_308 = sh_score(' \
+rh_300_308 = sh_score('meas2/4 ' + ' \
     |300 1/8[c f a- c] *3 [+c a- f c] * *4 [+c b- -e c] * \
     1/16 [c e- +a c] a3 c e- g- a c e- g- a c e- g- e- c a \
     g- e- c a g- e- c a g- e- c a g- e- c a *4 g- +e- c a * \
     |308 \
 ').tag('rh')
 
-lh_300_308 = sh_score(' \
+lh_300_308 = sh_score('meas2/4 ' + ' \
     |300 \
     1/16 f2 e d c b- a- g f g a- b- c d e f g 1/8 [g- -g-] . . . 10/4 . \
     |308 \
 ').tag('lh')
 
 # second ending onward
-rh_300_end = sh_score(' \
+rh_300_end = sh_score('meas2/4 ' + ' \
     |300 1/16 [c f a- c] g a- b- c d e f \
     *2 g f e d- c b- a- g f g a- b- c d e f * \
     *8 g f+ * g f e d- c b- a- g \
@@ -301,7 +301,7 @@ rh_300_end = sh_score(' \
     |362 \
 ').tag('rh')
 
-lh_300_end = sh_score(' \
+lh_300_end = sh_score('meas2/4 ' + ' \
     |300 1/4 f2 1/8 . [c f a- c] *4 [-c e g b- c] * \
     |302 1/4 [-c f a- c] 1/8 . [c f a- c] *4 [-c e g b- c] * \
     |304 1/4 [c a- f c] 1/8 . [c a- f c] *12 [+c b- g e c] * \
@@ -412,28 +412,28 @@ lha_36 = ' \
 
 def vol_20_118(ns, t0):
     # overall shape of exposition
-    v0 = sh_vol(v0_20 + ' \
+    v0 = sh_vol('meas2/4 ' + v0_20 + ' \
         |108 _f 4/2 f \
         |112 f 6/2 pp \
         |118 [ \
     ')
 
     # swells at 8 measure level
-    v1 = sh_vol(v1_20 + ' \
+    v1 = sh_vol('meas2/4 ' + v1_20 + ' \
         |108 mm 2/2 {sw2} 2/2 mm \
         |112 6/2 mm \
         |118 [ \
     ')
 
     # swells at 1 measure level
-    rhv = sh_vol(' \
+    rhv = sh_vol('meas2/4 ' + ' \
         |20 exp-2 *8 mp 1/2 _f 1/2 mp * \
         ' + rhv_36 + ' \
         |108 10/2 mm \
         |118 [ \
     ')
 
-    rha = sh_accents(' \
+    rha = sh_accents('meas2/4 ' + ' \
         |20 *2 \
             *3 mm 1/4 mf_ 1/4 mf 1/4 _mf 1/4 * \
             1/8 mf 1/4 mf 1/4 mf 1/4 mf 1/8 \
@@ -444,14 +444,14 @@ def vol_20_118(ns, t0):
         |118 \
     ')
         
-    lhv = sh_vol(' \
+    lhv = sh_vol('meas2/4 ' + ' \
         |20 _mf 16/2 _mf \
         ' + lhv_36 + ' \
         |108 *4 [ mf 1/4 mm 1/4 mf * \
         |112 [ mm 6/2 mm \
         |118 [ \
     ')
-    lha = sh_accents(' \
+    lha = sh_accents('meas2/4 ' + ' \
         |20 *3 ff 2/2 * \
         |26 f 1/4 f 1/4 f 1/4 f 1/4 \
         |28 *3 1/2 mf 1/4 p 1/4 * 2/2 \
@@ -505,13 +505,13 @@ pauses_20_108 = f' \
 '
 
 def timing_20_118(ns, t0):
-    ta = sh_tempo(tempo_20_108 + f' \
+    ta = sh_tempo('meas2/4 ' + tempo_20_108 + f' \
         |108 57 2/2 55 2/2 50 \
         |112 4/2 60 2/2 50 \
         |118 \
     ')
     ns.tempo_adjust_pft(ta, t0)
-    tb = sh_tempo(pauses_20_108 + f' \
+    tb = sh_tempo('meas2/4 ' + pauses_20_108 + f' \
         |108 *2 {dt0}p{dt1} 60 2/2 60 * {dt4}p{dt0} \
         |112 6/2 60 {dt0}p \
         |118 \
@@ -538,15 +538,15 @@ lhp_20 = ' \
 '
 def pedal_20_118(ns, t0):
     # virtual pedal RH arpeggios starting in m36
-    rh = sh_pedal(rhp_20)
+    rh = sh_pedal('meas2/4 ' + rhp_20)
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
     ns.insert_pedal(PedalSeg(4/2, time=t0+92/2))
 
-    lh = sh_pedal(lhp_20)
+    lh = sh_pedal('meas2/4 ' + lhp_20)
     ns.vsustain_pft(lh, t0+30/2, lambda n: 'lh' in n.tags)
 
 def vol_118_212(ns, t0):
-    v0 = sh_vol(' \
+    v0 = sh_vol('meas2/4 ' + ' \
         |118 ppp 7/2 p 1/2 p \
         |126 ] p 6/2 _mf 2/2 mp \
         |134 4/2 mf \
@@ -557,7 +557,7 @@ def vol_118_212(ns, t0):
         |184 [ p 8/2 pp 20/2 pp  \
         |212 [ \
     ')
-    rh = sh_vol(' \
+    rh = sh_vol('meas2/4 ' + ' \
         |118 *2 mp 1/2 mm 1/2 mp * *3 mp 1/4 mm 1/4 mp * [ mf 1/2 mm \
         |126 *2 [ mp 1/2 _mf 1/2 mp * mp 2/2 mf 2/2 mp \
         |134 *4 [ mp 1/2 mm 1/2 mp * \
@@ -568,14 +568,14 @@ def vol_118_212(ns, t0):
         |184 [ mm 28/2 mm \
         |212 [ \
     ')
-    rha = sh_accents(' \
+    rha = sh_accents('meas2/4 ' + ' \
         |118 16/2 \
         |134 1/2 1/4 f 1/4 f 1/4 f 1/4 1/4 f 1/4 f 4/2 \
         |142 *2 *3 1/8 f 3/8 * 1/2 *3 1/8 f 3/8 * 1/2 * \
         |158 *4 mf 2/2 * 1/2 3/8 mf 1/8 f 44/2 \
         |212 \
     ')
-    lh = sh_vol(' \
+    lh = sh_vol('meas2/4 ' + ' \
         |118 mf 4/2 mf 1/4 mf *3 [ mp 1/4 mf 1/4 mp * 1/4 mp \
         |126 [ _p 8/2 _p \
         |134 *2 [ p 1/2 mm 1/2 p * \
@@ -586,7 +586,7 @@ def vol_118_212(ns, t0):
         |212 [ \
     ')
     # attenuate off-beat chords from 138 to 140
-    lha = sh_accents(' \
+    lha = sh_accents('meas2/4 ' + ' \
         |118 2.7 2/2 2.0 2/2 1.8 1/2 ff 1/2 ff 2/2 \
         |126 *3 f_ 2/2 * f_ 1/2 f_ 1/2 \
         |134 *2 1/4 mf 1/4 mf 1/4 mf 1/4 * \
@@ -606,7 +606,7 @@ def vol_118_212(ns, t0):
     ns.vol_adjust_pft(sh_accents('*94 mm 1/8 mp_ 1/8 mm 1/8 mp_ 1/8 *'))
     
 def timing_118_212(ns, t0):
-    f1 = sh_tempo(f' \
+    f1 = sh_tempo('meas2/4 ' + f' \
         |118 60 4/2 60 4/2 55 \
         |126 55 7/2 60 1/2 50 \
         |134 60 8/2 55 \
@@ -617,7 +617,7 @@ def timing_118_212(ns, t0):
         |184 55 28/2 48 \
         |212 \
     ')
-    f2 = sh_tempo(f' \
+    f2 = sh_tempo('meas2/4 ' + f' \
         |118 {dt2}p *2 p{dt0} 60 2/2 60 * p{dt0} 4/2 60 \
         |126 {dt1}p{dt2} 60 8/2 60 \
         |134 p{dt0} 60 4/2 60 {dt1}p{dt1} 4/2 60 \
@@ -634,7 +634,7 @@ def timing_118_212(ns, t0):
     ns.tempo_adjust_pft(f2, t0)
 
 def pedal_118_212(ns, t0):
-    lh = sh_pedal(' \
+    lh = sh_pedal('meas2/4 ' + ' \
         |118 8/2 *3 (2/2) * (1/2) (1/2) \
         |134 *2 1/4 (1/4) (1/4) (1/4) * \
         |138 (2/2) (1/2) (1/4) (1/4) \
@@ -643,7 +643,7 @@ def pedal_118_212(ns, t0):
         |158 54/2 \
         |212 \
     ')
-    p = sh_pedal(' \
+    p = sh_pedal('meas2/4 ' + ' \
         |118 58/2 \
         |176 *2 (7/4) 1/4 * \
         |184 *4 (3/4) 1/4 * \
@@ -656,34 +656,34 @@ def pedal_118_212(ns, t0):
 # measures 212..299 are analogous to 20..107
 # (except the first 16 measures are kind of different)
 def vol_212_300(ns, t0):
-    v0 = sh_vol(v0_20 + ' \
+    v0 = sh_vol('meas2/4 ' + v0_20 + ' \
         |108 [ \
     ')
 
-    v1 = sh_vol(v1_20 + ' \
+    v1 = sh_vol('meas2/4 ' + v1_20 + ' \
         |108 [ \
     ')
 
-    rhv = sh_vol(' \
+    rhv = sh_vol('meas2/4 ' + ' \
         |20 *4 p 1/2 mf_ 1/2 p * \
         |28 [ mm 1/2 mf 1/2 mm [ _mf 1/2 mf_ 1/2 _mf [ mf 2/2 _f 2/2 mf \
         ' + rhv_36 + ' \
         |108 [ \
     ')
 
-    rha = sh_accents(' \
+    rha = sh_accents('meas2/4 ' + ' \
         |20 16/2 \
         ' + rha_36 + ' \
         |108 \
     ')
         
-    lhv = sh_vol(' \
+    lhv = sh_vol('meas2/4 ' + ' \
         |20 mf_ 8/2 mf_ \
         |28 ] *4 mp 1/2 mm 1/2 mp * \
         ' + lhv_36 + ' \
         |108 [ \
     ')
-    lha = sh_accents(' \
+    lha = sh_accents('meas2/4 ' + ' \
         |20 f 2/2 f 1/2 f 1/4 mp 1/4 f 1/2 f 3/2 \
         |28 8/2 \
         ' + lha_36 + ' \
@@ -697,54 +697,54 @@ def vol_212_300(ns, t0):
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
 
 def timing_212_300(ns, t0):
-    ta = sh_tempo(tempo_20_108 + ' \
+    ta = sh_tempo('meas2/4 ' + tempo_20_108 + ' \
         |108 \
     ')
     ns.tempo_adjust_pft(ta, t0)
-    tb = sh_tempo(pauses_20_108 + ' \
+    tb = sh_tempo('meas2/4 ' + pauses_20_108 + ' \
         |108 \
     ')
     ns.tempo_adjust_pft(tb, t0)
 
 def pedal_212_300(ns, t0):
-    rh = sh_pedal(rhp_20 + ' \
+    rh = sh_pedal('meas2/4 ' + rhp_20 + ' \
         |108 \
     ')
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
 
-    lh = sh_pedal(lhp_20 + ' \
+    lh = sh_pedal('meas2/4 ' + lhp_20 + ' \
         |108 \
     ')
     ns.vsustain_pft(lh, t0+30/2, lambda n: 'lh' in n.tags)
 
 def vol_300_1(ns, t0):
-    v = sh_vol(' \
+    v = sh_vol('meas2/4 ' + ' \
         |300 ff 2/2 ff_ 6/2 p \
         |308 [ \
     ')
     ns.vol_adjust_pft(v, t0)
-    a = sh_accents(f' \
+    a = sh_accents('meas2/4 ' + f' \
         |300 2/2 mf 1/4 _mf 1/4 *5 _mf 1/4 _mf 1/4 * \
         |308 \
     ')
     ns.vol_adjust_pft(a, t0)
     
 def timing_300_1(ns, t0):
-    t = sh_tempo(f' \
+    t = sh_tempo('meas2/4 ' + f' \
         |300 60 2/2 45 {dt4}p{dt2} 60 6/2 50 \
         |308 \
     ')
     ns.tempo_adjust_pft(t, t0)
     
 def pedal_300_1(ns, t0):
-    p = sh_pedal(' \
+    p = sh_pedal('meas2/4 ' + ' \
         |300 2/2 (4/2) 2/2 \
         |308 \
     ')
     ns.pedal_pft(p, t0)
     
 def v300_end(ns, t0):
-    v = sh_vol(' \
+    v = sh_vol('meas2/4 ' + ' \
         |300 f 8/2 _ff \
         |308 *2 [ ff 1/2 fff 1/2 fff [ p 5/2 mf ] mf 1/2 ff * \
         |324 ff 1/2 fff 1/2 fff [ mp 7/2 mf [ f 1/2 ff \
@@ -755,13 +755,13 @@ def v300_end(ns, t0):
         |371 6/2 ff [ ffff 3/2 ffff \
         |380 \
     ')
-    lhv = sh_vol(' \
+    lhv = sh_vol('meas2/4 ' + ' \
         |300 mm 43/2 mm \
         |343 ] mp 37/2 mp \
         |380 \
     ')
     a8 = 'mf'    # accents on 8th-note chords in 310 onward
-    lha = sh_accents(f' \
+    lha = sh_accents('meas2/4 ' + f' \
         |300 *3 1/2 mf 1/2 mf * mf 1/2 mf 1/2 \
         |308 *2 2/2 *5 {a8} 1/2 * f 1/2 * \
         |324 2/2 *8 {a8} 1/2 * 2/2 *7 {a8} 1/2 * \
@@ -771,7 +771,7 @@ def v300_end(ns, t0):
         |371 *6 _f 1/4 _f 1/4 * 3/2 \
         |380 \
     ')
-    rha = sh_accents(f' \
+    rha = sh_accents('meas2/4 ' + f' \
         |300 8/2 \
         |308 *2 2/2 *6 {a8} 1/2 * * \
         |324 2/2 *8 {a8} 1/2 * 2/2 *7 {a8} 1/2 * \
@@ -790,7 +790,7 @@ def v300_end(ns, t0):
     )
     
 def timing_300_end(ns, t0):
-    ta = sh_tempo(f' \
+    ta = sh_tempo('meas2/4 ' + f' \
         |300 exp-2 60 6/2 70 2/2 50 \
         |308 *2 65 2/2 65 70 6/2 70 * \
         |324 70 10/2 70 \
@@ -801,7 +801,7 @@ def timing_300_end(ns, t0):
         |380 \
     ')
     ns.tempo_adjust_pft(ta, t0)
-    tb = sh_tempo(f' \
+    tb = sh_tempo('meas2/4 ' + f' \
         |300 *3 60 2/2 {dt0}p{dt0} * 60 2/2 60 \
         |308 *2 p{dt2} 60 2/2 60 p{dt0} 60 5/2 60 {dt1}p{dt4} 1/2 60 * \
         |324 p{dt1} 60 9/2 60 {dt1}p 1/2 60 \
@@ -824,7 +824,7 @@ def timing_300_end(ns, t0):
     ) 
     
 def pedal_300_end(ns, t0):
-    p = sh_pedal(' \
+    p = sh_pedal('meas2/4 ' + ' \
         |300 59/2 \
         |359 *4 (3/4) 1/4 * \
         |367 *3 (3/8) 1/8 * (1/8) (1/8) (1/8) (1/8) \
