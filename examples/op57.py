@@ -10,7 +10,7 @@ import numula.pianoteq
 # tags
 # theme_a: the initial RH theme
 
-rh_20_117 = sh_score(' \
+rh_20_118 = sh_score(' \
     |20 1/16 . (theme_a *2 \
     *2 -c f a- c d- c b- a- b- a- g f g a- f . * \
     d- g- b- d- e- d- c b- c b- a- g- a- g- f \
@@ -52,7 +52,7 @@ rh_20_117 = sh_score(' \
     g- e- c a g- e- c a *4 -g- a c e- * \
 ').tag('rh')
 
-lh_20_117 = sh_score(' \
+lh_20_118 = sh_score(' \
     *2 1/4 f1 . . 3/16 . 1/16 +f * \
     1/4 -b- . . 3/16 . 1/16 d- \
     1/8 c . d- . b- . c . \
@@ -95,7 +95,7 @@ lh_20_117 = sh_score(' \
 
 measure_duration(2/4)
 
-rh_118_211 = sh_score(' \
+rh_118_212 = sh_score(' \
     |118 (theme_a 1/16 *2 . a c e- g- a- g- f e- f e- d- c d- e- c * \
     . a c e- g- a- g- f *2 1/8 e- 1/16 e- f g- a- g- f * theme_a) \
     |125 1/8 e- par+12 g- f a 1/16 b- par (theme_a \
@@ -126,7 +126,7 @@ rh_118_211 = sh_score(' \
     |212 \
 ').tag('rh')
 
-lh_118_211 = sh_score(' \
+lh_118_212 = sh_score(' \
     |118 1/4 f1 . . 3/16 . 1/16 +f 1/4 -f . . 3/16 . 1/16 +f \
     |122 1/4 -f 1/16 . . +++a b- *2 c d- c b- 1/8 a 1/16 a b- * \
     c d- c b- a g- f e- *2 2/2 d- _ 1/16 . f *7 b- f * * \
@@ -161,7 +161,7 @@ lh_118_211 = sh_score(' \
     |212 \
 ').tag('lh')
 
-rh_212_299 = sh_score(' \
+rh_212_300 = sh_score(' \
     |212 1/16 *2 . c3 f a- c d- c b- a- b- a- g f g a- f * \
     . d- g- b- d- e- d- c b- c b- a- g- a- g- f \
     |218 e f g e f g a- f g a- b- g e f g e \
@@ -200,7 +200,7 @@ rh_212_299 = sh_score(' \
     |300 \
 ').tag('rh')
 
-lh_212_299 = sh_score(' \
+lh_212_300 = sh_score(' \
     |212 1/4 [f2 -f] . . . [f +f] 3/16 . 1/16 [c5 a-] 1/4 [c a-] 1/8 [a- f] . \
     1/4 [b2- -b-] 3/16 . 1/16 [b4- d-] 1/2 [b- d-] \
     |218 1/8 [b- c] par-12 c3 . d- . b- . c 1/16 -f par \
@@ -240,15 +240,15 @@ lh_212_299 = sh_score(' \
     |300 \
 ').tag('lh')
 
-# first ending 300-307
-rh_300_307 = sh_score(' \
+# first ending 300-308
+rh_300_308 = sh_score(' \
     |300 1/8[c f a- c] *3 [+c a- f c] * *4 [+c b- -e c] * \
     1/16 [c e- +a c] a3 c e- g- a c e- g- a c e- g- e- c a \
     g- e- c a g- e- c a g- e- c a g- e- c a *4 g- +e- c a * \
     |308 \
 ').tag('rh')
 
-lh_300_307 = sh_score(' \
+lh_300_308 = sh_score(' \
     |300 \
     1/16 f2 e d c b- a- g f g a- b- c d e f g 1/8 [g- -g-] . . . 10/4 . \
     |308 \
@@ -409,7 +409,8 @@ lha_36 = ' \
     |96 mp 12/2 \
     |108 \
 '
-def v20_117(ns, t0):
+
+def vol_20_118(ns, t0):
     # overall shape of exposition
     v0 = sh_vol(v0_20 + ' \
         |108 _f 4/2 f \
@@ -419,7 +420,7 @@ def v20_117(ns, t0):
 
     # swells at 8 measure level
     v1 = sh_vol(v1_20 + ' \
-        |108 mm 2/2 mf 2/2 mm \
+        |108 mm 2/2 {sw2} 2/2 mm \
         |112 6/2 mm \
         |118 [ \
     ')
@@ -464,7 +465,6 @@ def v20_117(ns, t0):
     ns.vol_adjust_pft(rha, t0, lambda n: 'rh' in n.tags)
     ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
-    ns.vol_adjust_pft(sh_accents('*98 mm 1/8 mp_ 1/8 mm 1/8 mp_ 1/8 *'))
 
 # pause durations
 dt0 = .03
@@ -504,7 +504,7 @@ pauses_20_108 = f' \
     |108 \
 '
 
-def t20_117(ns, t0):
+def timing_20_118(ns, t0):
     ta = sh_tempo(tempo_20_108 + f' \
         |108 57 2/2 55 2/2 50 \
         |112 4/2 60 2/2 50 \
@@ -536,7 +536,7 @@ lhp_20 = ' \
     |96 (1/2) 3/2 (1/2) 7/2 \
     |108 \
 '
-def p20_117(ns, t0):
+def pedal_20_118(ns, t0):
     # virtual pedal RH arpeggios starting in m36
     rh = sh_pedal(rhp_20)
     ns.vsustain_pft(rh, t0, lambda n: 'rh' in n.tags)
@@ -545,7 +545,7 @@ def p20_117(ns, t0):
     lh = sh_pedal(lhp_20)
     ns.vsustain_pft(lh, t0+30/2, lambda n: 'lh' in n.tags)
 
-def v118_211(ns, t0):
+def vol_118_212(ns, t0):
     v0 = sh_vol(' \
         |118 ppp 7/2 p 1/2 p \
         |126 ] p 6/2 _mf 2/2 mp \
@@ -605,7 +605,7 @@ def v118_211(ns, t0):
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
     ns.vol_adjust_pft(sh_accents('*94 mm 1/8 mp_ 1/8 mm 1/8 mp_ 1/8 *'))
     
-def t118_211(ns, t0):
+def timing_118_212(ns, t0):
     f1 = sh_tempo(f' \
         |118 60 4/2 60 4/2 55 \
         |126 55 7/2 60 1/2 50 \
@@ -633,7 +633,7 @@ def t118_211(ns, t0):
     ns.tempo_adjust_pft(f1, t0)
     ns.tempo_adjust_pft(f2, t0)
 
-def p118_211(ns, t0):
+def pedal_118_212(ns, t0):
     lh = sh_pedal(' \
         |118 8/2 *3 (2/2) * (1/2) (1/2) \
         |134 *2 1/4 (1/4) (1/4) (1/4) * \
@@ -655,7 +655,7 @@ def p118_211(ns, t0):
 
 # measures 212..299 are analogous to 20..107
 # (except the first 16 measures are kind of different)
-def v212_299(ns, t0):
+def vol_212_300(ns, t0):
     v0 = sh_vol(v0_20 + ' \
         |108 [ \
     ')
@@ -696,7 +696,7 @@ def v212_299(ns, t0):
     ns.vol_adjust_pft(lhv, t0, lambda n: 'lh' in n.tags)
     ns.vol_adjust_pft(lha, t0, lambda n: 'lh' in n.tags)
 
-def t212_299(ns, t0):
+def timing_212_300(ns, t0):
     ta = sh_tempo(tempo_20_108 + ' \
         |108 \
     ')
@@ -706,7 +706,7 @@ def t212_299(ns, t0):
     ')
     ns.tempo_adjust_pft(tb, t0)
 
-def p212_299(ns, t0):
+def pedal_212_300(ns, t0):
     rh = sh_pedal(rhp_20 + ' \
         |108 \
     ')
@@ -717,7 +717,7 @@ def p212_299(ns, t0):
     ')
     ns.vsustain_pft(lh, t0+30/2, lambda n: 'lh' in n.tags)
 
-def v300_1(ns, t0):
+def vol_300_1(ns, t0):
     v = sh_vol(' \
         |300 ff 2/2 ff_ 6/2 p \
         |308 [ \
@@ -729,14 +729,14 @@ def v300_1(ns, t0):
     ')
     ns.vol_adjust_pft(a, t0)
     
-def t300_1(ns, t0):
+def timing_300_1(ns, t0):
     t = sh_tempo(f' \
         |300 60 2/2 45 {dt4}p{dt2} 60 6/2 50 \
         |308 \
     ')
     ns.tempo_adjust_pft(t, t0)
     
-def p300_1(ns, t0):
+def pedal_300_1(ns, t0):
     p = sh_pedal(' \
         |300 2/2 (4/2) 2/2 \
         |308 \
@@ -789,7 +789,7 @@ def v300_end(ns, t0):
         lambda n: 'ch' in n.tags and n.chord_pos < n.nchord-1
     )
     
-def t300_end(ns, t0):
+def timing_300_end(ns, t0):
     ta = sh_tempo(f' \
         |300 exp-2 60 6/2 70 2/2 50 \
         |308 *2 65 2/2 65 70 6/2 70 * \
@@ -823,7 +823,7 @@ def t300_end(ns, t0):
         ]
     ) 
     
-def p300_end(ns, t0):
+def pedal_300_end(ns, t0):
     p = sh_pedal(' \
         |300 59/2 \
         |359 *4 (3/4) 1/4 * \
@@ -844,28 +844,28 @@ def main():
     
     ns = Score(tempo=144, verbose=False)
     # must make copies first; append_scores() changes note times
-    lh_118_211_copy = copy.deepcopy(lh_118_211)
-    rh_118_211_copy = copy.deepcopy(rh_118_211)
-    lh_212_299_copy = copy.deepcopy(lh_212_299)
-    rh_212_299_copy = copy.deepcopy(rh_212_299)
+    lh_118_212_copy = copy.deepcopy(lh_118_212)
+    rh_118_212_copy = copy.deepcopy(rh_118_212)
+    lh_212_300_copy = copy.deepcopy(lh_212_300)
+    rh_212_300_copy = copy.deepcopy(rh_212_300)
     if do_20:
         t_20 = ns.cur_time
-        ns.append_scores([lh_20_117, rh_20_117])
+        ns.append_scores([lh_20_118, rh_20_118])
     if do_118:
         t_118 = ns.cur_time
-        ns.append_scores([lh_118_211, rh_118_211])
+        ns.append_scores([lh_118_212, rh_118_212])
     if do_212:
         t_212 = ns.cur_time
-        ns.append_scores([lh_212_299, rh_212_299])
+        ns.append_scores([lh_212_300, rh_212_300])
     if do_300_1:
         t_300_1 = ns.cur_time
-        ns.append_scores([rh_300_307, lh_300_307])
+        ns.append_scores([rh_300_308, lh_300_308])
     if do_118_rep:
         t_118_rep = ns.cur_time
-        ns.append_scores([lh_118_211_copy, rh_118_211_copy])
+        ns.append_scores([lh_118_212_copy, rh_118_212_copy])
     if do_212_rep:
         t_212_rep = ns.cur_time
-        ns.append_scores([lh_212_299_copy, rh_212_299_copy])
+        ns.append_scores([lh_212_300_copy, rh_212_300_copy])
     if do_300_2:
         t_300_2 = ns.cur_time
         ns.append_scores([rh_300_end, lh_300_end])
@@ -874,43 +874,43 @@ def main():
     # pedal control
     if nuance:
         if do_20:
-            p20_117(ns, t_20)
+            pedal_20_118(ns, t_20)
         if do_118:
-            p118_211(ns, t_118)
+            pedal_118_212(ns, t_118)
         if do_212:
-            p212_299(ns, t_212)
+            pedal_212_300(ns, t_212)
         if do_300_1:
-            p300_1(ns, t_300_1)
+            pedal_300_1(ns, t_300_1)
         if do_118_rep:
-            p118_211(ns, t_118_rep)
+            pedal_118_212(ns, t_118_rep)
         if do_212_rep:
-            p212_299(ns, t_212_rep)
+            pedal_212_300(ns, t_212_rep)
         if do_300_2:
-            p300_end(ns, t_300_2)
+            pedal_300_end(ns, t_300_2)
     
     # other nuance
     if nuance:
         if do_20:
-            v20_117(ns, t_20)
-            t20_117(ns, t_20)
+            vol_20_118(ns, t_20)
+            timing_20_118(ns, t_20)
         if do_118:
-            v118_211(ns, t_118)
-            t118_211(ns, t_118)
+            vol_118_212(ns, t_118)
+            timing_118_212(ns, t_118)
         if do_212:
-            v212_299(ns, t_212)
-            t212_299(ns, t_212)
+            vol_212_300(ns, t_212)
+            timing_212_300(ns, t_212)
         if do_300_1:
-            v300_1(ns, t_300_1)
-            t300_1(ns, t_300_1)
+            vol_300_1(ns, t_300_1)
+            timing_300_1(ns, t_300_1)
         if do_118_rep:
-            v118_211(ns, t_118_rep)
-            t118_211(ns, t_118_rep)
+            vol_118_212(ns, t_118_rep)
+            timing_118_212(ns, t_118_rep)
         if do_212_rep:
-            v212_299(ns, t_212_rep)
-            t212_299(ns, t_212_rep)
+            vol_212_300(ns, t_212_rep)
+            timing_212_300(ns, t_212_rep)
         if do_300_2:
-            v300_end(ns, t_300_2)
-            t300_end(ns, t_300_2)
+            vol_300_end(ns, t_300_2)
+            timing_300_end(ns, t_300_2)
 
         ns.adjust_dur_rel(0.6, lambda n: 'theme_a' in n.tags)
         ns.adjust_dur_rel(0.2, lambda n: 'stac' in n.tags)
