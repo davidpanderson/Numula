@@ -11,45 +11,52 @@ import numula.pianoteq
 # theme_a: the initial RH theme
 
 rh_20_118 = sh_score('meas2/4 ' + ' \
-    |20 1/16 . (theme_a *2 \
-    *2 -c f a- c d- c b- a- b- a- g f g a- f . * \
-    d- g- b- d- e- d- c b- c b- a- g- a- g- f \
-    e f g e f g a- f g a- b- g e f g e f * theme_a) \
-    |36 *2 c4 f a- c -c f a- . * \
-    -b d +a- b -b d +a- b -b e g c -c e g \
-    *3 . -c e g c -c e g * c -c e g c -c f a- \
-    *3 . -f a c f -f a c * \
-    [-f a] +f [-f b-] +f [-f +c] f [-f +d-] f \
-    . --c f a- c -c f a- c -c +g b- c -c e g \
+    |20 1/16 (theme_a \
+    . -c f a- c d- c b- a- b- a- g f g a- f \
+    . -c f a- c d- c b- a- b- a- g f g a- f \
+    . d- g- b- d- e- d- c b- c b- a- g- a- g- f \
+    e f g e f g a- f g a- b- g e f g e \
+    f -c f a- c d- c b- a- b- a- g f g a- f \
+    . -c f a- c d- c b- a- b- a- g f g a- f \
+    . d- g- b- d- e- d- c b- c b- a- g- a- g- f \
+    e f g e f g a- f g a- b- g e f g e \
+    theme_a) \
+    |36 f c4 f a- c -c f a- . c4 f a- c -c f a- \
+    |38 . -b d +a- b -b d +a- b -b e g c -c e g \
+    |40 *3 . -c e g c -c e g * c -c e g c -c f a- \
+    |44 *3 . -f a c f -f a c * \
+    |47 [-f a] +f [-f b-] +f [-f +c] f [-f +d-] f \
+    |48 . --c f a- c -c f a- c -c +g b- c -c e g \
     |50 1/4 [c4 f a- c] 3/16 . 1/16 [f a-] 1/4 [f a-] 3/16 . 1/16 [f a-] \
     |52 1/2 [f a-] 1/8 [g e] 5/8 . 3/16 . 1/16 [g b-] 1/4 [g b-] \
     3/16 . 1/16 [g b-] 1/2 [g b-] 1/8 [a- f] 5/8 . 3/16 . 1/16 [+c e-] \
-    |59 1/4 [c e-] 3/16 . 1/16 [c e-] 5/8 [c e-] \
-    1/8 [d- b-] [c a-] [b- g] 1/4 [f a-] \
-    3/16 . 1/16 [f a- +f] 1/4 [g -b- g] 3/16 . 1/16 [e g +e] [f -a- f] \
-    (theme_a *2 c f a- c d- c b- a- b- a- g f g a- f . * \
-    *2 f b d f g f e- d e- d c b c d b . * \
-    *2 g c e- g a- g f e- f e- d c d e- c . * theme_a) \
-    *2 d- e- d- e- d- c d- . b c b . c d c . * \
-    |80 d- e- d- e- d- c d \
-    . b c b . a- b- a- . g a- g . f+ g f+ . f g f . e- f e- . \
-    e- f e- . d e- d . c d c . b c b \
-    . a- *3 +a- -a- * . a- +a- g f e- d c \
-    . +a- *3 +a- -a- * . a- +a- g f e- d c \
-    . --a- *3 +a- -a- * . +a- -a- +a- . +a- -a- +a- \
-    . g -g +g . f+ -f+ +f+ . f -f +f . e- [-g e-] +e- \
-    . e- [-a -e-] +e- . d [a -d] +d . c [-e- c] +c . b [-d b] +b [c g e- c] \
-    g c e- g a- g f e- f e- d c b- a- g f e- d c 1/8 b \
-    [g b d g] *4 [-g b +f g] * 1/16 [g e- c g] \
-    ++g c e- g a- g f e- f e- d c b- a- g f e- d c 1/8 b \
-    [g b d g] *4 [-g b +f g] * 1/4 [g e- c g] 1/8 . \
-    [+g c e- g] *4 [-g b +f g] * 1/4 [g e- c g] 1/8 . \
-    [-g c e- g] *4 [-g b +f g] * 1/4 [g e- c g] 1/8 . \
-    [c e- g c] *4 [-c e g c] * 1/4 [c a- f c] 1/8 . \
-    [-c f a- c] *4 [-c e +b- c] * \
-    1/16 #c5 [c a -e- c] a c e- g- a c e- \
-    g- a c e- g- e- c a g- e- c a g- e- c a \
-    g- e- c a g- e- c a *4 -g- a c e- * \
+    |59 1/4 [c e-] 3/16 . 1/16 [c e-] 5/8 [c e-] 1/8 [d- b-] [c a-] [b- g] \
+    |62 1/4 [f a-] 3/16 . 1/16 [f a- +f] 1/4 [g -b- g] 3/16 . 1/16 [e g +e] \
+    |64 [f -a- f] (theme_a c f a- c d- c b- a- b- a- g f g a- f  \
+    |66 . c f a- c d- c b- a- b- a- g f g a- f  \
+    |68 *2 . f b d f g f e- d e- d c b c d b * \
+    |72 *2 . g c e- g a- g f e- f e- d c d e- c * theme_a) \
+    |76 *2 . d- e- d- e- d- c d- . b c b . c d c * \
+    |80 . d- e- d- e- d- c d . b c b . a- b- a- \
+    |82 . g a- g . f+ g f+ . f g f . e- f e- \
+    |84 . e- f e- . d e- d . c d c . b c b \
+    |86 . a- *3 +a- -a- * . a- +a- g f e- d c \
+    |88 . +a- *3 +a- -a- * . a- +a- g f e- d c \
+    |90 . --a- *3 +a- -a- * . +a- -a- +a- . +a- -a- +a- \
+    |92 . g -g +g . f+ -f+ +f+ . f -f +f . e- [-g e-] +e- \
+    |94 . e- [-a -e-] +e- . d [a -d] +d . c [-e- c] +c . b [-d b] +b \
+    |96 [c g e- c] g c e- g a- g f e- f e- d c b- a- g \
+    |98 f e- d c 1/8 b [g b d g] *4 [-g b +f g] * \
+    |100 1/16 [g e- c g] ++g c e- g a- g f e- f e- d c b- a- g \
+    |102 f e- d c 1/8 b [g b d g] *4 [-g b +f g] * \
+    |104 1/4 [g e- c g] 1/8 . [+g c e- g] *4 [-g b +f g] * \
+    |106 1/4 [g e- c g] 1/8 . [-g c e- g] *4 [-g b +f g] * \
+    |108 1/4 [g e- c g] 1/8 . [c e- g c] *4 [-c e g c] * \
+    |110 1/4 [c a- f c] 1/8 . [-c f a- c] *4 [-c e +b- c] * \
+    |112 1/16 [c5 a -e- c] a c e- g- a c e- \
+    |113 g- a c e- g- e- c a g- e- c a g- e- c a \
+    |115 g- e- c a g- e- c a *4 -g- a c e- * \
+    |118 \
 ').tag('rh')
 
 lh_20_118 = sh_score('meas2/4 ' + ' \
@@ -257,48 +264,55 @@ lh_300_308 = sh_score('meas2/4 ' + ' \
 # second ending onward
 rh_300_end = sh_score('meas2/4 ' + ' \
     |300 1/16 [c f a- c] g a- b- c d e f \
-    *2 g f e d- c b- a- g f g a- b- c d e f * \
-    *8 g f+ * g f e d- c b- a- g \
+    |301 *2 g f e d- c b- a- g f g a- b- c d e f * \
+    |305 *8 g f+ * g f e d- c b- a- g \
     |presto \
-    1/2 [f c a-] [a- c +a-] \
-    1/8 (stac *2 [g -b- g] [g b- +e] [c b- g] [g b- +e] \
-    [f c a-] [a- c] [f c a-] [a- c +a-] * \
-    [g -c g] [g c e-] [d b g] [g b +g] stac) \
+    |308 1/2 [f c a-] [a- c +a-] \
+    |310 1/8 (stac *2 \
+        [g -b- g] [g b- +e] [c b- g] [g b- +e] \
+        [f c a-] [a- c] [f c a-] [a- c +a-] \
+        * \
+    |314 [g -c g] [g c e-] [d b g] [g b +g] stac) \
     |315 1/4 -c 1/8 . 1/24 c d e \
-    1/2 [f c a-] [a- c +a-] \
-    1/8 (stac *2 [g -b- g] [g b- +e] [c b- g] [g b- +e] \
-    [f c a-] [a- c] [f c a-] [a- c +a-] * \
-    [g -c g] [g c e-] [d b g] [g b +g] stac) \
-    |316 1/4 -c 1/8 . 1/24 e- f g \
-    |317 \
-    1/2 [a- e- c] [c e- +c] \
-    1/8 (stac *2 [b- -d- b-] [b- d- g] [e- d- b-] [b- d- g] \
-    [a- e- c] [c e-] [a- e- c] [c e- +c] * \
-    [a e- c] [c e- f] [a e- c] [c e- +c] \
-    [b- f d-] [d- f] [b- f d-] [d- f +d-] \
-    [c -f c] [c f a-] [g e c] [c e +c] stac) \
-    |325 1/4 -f 1/8 . 1/24 e- f g \
-    1/2 [a- e- c] [c e- +c] \
-    1/8 (stac *2 [b- -d- b-] [b- d- g] [e- d- b-] [b- d- g] \
-    [a- e- c] [c e-] [a- e- c] [c e- +c] * \
-    [a e- c] [c e- f] [a e- c] [c e- +c] \
-    [b- f d-] [d- f] [b- f d-] [d- f +d-] \
-    [c -f c] [c f a-] [g e c] [c e +c] stac) \
-    |326 \
-    1/16 #c4 f c f a- c d- c b- a- b- a- g f g a- f a- -c f a- c d- c b- \
-    |328 a- b- a- g f g a- f g- d- g- b- d- e- d- c \
-    |330 b- c b- a- g- a- g- f e f g a- b- a- g f e f g a- b- c d e \
-    |333 f c f a- c d- c b- a- b- a- g f g a- f \
-    a- -c f a- c d- c b- a- b- a- g f g a- f \
-    g- d- g- b- d- e- d- c b- c b- a- g- a- g- f \
-    |339 e f g a- b- a- g f e f g a- b- c d e \
-    |341 *4 f -a- c f 5/16 a- 1/16 -c f a- c a- g e * \
-    |349 *3 f c f a- c a- g e * *2 +c a- g e * \
-    |353 +c a- f c +a- f c a- +f c a- f +c a- f c \
-    |355 +a- f c a- +f c a- f +c a- f c +a- f c a- \
-    |377 +f c a- f +c a- f c +a- f c a- +f c a- c \
-    |359 1/8 [a- c f] . . . [+f a- c f] . . . [-f c a- f] . . . \
-    |362 \
+    |316 1/2 [f c a-] [a- c +a-] \
+    |318 1/8 (stac *2 \
+        [g -b- g] [g b- +e] [c b- g] [g b- +e] \
+        [f c a-] [a- c] [f c a-] [a- c +a-] \
+        * \
+    |322 [g -c g] [g c e-] [d b g] [g b +g] stac) \
+    |323 1/4 -c 1/8 . 1/24 e- f g \
+    |324 1/2 [a- e- c] [c e- +c] \
+    |326 1/8 (stac *2 \
+        [b- -d- b-] [b- d- g] [e- d- b-] [b- d- g] \
+        [a- e- c] [c e-] [a- e- c] [c e- +c] \
+        * \
+    |330 [a e- c] [c e- f] [a e- c] [c e- +c] \
+        [b- f d-] [d- f] [b- f d-] [d- f +d-] \
+        [c -f c] [c f a-] [g e c] [c e +c] stac) \
+    |333 1/4 -f 1/8 . 1/24 e- f g \
+    |334 1/2 [a- e- c] [c e- +c] \
+    |336 1/8 (stac *2 \
+        [b- -d- b-] [b- d- g] [e- d- b-] [b- d- g] \
+        [a- e- c] [c e-] [a- e- c] [c e- +c] \
+        * \
+    |340 [a e- c] [c e- f] [a e- c] [c e- +c] \
+        [b- f d-] [d- f] [b- f d-] [d- f +d-] \
+        [c -f c] [c f a-] [g e c] [c e +c] stac) \
+    |343 1/16 f4 c f a- c d- c b- a- b- a- g f g a- f \
+    |345 a- -c f a- c d- c b- a- b- a- g f g a- f \
+    |347 g- d- g- b- d- e- d- c b- c b- a- g- a- g- f \
+    |349 e f g a- b- a- g f e f g a- b- c d e \
+    |351 f c f a- c d- c b- a- b- a- g f g a- f \
+        a- -c f a- c d- c b- a- b- a- g f g a- f \
+        g- d- g- b- d- e- d- c b- c b- a- g- a- g- f \
+    |357 e f g a- b- a- g f e f g a- b- c d e \
+    |359 *4 f -a- c f 5/16 a- 1/16 -c f a- c a- g e * \
+    |367 *3 f c f a- c a- g e * *2 +c a- g e * \
+    |371 +c a- f c +a- f c a- +f c a- f +c a- f c \
+    |373 +a- f c a- +f c a- f +c a- f c +a- f c a- \
+    |375 +f c a- f +c a- f c +a- f c a- +f c a- c \
+    |377 1/8 [a- c f] . . . [+f a- c f] . . . [-f c a- f] . . . \
+    |380 \
 ').tag('rh')
 
 lh_300_end = sh_score('meas2/4 ' + ' \
@@ -475,7 +489,7 @@ dt4 = .14
 
 tempo_20_108 = f' \
     |20 60 6/2 63 2/2 55 \
-    |28 60 6/2 63 2/2 30 \
+    |28 60 6/2 63 1/2 60 1/2 50 \
     |36 *2 \
         *2 55 4/2 60 * \
         4/2 60 2/2 57 \
@@ -512,8 +526,8 @@ def timing_20_118(ns, t0):
     ')
     ns.tempo_adjust_pft(ta, t0)
     tb = sh_tempo('meas2/4 ' + pauses_20_108 + f' \
-        |108 *2 {dt0}p{dt1} 60 2/2 60 * {dt4}p{dt0} \
-        |112 6/2 60 {dt0}p \
+        |108 *2 {dt0}p{dt1} 2/2 . * {dt4}p{dt0} \
+        |112 6/2 . {dt0}p \
         |118 \
     ')
     ns.tempo_adjust_pft(tb, t0)
