@@ -317,9 +317,11 @@ bass_ped = sh_pedal('meas4/4 \
     |67 \
 ')
 
-do_nuance = True
-
 def main():
+    do_nuance = True
+    make_wav = False
+    preset = 'NY Steinway D Classical'
+
     ns = Score(tempo=84)
     if do_nuance:
         soprano.vol_adjust_pft(soprano_v0)
@@ -338,6 +340,15 @@ def main():
         ns.tempo_adjust_pft(pauses)
         ns.start_adjust_pft(sop_shift, selector=lambda n: 'sop' in n.tags)
     #print(ns)
-    numula.pianoteq.play_score(ns, 'Steinway B Improv')
+    if make_wav:
+        fname = if do_nuance 'helps_faure' else 'helps_faure_plain'
+        ns.write_midi(f'data/{fname}.midi')
+        numula.pianoteq.midi_to_wav(
+            f'data/{fname}.midi',
+            f'data/{fname}.wav',
+            preset=preset
+        )
+    else:
+        numula.pianoteq.play_score(ns, preset)
 
 main()

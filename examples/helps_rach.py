@@ -231,9 +231,11 @@ mped = sh_pedal('meas4/4 \
     |33 \
 ')
 
-do_nuance = True
-
 def main():
+    do_nuance = True
+    make_wav = False
+    preset = 'HB Steinway D Classical'
+
     ns = Score(tempo=80, verbose=False)
     if do_nuance:
         soprano.vol_adjust(.7, lambda n: 'bottom' in n.tags)
@@ -260,6 +262,15 @@ def main():
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(t1)
     #print(ns)
-    numula.pianoteq.play_score(ns, preset='HB Steinway D Classical')
+    if make_wav:
+        fname = if do_nuance 'helps_rach' else 'helps_rach_plain'
+        ns.write_midi(f'data/{fname}.midi')
+        numula.pianoteq.midi_to_wav(
+            f'data/{fname}.midi',
+            f'data/{fname}.wav',
+            preset=preset
+        )
+    else:
+        numula.pianoteq.play_score(ns, preset)
 
 main()

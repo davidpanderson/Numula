@@ -376,6 +376,7 @@ def do_pedal(ns):
 def main():
     do_nuance = True
     make_wav = False
+    preset = 'NY Steinway D Sombre'
 
     ns = make_score()
     if do_nuance:
@@ -391,11 +392,9 @@ def main():
         numula.pianoteq.midi_to_wav(
             f'data/{fname}.midi',
             f'data/{fname}.wav',
-            preset='NY Steinway D Sombre'
+            preset=preset
         )
     else:
-        numula.pianoteq.play_score(ns,
-            preset='NY Steinway D Sombre'
-        )
+        numula.pianoteq.play_score(ns, preset)
 
 main()

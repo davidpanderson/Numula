@@ -305,9 +305,11 @@ soft_pedal = sh_pedal(f'meas3/4 \
     |86 \
 ')
 
-do_nuance = True
-
 def main():
+    do_nuance = True
+    make_wav = False
+    preset = 'NY Steinway D Classical'
+
     ns = Score(tempo=72)
     if do_nuance:
         soprano.vol_adjust_pft(soprano_vol_overall)
@@ -335,7 +337,14 @@ def main():
         ns.tempo_adjust_pft(tempo)
         ns.tempo_adjust_pft(pauses)
     #print(ns)
-    #print(*ns.pedals, sep='\n')
-    numula.pianoteq.play_score(ns, preset='NY Steinway D Classical')
-    #numula.read_midifile.print_midifile(fname)
+    if make_wav:
+        fname = if do_nuance 'helps_ravel' else 'helps_ravel_plain'
+        ns.write_midi(f'data/{fname}.midi')
+        numula.pianoteq.midi_to_wav(
+            f'data/{fname}.midi',
+            f'data/{fname}.wav',
+            preset=preset
+        )
+    else:
+        numula.pianoteq.play_score(ns, preset)
 main()

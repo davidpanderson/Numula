@@ -35,6 +35,8 @@ rh = sh_score('2/4 ++d- 1/4 b- 3/44 +b- c d- -a b- a g+ a c b- g- \
 
 def main():
     nuance = True
+    make_wav = False
+    preset = 'HB Steinway D Classical Recording'
 
     if nuance:
         ns = Score()
@@ -72,8 +74,17 @@ def main():
 
         # portamento in RH
         ns.adjust_dur_rel(.6, lambda n: 'port' in n.tags)
-    print(ns)
+    #print(ns)
 
-    pianoteq.play_score(ns)
+    if make_wav:
+        fname = if do_nuance 'nocturne' else 'nocturne_plain'
+        ns.write_midi(f'data/{fname}.midi')
+        numula.pianoteq.midi_to_wav(
+            f'data/{fname}.midi',
+            f'data/{fname}.wav',
+            preset=preset
+        )
+    else:
+        numula.pianoteq.play_score(ns, preset)
 
 main()

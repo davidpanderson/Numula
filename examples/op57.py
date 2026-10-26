@@ -853,6 +853,10 @@ def pedal_300_end(ns, t0):
     ns.vsustain_pft(p, t0)
 
 def main():
+    nuance = True
+    make_wav = False
+    preset='NY Steinway D Classical Recording'
+
     do_20 = True
     do_118 = True
     do_212 = True
@@ -888,7 +892,6 @@ def main():
     if do_300_2:
         t_300_2 = ns.cur_time
         ns.append_scores([rh_300_end, lh_300_end])
-    nuance = True
 
     # pedal control
     if nuance:
@@ -936,6 +939,15 @@ def main():
         
     #ns.t_random_normal(.005, 2)
     #print(ns)
-    numula.pianoteq.play_score(ns, preset='NY Steinway D Classical Recording')
+    if make_wav:
+        fname = if do_nuance 'op57' else 'op57_plain'
+        ns.write_midi(f'data/{fname}.midi')
+        numula.pianoteq.midi_to_wav(
+            f'data/{fname}.midi',
+            f'data/{fname}.wav',
+            preset=preset
+        )
+    else:
+        numula.pianoteq.play_score(ns, preset)
 
 main()
