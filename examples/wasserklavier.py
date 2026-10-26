@@ -374,8 +374,8 @@ def do_pedal(ns):
     )
                 
 def main():
-    do_nuance = True
-    make_wav = False
+    do_nuance = False
+    make_wav = True
 
     ns = make_score()
     if do_nuance:
@@ -386,7 +386,7 @@ def main():
         #print(ns)
 
     if make_wav:
-        fname = if do_nuance 'wasserklavier' else 'wasserklavier_plain'
+        fname = 'wasserklavier' if do_nuance else 'wasserklavier_plain'
         ns.write_midi(f'data/{fname}.midi')
         numula.pianoteq.midi_to_wav(
             f'data/{fname}.midi',
