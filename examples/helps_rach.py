@@ -151,24 +151,24 @@ alto_v1 = sh_vol('meas4/4 \
 ')
 
 tenor_v0 = sh_vol('meas4/4 \
-    |1 mp 10/1 mp \
+    |1 pp 10/1 mp \
     |11 meas6/4 mp 6/4 mp \
     |12 meas4/4 mp 84/4 mp \
     |33 \
 ')
 
 tenor_v1 = sh_vol('meas4/4 \
-    |1 -1 9/4 -1 \
-        *4 [ p 1/4 mp [ mp_ 1/4 mp_ * \
-        ] -1 3/4 -1 \
+    |1 mm 9/4 mm \
+        *4 [ mm 1/4 mf [ mm 1/4 mf * \
+        [ mm 3/4 mm \
     |6 \
 ')
 
 bass_v0 = sh_vol('meas4/4 \
-    p 44/4 p \
-    |11 meas6/4 p 6/4 p \
+    |1 pp 40/4 pp \
+    |11 meas6/4 pp 6/4 p \
     |12 meas4/4 p 12/1 p \
-    |24 [ f 4/4 f [ p 8/1 p \
+    |24 [ _mf 4/4 _mf [ p 8/1 p \
     |33 \
 ')
 # overall volume, 4-16 m scale
@@ -179,7 +179,7 @@ v0 = sh_vol('meas4/4 \
     |14 [ p 12/4 pp \
     |17 pp 4/4 p 8/4 f \
     |20 f 16/4 _f 4/4 mf \
-    |25 mf 2/4 p 10/4 pp \
+    |25 mf 2/4 p 2/4 mf 8/4 pp \
     |28 pp 16/4 ppp 4/4 ppp \
     |33 \
 ')
@@ -188,12 +188,14 @@ v0 = sh_vol('meas4/4 \
 t0 = sh_tempo('meas4/4 \
     |1 *2 55 2/4 65 2/4 60 60 2/4 65 2/4 60 65 8/4 55 * \
     |9 60 2/4 65 2/4 60 60 2/4 65 2/4 60 \
-    |11 meas6/4 65 6/4 60 \
+    |11 meas6/4 55 6/4 60 \
     |12 meas4/4 60 4/4 45 \
-    |13 60 4/4 60 55 4/4 55 60 8/4 50 \
-    |17 *2 *2 60 2/4 65 2/4 60 * 60 4/4 55 * \
-    |23 55 4/4 50 \
-    |24 60 4/4 65 65 12/4 55 \
+    |13 60 4/4 60 55 4/4 55 60 4/4 55 4/4 48 \
+    |17 *2 *2 58 2/4 65 2/4 60 * 60 4/4 55 * \
+    |23 55 4/4 53 \
+    |24 60 4/4 65 \
+    |25 65 2/4 60 2/4 50 \
+    |26 65 6/4 60 2/4 50 \
     |28 60 8/4 55 8/4 50 4/4 15 \
 ')
 
@@ -240,6 +242,7 @@ def main():
         alto.vol_adjust_pft(alto_v1)
         tenor.vol_adjust_pft(tenor_v0)
         bass.vol_adjust_pft(bass_v0)
+    print(bass)
     ns.append_scores([
         soprano,
         alto,
@@ -251,12 +254,12 @@ def main():
         ns.vsustain_pft(mped, 0, lambda n: 'tenor' in n.tags)
         ns.vsustain_pft(mped, 0, lambda n: 'bass' in n.tags)
         ns.vol_adjust_pft(v0)
-        tenor.vol_adjust_pft(
-            tenor_v1, selector=lambda n: 'tenor' in n.tags, mode=VOL_SET
+        ns.vol_adjust_pft(
+            tenor_v1, selector=lambda n: 'tenor' in n.tags, mode=VOL_MULT
         )
         ns.tempo_adjust_pft(t0)
         ns.tempo_adjust_pft(t1)
     #print(ns)
-    numula.pianoteq.play_score(ns)
+    numula.pianoteq.play_score(ns, preset='HB Steinway D Classical')
 
 main()

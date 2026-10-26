@@ -336,6 +336,6 @@ def main():
         ns.tempo_adjust_pft(pauses)
     #print(ns)
     #print(*ns.pedals, sep='\n')
-    numula.pianoteq.play_score(ns)
+    numula.pianoteq.play_score(ns, preset='NY Steinway D Classical')
     #numula.read_midifile.print_midifile(fname)
 main()

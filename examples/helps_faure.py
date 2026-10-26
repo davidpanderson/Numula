@@ -48,11 +48,11 @@ alto = sh_score('meas4/4 \
     |15 . c . c 4/4 . \
     |17 1/12 . b4- d- +b- b- +b- . b4- d- . +b- +b- \
     |18 . c5- d- g- c- d- +c- g- d- . -d- c- \
-    |19 . c5- d- . +d- +d- . c6- d- . +d- +d- \
-    |20 . b5- d- +a- b- d- +b- a- e- b- a- -d- \
+    |19 . c5- d- . +d- +d- . c5- d- . +d- +d- \
+    |20 . b4- d- +a- b- d- +b- a- e- b- a- -d- \
     |21 . g4- b- +g- +f -b- . -b- +b- . +e- --d- \
     |22 . c5- d- g- ++b- -d- . --c- d- . ++g- -b- \
-    |23 . a4- b- . +b- +b- . a5- ++b- . -c +c \
+    |23 . a4- b- . +b- +b- . a4- ++b- . -c +c \
     |24 . d5- +d- c b- a- f e- d- c b- f \
     |25 . b4- d- +a- b- +b- . b4- d- . +b- +b- \
     |26 . c5- d- g- c- d- +c- b- -d- . d6- c- \
@@ -202,7 +202,7 @@ bass_accents = sh_accents('meas4/4 \
     |32 meas2/4 mf 1/4 _mf 1/4 \
     |33 meas4/4 *14 mf 1/4 _mf 1/4 * \
     |40 meas2/4 mf 1/4 mf 1/4  \
-    |41 meas4/4 *12 mf 1/4 _mf 1/4 * \
+    |41 meas4/4 *12 mf 1/4 f 1/4 * \
     |47 *6 f 1/4 f 1/4 * \
     |50 meas2/4 2/4 \
     |51 meas4/4 *32 mf 1/4 _mf 1/4 * \
@@ -225,14 +225,14 @@ t0 = sh_tempo('meas4/4 \
     |37 55 1/1 65 1/1 55 60 1/1 60 \
     |40 meas2/4 60 2/4 45 \
     |41 meas4/4 \
-        55 1/1 65 1/1 55 60 2/1 50 \
+        55 1/1 65 1/1 55 60 1/1 50 60 1/1 40 \
         55 1/1 65 1/1 55 60 1/1 60 1/1 50 \
     |49 45 1/1 40 \
     |50 meas2/4 35 2/4 30 \
     |51 meas4/4 52 1/1 60 1/1 55 60 2/1 45 \
     |55 55 1/1 60 1/1 55 60 1/1 60 1/1 50 \
     |59 55 1/1 60 1/1 55 60 2/1 40 \
-    |63 55 1/1 60 1/1 55 1/1 38 1/1 25 \
+    |63 55 1/1 60 1/1 55 1/1 38 1/1 20 \
     |67 \
 ')
 
@@ -338,6 +338,6 @@ def main():
         ns.tempo_adjust_pft(pauses)
         ns.start_adjust_pft(sop_shift, selector=lambda n: 'sop' in n.tags)
     #print(ns)
-    numula.pianoteq.play_score(ns, 'My Presets/NY Steinway B Improv')
+    numula.pianoteq.play_score(ns, 'Steinway B Improv')
 
 main()

@@ -380,11 +380,10 @@ def main():
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)
-        print(ns)
+        #print(ns)
 
     if True:
         numula.pianoteq.play_score(ns,
-            #preset='My Presets/NY Steinway D Classical (for wasser)'
             preset='NY Steinway D Sombre'
         )
     else:

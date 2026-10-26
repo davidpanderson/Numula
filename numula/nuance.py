@@ -52,7 +52,7 @@ class Score(ScoreBasic):
         elif mode == VOL_ADD:
             return v + x;
         elif mode == VOL_SET:
-            if v < 0:
+            if x < 0:
                 return v
             return x/2
         elif mode == VOL_SCALE:
