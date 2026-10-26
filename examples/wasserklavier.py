@@ -374,24 +374,27 @@ def do_pedal(ns):
     )
                 
 def main():
+    do_nuance = True
+    make_wav = False
+
     ns = make_score()
-    if True:
+    if do_nuance:
         do_pedal(ns)
         set_vol(ns)
         set_tempo(ns)
         time_adjust(ns)
         #print(ns)
 
-    if True:
-        numula.pianoteq.play_score(ns,
+    if make_wav:
+        fname = if do_nuance 'wasserklavier' else 'wasserklavier_plain'
+        ns.write_midi(f'data/{fname}.midi')
+        numula.pianoteq.midi_to_wav(
+            f'data/{fname}.midi',
+            f'data/{fname}.wav',
             preset='NY Steinway D Sombre'
         )
     else:
-        ns.write_midi('data/wasserklavier.midi')
-        numula.pianoteq.midi_to_wav(
-            'data/wasserklavier.midi',
-            'data/wasserklavier9.wav',
-            version=9,
+        numula.pianoteq.play_score(ns,
             preset='NY Steinway D Sombre'
         )
 
