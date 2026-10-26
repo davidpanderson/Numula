@@ -937,8 +937,6 @@ def main():
         
     #ns.t_random_normal(.005, 2)
     #print(ns)
-    numula.pianoteq.play_score(ns,
-         'My Presets/NY Steinway D Classical (for Appassionata)'
-    )
+    numula.pianoteq.play_score(ns)
 
 main()
