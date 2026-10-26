@@ -387,7 +387,7 @@ def main():
         #print(ns)
 
     if make_wav:
-        fname = if do_nuance 'wasserklavier' else 'wasserklavier_plain'
+        fname = 'wasserklavier' if do_nuance else 'wasserklavier_plain'
         ns.write_midi(f'data/{fname}.midi')
         numula.pianoteq.midi_to_wav(
             f'data/{fname}.midi',
