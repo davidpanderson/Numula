@@ -341,7 +341,7 @@ def main():
         ns.start_adjust_pft(sop_shift, selector=lambda n: 'sop' in n.tags)
     #print(ns)
     if make_wav:
-        fname = if do_nuance 'helps_faure' else 'helps_faure_plain'
+        fname = 'helps_faure' if do_nuance else 'helps_faure_plain'
         ns.write_midi(f'data/{fname}.midi')
         numula.pianoteq.midi_to_wav(
             f'data/{fname}.midi',

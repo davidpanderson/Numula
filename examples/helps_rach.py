@@ -263,7 +263,7 @@ def main():
         ns.tempo_adjust_pft(t1)
     #print(ns)
     if make_wav:
-        fname = if do_nuance 'helps_rach' else 'helps_rach_plain'
+        fname = 'helps_rach' if do_nuance else 'helps_rach_plain'
         ns.write_midi(f'data/{fname}.midi')
         numula.pianoteq.midi_to_wav(
             f'data/{fname}.midi',

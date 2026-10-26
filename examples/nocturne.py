@@ -77,7 +77,7 @@ def main():
     #print(ns)
 
     if make_wav:
-        fname = if do_nuance 'nocturne' else 'nocturne_plain'
+        fname = 'nocturne' if do_nuance else 'nocturne_plain'
         ns.write_midi(f'data/{fname}.midi')
         numula.pianoteq.midi_to_wav(
             f'data/{fname}.midi',

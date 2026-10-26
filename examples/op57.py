@@ -940,7 +940,7 @@ def main():
     #ns.t_random_normal(.005, 2)
     #print(ns)
     if make_wav:
-        fname = if do_nuance 'op57' else 'op57_plain'
+        fname = 'op57' if do_nuance else 'op57_plain'
         ns.write_midi(f'data/{fname}.midi')
         numula.pianoteq.midi_to_wav(
             f'data/{fname}.midi',

@@ -428,12 +428,12 @@ tphrase = sh_tempo(f'meas4/4 \
     |35 \
 ')
 
-nuance = True
+do_nuance = True
 make_wav = False
 preset = 'NY Steinway D Classical'
 
 def main():
-    if nuance:
+    if do_nuance:
         ns = Score(tempo=110)
     else:
         ns = Score(tempo=75)
@@ -448,7 +448,7 @@ def main():
     ns.append_scores(parts)
     #ns.trim(0, 8/1)
     #print(ns)
-    if nuance:
+    if do_nuance:
         if if_vphrase != 'off':
             ns.vol_adjust_pft(vphrase)
         if if_vmeas != 'off':
@@ -475,7 +475,7 @@ if __name__ == '__main__':
     import numula.pianoteq
     ns = main()
     if make_wav:
-        fname = if do_nuance 'chopin_prelude_8' else 'chopin_prelude_8_plain'
+        fname = 'chopin_prelude_8' if do_nuance else 'chopin_prelude_8_plain'
         ns.write_midi(f'data/{fname}.midi')
         numula.pianoteq.midi_to_wav(
             f'data/{fname}.midi',
