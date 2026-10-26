@@ -429,7 +429,7 @@ tphrase = sh_tempo(f'meas4/4 \
 ')
 
 def main():
-    nuance = False
+    nuance = True
     if nuance:
         ns = Score(tempo=110)
     else:
