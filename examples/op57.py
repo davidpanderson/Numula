@@ -853,8 +853,8 @@ def pedal_300_end(ns, t0):
     ns.vsustain_pft(p, t0)
 
 def main():
-    nuance = True
-    make_wav = False
+    do_nuance = False
+    make_wav = True
     preset='NY Steinway D Classical Recording'
 
     do_20 = True
@@ -894,7 +894,7 @@ def main():
         ns.append_scores([rh_300_end, lh_300_end])
 
     # pedal control
-    if nuance:
+    if do_nuance:
         if do_20:
             pedal_20_118(ns, t_20)
         if do_118:
@@ -911,7 +911,7 @@ def main():
             pedal_300_end(ns, t_300_2)
     
     # other nuance
-    if nuance:
+    if do_nuance:
         if do_20:
             vol_20_118(ns, t_20)
             timing_20_118(ns, t_20)

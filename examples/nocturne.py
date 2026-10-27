@@ -34,11 +34,11 @@ rh = sh_score('2/4 ++d- 1/4 b- 3/44 +b- c d- -a b- a g+ a c b- g- \
 ').tag('rh')
 
 def main():
-    nuance = True
-    make_wav = False
-    preset = 'HB Steinway D Classical Recording'
+    do_nuance = False
+    make_wav = True
+    preset = 'NY Steinway D Classical Recording'
 
-    if nuance:
+    if do_nuance:
         ns = Score()
         lh.vsustain_pft(
             sh_pedal('*5 (3/4) *')
@@ -48,7 +48,7 @@ def main():
         
     ns.append_scores([lh, rh])
 
-    if nuance:
+    if do_nuance:
         ns.vol_adjust_pft(
             sh_vol('*5 pp 2/4 p 1/4 pp *'), 0,
             lambda n: 'lh' in n.tags

@@ -428,9 +428,9 @@ tphrase = sh_tempo(f'meas4/4 \
     |35 \
 ')
 
-do_nuance = True
-make_wav = False
-preset = 'NY Steinway D Classical'
+do_nuance = False
+make_wav = True
+preset = 'NY Steinway D Classical Recording'
 
 def main():
     if do_nuance:

@@ -232,9 +232,9 @@ mped = sh_pedal('meas4/4 \
 ')
 
 def main():
-    do_nuance = True
-    make_wav = False
-    preset = 'HB Steinway D Classical'
+    do_nuance = False
+    make_wav = True
+    preset = 'HB Steinway D Classical Recording'
 
     ns = Score(tempo=80, verbose=False)
     if do_nuance:
@@ -244,7 +244,6 @@ def main():
         alto.vol_adjust_pft(alto_v1)
         tenor.vol_adjust_pft(tenor_v0)
         bass.vol_adjust_pft(bass_v0)
-    print(bass)
     ns.append_scores([
         soprano,
         alto,

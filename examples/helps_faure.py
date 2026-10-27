@@ -318,9 +318,9 @@ bass_ped = sh_pedal('meas4/4 \
 ')
 
 def main():
-    do_nuance = True
-    make_wav = False
-    preset = 'NY Steinway D Classical'
+    do_nuance = False
+    make_wav = True
+    preset = 'HB Steinway D Classical Recording'
 
     ns = Score(tempo=84)
     if do_nuance:

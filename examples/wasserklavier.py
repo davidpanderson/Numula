@@ -365,7 +365,7 @@ def time_adjust(ns):
     ta4(ns)
     ta5(ns)
     ta6(ns)
-    #ns.t_random_normal(.015, 2)
+    ns.t_random_normal(.015, 2)
 
 def do_pedal(ns):
     ns.pedal_pft(
@@ -376,7 +376,7 @@ def do_pedal(ns):
 def main():
     do_nuance = True
     make_wav = False
-    preset = 'NY Steinway D Sombre'
+    preset = 'Bösendorfer VC Warm'
 
     ns = make_score()
     if do_nuance:

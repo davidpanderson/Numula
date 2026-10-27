@@ -306,9 +306,9 @@ soft_pedal = sh_pedal(f'meas3/4 \
 ')
 
 def main():
-    do_nuance = True
-    make_wav = False
-    preset = 'NY Steinway D Classical'
+    do_nuance = False
+    make_wav = True
+    preset = 'HB Steinway D Classical'
 
     ns = Score(tempo=72)
     if do_nuance:
