@@ -372,11 +372,11 @@ def do_pedal(ns):
         sh_pedal('*18 [1/4) * [1/4) [2/4) [2/4)'),
         t5
     )
-                
+
 def main():
-    do_nuance = True
-    make_wav = False
-    preset = 'Bösendorfer VC Warm'
+    do_nuance = False
+    make_wav = True
+    preset = 'Bösendorfer VC Classical Recording'
 
     ns = make_score()
     if do_nuance:
